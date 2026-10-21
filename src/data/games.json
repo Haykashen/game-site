@@ -1,0 +1,29 @@
+[
+  {
+    "id": "silent-hill-2",
+    "title": "Silent Hill 2",
+    "platform": "PS2",
+    "publisher": "Konami",
+    "year": 2001,
+    "lang": "Английский",
+    "description": "Психологический survival horror. Джеймс Сандерленд отправляется в туманный Сайлент Хилл после получения письма от умершей жены."
+  },
+  {
+    "id": "halo-combat",
+    "title": "Halo: Combat Evolved",
+    "platform": "Xbox Original",
+    "publisher": "Bungie",
+    "year": 2001,
+    "lang": "Английский",
+    "description": "Научно-фантастический шутер от первого лица, положивший начало легендарной саге о Мастере Чифе и войне человечества против Ковенанта."
+  },
+  {
+    "id": "elden-ring",
+    "title": "Elden Ring",
+    "platform": "PS5",
+    "publisher": "FromSoftware",
+    "year": 2022,
+    "lang": "Русский",
+    "description": "Ролевой экшен с открытым миром от авторов Dark Souls и Джорджа Мартина. Исследуйте Междуземье и станьте Владыкой Элден."
+  }
+]

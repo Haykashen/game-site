@@ -1,0 +1,56 @@
+[
+  {
+    "name": "PS1",
+    "group": "PlayStation",
+    "color": "#4b5563",
+    "textColor": "#f9fafb"
+  },
+  {
+    "name": "PS2",
+    "group": "PlayStation",
+    "color": "#003791",
+    "textColor": "#ffffff"
+  },
+  {
+    "name": "PS3",
+    "group": "PlayStation",
+    "color": "#374151",
+    "textColor": "#f9fafb"
+  },
+  {
+    "name": "PS4",
+    "group": "PlayStation",
+    "color": "#0070d1",
+    "textColor": "#ffffff"
+  },
+  {
+    "name": "PS5",
+    "group": "PlayStation",
+    "color": "#2563eb",
+    "textColor": "#ffffff"
+  },
+  {
+    "name": "Xbox Original",
+    "group": "Xbox",
+    "color": "#107c10",
+    "textColor": "#ffffff"
+  },
+  {
+    "name": "Xbox 360",
+    "group": "Xbox",
+    "color": "#8dc63f",
+    "textColor": "#172013"
+  },
+  {
+    "name": "Xbox One",
+    "group": "Xbox",
+    "color": "#0e5c2f",
+    "textColor": "#ffffff"
+  },
+  {
+    "name": "Xbox Series X",
+    "group": "Xbox",
+    "color": "#1f2937",
+    "textColor": "#bef264"
+  }
+]
