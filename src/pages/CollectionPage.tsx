@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { GameBrowser } from '../components/GameBrowser';
 import { PageHeading } from '../components/PageHeading';
 import { useCollection } from '../context/CollectionContext';
+import { useGameDrawerParam } from '../hooks/useGameDrawerParam';
 
 function gamesOnShelf(count: number): string {
   const lastDigit = count % 10;
@@ -19,6 +20,7 @@ function gamesOnShelf(count: number): string {
 /** Owned games plus the future achievements slot. */
 export function CollectionPage() {
   const { games, ownedIds } = useCollection();
+  const { gameId, openGame, closeGame } = useGameDrawerParam();
 
   const ownedGames = useMemo(
     () => games.filter((game) => ownedIds.includes(game.id)),
@@ -52,6 +54,9 @@ export function CollectionPage() {
 
       <GameBrowser
         games={ownedGames}
+        gameId={gameId}
+        onOpenGame={openGame}
+        onCloseGame={closeGame}
         emptyText="В коллекции пока нет игр. Добавьте первую из каталога."
       />
     </>

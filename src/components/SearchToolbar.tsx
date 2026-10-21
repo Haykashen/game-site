@@ -1,6 +1,13 @@
 import { RotateCcw, Search, X } from 'lucide-react';
 import { useRef } from 'react';
-import { LANGUAGES, PLATFORM_GROUPS, YEAR_RANGES } from '../data';
+import {
+  COMPLETENESS,
+  EDITIONS,
+  LANGUAGES,
+  PLATFORM_GROUPS,
+  REGIONS,
+  YEAR_RANGES,
+} from '../data';
 import type { CatalogFilters } from '../types';
 import { FilterDropdown } from './ui/FilterDropdown';
 import type { FilterOption } from './ui/FilterDropdown';
@@ -12,6 +19,21 @@ const PLATFORM_OPTIONS: ReadonlyArray<FilterOption> = PLATFORM_GROUPS.flatMap((g
     group: group.label,
   })),
 );
+
+const REGION_OPTIONS: ReadonlyArray<FilterOption> = REGIONS.map((region) => ({
+  value: region,
+  label: region,
+}));
+
+const EDITION_OPTIONS: ReadonlyArray<FilterOption> = EDITIONS.map((edition) => ({
+  value: edition,
+  label: edition,
+}));
+
+const COMPLETENESS_OPTIONS: ReadonlyArray<FilterOption> = COMPLETENESS.map((value) => ({
+  value,
+  label: value,
+}));
 
 const LANGUAGE_OPTIONS: ReadonlyArray<FilterOption> = LANGUAGES.map((language) => ({
   value: language,
@@ -72,6 +94,33 @@ export function SearchToolbar({
       label: 'Платформа',
       value: filters.platform,
       onClear: () => onFilterChange({ platform: '' }),
+    });
+  }
+
+  if (filters.region) {
+    activeFilters.push({
+      key: 'region',
+      label: 'Регион',
+      value: filters.region,
+      onClear: () => onFilterChange({ region: '' }),
+    });
+  }
+
+  if (filters.edition) {
+    activeFilters.push({
+      key: 'edition',
+      label: 'Издание',
+      value: filters.edition,
+      onClear: () => onFilterChange({ edition: '' }),
+    });
+  }
+
+  if (filters.completeness) {
+    activeFilters.push({
+      key: 'completeness',
+      label: 'Комплектность',
+      value: filters.completeness,
+      onClear: () => onFilterChange({ completeness: '' }),
     });
   }
 
@@ -148,6 +197,33 @@ export function SearchToolbar({
           value={filters.platform}
           options={PLATFORM_OPTIONS}
           onChange={(platform) => onFilterChange({ platform })}
+        />
+
+        <FilterDropdown
+          id="regionFilter"
+          label="Регион"
+          placeholder="Все регионы"
+          value={filters.region}
+          options={REGION_OPTIONS}
+          onChange={(region) => onFilterChange({ region })}
+        />
+
+        <FilterDropdown
+          id="editionFilter"
+          label="Издание"
+          placeholder="Все издания"
+          value={filters.edition}
+          options={EDITION_OPTIONS}
+          onChange={(edition) => onFilterChange({ edition })}
+        />
+
+        <FilterDropdown
+          id="completenessFilter"
+          label="Комплектность"
+          placeholder="Любая комплектность"
+          value={filters.completeness}
+          options={COMPLETENESS_OPTIONS}
+          onChange={(completeness) => onFilterChange({ completeness })}
         />
 
         <FilterDropdown

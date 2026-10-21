@@ -9,6 +9,8 @@ interface ModalShellProps {
   isOpen: boolean;
   onClose: () => void;
   labelledBy: string;
+  /** Change this to move focus back to the dialog after its content is swapped. */
+  focusKey?: string;
   children: ReactNode;
 }
 
@@ -16,7 +18,13 @@ interface ModalShellProps {
  * Side-drawer modal plumbing: enter/exit animation, backdrop, Escape key,
  * body scroll lock and focus restoration. Visuals stay in styles.css.
  */
-export function ModalShell({ isOpen, onClose, labelledBy, children }: ModalShellProps) {
+export function ModalShell({
+  isOpen,
+  onClose,
+  labelledBy,
+  focusKey,
+  children,
+}: ModalShellProps) {
   const { isMounted, isActive } = useAnimatedPresence(isOpen);
   const dialogRef = useRef<HTMLDivElement>(null);
 
@@ -35,6 +43,14 @@ export function ModalShell({ isOpen, onClose, labelledBy, children }: ModalShell
       }
     };
   }, [isOpen, isMounted]);
+
+  // Content can swap inside an open drawer (compose form → entity card). The
+  // previous focus target disappears with the old content, so return focus to
+  // the dialog to keep the Tab trap working.
+  useEffect(() => {
+    if (!isOpen || !isMounted) return;
+    dialogRef.current?.focus();
+  }, [isOpen, isMounted, focusKey]);
 
   // Keep keyboard focus inside the drawer while it is open.
   useEffect(() => {

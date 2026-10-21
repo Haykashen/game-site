@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { GameBrowser } from '../components/GameBrowser';
 import { SearchToolbar } from '../components/SearchToolbar';
 import { useCollection } from '../context/CollectionContext';
+import { useGameDrawerParam } from '../hooks/useGameDrawerParam';
 import { selectVisibleGames } from '../lib/selectVisibleGames';
 import type { CatalogFilters } from '../types';
 
@@ -11,6 +12,9 @@ const FILTER_PARAMS: ReadonlyArray<readonly [keyof CatalogFilters, string]> = [
   ['platform', 'platform'],
   ['lang', 'lang'],
   ['yearRange', 'year'],
+  ['region', 'region'],
+  ['edition', 'edition'],
+  ['completeness', 'completeness'],
 ];
 
 function readFilters(params: URLSearchParams): CatalogFilters {
@@ -19,6 +23,9 @@ function readFilters(params: URLSearchParams): CatalogFilters {
     platform: params.get('platform') ?? '',
     lang: params.get('lang') ?? '',
     yearRange: params.get('year') ?? '',
+    region: params.get('region') ?? '',
+    edition: params.get('edition') ?? '',
+    completeness: params.get('completeness') ?? '',
   };
 }
 
@@ -26,6 +33,7 @@ function readFilters(params: URLSearchParams): CatalogFilters {
 export function GamesPage() {
   const { games } = useCollection();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { gameId, openGame, closeGame } = useGameDrawerParam();
   const filters = useMemo(() => readFilters(searchParams), [searchParams]);
 
   const updateFilters = useCallback(
@@ -82,7 +90,12 @@ export function GamesPage() {
         onFilterChange={updateFilters}
         onReset={resetFilters}
       />
-      <GameBrowser games={visibleGames} />
+      <GameBrowser
+        games={visibleGames}
+        gameId={gameId}
+        onOpenGame={openGame}
+        onCloseGame={closeGame}
+      />
     </>
   );
 }

@@ -13,6 +13,9 @@ export function selectVisibleGames(
     if (query && !game.title.toLowerCase().includes(query)) return false;
     if (filters.platform && game.platform !== filters.platform) return false;
     if (filters.lang && !game.lang.includes(filters.lang)) return false;
+    if (filters.region && game.region !== filters.region) return false;
+    if (filters.edition && game.edition !== filters.edition) return false;
+    if (filters.completeness && game.completeness !== filters.completeness) return false;
     if (yearRange && (game.year < yearRange.min || game.year > yearRange.max)) return false;
     return true;
   });

@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { INITIAL_GAMES } from '../data';
+import { mergeCatalog } from '../lib/catalog';
 import { STORAGE_KEYS } from '../lib/constants';
 import { createId, parseGames, parseOwnedIds } from '../lib/storage';
 import type { Game, Lot, LotDraft } from '../types';
@@ -16,7 +17,7 @@ export interface GameCollection {
 
 /** Owns catalogue persistence and exposes the only mutations the UI needs. */
 export function useGameCollection(): GameCollection {
-  const [games, setGames] = usePersistentState<Game[]>(
+  const [storedGames, setGames] = usePersistentState<Game[]>(
     STORAGE_KEYS.games,
     INITIAL_GAMES,
     parseGames,
@@ -27,6 +28,7 @@ export function useGameCollection(): GameCollection {
     parseOwnedIds,
   );
 
+  const games = useMemo(() => mergeCatalog(storedGames, INITIAL_GAMES), [storedGames]);
   const ownedSet = useMemo(() => new Set(ownedIds), [ownedIds]);
 
   const isOwned = useCallback((gameId: string) => ownedSet.has(gameId), [ownedSet]);

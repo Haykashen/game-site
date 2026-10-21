@@ -163,8 +163,18 @@
         .modal-fixed.active .modal-content { transform: translateX(0); }
 
         .modal-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 1.25rem; }
-        .modal-header-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem; }
+        .modal-header-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem; }
         .modal-header-meta .year { font-size: 0.8rem; color: var(--text-muted); }
+        .modal-header-meta .meta-chip {
+            padding: .18rem .42rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-muted);
+            font: 600 .6rem/1.3 'IBM Plex Mono', monospace;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+        }
         .modal-title { font-size: 1.65rem; font-weight: 800; tracking: -0.01em; }
         .modal-action-row { display: flex; gap: 0.75rem; margin-top: 0.5rem; }
 
@@ -189,7 +199,7 @@
 
         .desc-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
         @media (max-width: 640px) { .desc-grid { grid-template-columns: 1fr; } }
-        .desc-text h4, .spec-box h4, .editions-section h4, .lot-form-section h4 { font-size: 0.75rem; text-transform: uppercase; tracking: 0.05em; color: var(--text-muted); margin-bottom: 0.6rem; font-weight: 700; }
+        .desc-text h4, .spec-box h4, .editions-section h4 { font-size: 0.75rem; text-transform: uppercase; tracking: 0.05em; color: var(--text-muted); margin-bottom: 0.6rem; font-weight: 700; }
         .desc-text p { font-size: 0.9rem; color: var(--text-main); line-height: 1.6; }
         
         .spec-box { background: var(--bg-main); padding: 1.25rem; border-radius: 0.85rem; border: 1px solid var(--border-color); font-size: 0.85rem; }
@@ -202,14 +212,30 @@
         .edition-tag { padding: 0.45rem 0.85rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.5rem; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-muted); }
         .edition-tag.active { background: var(--brand-light); color: var(--brand); border-color: var(--brand); }
 
-        /* ФОРМА СОЗДАНИЯ ЛОТА */
-        .lot-form-section { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 1rem; padding: 1.25rem; }
-        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 0.75rem; }
-        .form-group-full { grid-column: span 2; }
-        .form-control { width: 100%; padding: 0.6rem 0.75rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 0.5rem; color: var(--text-main); font-size: 0.875rem; outline: none; }
-        .form-control:focus { border-color: var(--brand); }
-        .btn-submit { padding: 0.6rem 1.2rem; background: var(--brand); color: white; border: none; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem; transition: background 0.2s; margin-top: 1rem; width: 100%; }
-        .btn-submit:hover { background: var(--brand-hover); }
+        /* ДЕЙСТВИЯ В КАРТОЧКЕ: ОБЪЯВЛЕНИЕ И АУКЦИОН */
+        .game-cta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
+        .game-cta__btn {
+            min-height: 46px;
+            display: flex; align-items: center; justify-content: center; gap: .5rem;
+            padding: .8rem 1rem;
+            border: 1px solid var(--border-color); border-radius: 8px;
+            background: var(--bg-card); color: var(--text-main);
+            font-size: .88rem; font-weight: 600; letter-spacing: -.02em;
+            transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease;
+        }
+        .game-cta__btn > svg { flex: none; color: var(--text-muted); transition: color .18s ease; }
+        .game-cta__btn:hover { border-color: var(--brand); transform: translateY(-1px); }
+        .game-cta__btn:hover > svg { color: var(--brand); }
+        .game-cta__btn--listing {
+            border-color: var(--brand);
+            background: var(--brand); color: #172013;
+            box-shadow: 3px 3px 0 rgba(120,100,216,.35);
+        }
+        .game-cta__btn--listing > svg { color: #172013; }
+        .game-cta__btn--listing:hover { background: var(--brand-hover); border-color: var(--brand-hover); }
+        .game-cta__btn--listing:hover > svg { color: #172013; }
+        .game-cta__btn--auction:hover { background: var(--brand-light); }
+        @media (max-width: 520px) { .game-cta { grid-template-columns: 1fr; } }
 
         .tabs-header { display: flex; gap: 1.75rem; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; font-weight: 600; margin-top: 1rem; }
         .tab-btn { background: none; border: none; padding-bottom: 0.85rem; color: var(--text-muted); border-bottom: 2px solid transparent; transition: all 0.2s; font-weight: 600; }
@@ -301,7 +327,7 @@
         }
         .logo-text::after { content: "."; color: var(--brand); -webkit-text-fill-color: var(--brand); }
         .btn-lang, .btn-icon, .view-mode-tabs, .catalog-toolbar, .game-card,
-        .analytics-box, .metric-card, .spec-box, .lot-form-section, .lot-item {
+        .analytics-box, .metric-card, .spec-box, .lot-item {
             box-shadow: 0 8px 24px rgba(0,0,0,.045);
         }
         .btn-icon { border: 1px solid var(--border-color); border-radius: 9px; }
@@ -328,7 +354,7 @@
         .btn-primary { background: var(--brand); color: #172013; border-radius: 9px; box-shadow: 3px 3px 0 rgba(120,100,216,.4); }
         .btn-primary:hover { background: var(--brand-hover); transform: translate(-1px,-1px); box-shadow: 4px 4px 0 rgba(120,100,216,.45); }
         .catalog-filters { gap: 1rem; }
-        .filter-field__label, .analytics-title, .desc-text h4, .spec-box h4, .editions-section h4, .lot-form-section h4 {
+        .filter-field__label, .analytics-title, .desc-text h4, .spec-box h4, .editions-section h4 {
             font-family: 'IBM Plex Mono', monospace; letter-spacing: .08em;
         }
         .games-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 245px), 1fr)); gap: clamp(.9rem, 1.8vw, 1.35rem); }
@@ -401,12 +427,10 @@
         .gallery-kicker { color: var(--brand); font: 600 .65rem/1.4 'IBM Plex Mono', monospace; letter-spacing: .16em; }
         .carousel-container strong { font-size: clamp(1.4rem, 4vw, 2.2rem); line-height: 1.1; letter-spacing: -.06em; color: #f5f5e8; }
         .gallery-caption { color: rgba(255,255,255,.65); font: 500 .7rem/1.4 'IBM Plex Mono', monospace; letter-spacing: .08em; }
-        .analytics-box, .spec-box, .lot-form-section { border-radius: 12px; }
+        .analytics-box, .spec-box { border-radius: 12px; }
         .metric-card { border-radius: 8px; }
         .metric-value { letter-spacing: -.04em; }
         .price-range-fill { background: linear-gradient(90deg, var(--emerald), var(--brand), var(--retro-pink)); }
-        .form-control { border-radius: 7px; }
-        .btn-submit { background: var(--brand); color: #172013; border-radius: 7px; box-shadow: 3px 3px 0 rgba(120,100,216,.35); }
         .tabs-header { gap: 1.25rem; }
         .tab-btn.active { color: var(--text-main); border-color: var(--brand); }
         .lot-item { gap: 1rem; border-radius: 10px; }
@@ -948,4 +972,587 @@
         @keyframes sheet-in {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ---------- marketplace: entity cards and placement flow ---------- */
+        .page-heading--with-action {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1.25rem 2rem;
+            flex-wrap: wrap;
+        }
+        .page-heading__copy { min-width: 0; }
+        .page-heading__action { flex: none; }
+
+        .market-compose-btn {
+            min-height: 46px;
+            display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+            padding: .78rem 1.15rem;
+            border: 1px solid var(--brand); border-radius: 8px;
+            background: var(--brand); color: #172013;
+            font-size: .88rem; font-weight: 700; letter-spacing: -.02em;
+            box-shadow: 3px 3px 0 rgba(120,100,216,.42);
+            transition: background .18s ease, border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+        }
+        .market-compose-btn:hover {
+            background: var(--brand-hover); border-color: var(--brand-hover);
+            transform: translateY(-1px);
+            box-shadow: 4px 4px 0 rgba(120,100,216,.42);
+        }
+        .market-compose-btn > svg { flex: none; }
+
+        .market-list-head {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: .75rem; flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .market-count {
+            display: inline-flex; align-items: center; gap: .45rem;
+            color: var(--text-muted);
+            font: 600 .68rem/1.4 'IBM Plex Mono', monospace;
+            letter-spacing: .08em; text-transform: uppercase;
+        }
+        .market-count::before {
+            content: ""; width: 7px; height: 7px; border-radius: 2px;
+            background: var(--brand); box-shadow: 0 0 0 3px var(--brand-light);
+        }
+        .market-list-hint { color: var(--text-muted); font-size: .78rem; }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.15rem;
+            margin-bottom: 3rem;
+        }
+        .market-card {
+            position: relative;
+            display: flex; flex-direction: column; gap: .7rem;
+            padding: 1.15rem 1.2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+        }
+        .market-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(120,100,216,.55);
+            box-shadow: 0 16px 32px rgba(0,0,0,.10);
+        }
+        .market-card--auction:hover { border-color: var(--amber); }
+
+        .market-card__media {
+            position: relative;
+            flex: none;
+            height: 148px;
+            margin: -1.15rem -1.2rem 0;
+            overflow: hidden;
+            background: var(--bg-main);
+            border-radius: 11px 11px 0 0;
+        }
+        .market-card__media img {
+            display: block; width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform .35s ease;
+        }
+        .market-card:hover .market-card__media img { transform: scale(1.035); }
+        .market-card__photo-count {
+            position: absolute; right: .55rem; bottom: .5rem;
+            display: inline-flex; align-items: center; gap: .25rem;
+            padding: .2rem .42rem;
+            border-radius: 999px;
+            background: rgba(2, 6, 23, .72);
+            color: #f8fafc;
+            font: 600 .6rem/1.2 'IBM Plex Mono', monospace;
+            letter-spacing: .04em;
+            backdrop-filter: blur(4px);
+        }
+
+        .market-card__top { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+        .market-card__arrow { color: var(--text-muted); transition: color .2s ease, transform .2s ease; }
+        .market-card:hover .market-card__arrow { color: var(--brand); transform: translate(1px, -1px); }
+
+        .market-kind {
+            display: inline-flex; align-items: center; gap: .32rem;
+            color: var(--text-muted);
+            font: 600 .62rem/1.2 'IBM Plex Mono', monospace;
+            letter-spacing: .09em; text-transform: uppercase;
+        }
+        .market-kind > svg { color: var(--brand); }
+        .market-kind--auction,
+        .market-card--auction .market-kind { color: var(--amber); }
+        .market-kind--auction > svg,
+        .market-card--auction .market-kind > svg { color: var(--amber); }
+
+        .market-card__main { min-height: 4.2rem; }
+        .market-card__title {
+            color: var(--text-main);
+            font-size: 1.03rem; font-weight: 700; line-height: 1.32; letter-spacing: -.025em;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .market-card__game { margin-top: .3rem; color: var(--text-muted); font-size: .78rem; line-height: 1.45; }
+        .market-card__chips { display: flex; flex-wrap: wrap; gap: .35rem; }
+        .market-chip {
+            padding: .24rem .42rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            color: var(--text-muted);
+            font: 500 .64rem/1.35 'IBM Plex Mono', monospace;
+        }
+
+        .market-card__bottom {
+            margin-top: auto;
+            display: flex; align-items: flex-end; justify-content: space-between;
+            gap: .75rem;
+            padding-top: .85rem;
+            border-top: 1px dashed var(--border-color);
+        }
+        .market-card__price-block { display: flex; flex-direction: column; gap: .12rem; }
+        .market-card__price-label {
+            color: var(--text-muted);
+            font: 500 .58rem/1.3 'IBM Plex Mono', monospace;
+            letter-spacing: .08em; text-transform: uppercase;
+        }
+        .market-card__price { font-size: 1.22rem; font-weight: 800; letter-spacing: -.045em; }
+        .market-card__timing {
+            display: flex; flex-direction: column; align-items: flex-end; gap: .2rem;
+            min-width: 0;
+        }
+        .market-card__end {
+            display: inline-flex; align-items: center; gap: .28rem;
+            color: var(--amber); font-size: .7rem; font-weight: 600; white-space: nowrap;
+        }
+        .market-card__bids,
+        .market-card__fixed {
+            color: var(--text-muted);
+            font: 500 .62rem/1.3 'IBM Plex Mono', monospace;
+            white-space: nowrap;
+        }
+
+        .market-empty {
+            display: flex; flex-direction: column; align-items: center; gap: 1rem;
+            margin-bottom: 3rem; padding: clamp(2rem, 5vw, 3.5rem) 1.5rem;
+            background: var(--bg-card);
+            border: 1px dashed var(--border-color);
+            border-radius: 14px;
+            text-align: center;
+        }
+        .market-empty p { color: var(--text-muted); font-size: .92rem; }
+
+        .market-photo-empty {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: .3rem; min-height: 130px; padding: 1.25rem;
+            background: var(--bg-main);
+            border: 1px dashed var(--border-color);
+            border-radius: 12px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+        .market-photo-empty > svg { color: var(--brand); opacity: .85; margin-bottom: .15rem; }
+        .market-photo-empty__title {
+            color: var(--text-main);
+            font-size: .86rem; font-weight: 700; letter-spacing: -.015em;
+        }
+        .market-photo-empty p { max-width: 34rem; font-size: .74rem; line-height: 1.55; }
+
+        .market-carousel { display: flex; flex-direction: column; gap: .6rem; margin: 0; }
+        .market-carousel__stage {
+            position: relative;
+            display: flex; align-items: center; justify-content: center;
+            height: clamp(200px, 30vw, 310px);
+            overflow: hidden;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+        .market-carousel__stage > img {
+            display: block; width: 100%; height: 100%;
+            object-fit: contain;
+        }
+        .market-carousel__nav {
+            position: absolute; top: 50%;
+            width: 38px; height: 38px;
+            display: grid; place-items: center;
+            padding: 0;
+            border: 1px solid rgba(255, 255, 255, .35);
+            border-radius: 50%;
+            background: rgba(2, 6, 23, .58);
+            color: #f8fafc;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transform: translateY(-50%);
+            transition: background .18s ease, transform .18s ease;
+        }
+        .market-carousel__nav:hover {
+            background: rgba(2, 6, 23, .82);
+            transform: translateY(-50%) scale(1.04);
+        }
+        .market-carousel__nav--prev { left: .55rem; }
+        .market-carousel__nav--next { right: .55rem; }
+        .market-carousel__counter {
+            position: absolute; right: .6rem; bottom: .55rem;
+            padding: .22rem .48rem;
+            border-radius: 999px;
+            background: rgba(2, 6, 23, .68);
+            color: #f8fafc;
+            font: 600 .64rem/1.2 'IBM Plex Mono', monospace;
+            letter-spacing: .04em;
+        }
+        .market-carousel__thumbs {
+            display: flex; gap: .45rem;
+            overflow-x: auto;
+            padding-bottom: .15rem;
+            scrollbar-width: thin;
+        }
+        .market-carousel__thumb {
+            flex: 0 0 70px; height: 54px;
+            padding: 0;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--bg-main);
+            cursor: pointer;
+            opacity: .68;
+            transition: opacity .18s ease, border-color .18s ease, box-shadow .18s ease;
+        }
+        .market-carousel__thumb img {
+            display: block; width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        .market-carousel__thumb:hover { opacity: 1; border-color: var(--border-color); }
+        .market-carousel__thumb.is-active {
+            opacity: 1;
+            border-color: var(--brand);
+            box-shadow: 0 0 0 2px var(--brand-light);
+        }
+
+        .market-detail-price {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 1rem; flex-wrap: wrap;
+            padding: 1rem 1.15rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+        .market-detail-price__label {
+            display: block;
+            margin-bottom: .2rem;
+            color: var(--text-muted);
+            font: 500 .6rem/1.3 'IBM Plex Mono', monospace;
+            letter-spacing: .09em; text-transform: uppercase;
+        }
+        .market-detail-price__value { font-size: 1.7rem; font-weight: 800; letter-spacing: -.05em; }
+        .market-detail-price__side {
+            display: flex; flex-direction: column; align-items: flex-end; gap: .25rem;
+            color: var(--text-muted); font-size: .74rem;
+        }
+        .market-detail-price__timer {
+            display: inline-flex; align-items: center; gap: .3rem;
+            color: var(--amber); font-weight: 600; font-size: .78rem;
+        }
+
+        .market-game-strip {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 1rem; flex-wrap: wrap;
+            padding: 1rem 1.15rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+        .market-game-strip__kicker {
+            color: var(--brand);
+            font: 600 .58rem/1.4 'IBM Plex Mono', monospace;
+            letter-spacing: .12em; text-transform: uppercase;
+        }
+        .market-game-strip__title { margin-top: .15rem; font-size: .98rem; font-weight: 700; letter-spacing: -.025em; }
+        .market-game-strip__meta { margin-top: .15rem; color: var(--text-muted); font-size: .76rem; }
+
+        .market-shipping {
+            display: flex; flex-direction: column; gap: .85rem;
+            padding: 1rem 1.15rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+        .market-shipping__head { display: flex; align-items: center; gap: .65rem; }
+        .market-shipping__icon {
+            width: 34px; height: 34px; flex: 0 0 auto;
+            display: grid; place-items: center;
+            border-radius: 9px;
+            background: var(--brand-light);
+            color: var(--brand);
+        }
+        .market-shipping__head h4 { font-size: .8rem; font-weight: 700; letter-spacing: -.01em; }
+        .market-shipping__head p { margin-top: .1rem; color: var(--text-muted); font-size: .7rem; }
+        .market-shipping__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: .85rem 1rem;
+            margin: 0;
+            padding-top: .85rem;
+            border-top: 1px dashed var(--border-color);
+        }
+        .market-shipping__item { min-width: 0; }
+        .market-shipping__item dt {
+            color: var(--text-muted);
+            font: 600 .58rem/1.4 'IBM Plex Mono', monospace;
+            letter-spacing: .08em; text-transform: uppercase;
+        }
+        .market-shipping__item dd {
+            margin: .22rem 0 0;
+            font-size: .82rem; font-weight: 600; line-height: 1.45;
+        }
+        .market-shipping__services { display: flex; flex-wrap: wrap; gap: .3rem; }
+        .market-shipping__service {
+            display: inline-flex;
+            padding: .18rem .48rem;
+            border: 1px solid rgba(120, 100, 216, .25);
+            border-radius: 999px;
+            background: var(--brand-light);
+            color: var(--text-main);
+            font: 600 .64rem/1.35 'IBM Plex Mono', monospace;
+        }
+        .market-shipping__muted { color: var(--text-muted); font-weight: 500; }
+
+        .market-form__lead {
+            margin-top: -.65rem;
+            color: var(--text-muted); font-size: .86rem; line-height: 1.6;
+        }
+        .market-form { display: flex; flex-direction: column; gap: 1.1rem; }
+        .market-form__grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: .9rem 1rem;
+        }
+        .market-form__full { grid-column: 1 / -1; }
+        .market-form__timing {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: .9rem 1rem;
+        }
+        .market-form__timing > div { min-width: 0; }
+        .market-form__timing-error { grid-column: 1 / -1; margin-top: -.35rem; }
+        .market-form__timing .form-control { min-width: 0; max-width: 100%; }
+        .form-label {
+            display: block;
+            margin-bottom: .38rem;
+            color: var(--text-muted);
+            font: 600 .62rem/1.4 'IBM Plex Mono', monospace;
+            letter-spacing: .1em; text-transform: uppercase;
+        }
+        .form-control {
+            width: 100%; min-height: 44px;
+            padding: .68rem .78rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: .9rem;
+            outline: none;
+            transition: border-color .2s ease, box-shadow .2s ease;
+        }
+        .form-control::placeholder { color: var(--text-muted); opacity: .8; }
+        .form-control:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-light); }
+        textarea.form-control { min-height: 120px; resize: vertical; line-height: 1.55; }
+        .market-form__hint { margin-top: .28rem; color: var(--text-muted); font-size: .66rem; line-height: 1.45; }
+        .market-form__error { margin-top: .42rem; color: #b91c1c; font-size: .72rem; line-height: 1.45; }
+        html.dark .market-form__error { color: #fca5a5; }
+
+        .market-delivery { min-width: 0; margin: 0; padding: 0; border: 0; }
+        .market-delivery .form-label { margin-bottom: .45rem; padding: 0; }
+        .market-delivery__options { display: flex; flex-wrap: wrap; gap: .45rem; }
+        .market-delivery__option {
+            display: inline-flex; align-items: center; gap: .45rem;
+            min-height: 38px;
+            padding: .42rem .68rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            font-size: .78rem; font-weight: 600;
+            cursor: pointer;
+            transition: border-color .18s ease, background .18s ease;
+        }
+        .market-delivery__option:hover { border-color: var(--brand); }
+        .market-delivery__option:focus-within {
+            outline: 2px solid var(--retro-purple);
+            outline-offset: 2px;
+        }
+        .market-delivery__option input {
+            width: 15px; height: 15px; margin: 0;
+            accent-color: var(--brand);
+            cursor: pointer;
+        }
+        .market-delivery__option.is-selected {
+            border-color: var(--brand);
+            background: var(--brand-light);
+        }
+
+        .market-toggle {
+            display: flex; align-items: flex-start; gap: .65rem;
+            padding: .7rem .8rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color .18s ease, box-shadow .18s ease;
+        }
+        .market-toggle:hover { border-color: var(--brand); }
+        .market-toggle:focus-within {
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px var(--brand-light);
+        }
+        .market-toggle > input {
+            width: 17px; height: 17px; margin: .12rem 0 0;
+            flex: 0 0 auto;
+            accent-color: var(--brand);
+            cursor: pointer;
+        }
+        .market-toggle__copy { display: flex; flex-direction: column; gap: .12rem; }
+        .market-toggle__title { font-size: .82rem; font-weight: 600; }
+        .market-toggle__hint { color: var(--text-muted); font-size: .68rem; line-height: 1.45; }
+
+        .market-photo-picker { display: flex; flex-direction: column; gap: .55rem; }
+        .market-photo-picker__head {
+            display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+        }
+        .market-photo-picker__head .form-label { margin-bottom: 0; }
+        .market-photo-picker__count {
+            color: var(--text-muted);
+            font: 600 .6rem/1.3 'IBM Plex Mono', monospace;
+            letter-spacing: .06em;
+        }
+        .market-photo-picker__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(94px, 1fr));
+            gap: .55rem;
+        }
+        .market-photo-tile {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        .market-photo-tile img {
+            display: block; width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        .market-photo-tile > button {
+            position: absolute; top: 4px; right: 4px;
+            width: 24px; height: 24px;
+            display: grid; place-items: center;
+            padding: 0;
+            border: 0;
+            border-radius: 50%;
+            background: rgba(2, 6, 23, .68);
+            color: #f8fafc;
+            cursor: pointer;
+            transition: background .18s ease;
+        }
+        .market-photo-tile > button:hover:not(:disabled) { background: #dc2626; }
+        .market-photo-tile > button:disabled { cursor: not-allowed; opacity: .55; }
+        .market-photo-add {
+            position: relative;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: .3rem;
+            aspect-ratio: 4 / 3;
+            padding: .4rem;
+            background: var(--bg-main);
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-align: center;
+            font: 600 .64rem/1.35 'IBM Plex Mono', monospace;
+            letter-spacing: .02em;
+            transition: border-color .18s ease, color .18s ease, background .18s ease;
+        }
+        .market-photo-add:hover {
+            border-color: var(--brand);
+            color: var(--text-main);
+            background: var(--brand-light);
+        }
+        .market-photo-add:focus-within {
+            outline: 2px solid var(--retro-purple);
+            outline-offset: 3px;
+        }
+        .market-photo-add input {
+            position: absolute;
+            width: 1px; height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .market-photo-add.is-disabled { opacity: .65; cursor: wait; pointer-events: none; }
+        .market-photo-picker__hint { color: var(--text-muted); font-size: .68rem; line-height: 1.5; }
+        .market-photo-picker__error { color: #b91c1c; font-size: .72rem; line-height: 1.45; }
+        html.dark .market-photo-picker__error { color: #fca5a5; }
+        .market-photo-spin { animation: spin .9s linear infinite; }
+
+        .market-form__actions { display: flex; justify-content: flex-end; gap: .6rem; padding-top: .2rem; }
+        .market-form__submit {
+            min-height: 44px;
+            display: inline-flex; align-items: center; justify-content: center; gap: .45rem;
+            padding: .7rem 1.1rem;
+            border: 1px solid var(--brand); border-radius: 8px;
+            background: var(--brand); color: #172013;
+            font-size: .86rem; font-weight: 700;
+            box-shadow: 3px 3px 0 rgba(120,100,216,.42);
+            transition: background .18s ease, border-color .18s ease, transform .18s ease;
+        }
+        .market-form__submit:hover {
+            background: var(--brand-hover); border-color: var(--brand-hover);
+            transform: translateY(-1px);
+        }
+        .market-form__submit:disabled {
+            cursor: wait;
+            opacity: .68;
+            transform: none;
+        }
+        .btn-secondary {
+            min-height: 44px;
+            padding: .7rem 1rem;
+            border: 1px solid var(--border-color); border-radius: 8px;
+            background: var(--bg-card); color: var(--text-main);
+            font-size: .86rem; font-weight: 600;
+            transition: border-color .18s ease, background .18s ease;
+        }
+        .btn-secondary:hover { border-color: var(--brand); background: var(--brand-light); }
+
+        @media (max-width: 760px) {
+            .page-heading--with-action { align-items: stretch; }
+            .page-heading__action,
+            .page-heading__action .market-compose-btn { width: 100%; }
+            .market-grid {
+                grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+                gap: .9rem;
+            }
+            .market-list-hint { display: none; }
+            .market-form__grid { grid-template-columns: 1fr; }
+            .market-form__full { grid-column: auto; }
+            .market-form__timing { grid-template-columns: 1fr; }
+            .market-form__timing-error { grid-column: auto; }
+            .market-card__media { height: 140px; }
+            .market-carousel__stage { height: clamp(190px, 48vw, 260px); }
+        }
+
+        @media (max-width: 420px) {
+            .market-grid { grid-template-columns: 1fr; }
+            .market-card__title { font-size: .98rem; }
+            .market-card__bottom { align-items: flex-start; flex-direction: column; gap: .55rem; }
+            .market-card__timing { align-items: flex-start; }
+            .market-form__actions { flex-direction: column-reverse; }
+            .market-form__actions > button { width: 100%; }
+            .market-detail-price { align-items: flex-start; flex-direction: column; }
+            .market-detail-price__side { align-items: flex-start; }
+            .market-card__media { height: 180px; }
+            .market-carousel__stage { height: 220px; }
+            .market-carousel__nav { width: 34px; height: 34px; }
+            .market-delivery__options { flex-direction: column; }
+            .market-delivery__option { width: 100%; }
+            .market-carousel__thumb { flex-basis: 58px; height: 46px; }
+            .market-photo-picker__grid { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); }
+            .market-photo-empty { min-height: 110px; padding: 1rem; }
         }

@@ -1,4 +1,6 @@
-import type { Game, Lot } from '../types';
+import type { Game, Lot, MarketDeliveryService, MarketEntry } from '../types';
+import { MAX_MARKET_PHOTOS } from './constants';
+import { isDeliveryService } from './delivery';
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
@@ -61,7 +63,24 @@ function normalizeGame(value: unknown): Game | null {
     .map((lot, index) => normalizeLot(lot, id, index))
     .filter((lot): lot is Lot => lot !== null);
 
-  return { id, title, platform, publisher, year, lang, description, lots };
+  // Collector metadata arrived later than the first payloads: older saves simply
+  // have empty values, and the catalogue seeds fill them in on read.
+  return {
+    id,
+    title,
+    platform,
+    publisher,
+    developer: readString(value.developer) ?? '',
+    series: readString(value.series) ?? '',
+    year,
+    lang,
+    region: readString(value.region) ?? '',
+    edition: readString(value.edition) ?? '',
+    completeness: readString(value.completeness) ?? '',
+    media: readString(value.media) ?? '',
+    description,
+    lots,
+  };
 }
 
 /** Returns `null` for payloads that cannot be trusted, so the caller can fall back to seeds. */
@@ -73,6 +92,119 @@ export function parseGames(value: unknown): Game[] | null {
 export function parseOwnedIds(value: unknown): string[] | null {
   if (!Array.isArray(value)) return null;
   return value.filter((id): id is string => typeof id === 'string' && id.length > 0);
+}
+
+/** Old saved entries predate photos, so a missing field simply means an empty gallery. */
+function readPhotos(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .filter(
+      (photo): photo is string =>
+        typeof photo === 'string' && photo.startsWith('data:image/'),
+    )
+    .slice(0, MAX_MARKET_PHOTOS);
+}
+
+/** Legacy entries predate the logistics fields, so every reader has a safe default. */
+function readDeliveryServices(value: unknown): MarketDeliveryService[] {
+  if (!Array.isArray(value)) return [];
+
+  return [...new Set(value.filter(isDeliveryService))];
+}
+
+function readPackagingPrice(value: unknown): number | null {
+  return typeof value === 'number' && Number.isInteger(value) && value >= 0
+    ? value
+    : null;
+}
+
+function readBidStep(value: unknown): number | null {
+  return typeof value === 'number' && Number.isInteger(value) && value > 0
+    ? value
+    : null;
+}
+
+function normalizeMarketEntry(value: unknown): MarketEntry | null {
+  if (!isRecord(value)) return null;
+
+  const kind = value.kind;
+  const id = readString(value.id);
+  const gameId = readString(value.gameId);
+  const title = readString(value.title);
+  const edition = (readString(value.edition) ?? '').slice(0, 80);
+  const region = (readString(value.region) ?? '').slice(0, 80);
+  const condition = readString(value.condition);
+  const seller = readString(value.seller);
+  const description = readString(value.description);
+  const photos = readPhotos(value.photos);
+  const deliveryServices = readDeliveryServices(value.deliveryServices);
+  const internationalShipping =
+    typeof value.internationalShipping === 'boolean'
+      ? value.internationalShipping
+      : null;
+  const packagingPrice = readPackagingPrice(value.packagingPrice);
+  const shipsFrom = (readString(value.shipsFrom) ?? '').slice(0, 80);
+  const price = readNumber(value.price);
+  const bids = readNumber(value.bids) ?? 0;
+  const bidStep = readBidStep(value.bidStep);
+  const createdAt = readString(value.createdAt);
+  const rawStartsAt = value.startsAt === null ? null : readString(value.startsAt);
+  const startsAt =
+    rawStartsAt && !Number.isNaN(Date.parse(rawStartsAt)) ? rawStartsAt : null;
+  const endsAt = value.endsAt === null ? null : readString(value.endsAt);
+
+  if (
+    (kind !== 'listing' && kind !== 'auction') ||
+    !id ||
+    !gameId ||
+    !title ||
+    !condition ||
+    !seller ||
+    !description ||
+    price === null ||
+    price <= 0 ||
+    !Number.isInteger(bids) ||
+    bids < 0 ||
+    !createdAt ||
+    Number.isNaN(Date.parse(createdAt))
+  ) {
+    return null;
+  }
+
+  if (kind === 'auction' && (!endsAt || Number.isNaN(Date.parse(endsAt)))) return null;
+  if (kind === 'listing' && endsAt !== null) return null;
+
+  return {
+    id,
+    kind,
+    gameId,
+    title,
+    edition,
+    region,
+    condition,
+    price,
+    seller,
+    description,
+    photos,
+    deliveryServices,
+    internationalShipping,
+    packagingPrice,
+    shipsFrom,
+    bids,
+    bidStep: kind === 'auction' ? bidStep : null,
+    startsAt: kind === 'auction' ? (startsAt ?? createdAt) : null,
+    endsAt,
+    createdAt,
+  };
+}
+
+/** Malformed or legacy market payloads are dropped one by one, never crashing the page. */
+export function parseMarketEntries(value: unknown): MarketEntry[] | null {
+  if (!Array.isArray(value)) return null;
+  return value
+    .map(normalizeMarketEntry)
+    .filter((entry): entry is MarketEntry => entry !== null);
 }
 
 export function readStorage<T>(

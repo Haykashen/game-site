@@ -1,23 +1,17 @@
-import type { CSSProperties, ReactNode } from 'react';
-
-const LABEL_STYLE: CSSProperties = {
-  fontSize: '0.75rem',
-  fontWeight: 600,
-  display: 'block',
-  marginBottom: '0.25rem',
-};
+import type { ReactNode } from 'react';
 
 interface FormFieldProps {
   id: string;
   label: string;
+  className?: string;
   children: ReactNode;
 }
 
-/** Label + control pair for the "create lot" form. */
-export function FormField({ id, label, children }: FormFieldProps) {
+/** Label + control pair used by the marketplace placement form. */
+export function FormField({ id, label, className, children }: FormFieldProps) {
   return (
-    <div>
-      <label htmlFor={id} className="spec-label" style={LABEL_STYLE}>
+    <div className={className}>
+      <label htmlFor={id} className="form-label">
         {label}
       </label>
       {children}

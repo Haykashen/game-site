@@ -1,9 +1,9 @@
 import { Bookmark, X } from 'lucide-react';
 import { getPlatformBadgeStyle } from '../data';
 import { cx } from '../lib/cx';
-import type { Game, LotDraft, LotType } from '../types';
+import type { Game, LotType } from '../types';
 import { ArtworkPanel } from './modal/ArtworkPanel';
-import { LotForm } from './modal/LotForm';
+import { GameActions } from './modal/GameActions';
 import { LotsSection } from './modal/LotsSection';
 import { PriceAnalytics } from './modal/PriceAnalytics';
 import { SpecBox } from './modal/SpecBox';
@@ -17,13 +17,14 @@ interface GameModalProps {
   activeTab: LotType;
   onClose: () => void;
   onToggleOwned: () => void;
-  onCreateLot: (draft: LotDraft) => void;
   onChangeTab: (tab: LotType) => void;
+  onPlaceListing: () => void;
+  onPlaceAuction: () => void;
 }
 
 const MODAL_TITLE_ID = 'modal-title';
 
-/** Detail drawer: collection action, price analytics, specs, lot form and lots. */
+/** Detail drawer: collection action, price analytics, specs, actions and lots. */
 export function GameModal({
   game,
   isOpen,
@@ -31,8 +32,9 @@ export function GameModal({
   activeTab,
   onClose,
   onToggleOwned,
-  onCreateLot,
   onChangeTab,
+  onPlaceListing,
+  onPlaceAuction,
 }: GameModalProps) {
   const platformStyle = getPlatformBadgeStyle(game.platform);
 
@@ -49,6 +51,8 @@ export function GameModal({
               {game.platform}
             </span>
             <span className="year">{game.year}</span>
+            {game.region && <span className="meta-chip">{game.region}</span>}
+            {game.completeness && <span className="meta-chip">{game.completeness}</span>}
           </div>
           <h2 className="modal-title" id={MODAL_TITLE_ID}>
             {game.title}
@@ -81,7 +85,7 @@ export function GameModal({
         <SpecBox game={game} />
       </div>
 
-      <LotForm onCreateLot={onCreateLot} />
+      <GameActions onPlaceListing={onPlaceListing} onPlaceAuction={onPlaceAuction} />
 
       <LotsSection game={game} activeTab={activeTab} onChangeTab={onChangeTab} />
     </ModalShell>

@@ -4,6 +4,22 @@
     "Русский",
     "Японский"
   ],
+  "regions": [
+    "PAL",
+    "NTSC-U",
+    "NTSC-J"
+  ],
+  "editions": [
+    "Standard",
+    "Launch Edition",
+    "Collector's Edition",
+    "Limited Edition"
+  ],
+  "completeness": [
+    "Sealed",
+    "CIB",
+    "Loose"
+  ],
   "yearRanges": [
     {
       "value": "1995-2000",
