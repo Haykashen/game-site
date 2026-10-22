@@ -1,4 +1,11 @@
-import type { Game, Lot, MarketDeliveryService, MarketEntry } from '../types';
+import type {
+  Copy,
+  Edition,
+  Game,
+  MarketDeliveryService,
+  MarketEntry,
+  MarketListingType,
+} from '../types';
 import { MAX_MARKET_PHOTOS } from './constants';
 import { isDeliveryService } from './delivery';
 
@@ -11,6 +18,27 @@ const readString = (value: unknown): string | null =>
 const readNumber = (value: unknown): number | null =>
   typeof value === 'number' && Number.isFinite(value) ? value : null;
 
+const readStringList = (value: unknown, limit = 30): string[] => {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .filter((item): item is string => typeof item === 'string')
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0)
+    .slice(0, limit);
+};
+
+const isImageUrl = (value: string): boolean =>
+  value.startsWith('data:image/') || /^https?:\/\//i.test(value);
+
+const readImageList = (value: unknown, limit = 8): string[] => {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .filter((item): item is string => typeof item === 'string' && isImageUrl(item))
+    .slice(0, limit);
+};
+
 /** `crypto.randomUUID` is missing in a few older WebViews — fall back gracefully. */
 export function createId(): string {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
@@ -19,67 +47,29 @@ export function createId(): string {
   return `id-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-function normalizeLot(value: unknown, gameId: string, index: number): Lot | null {
-  if (!isRecord(value)) return null;
-
-  const type = value.type;
-  const title = readString(value.title);
-  const condition = readString(value.condition);
-  const user = readString(value.user);
-  const price = readNumber(value.price);
-
-  if ((type !== 'sale' && type !== 'purchase') || !title || !condition || !user || price === null) {
-    return null;
-  }
-
-  // Lots saved by the pre-React version had no id: backfill one during migration.
-  return {
-    id: readString(value.id) ?? `${gameId}-lot-${index}-${createId()}`,
-    type,
-    title,
-    condition,
-    user,
-    price,
-  };
-}
-
 function normalizeGame(value: unknown): Game | null {
   if (!isRecord(value)) return null;
 
   const id = readString(value.id);
   const title = readString(value.title);
-  const platform = readString(value.platform);
   const publisher = readString(value.publisher);
-  const lang = readString(value.lang);
   const description = readString(value.description);
   const year = readNumber(value.year);
-  const rawLots = Array.isArray(value.lots) ? value.lots : [];
 
-  if (!id || !title || !platform || !publisher || !lang || !description || year === null) {
+  if (!id || !title || !publisher || !description || year === null) {
     return null;
   }
 
-  const lots = rawLots
-    .map((lot, index) => normalizeLot(lot, id, index))
-    .filter((lot): lot is Lot => lot !== null);
-
-  // Collector metadata arrived later than the first payloads: older saves simply
-  // have empty values, and the catalogue seeds fill them in on read.
   return {
     id,
     title,
-    platform,
     publisher,
     developer: readString(value.developer) ?? '',
     series: readString(value.series) ?? '',
     year,
-    lang,
-    region: readString(value.region) ?? '',
-    edition: readString(value.edition) ?? '',
-    completeness: readString(value.completeness) ?? '',
-    media: readString(value.media) ?? '',
+    genres: readStringList(value.genres, 8),
     description,
-    lots,
+    coverImage: readString(value.coverImage) ?? '',
   };
 }
 
@@ -89,6 +79,78 @@ export function parseGames(value: unknown): Game[] | null {
   return value.map(normalizeGame).filter((game): game is Game => game !== null);
 }
 
+function normalizeEdition(value: unknown): Edition | null {
+  if (!isRecord(value)) return null;
+
+  const id = readString(value.id);
+  const gameId = readString(value.gameId);
+  const name = readString(value.name);
+  const platform = readString(value.platform);
+  const region = readString(value.region);
+  const lang = readString(value.lang);
+  const media = readString(value.media);
+
+  if (!id || !gameId || !name || !platform || !region || !lang || !media) {
+    return null;
+  }
+
+  const rawReleaseDate = readString(value.releaseDate);
+  const releaseDate =
+    rawReleaseDate && !Number.isNaN(Date.parse(rawReleaseDate)) ? rawReleaseDate : '';
+
+  return {
+    id,
+    gameId,
+    name,
+    platform,
+    region,
+    lang,
+    media,
+    releaseDate,
+    description: readString(value.description) ?? '',
+    contents: readStringList(value.contents),
+    coverImages: readImageList(value.coverImages),
+    barcode: readString(value.barcode) ?? '',
+    dnsProductId: readString(value.dnsProductId) ?? '',
+    dnsProductCode: readString(value.dnsProductCode) ?? '',
+  };
+}
+
+export function parseEditions(value: unknown): Edition[] | null {
+  if (!Array.isArray(value)) return null;
+  return value
+    .map(normalizeEdition)
+    .filter((edition): edition is Edition => edition !== null);
+}
+
+function normalizeCopy(value: unknown): Copy | null {
+  if (!isRecord(value)) return null;
+
+  const id = readString(value.id);
+  const editionId = readString(value.editionId);
+  const createdAt = readString(value.createdAt);
+
+  if (!id || !editionId || !createdAt || Number.isNaN(Date.parse(createdAt))) {
+    return null;
+  }
+
+  return {
+    id,
+    editionId,
+    condition: readString(value.condition) ?? 'Не указано',
+    completeness: readString(value.completeness) ?? 'Не указано',
+    notes: readString(value.notes) ?? '',
+    photos: readImageList(value.photos, MAX_MARKET_PHOTOS),
+    createdAt,
+  };
+}
+
+export function parseCopies(value: unknown): Copy[] | null {
+  if (!Array.isArray(value)) return null;
+  return value.map(normalizeCopy).filter((copy): copy is Copy => copy !== null);
+}
+
+/** Legacy saves stored a game-level collection; these ids seed the first copies. */
 export function parseOwnedIds(value: unknown): string[] | null {
   if (!Array.isArray(value)) return null;
   return value.filter((id): id is string => typeof id === 'string' && id.length > 0);
@@ -125,15 +187,50 @@ function readBidStep(value: unknown): number | null {
     : null;
 }
 
-function normalizeMarketEntry(value: unknown): MarketEntry | null {
+/** Old listings predate the intention field, so they become fixed-price sales. */
+function readListingType(
+  value: unknown,
+  kind: MarketEntry['kind'],
+): MarketListingType | null {
+  if (kind === 'auction') return null;
+  if (value === 'sale' || value === 'purchase' || value === 'exchange') return value;
+  return 'sale';
+}
+
+interface EditionLookup {
+  readonly byId: ReadonlyMap<string, Edition>;
+  readonly firstByGame: ReadonlyMap<string, string>;
+  /** Legacy market entries stored `edition` and `region` as free-form strings. */
+  readonly byLegacyKey: ReadonlyMap<string, string>;
+}
+
+function createEditionLookup(editions: readonly Edition[]): EditionLookup {
+  const byId = new Map<string, Edition>();
+  const firstByGame = new Map<string, string>();
+  const byLegacyKey = new Map<string, string>();
+
+  for (const edition of editions) {
+    byId.set(edition.id, edition);
+    if (!firstByGame.has(edition.gameId)) firstByGame.set(edition.gameId, edition.id);
+    byLegacyKey.set(
+      `${edition.gameId}|${edition.name}|${edition.region}`,
+      edition.id,
+    );
+  }
+
+  return { byId, firstByGame, byLegacyKey };
+}
+
+function normalizeMarketEntry(
+  value: unknown,
+  lookup: EditionLookup,
+): MarketEntry | null {
   if (!isRecord(value)) return null;
 
   const kind = value.kind;
   const id = readString(value.id);
   const gameId = readString(value.gameId);
   const title = readString(value.title);
-  const edition = (readString(value.edition) ?? '').slice(0, 80);
-  const region = (readString(value.region) ?? '').slice(0, 80);
   const condition = readString(value.condition);
   const seller = readString(value.seller);
   const description = readString(value.description);
@@ -175,13 +272,34 @@ function normalizeMarketEntry(value: unknown): MarketEntry | null {
   if (kind === 'auction' && (!endsAt || Number.isNaN(Date.parse(endsAt)))) return null;
   if (kind === 'listing' && endsAt !== null) return null;
 
+  const listingType = readListingType(value.listingType, kind);
+  const directEditionId = readString(value.editionId);
+  const legacyEdition = readString(value.edition);
+  const legacyRegion = readString(value.region);
+  const directMatch =
+    directEditionId && lookup.byId.get(directEditionId)?.gameId === gameId
+      ? directEditionId
+      : null;
+  const legacyMatch =
+    legacyEdition && legacyRegion
+      ? lookup.byLegacyKey.get(`${gameId}|${legacyEdition}|${legacyRegion}`) ?? null
+      : null;
+  let editionId = directMatch ?? legacyMatch;
+  const editionRequired = kind === 'auction' || listingType !== 'purchase';
+
+  if (!editionId && editionRequired) {
+    editionId = lookup.firstByGame.get(gameId) ?? null;
+  }
+
+  if (editionRequired && !editionId) return null;
+
   return {
     id,
     kind,
+    listingType,
     gameId,
+    editionId,
     title,
-    edition,
-    region,
     condition,
     price,
     seller,
@@ -199,11 +317,19 @@ function normalizeMarketEntry(value: unknown): MarketEntry | null {
   };
 }
 
-/** Malformed or legacy market payloads are dropped one by one, never crashing the page. */
-export function parseMarketEntries(value: unknown): MarketEntry[] | null {
+/**
+ * Malformed or legacy market payloads are dropped one by one, never crashing the
+ * page. `editions` lets old `edition` + `region` entries find their new edition id.
+ */
+export function parseMarketEntries(
+  value: unknown,
+  editions: readonly Edition[] = [],
+): MarketEntry[] | null {
   if (!Array.isArray(value)) return null;
+  const lookup = createEditionLookup(editions);
+
   return value
-    .map(normalizeMarketEntry)
+    .map((entry) => normalizeMarketEntry(entry, lookup))
     .filter((entry): entry is MarketEntry => entry !== null);
 }
 

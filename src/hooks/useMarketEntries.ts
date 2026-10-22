@@ -3,6 +3,7 @@ import { INITIAL_MARKET_ENTRIES } from '../data';
 import { STORAGE_KEYS } from '../lib/constants';
 import { createId, parseMarketEntries } from '../lib/storage';
 import type { MarketDraft, MarketEntry } from '../types';
+import { useCollection } from '../context/CollectionContext';
 import { usePersistentState } from './usePersistentState';
 
 export interface MarketStore {
@@ -16,10 +17,16 @@ export interface MarketStore {
  * localStorage only adds entries created by the user.
  */
 export function useMarketEntries(): MarketStore {
+  const { editions } = useCollection();
+  const parseStoredEntries = useCallback(
+    (value: unknown) => parseMarketEntries(value, editions),
+    [editions],
+  );
+
   const [storedEntries, setStoredEntries] = usePersistentState<MarketEntry[]>(
     STORAGE_KEYS.market,
     [],
-    parseMarketEntries,
+    parseStoredEntries,
   );
 
   const entries = useMemo(() => {

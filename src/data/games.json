@@ -2,46 +2,43 @@
   {
     "id": "silent-hill-2",
     "title": "Silent Hill 2",
-    "platform": "PS2",
     "publisher": "Konami",
     "developer": "Team Silent",
     "series": "Silent Hill",
     "year": 2001,
-    "lang": "Английский",
-    "region": "PAL",
-    "edition": "Standard",
-    "completeness": "CIB",
-    "media": "DVD",
-    "description": "Психологический survival horror. Джеймс Сандерленд отправляется в туманный Сайлент Хилл после получения письма от умершей жены."
+    "genres": [
+      "Survival horror",
+      "Психологический хоррор"
+    ],
+    "description": "Психологический survival horror. Джеймс Сандерленд отправляется в туманный Сайлент Хилл после получения письма от умершей жены.",
+    "coverImage": ""
   },
   {
     "id": "halo-combat",
     "title": "Halo: Combat Evolved",
-    "platform": "Xbox Original",
     "publisher": "Bungie",
     "developer": "Bungie",
     "series": "Halo",
     "year": 2001,
-    "lang": "Английский",
-    "region": "NTSC-U",
-    "edition": "Standard",
-    "completeness": "CIB",
-    "media": "DVD",
-    "description": "Научно-фантастический шутер от первого лица, положивший начало легендарной саге о Мастере Чифе и войне человечества против Ковенанта."
+    "genres": [
+      "Шутер",
+      "Научная фантастика"
+    ],
+    "description": "Научно-фантастический шутер от первого лица, положивший начало легендарной саге о Мастере Чифе и войне человечества против Ковенанта.",
+    "coverImage": ""
   },
   {
     "id": "elden-ring",
     "title": "Elden Ring",
-    "platform": "PS5",
     "publisher": "FromSoftware",
     "developer": "FromSoftware",
     "series": "Souls",
     "year": 2022,
-    "lang": "Русский",
-    "region": "PAL",
-    "edition": "Launch Edition",
-    "completeness": "Sealed",
-    "media": "Blu-ray",
-    "description": "Ролевой экшен с открытым миром от авторов Dark Souls и Джорджа Мартина. Исследуйте Междуземье и станьте Владыкой Элден."
+    "genres": [
+      "Action RPG",
+      "Открытый мир"
+    ],
+    "description": "Ролевой экшен с открытым миром от авторов Dark Souls и Джорджа Мартина. Исследуйте Междуземье и станьте Владыкой Элден.",
+    "coverImage": "https://c.dns-shop.ru/thumb/st4/fit/500/500/67bdb7146c1985609428770835f702e4/37cc0b233ceead117992d77d8324700e48f36bcc0467d9df5142de8436d25d1a.png.webp"
   }
 ]

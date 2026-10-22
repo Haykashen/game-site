@@ -1,30 +1,31 @@
 import { memo } from 'react';
 import type { KeyboardEvent } from 'react';
-import { Check, Disc, Eye, Languages } from 'lucide-react';
+import { Check, Disc, Eye, Layers } from 'lucide-react';
 import { getPlatformBadgeStyle } from '../data';
 import { cx } from '../lib/cx';
-import type { Game } from '../types';
+import { editionsCountLabel, lotsCountLabel } from '../lib/market';
+import type { Game, GameStats } from '../types';
 
 interface GameCardProps {
   game: Game;
-  isOwned: boolean;
+  stats: GameStats;
   onSelect: (gameId: string) => void;
 }
 
 /**
- * Catalogue tile: generated cover art, badges and a compact meta footer.
- * Memoised so typing in the search field does not re-render every card.
+ * Catalogue tile: abstract game first, with edition and market counts in the
+ * footer. Memoised so typing in the search field does not re-render every card.
  */
-function GameCardComponent({ game, isOwned, onSelect }: GameCardProps) {
-  const salesLotsCount = game.lots.filter((lot) => lot.type === 'sale').length;
-  const platformStyle = getPlatformBadgeStyle(game.platform);
-
+function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       onSelect(game.id);
     }
   };
+
+  const visiblePlatforms = stats.platforms.slice(0, 2);
+  const hiddenPlatforms = stats.platforms.length - visiblePlatforms.length;
 
   return (
     <div
@@ -36,11 +37,33 @@ function GameCardComponent({ game, isOwned, onSelect }: GameCardProps) {
       onKeyDown={handleKeyDown}
     >
       <div className="card-cover">
+        {stats.coverImage && (
+          <img className="card-cover__image" src={stats.coverImage} alt="" loading="lazy" />
+        )}
+
         <div className="cover-art" aria-hidden="true">
           <span className="art-orbit" />
           <span className="art-sigil" />
           <span className="art-horizon" />
           <span className="art-scanline" />
+        </div>
+
+        <div className="card-platforms">
+          {visiblePlatforms.map((platform) => (
+            <span
+              key={platform}
+              className="badge-platform badge-platform--static"
+              data-platform={platform}
+              style={getPlatformBadgeStyle(platform)}
+            >
+              {platform}
+            </span>
+          ))}
+          {hiddenPlatforms > 0 && (
+            <span className="badge-platform badge-platform--static badge-platform--more">
+              +{hiddenPlatforms}
+            </span>
+          )}
         </div>
 
         <div className="card-hover-overlay">
@@ -59,16 +82,15 @@ function GameCardComponent({ game, isOwned, onSelect }: GameCardProps) {
           <Disc size={40} />
           <span className="cover-title">{game.title}</span>
           <span className="cover-edition">
-            {game.platform} • {game.year}
+            {stats.platforms.length > 0 ? stats.platforms.join(' / ') : 'Платформа не указана'} •{' '}
+            {game.year}
           </span>
         </div>
 
-        <span className="badge-platform" data-platform={game.platform} style={platformStyle}>
-          {game.platform}
-        </span>
-        {isOwned && (
+        {stats.ownedCount > 0 && (
           <span className="badge-owned">
             <Check size={12} /> На полке
+            {stats.ownedCount > 1 ? ` ×${stats.ownedCount}` : ''}
           </span>
         )}
       </div>
@@ -79,12 +101,15 @@ function GameCardComponent({ game, isOwned, onSelect }: GameCardProps) {
           <p className="card-meta">
             {game.publisher} • {game.year}
           </p>
+          {game.genres.length > 0 && (
+            <p className="card-genres">{game.genres.slice(0, 2).join(' · ')}</p>
+          )}
         </div>
         <div className="card-footer">
           <span className="lang-info">
-            <Languages size={14} /> {game.lang}
+            <Layers size={14} /> {editionsCountLabel(stats.editionCount)}
           </span>
-          <span className="lots-count">{salesLotsCount} лотов</span>
+          <span className="lots-count">{lotsCountLabel(stats.lotsCount)}</span>
         </div>
       </div>
     </div>

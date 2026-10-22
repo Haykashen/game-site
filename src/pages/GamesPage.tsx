@@ -1,98 +1,51 @@
-import { useCallback, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useMemo } from 'react';
 import { GameBrowser } from '../components/GameBrowser';
 import { SearchToolbar } from '../components/SearchToolbar';
 import { useCollection } from '../context/CollectionContext';
 import { useGameDrawerParam } from '../hooks/useGameDrawerParam';
+import { useUrlFilters } from '../hooks/useUrlFilters';
+import { CATALOG_FILTER_FIELDS, SEARCH_FILTER_PARAMS } from '../lib/searchFilterConfig';
 import { selectVisibleGames } from '../lib/selectVisibleGames';
-import type { CatalogFilters } from '../types';
 
-const FILTER_PARAMS: ReadonlyArray<readonly [keyof CatalogFilters, string]> = [
-  ['query', 'q'],
-  ['platform', 'platform'],
-  ['lang', 'lang'],
-  ['yearRange', 'year'],
-  ['region', 'region'],
-  ['edition', 'edition'],
-  ['completeness', 'completeness'],
-];
+function gamesCountLabel(count: number): string {
+  const mod10 = count % 10;
+  const mod100 = count % 100;
 
-function readFilters(params: URLSearchParams): CatalogFilters {
-  return {
-    query: params.get('q') ?? '',
-    platform: params.get('platform') ?? '',
-    lang: params.get('lang') ?? '',
-    yearRange: params.get('year') ?? '',
-    region: params.get('region') ?? '',
-    edition: params.get('edition') ?? '',
-    completeness: params.get('completeness') ?? '',
-  };
+  if (mod10 === 1 && mod100 !== 11) return `${count} игра`;
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return `${count} игры`;
+  return `${count} игр`;
 }
 
 /** Catalogue with URL-backed filters, grid and the game detail drawer. */
 export function GamesPage() {
-  const { games } = useCollection();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { gameId, openGame, closeGame } = useGameDrawerParam();
-  const filters = useMemo(() => readFilters(searchParams), [searchParams]);
-
-  const updateFilters = useCallback(
-    (patch: Partial<CatalogFilters>) => {
-      setSearchParams(
-        (previous) => {
-          const next = new URLSearchParams(previous);
-
-          for (const [field, paramName] of FILTER_PARAMS) {
-            const value = patch[field];
-            if (value === undefined) continue;
-
-            if (value) {
-              next.set(paramName, value);
-            } else {
-              next.delete(paramName);
-            }
-          }
-
-          return next;
-        },
-        { replace: true },
-      );
-    },
-    [setSearchParams],
-  );
-
-  const resetFilters = useCallback(() => {
-    setSearchParams(
-      (previous) => {
-        const next = new URLSearchParams(previous);
-
-        for (const [, paramName] of FILTER_PARAMS) {
-          next.delete(paramName);
-        }
-
-        return next;
-      },
-      { replace: true },
-    );
-  }, [setSearchParams]);
+  const { games, editions } = useCollection();
+  const { gameId, editionId, openGame, closeGame } = useGameDrawerParam();
+  const { values: filters, setValue, reset } = useUrlFilters(SEARCH_FILTER_PARAMS);
 
   const visibleGames = useMemo(
-    () => selectVisibleGames(games, filters),
-    [filters, games],
+    () => selectVisibleGames(games, editions, filters),
+    [editions, filters, games],
   );
 
   return (
     <>
       <h1 className="sr-only">Каталог игр</h1>
       <SearchToolbar
-        filters={filters}
-        resultCount={visibleGames.length}
-        onFilterChange={updateFilters}
-        onReset={resetFilters}
+        idPrefix="catalog"
+        ariaLabel="Поиск и фильтры каталога"
+        searchPlaceholder="Найти игру по названию"
+        query={filters.query}
+        filterValues={filters}
+        fields={CATALOG_FILTER_FIELDS}
+        resultCountLabel={gamesCountLabel(visibleGames.length)}
+        onQueryChange={(query) => setValue('query', query)}
+        onFilterChange={setValue}
+        onReset={reset}
       />
       <GameBrowser
         games={visibleGames}
         gameId={gameId}
+        editionId={editionId}
         onOpenGame={openGame}
         onCloseGame={closeGame}
       />

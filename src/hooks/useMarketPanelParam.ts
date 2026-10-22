@@ -6,9 +6,11 @@ export interface MarketPanelState {
   isComposing: boolean;
   /** Game preselected for the placement form, if the flow started from a game card. */
   composeGameId: string;
+  /** Edition preselected for the placement form, if the flow started from an edition card. */
+  composeEditionId: string;
   /** Entry whose detail card is open, empty when the drawer is closed. */
   itemId: string;
-  openCompose: (gameId?: string) => void;
+  openCompose: (gameId?: string, editionId?: string) => void;
   openItem: (itemId: string, options?: { replace?: boolean }) => void;
   closePanel: () => void;
 }
@@ -21,7 +23,7 @@ export function useMarketPanelParam(): MarketPanelState {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const openCompose = useCallback(
-    (gameId = '') => {
+    (gameId = '', editionId = '') => {
       setSearchParams((previous) => {
         const next = new URLSearchParams(previous);
         next.set('compose', '1');
@@ -29,6 +31,9 @@ export function useMarketPanelParam(): MarketPanelState {
 
         if (gameId) next.set('game', gameId);
         else next.delete('game');
+
+        if (editionId) next.set('editionId', editionId);
+        else next.delete('editionId');
 
         return next;
       });
@@ -44,6 +49,7 @@ export function useMarketPanelParam(): MarketPanelState {
           next.set('item', itemId);
           next.delete('compose');
           next.delete('game');
+          next.delete('editionId');
           return next;
         },
         { replace: options?.replace ?? false },
@@ -59,6 +65,7 @@ export function useMarketPanelParam(): MarketPanelState {
         next.delete('compose');
         next.delete('item');
         next.delete('game');
+        next.delete('editionId');
         return next;
       },
       { replace: true },
@@ -68,6 +75,7 @@ export function useMarketPanelParam(): MarketPanelState {
   return {
     isComposing: searchParams.get('compose') === '1',
     composeGameId: searchParams.get('game') ?? '',
+    composeEditionId: searchParams.get('editionId') ?? '',
     itemId: searchParams.get('item') ?? '',
     openCompose,
     openItem,

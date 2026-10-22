@@ -1,14 +1,17 @@
 import { Gavel, Tag, X } from 'lucide-react';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { EDITIONS, REGIONS } from '../../data';
 import { cx } from '../../lib/cx';
 import { DELIVERY_SERVICES } from '../../lib/delivery';
+import { editionLabel } from '../../lib/editions';
+import { MARKET_LISTING_TYPE_OPTIONS } from '../../lib/market';
 import type {
+  Edition,
   Game,
   MarketDeliveryService,
   MarketDraft,
   MarketKind,
+  MarketListingType,
 } from '../../types';
 import { FormField } from '../ui/FormField';
 import { IconButton } from '../ui/IconButton';
@@ -17,8 +20,11 @@ import { PhotoPicker } from './PhotoPicker';
 interface ComposeEntryFormProps {
   kind: MarketKind;
   games: readonly Game[];
+  editions: readonly Edition[];
   /** Game preselected when the flow started from a game card. */
   initialGameId: string;
+  /** Edition preselected when the flow started from an edition card. */
+  initialEditionId: string;
   titleId: string;
   onSubmit: (draft: MarketDraft) => void;
   onCancel: () => void;
@@ -49,7 +55,9 @@ function formatDateTimeLocal(date: Date): string {
 export function ComposeEntryForm({
   kind,
   games,
+  editions,
   initialGameId,
+  initialEditionId,
   titleId,
   onSubmit,
   onCancel,
@@ -58,13 +66,18 @@ export function ComposeEntryForm({
   const defaultGameId = games.some((game) => game.id === initialGameId)
     ? initialGameId
     : (games[0]?.id ?? '');
-  const defaultGame = games.find((game) => game.id === defaultGameId);
+
+  const editionsForGame = (gameId: string) => editions.filter((edition) => edition.gameId === gameId);
+
+  const defaultEditionId = (gameId: string) => {
+    const gameEditions = editionsForGame(gameId);
+    const preferred = gameEditions.find((edition) => edition.id === initialEditionId);
+    return preferred?.id ?? gameEditions[0]?.id ?? '';
+  };
 
   const [gameId, setGameId] = useState(defaultGameId);
-  const [edition, setEdition] = useState(
-    defaultGame?.edition ?? EDITIONS[0] ?? '',
-  );
-  const [region, setRegion] = useState(defaultGame?.region ?? REGIONS[0] ?? '');
+  const [listingType, setListingType] = useState<MarketListingType>('sale');
+  const [editionId, setEditionId] = useState(() => defaultEditionId(defaultGameId));
   const [title, setTitle] = useState('');
   const [condition, setCondition] = useState('');
   const [price, setPrice] = useState('');
@@ -83,14 +96,21 @@ export function ComposeEntryForm({
   const [packagingPrice, setPackagingPrice] = useState('');
   const [shipsFrom, setShipsFrom] = useState('');
 
+  const gameEditions = editionsForGame(gameId);
   const selectedGame = games.find((game) => game.id === gameId);
+  const isPurchase = !isAuction && listingType === 'purchase';
 
   const handleGameChange = (nextGameId: string) => {
-    const nextGame = games.find((game) => game.id === nextGameId);
-
     setGameId(nextGameId);
-    setEdition(nextGame?.edition ?? EDITIONS[0] ?? '');
-    setRegion(nextGame?.region ?? REGIONS[0] ?? '');
+    setEditionId(defaultEditionId(nextGameId));
+  };
+
+  const handleListingTypeChange = (nextType: MarketListingType) => {
+    setListingType(nextType);
+
+    if (nextType !== 'purchase' && !editionId) {
+      setEditionId(editionsForGame(gameId)[0]?.id ?? '');
+    }
   };
 
   const toggleDeliveryService = (service: MarketDeliveryService) => {
@@ -108,8 +128,7 @@ export function ComposeEntryForm({
     if (isProcessingPhotos) return;
 
     const trimmedTitle = title.trim();
-    const trimmedEdition = edition.trim();
-    const trimmedRegion = region.trim();
+    const trimmedEditionId = editionId.trim();
     const trimmedCondition = condition.trim();
     const trimmedDescription = description.trim();
     const trimmedShipsFrom = shipsFrom.trim();
@@ -122,8 +141,6 @@ export function ComposeEntryForm({
 
     if (
       !gameId ||
-      !trimmedEdition ||
-      !trimmedRegion ||
       !trimmedTitle ||
       !trimmedCondition ||
       !trimmedDescription ||
@@ -137,6 +154,11 @@ export function ComposeEntryForm({
       (numericPackaging !== null &&
         (!Number.isInteger(numericPackaging) || numericPackaging < 0))
     ) {
+      return;
+    }
+
+    if (!isPurchase && !trimmedEditionId) return;
+    if (trimmedEditionId && !gameEditions.some((edition) => edition.id === trimmedEditionId)) {
       return;
     }
 
@@ -157,10 +179,10 @@ export function ComposeEntryForm({
 
     onSubmit({
       kind,
+      listingType: isAuction ? null : listingType,
       gameId,
+      editionId: trimmedEditionId || null,
       title: trimmedTitle,
-      edition: trimmedEdition,
-      region: trimmedRegion,
       condition: trimmedCondition,
       price: numericPrice,
       seller: AUTHOR,
@@ -217,44 +239,70 @@ export function ComposeEntryForm({
               required
             >
               {games.length === 0 && <option value="">Каталог пуст</option>}
-              {games.map((game) => (
-                <option key={game.id} value={game.id}>
-                  {game.title} ({game.platform})
-                </option>
-              ))}
+              {games.map((game) => {
+                const platforms = [
+                  ...new Set(
+                    editions
+                      .filter((edition) => edition.gameId === game.id)
+                      .map((edition) => edition.platform),
+                  ),
+                ];
+
+                return (
+                  <option key={game.id} value={game.id}>
+                    {game.title}
+                    {platforms.length > 0 ? ` (${platforms.join(', ')})` : ''}
+                  </option>
+                );
+              })}
             </select>
           </FormField>
 
-          <FormField id="marketEdition" label="Издание">
+          {!isAuction && (
+            <FormField
+              id="marketListingType"
+              label="Тип объявления"
+              className="market-form__full"
+            >
+              <select
+                id="marketListingType"
+                className="form-control"
+                required
+                value={listingType}
+                onChange={(event) =>
+                  handleListingTypeChange(event.target.value as MarketListingType)
+                }
+              >
+                {MARKET_LISTING_TYPE_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </FormField>
+          )}
+
+          <FormField id="marketEdition" label="Издание" className="market-form__full">
             <select
               id="marketEdition"
               className="form-control"
-              required
-              value={edition}
-              onChange={(event) => setEdition(event.target.value)}
+              required={!isPurchase}
+              value={editionId}
+              onChange={(event) => setEditionId(event.target.value)}
             >
-              {EDITIONS.map((option) => (
-                <option key={option} value={option}>
-                  {option}
+              {isPurchase && <option value="">Любое издание</option>}
+              {gameEditions.length === 0 && <option value="">Нет изданий</option>}
+              {gameEditions.map((edition) => (
+                <option key={edition.id} value={edition.id}>
+                  {editionLabel(edition)}
                 </option>
               ))}
             </select>
-          </FormField>
-
-          <FormField id="marketRegion" label="Регион">
-            <select
-              id="marketRegion"
-              className="form-control"
-              required
-              value={region}
-              onChange={(event) => setRegion(event.target.value)}
-            >
-              {REGIONS.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
+            <p className="market-form__hint">
+              {isPurchase
+                ? 'Для покупки можно оставить «Любое издание», если готовы взять любую версию.'
+                : 'Издание определяет платформу, регион, язык и комплектацию лота.'}
+            </p>
           </FormField>
 
           <FormField id="marketTitle" label="Заголовок" className="market-form__full">

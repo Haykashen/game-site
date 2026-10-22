@@ -1,4 +1,13 @@
-import { Clock, Gamepad2, Gavel, Tag, Truck, X } from 'lucide-react';
+import {
+  ArrowLeftRight,
+  Clock,
+  Gamepad2,
+  Gavel,
+  ShoppingBag,
+  Tag,
+  Truck,
+  X,
+} from 'lucide-react';
 import { deliveryLabel } from '../../lib/delivery';
 import { formatPrice } from '../../lib/formatPrice';
 import {
@@ -9,9 +18,10 @@ import {
   formatMarketDateTime,
   isAuctionOver,
   isAuctionUpcoming,
+  listingTypeLabel,
 } from '../../lib/market';
 import { cx } from '../../lib/cx';
-import type { Game, MarketEntry } from '../../types';
+import type { Edition, Game, MarketEntry } from '../../types';
 import { IconButton } from '../ui/IconButton';
 import { SpecRow } from '../ui/SpecRow';
 import { MarketPhotoGallery } from './MarketPhotoGallery';
@@ -19,15 +29,17 @@ import { MarketPhotoGallery } from './MarketPhotoGallery';
 interface MarketEntryDetailProps {
   entry: MarketEntry;
   game: Game | undefined;
+  edition: Edition | undefined;
   titleId: string;
   onClose: () => void;
-  onOpenGame: (gameId: string) => void;
+  onOpenGame: (gameId: string, editionId?: string) => void;
 }
 
 /** Entity card: the full card of a listing or auction opened from the grid. */
 export function MarketEntryDetail({
   entry,
   game,
+  edition,
   titleId,
   onClose,
   onOpenGame,
@@ -35,13 +47,33 @@ export function MarketEntryDetail({
   const isAuction = entry.kind === 'auction';
   const isOver = isAuction && isAuctionOver(entry.endsAt);
   const isUpcoming = isAuction && isAuctionUpcoming(entry.startsAt);
+  const listingType = isAuction ? null : entry.listingType;
+  const kindLabel = isAuction ? 'Аукцион' : listingTypeLabel(listingType);
+  const KindIcon = isAuction
+    ? Gavel
+    : listingType === 'purchase'
+      ? ShoppingBag
+      : listingType === 'exchange'
+        ? ArrowLeftRight
+        : Tag;
+  const priceLabel = isAuction
+    ? 'Стартовая ставка'
+    : listingType === 'purchase'
+      ? 'Готов купить за'
+      : listingType === 'exchange'
+        ? 'Оценка'
+        : 'Цена';
   const status = isAuction
     ? isOver
       ? 'Торги завершены'
       : isUpcoming
         ? 'Скоро откроется'
         : 'Идут торги'
-    : 'В продаже';
+    : listingType === 'purchase'
+      ? 'Куплю'
+      : listingType === 'exchange'
+        ? 'Обмен'
+        : 'В продаже';
   const auctionTimerLabel = isUpcoming
     ? formatAuctionStart(entry.startsAt)
     : formatAuctionEnd(entry.endsAt);
@@ -67,12 +99,8 @@ export function MarketEntryDetail({
         <div>
           <div className="modal-header-meta">
             <span className={cx('market-kind', isAuction && 'market-kind--auction')}>
-              {isAuction ? (
-                <Gavel size={13} aria-hidden="true" />
-              ) : (
-                <Tag size={13} aria-hidden="true" />
-              )}
-              {isAuction ? 'Аукцион' : 'Объявление'}
+              <KindIcon size={13} aria-hidden="true" />
+              {kindLabel}
             </span>
             <span className="meta-chip">{status}</span>
           </div>
@@ -89,9 +117,7 @@ export function MarketEntryDetail({
 
       <div className="market-detail-price">
         <div>
-          <span className="market-detail-price__label">
-            {isAuction ? 'Стартовая ставка' : 'Цена'}
-          </span>
+          <span className="market-detail-price__label">{priceLabel}</span>
           <strong className="market-detail-price__value">{formatPrice(entry.price)}</strong>
         </div>
 
@@ -113,11 +139,12 @@ export function MarketEntryDetail({
         </div>
 
         <div className="spec-box">
-          <h4>О лоте</h4>
+          <h4>{isAuction ? 'О лоте' : 'Об объявлении'}</h4>
           <SpecRow label="Игра" value={game?.title ?? '—'} />
-          <SpecRow label="Платформа" value={game?.platform ?? '—'} />
-          <SpecRow label="Издание" value={entry.edition || game?.edition || '—'} />
-          <SpecRow label="Регион" value={entry.region || game?.region || '—'} />
+          <SpecRow label="Платформа" value={edition?.platform ?? 'Любая'} />
+          <SpecRow label="Издание" value={edition?.name ?? 'Любое издание'} />
+          <SpecRow label="Регион" value={edition?.region ?? 'Любой'} />
+          <SpecRow label="Язык" value={edition?.lang ?? '—'} />
           <SpecRow label="Состояние" value={entry.condition} />
           <SpecRow label="Автор" value={entry.seller} />
           <SpecRow label="Размещено" value={formatMarketDate(entry.createdAt)} />
@@ -205,13 +232,13 @@ export function MarketEntryDetail({
             <span className="market-game-strip__kicker">Игра в каталоге</span>
             <p className="market-game-strip__title">{game.title}</p>
             <p className="market-game-strip__meta">
-              {game.publisher} • {game.year} • {game.region}
+              {game.publisher} • {game.year}
             </p>
           </div>
           <button
             type="button"
             className="btn-collection"
-            onClick={() => onOpenGame(entry.gameId)}
+            onClick={() => onOpenGame(entry.gameId, entry.editionId ?? undefined)}
           >
             <Gamepad2 size={15} aria-hidden="true" />
             Открыть карточку

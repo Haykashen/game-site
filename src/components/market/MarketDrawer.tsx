@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { Game, MarketDraft, MarketEntry, MarketKind } from '../../types';
+import type { Edition, Game, MarketDraft, MarketEntry, MarketKind } from '../../types';
 import { ModalShell } from '../ui/ModalShell';
 import { ComposeEntryForm } from './ComposeEntryForm';
 import { MarketEntryDetail } from './MarketEntryDetail';
@@ -10,16 +10,19 @@ interface MarketDrawerProps {
   kind: MarketKind;
   entry: MarketEntry | null;
   game: Game | undefined;
+  edition: Edition | undefined;
   games: readonly Game[];
+  editions: readonly Edition[];
   initialGameId: string;
+  initialEditionId: string;
   onClose: () => void;
   onCreate: (draft: MarketDraft) => void;
-  onOpenGame: (gameId: string) => void;
+  onOpenGame: (gameId: string, editionId?: string) => void;
 }
 
 type DrawerView =
   | { type: 'compose' }
-  | { type: 'entry'; entry: MarketEntry; game: Game | undefined };
+  | { type: 'entry'; entry: MarketEntry; game: Game | undefined; edition: Edition | undefined };
 
 const TITLE_ID = 'market-drawer-title';
 
@@ -33,8 +36,11 @@ export function MarketDrawer({
   kind,
   entry,
   game,
+  edition,
   games,
+  editions,
   initialGameId,
+  initialEditionId,
   onClose,
   onCreate,
   onOpenGame,
@@ -45,17 +51,19 @@ export function MarketDrawer({
     if (isComposing) {
       setLastView({ type: 'compose' });
     } else if (entry) {
-      setLastView({ type: 'entry', entry, game });
+      setLastView({ type: 'entry', entry, game, edition });
     }
-  }, [isComposing, entry, game]);
+  }, [edition, entry, game, isComposing]);
 
   const view: DrawerView | null = isComposing
     ? { type: 'compose' }
     : entry
-      ? { type: 'entry', entry, game }
+      ? { type: 'entry', entry, game, edition }
       : lastView;
 
-  const focusKey = isComposing ? `compose-${initialGameId}` : (entry?.id ?? 'closed');
+  const focusKey = isComposing
+    ? `compose-${initialGameId}-${initialEditionId}`
+    : (entry?.id ?? 'closed');
 
   return (
     <ModalShell
@@ -66,10 +74,12 @@ export function MarketDrawer({
     >
       {view?.type === 'compose' ? (
         <ComposeEntryForm
-          key={`compose-${initialGameId}`}
+          key={`compose-${initialGameId}-${initialEditionId}`}
           kind={kind}
           games={games}
+          editions={editions}
           initialGameId={initialGameId}
+          initialEditionId={initialEditionId}
           titleId={TITLE_ID}
           onSubmit={onCreate}
           onCancel={onClose}
@@ -78,6 +88,7 @@ export function MarketDrawer({
         <MarketEntryDetail
           entry={view.entry}
           game={view.game}
+          edition={view.edition}
           titleId={TITLE_ID}
           onClose={onClose}
           onOpenGame={onOpenGame}

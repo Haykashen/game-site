@@ -1,4 +1,12 @@
-import { ArrowUpRight, Clock, Gavel, Images, Tag } from 'lucide-react';
+import {
+  ArrowLeftRight,
+  ArrowUpRight,
+  Clock,
+  Gavel,
+  Images,
+  ShoppingBag,
+  Tag,
+} from 'lucide-react';
 import type { KeyboardEvent } from 'react';
 import { formatPrice } from '../../lib/formatPrice';
 import {
@@ -6,20 +14,42 @@ import {
   formatAuctionEnd,
   formatAuctionStart,
   isAuctionUpcoming,
+  listingTypeLabel,
 } from '../../lib/market';
 import { cx } from '../../lib/cx';
-import type { Game, MarketEntry } from '../../types';
+import type { Edition, Game, MarketEntry } from '../../types';
 
 interface MarketCardProps {
   entry: MarketEntry;
   game: Game | undefined;
+  edition?: Edition | undefined;
   onSelect: (entryId: string) => void;
 }
 
 /** Entity tile for the listings and auctions pages. */
-export function MarketCard({ entry, game, onSelect }: MarketCardProps) {
+export function MarketCard({ entry, game, edition, onSelect }: MarketCardProps) {
   const isAuction = entry.kind === 'auction';
   const isUpcoming = isAuction && isAuctionUpcoming(entry.startsAt);
+  const listingType = isAuction ? null : entry.listingType;
+  const kindLabel = isAuction ? 'Аукцион' : listingTypeLabel(listingType);
+  const KindIcon = isAuction
+    ? Gavel
+    : listingType === 'purchase'
+      ? ShoppingBag
+      : listingType === 'exchange'
+        ? ArrowLeftRight
+        : Tag;
+  const priceLabel = isAuction
+    ? 'Стартовая ставка'
+    : listingType === 'purchase'
+      ? 'Бюджет'
+      : listingType === 'exchange'
+        ? 'Оценка'
+        : 'Цена';
+  const fixedLabel =
+    listingType === 'sale' || listingType === null
+      ? 'Фиксированная цена'
+      : listingTypeLabel(listingType);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -51,8 +81,8 @@ export function MarketCard({ entry, game, onSelect }: MarketCardProps) {
 
       <div className="market-card__top">
         <span className="market-kind">
-          {isAuction ? <Gavel size={13} aria-hidden="true" /> : <Tag size={13} aria-hidden="true" />}
-          {isAuction ? 'Аукцион' : 'Объявление'}
+          <KindIcon size={13} aria-hidden="true" />
+          {kindLabel}
         </span>
         <ArrowUpRight className="market-card__arrow" size={17} aria-hidden="true" />
       </div>
@@ -60,20 +90,21 @@ export function MarketCard({ entry, game, onSelect }: MarketCardProps) {
       <div className="market-card__main">
         <h2 className="market-card__title">{entry.title}</h2>
         <p className="market-card__game">
-          {game ? `${game.title} • ${game.platform}` : 'Игра не найдена'}
+          {game
+            ? `${game.title}${edition ? ` • ${edition.platform} • ${edition.region}` : ' • любое издание'}`
+            : 'Игра не найдена'}
         </p>
       </div>
 
       <div className="market-card__chips">
+        {edition && <span className="market-chip">{edition.name}</span>}
         <span className="market-chip">{entry.condition}</span>
         <span className="market-chip">{entry.seller}</span>
       </div>
 
       <div className="market-card__bottom">
         <div className="market-card__price-block">
-          <span className="market-card__price-label">
-            {isAuction ? 'Стартовая ставка' : 'Цена'}
-          </span>
+          <span className="market-card__price-label">{priceLabel}</span>
           <span className="market-card__price">{formatPrice(entry.price)}</span>
         </div>
 
@@ -89,7 +120,7 @@ export function MarketCard({ entry, game, onSelect }: MarketCardProps) {
               <span className="market-card__bids">{bidsLabel(entry.bids)}</span>
             </>
           ) : (
-            <span className="market-card__fixed">Фиксированная цена</span>
+            <span className="market-card__fixed">{fixedLabel}</span>
           )}
         </div>
       </div>

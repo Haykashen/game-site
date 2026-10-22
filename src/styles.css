@@ -92,11 +92,14 @@
         .search-clear { position: absolute; right: 0.55rem; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 7px; background: var(--bg-input); color: var(--text-muted); transition: color 0.2s, background 0.2s; }
         .search-clear:hover { color: var(--text-main); background: var(--border-color); }
         .catalog-toolbar__meta { display: flex; align-items: center; gap: 0.7rem; flex: none; }
+        .catalog-toolbar__actions { display: flex; align-items: center; gap: 0.4rem; }
         .catalog-results { display: inline-flex; align-items: center; gap: 0.45rem; color: var(--text-muted); font: 600 0.68rem/1.4 'IBM Plex Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
         .catalog-results::before { content: ""; width: 7px; height: 7px; border-radius: 2px; background: var(--brand); box-shadow: 0 0 0 3px var(--brand-light); }
-        .filter-reset { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 0.7rem; border: 1px solid var(--border-color); border-radius: 8px; background: transparent; color: var(--text-muted); font-size: 0.76rem; font-weight: 600; transition: color 0.2s, border-color 0.2s, background 0.2s; }
-        .filter-reset:hover:not(:disabled) { color: var(--text-main); border-color: var(--brand); background: var(--brand-light); }
-        .filter-reset:disabled { opacity: 0.4; cursor: not-allowed; }
+        .filter-icon-btn { position: relative; width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0; border: 1px solid var(--border-color); border-radius: 9px; background: transparent; color: var(--text-muted); transition: color 0.2s, border-color 0.2s, background 0.2s; }
+        .filter-icon-btn:hover:not(:disabled) { color: var(--text-main); border-color: var(--brand); background: var(--brand-light); }
+        .filter-icon-btn.is-open { color: var(--text-main); border-color: var(--brand); background: var(--brand-light); }
+        .filter-icon-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .filter-toggle__count { position: absolute; top: -6px; right: -6px; min-width: 18px; height: 18px; padding: 0 4px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; background: var(--brand); color: #172013; font: 700 0.58rem/1 'IBM Plex Mono', monospace; box-shadow: 0 0 0 2px var(--bg-card); }
 
         .btn-primary { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.85rem 1.75rem; background: var(--brand); color: white; border: none; border-radius: 0.75rem; font-weight: 600; font-size: 0.95rem; box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25); transition: all 0.2s ease; }
         .btn-primary:hover { background: var(--brand-hover); transform: translateY(-1px); }
@@ -155,7 +158,7 @@
         .lots-count { font-weight: 600; padding: 0.25rem 0.5rem; border-radius: 0.35rem; background: var(--emerald-light); color: var(--emerald); }
 
         /* МАКЕТ МОДАЛЬНОГО ОКНА */
-        .modal-fixed { position: fixed; inset: 0; z-index: 50; display: none; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-fixed { position: fixed; inset: 0; z-index: 70; display: none; opacity: 0; transition: opacity 0.3s ease; }
         .modal-fixed.active { display: block; opacity: 1; }
         .modal-backdrop { position: absolute; inset: 0; background: rgba(2, 6, 23, 0.7); backdrop-filter: blur(8px); }
         
@@ -237,9 +240,17 @@
         .game-cta__btn--auction:hover { background: var(--brand-light); }
         @media (max-width: 520px) { .game-cta { grid-template-columns: 1fr; } }
 
-        .tabs-header { display: flex; gap: 1.75rem; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; font-weight: 600; margin-top: 1rem; }
-        .tab-btn { background: none; border: none; padding-bottom: 0.85rem; color: var(--text-muted); border-bottom: 2px solid transparent; transition: all 0.2s; font-weight: 600; }
+        .tabs-header { display: flex; gap: 1.75rem; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; font-weight: 600; margin-top: 1rem; overflow-x: auto; scrollbar-width: none; }
+        .tabs-header::-webkit-scrollbar { display: none; }
+        .tab-btn { background: none; border: none; padding-bottom: 0.85rem; color: var(--text-muted); border-bottom: 2px solid transparent; transition: all 0.2s; font-weight: 600; white-space: nowrap; }
         .tab-btn.active { color: var(--brand); border-color: var(--brand); }
+
+        .game-market { margin-top: 1.25rem; }
+        .game-market__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .game-market__empty { margin-top: 1rem; padding: 1.5rem; border: 1px dashed var(--border-color); border-radius: 1rem; text-align: center; color: var(--text-muted); font-size: 0.88rem; }
+        .game-market__empty--discussions { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+        .game-market__empty--discussions svg { color: var(--brand); }
+        .game-market__soon { display: inline-flex; padding: 0.25rem 0.5rem; border-radius: 999px; background: var(--brand-light); color: var(--brand); font: 600 0.62rem/1 'IBM Plex Mono', monospace; letter-spacing: 0.06em; text-transform: uppercase; }
         
         .lot-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-main); border-radius: 0.85rem; border: 1px solid var(--border-color); margin-top: 0.75rem; }
         .lot-info { display: flex; align-items: center; gap: 0.85rem; }
@@ -1003,19 +1014,9 @@
         .market-compose-btn > svg { flex: none; }
 
         .market-list-head {
-            display: flex; align-items: center; justify-content: space-between;
+            display: flex; align-items: center; justify-content: flex-end;
             gap: .75rem; flex-wrap: wrap;
             margin-bottom: 1rem;
-        }
-        .market-count {
-            display: inline-flex; align-items: center; gap: .45rem;
-            color: var(--text-muted);
-            font: 600 .68rem/1.4 'IBM Plex Mono', monospace;
-            letter-spacing: .08em; text-transform: uppercase;
-        }
-        .market-count::before {
-            content: ""; width: 7px; height: 7px; border-radius: 2px;
-            background: var(--brand); box-shadow: 0 0 0 3px var(--brand-light);
         }
         .market-list-hint { color: var(--text-muted); font-size: .78rem; }
 
@@ -1140,6 +1141,9 @@
             text-align: center;
         }
         .market-empty p { color: var(--text-muted); font-size: .92rem; }
+        .market-empty__reset {
+            display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
+        }
 
         .market-photo-empty {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -1555,4 +1559,486 @@
             .market-carousel__thumb { flex-basis: 58px; height: 46px; }
             .market-photo-picker__grid { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); }
             .market-photo-empty { min-height: 110px; padding: 1rem; }
+        }
+
+        /* ============================================================
+           GAME → EDITION → COPY
+           ============================================================ */
+        .card-cover__image {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+        .card-cover__image + .cover-art { opacity: .32; mix-blend-mode: screen; }
+        .card-cover__image ~ .card-cover-placeholder {
+            background: linear-gradient(180deg, transparent 26%, rgba(2, 6, 23, .86) 100%);
+        }
+
+        .card-platforms {
+            position: absolute; top: .7rem; left: .7rem; right: 4.5rem;
+            z-index: 5;
+            display: flex; flex-wrap: wrap; gap: .25rem;
+        }
+        .card-platforms .badge-platform { position: static; }
+        .badge-platform--static { position: static; }
+        .badge-platform--more {
+            background: rgba(2, 6, 23, .72);
+            color: #f8fafc;
+            border: 1px solid rgba(255,255,255,.18);
+        }
+        .game-platforms { display: flex; flex-wrap: wrap; gap: .3rem; }
+        .card-genres {
+            margin-top: .22rem;
+            color: var(--text-muted);
+            font-size: .72rem;
+            line-height: 1.4;
+        }
+
+        .editions-section { display: flex; flex-direction: column; gap: .9rem; }
+        .editions-section__head {
+            display: flex; align-items: flex-end; justify-content: space-between;
+            gap: 1rem; flex-wrap: wrap;
+        }
+        .editions-section__head h4 { margin-bottom: .2rem; }
+        .editions-section__hint {
+            color: var(--text-muted);
+            font-size: .76rem;
+            line-height: 1.5;
+        }
+        .editions-section__count {
+            flex: none;
+            padding: .25rem .5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: var(--bg-main);
+            color: var(--text-muted);
+            font: 600 .64rem/1.3 'IBM Plex Mono', monospace;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+        }
+        .editions-section__empty {
+            padding: 1.15rem;
+            border: 1px dashed var(--border-color);
+            border-radius: 10px;
+            color: var(--text-muted);
+            font-size: .82rem;
+            text-align: center;
+        }
+        .editions-section__game {
+            color: var(--text-muted);
+            font: 500 .66rem/1.4 'IBM Plex Mono', monospace;
+            letter-spacing: .03em;
+        }
+
+        .editions-groups {
+            display: flex; flex-direction: column; gap: 1rem;
+        }
+        .editions-group {
+            display: flex; flex-direction: column; gap: .55rem;
+        }
+        .editions-group__head {
+            display: flex; align-items: center; gap: .45rem;
+        }
+        .editions-group__count {
+            color: var(--text-muted);
+            font: 500 .64rem/1.3 'IBM Plex Mono', monospace;
+        }
+        .editions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+            gap: .8rem;
+        }
+        .edition-card {
+            display: flex; flex-direction: column;
+            overflow: hidden;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 11px;
+            cursor: pointer;
+            transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+        }
+        .edition-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--brand);
+            box-shadow: 0 12px 24px rgba(0,0,0,.08);
+        }
+        .edition-card.is-selected {
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px var(--brand-light);
+        }
+        .edition-card__cover {
+            position: relative;
+            aspect-ratio: 16 / 10;
+            overflow: hidden;
+            background: linear-gradient(135deg, #26372a, #111713 72%);
+        }
+        .edition-card__cover > img {
+            display: block; width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        .edition-card__placeholder {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: .45rem; width: 100%; height: 100%;
+            color: rgba(255,255,255,.55);
+            background:
+                radial-gradient(ellipse at 50% 30%, rgba(192,250,88,.12), transparent 52%),
+                repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0 2px, transparent 2px 7px);
+            font: 600 .7rem/1.3 'IBM Plex Mono', monospace;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+        .edition-card__platform { position: absolute; top: .5rem; left: .5rem; }
+        .edition-card__owned {
+            position: absolute; top: .5rem; right: .5rem;
+            display: inline-flex; align-items: center; gap: .2rem;
+            padding: .22rem .4rem;
+            border-radius: 5px;
+            background: var(--retro-purple);
+            color: #fff;
+            font: 700 .6rem/1 'IBM Plex Mono', monospace;
+            animation: edition-owned-pop .34s cubic-bezier(.34, 1.56, .64, 1);
+        }
+        .edition-card__body {
+            display: flex; flex-direction: column; gap: .5rem;
+            flex: 1;
+            padding: .8rem .85rem .85rem;
+        }
+        .edition-card__title {
+            color: var(--text-main);
+            font-size: .92rem; font-weight: 700; letter-spacing: -.025em;
+        }
+        .edition-card__subtitle {
+            margin-top: .12rem;
+            color: var(--text-muted);
+            font-size: .72rem;
+        }
+        .edition-card__meta,
+        .edition-card__contents,
+        .edition-card__actions { display: flex; flex-wrap: wrap; gap: .3rem; }
+        .edition-chip {
+            display: inline-flex; align-items: center;
+            padding: .22rem .4rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: var(--bg-card);
+            color: var(--text-muted);
+            font: 500 .61rem/1.3 'IBM Plex Mono', monospace;
+        }
+        .edition-card__description {
+            color: var(--text-muted);
+            font-size: .73rem;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .edition-card__contents {
+            align-items: flex-start;
+            color: var(--text-muted);
+            font-size: .7rem;
+            line-height: 1.45;
+        }
+        .edition-card__contents > svg { flex: none; margin-top: .08rem; color: var(--brand); }
+        .edition-card__actions {
+            margin-top: auto;
+            padding-top: .55rem;
+            border-top: 1px dashed var(--border-color);
+        }
+        .edition-card__btn {
+            min-height: 32px;
+            display: inline-flex; align-items: center; justify-content: center; gap: .3rem;
+            flex: 1 1 0;
+            padding: .35rem .45rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-size: .68rem; font-weight: 600;
+            white-space: nowrap;
+            transition: border-color .18s ease, background .18s ease, color .18s ease;
+        }
+        .edition-card__btn:hover { border-color: var(--brand); background: var(--brand-light); }
+        .edition-card__btn--primary {
+            border-color: var(--brand);
+            background: var(--brand);
+            color: #172013;
+        }
+        .edition-card__btn--primary:hover { background: var(--brand-hover); border-color: var(--brand-hover); }
+        .edition-card__btn:disabled {
+            opacity: .45;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .edition-card__btn--primary:disabled {
+            border-color: var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-muted);
+        }
+        .edition-card__btn--primary.is-added,
+        .edition-card__btn--primary.is-added:hover {
+            border-color: var(--emerald);
+            background: var(--emerald);
+            color: #fff;
+            animation: edition-added-pop .42s cubic-bezier(.34, 1.56, .64, 1);
+        }
+        html.dark .edition-card__btn--primary.is-added,
+        html.dark .edition-card__btn--primary.is-added:hover { color: #0d1b12; }
+        .edition-card__btn-icon--check {
+            animation: edition-check-pop .42s cubic-bezier(.34, 1.56, .64, 1);
+        }
+        .edition-card__btn--primary.is-added .edition-card__btn-label {
+            animation: edition-label-in .2s ease;
+        }
+
+        @keyframes edition-added-pop {
+            0% { box-shadow: 0 0 0 0 var(--brand-light); }
+            45% { box-shadow: 0 0 0 4px var(--brand-light); }
+            100% { box-shadow: 0 0 0 0 transparent; }
+        }
+        @keyframes edition-check-pop {
+            0% { opacity: 0; transform: scale(.2) rotate(-20deg); }
+            55% { opacity: 1; transform: scale(1.28) rotate(5deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0); }
+        }
+        @keyframes edition-label-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes edition-owned-pop {
+            0% { opacity: 0; transform: scale(.6); }
+            60% { opacity: 1; transform: scale(1.12); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .edition-shelf {
+            display: flex; flex-direction: column; gap: .45rem;
+            padding: .8rem .9rem;
+            background: var(--brand-light);
+            border: 1px solid color-mix(in srgb, var(--brand) 34%, var(--border-color));
+            border-radius: 10px;
+        }
+        .edition-shelf__title {
+            color: var(--text-main);
+            font-size: .78rem; font-weight: 700;
+        }
+        .edition-shelf__items { display: flex; flex-wrap: wrap; gap: .35rem; }
+        .edition-shelf__item {
+            display: inline-flex; align-items: center; gap: .45rem;
+            padding: .24rem .42rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: var(--bg-card);
+            color: var(--text-muted);
+            font: 500 .64rem/1.3 'IBM Plex Mono', monospace;
+        }
+        .edition-shelf__quantity { display: inline-flex; align-items: center; gap: .15rem; }
+        .edition-shelf__quantity button {
+            display: grid; place-items: center;
+            width: 19px; height: 19px;
+            padding: 0;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--bg-main);
+            color: var(--text-main);
+            cursor: pointer;
+        }
+        .edition-shelf__quantity button:hover:not(:disabled) { border-color: var(--brand); color: var(--brand); }
+        .edition-shelf__quantity button:disabled { opacity: .35; cursor: not-allowed; }
+        .edition-shelf__quantity-value {
+            min-width: 2ch;
+            color: var(--text-main);
+            font-weight: 700;
+            text-align: center;
+        }
+        .edition-shelf__remove {
+            display: grid; place-items: center;
+            width: 18px; height: 18px;
+            padding: 0;
+            border: 0; border-radius: 50%;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        .edition-shelf__remove:hover { background: var(--bg-main); color: #b91c1c; }
+
+        .game-market__filter {
+            display: flex; align-items: center; gap: .6rem;
+            padding: .65rem .75rem;
+            margin-top: .35rem;
+            border: 1px solid var(--border-color);
+            border-radius: 9px;
+            background: var(--bg-main);
+        }
+        .game-market__filter-label {
+            flex: none;
+            color: var(--text-muted);
+            font: 600 .62rem/1.3 'IBM Plex Mono', monospace;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+        }
+        .game-market__select {
+            min-height: 36px;
+            padding-block: .35rem;
+            font-size: .78rem;
+        }
+
+        .carousel-cover {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            opacity: .72;
+        }
+        .carousel-container.has-cover::after {
+            content: "";
+            position: absolute; inset: 0;
+            z-index: 1;
+            background: linear-gradient(180deg, rgba(9,15,12,.12), rgba(9,15,12,.84));
+            pointer-events: none;
+        }
+        .carousel-container > svg,
+        .carousel-container > strong,
+        .carousel-container > span { position: relative; z-index: 2; }
+
+        .collection-copy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        .collection-empty { margin-top: .5rem; }
+        .copy-card {
+            display: flex; flex-direction: column;
+            overflow: hidden;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+        }
+        .copy-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--brand);
+            box-shadow: 0 16px 30px rgba(0,0,0,.09);
+        }
+        .copy-card__cover {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            background: linear-gradient(135deg, #26372a, #111713 72%);
+        }
+        .copy-card__cover > img {
+            display: block; width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        .copy-card__placeholder {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: .35rem; width: 100%; height: 100%;
+            color: rgba(255,255,255,.58);
+            font: 600 .68rem/1.3 'IBM Plex Mono', monospace;
+            letter-spacing: .07em;
+        }
+        .copy-card__badge { position: absolute; top: .55rem; left: .55rem; }
+        .copy-card__count {
+            position: absolute; top: .55rem; right: .55rem;
+            display: inline-flex; align-items: center; justify-content: center;
+            min-width: 2.1rem; padding: .25rem .42rem;
+            border-radius: 5px;
+            background: var(--brand);
+            color: #172013;
+            font: 700 .66rem/1 'IBM Plex Mono', monospace;
+            box-shadow: 0 4px 10px rgba(0,0,0,.14);
+        }
+        .copy-card__body {
+            display: flex; flex-direction: column; gap: .55rem;
+            flex: 1;
+            padding: .9rem .95rem 1rem;
+        }
+        .copy-card__title { font-size: 1rem; font-weight: 700; letter-spacing: -.03em; }
+        .copy-card__edition { margin-top: .18rem; color: var(--text-muted); font-size: .76rem; }
+        .copy-card__chips { display: flex; flex-wrap: wrap; gap: .3rem; }
+        .copy-card__contents {
+            display: flex; align-items: flex-start; gap: .32rem;
+            color: var(--text-muted); font-size: .72rem; line-height: 1.45;
+        }
+        .copy-card__contents > svg { flex: none; margin-top: .08rem; color: var(--brand); }
+        .copy-card__notes { color: var(--text-muted); font-size: .72rem; line-height: 1.45; }
+        .copy-card__quantity {
+            display: flex; align-items: center; justify-content: space-between; gap: .6rem;
+            padding: .48rem .52rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-main);
+        }
+        .copy-card__quantity-label {
+            color: var(--text-muted);
+            font: 600 .62rem/1.2 'IBM Plex Mono', monospace;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+        .copy-card__stepper { display: inline-flex; align-items: center; gap: .18rem; }
+        .copy-card__stepper button {
+            display: grid; place-items: center;
+            width: 28px; height: 28px;
+            padding: 0;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            cursor: pointer;
+            transition: border-color .16s ease, color .16s ease, background .16s ease;
+        }
+        .copy-card__stepper button:hover:not(:disabled) {
+            border-color: var(--brand);
+            color: var(--brand);
+            background: var(--brand-light);
+        }
+        .copy-card__stepper button:disabled { opacity: .35; cursor: not-allowed; }
+        .copy-card__quantity-value {
+            min-width: 2.1ch;
+            color: var(--text-main);
+            font: 700 .86rem/1 'IBM Plex Mono', monospace;
+            text-align: center;
+        }
+        .copy-card__actions {
+            display: flex; align-items: center; gap: .45rem;
+            margin-top: auto; padding-top: .65rem;
+            border-top: 1px dashed var(--border-color);
+        }
+        .copy-card__open {
+            min-height: 34px;
+            display: inline-flex; align-items: center; justify-content: center; gap: .35rem;
+            flex: 1;
+            padding: .38rem .55rem;
+            border: 1px solid var(--brand);
+            border-radius: 6px;
+            background: var(--brand);
+            color: #172013;
+            font-size: .72rem; font-weight: 700;
+        }
+        .copy-card__open:hover { background: var(--brand-hover); border-color: var(--brand-hover); }
+        .copy-card__remove {
+            display: grid; place-items: center;
+            width: 34px; height: 34px;
+            padding: 0;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-main);
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        .copy-card__remove:hover { border-color: #dc2626; color: #dc2626; }
+
+        @media (max-width: 760px) {
+            .editions-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr)); }
+            .collection-copy-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); }
+            .game-market__filter { align-items: stretch; flex-direction: column; gap: .3rem; }
+            .edition-card__body { padding: .7rem; }
+        }
+        @media (max-width: 420px) {
+            .editions-grid { grid-template-columns: 1fr; }
+            .collection-copy-grid { grid-template-columns: 1fr; }
+            .edition-card__actions { flex-direction: column; }
+            .edition-card__btn { width: 100%; }
         }

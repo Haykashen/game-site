@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCollection } from '../context/CollectionContext';
-import type { Game, LotType } from '../types';
+import { useMarketEntries } from '../hooks/useMarketEntries';
+import { gameCoverImage } from '../lib/editions';
+import type { Game, GameStats, MarketEntry } from '../types';
 import { GameGrid } from './GameGrid';
 import { GameModal } from './GameModal';
 
@@ -9,7 +11,9 @@ interface GameBrowserProps {
   games: readonly Game[];
   /** Game id from the URL: links, reloads and history all drive the drawer. */
   gameId: string;
-  onOpenGame: (gameId: string) => void;
+  /** Optional edition preselected in the drawer. */
+  editionId?: string;
+  onOpenGame: (gameId: string, editionId?: string) => void;
   onCloseGame: () => void;
   emptyText?: string;
 }
@@ -21,15 +25,23 @@ interface GameBrowserProps {
 export function GameBrowser({
   games,
   gameId,
+  editionId = '',
   onOpenGame,
   onCloseGame,
   emptyText,
 }: GameBrowserProps) {
-  const { games: allGames, ownedIds, isOwned, toggleOwned } = useCollection();
+  const {
+    games: allGames,
+    editions,
+    copies,
+    addCopy,
+    setEditionQuantity,
+    removeEdition,
+  } = useCollection();
+  const { entries: marketEntries } = useMarketEntries();
   const navigate = useNavigate();
   const [selectedGameId, setSelectedGameId] = useState<string | null>(gameId || null);
   const [isModalOpen, setIsModalOpen] = useState(Boolean(gameId));
-  const [activeLotTab, setActiveLotTab] = useState<LotType>('sale');
 
   useEffect(() => {
     if (!gameId) {
@@ -48,6 +60,50 @@ export function GameBrowser({
     [allGames, selectedGameId],
   );
 
+  const gameEditions = useMemo(
+    () => (selectedGame ? editions.filter((edition) => edition.gameId === selectedGame.id) : []),
+    [editions, selectedGame],
+  );
+
+  const gameCopies = useMemo(
+    () => copies.filter((copy) => gameEditions.some((edition) => edition.id === copy.editionId)),
+    [copies, gameEditions],
+  );
+
+  const statsByGame = useMemo(() => {
+    const ownedByGame = new Map<string, number>();
+
+    for (const copy of copies) {
+      const edition = editions.find((item) => item.id === copy.editionId);
+      if (!edition) continue;
+      ownedByGame.set(edition.gameId, (ownedByGame.get(edition.gameId) ?? 0) + 1);
+    }
+
+    const auctionCounts = new Map<string, number>();
+
+    for (const entry of marketEntries) {
+      if (entry.kind !== 'auction') continue;
+      auctionCounts.set(entry.gameId, (auctionCounts.get(entry.gameId) ?? 0) + 1);
+    }
+
+    const stats = new Map<string, GameStats>();
+
+    for (const game of allGames) {
+      const editionsForGame = editions.filter((edition) => edition.gameId === game.id);
+      const platforms = [...new Set(editionsForGame.map((edition) => edition.platform))];
+
+      stats.set(game.id, {
+        platforms,
+        editionCount: editionsForGame.length,
+        ownedCount: ownedByGame.get(game.id) ?? 0,
+        lotsCount: auctionCounts.get(game.id) ?? 0,
+        coverImage: gameCoverImage(game, editionsForGame),
+      });
+    }
+
+    return stats;
+  }, [allGames, copies, editions, marketEntries]);
+
   const openGame = useCallback(
     (nextGameId: string) => {
       setSelectedGameId(nextGameId);
@@ -62,38 +118,59 @@ export function GameBrowser({
     onCloseGame();
   }, [onCloseGame]);
 
-  const handleToggleOwned = useCallback(() => {
-    if (selectedGameId) toggleOwned(selectedGameId);
-  }, [selectedGameId, toggleOwned]);
+  const placeEntry = useCallback(
+    (section: 'listings' | 'auctions', selectedEditionId?: string) => {
+      if (!selectedGameId) return;
 
-  const placeListing = useCallback(() => {
-    if (!selectedGameId) return;
-    navigate(`/listings?compose=1&game=${encodeURIComponent(selectedGameId)}`);
-  }, [navigate, selectedGameId]);
+      const params = new URLSearchParams({ compose: '1', game: selectedGameId });
+      if (selectedEditionId) params.set('editionId', selectedEditionId);
 
-  const placeAuction = useCallback(() => {
-    if (!selectedGameId) return;
-    navigate(`/auctions?compose=1&game=${encodeURIComponent(selectedGameId)}`);
-  }, [navigate, selectedGameId]);
+      navigate(`/${section}?${params.toString()}`);
+    },
+    [navigate, selectedGameId],
+  );
+
+  const placeListing = useCallback(
+    (selectedEditionId?: string) => placeEntry('listings', selectedEditionId),
+    [placeEntry],
+  );
+
+  const placeAuction = useCallback(
+    (selectedEditionId?: string) => placeEntry('auctions', selectedEditionId),
+    [placeEntry],
+  );
+
+  const openMarketEntry = useCallback(
+    (entry: MarketEntry) => {
+      const section = entry.kind === 'auction' ? 'auctions' : 'listings';
+      navigate(`/${section}?item=${encodeURIComponent(entry.id)}`);
+    },
+    [navigate],
+  );
 
   return (
     <>
       <GameGrid
         games={games}
-        ownedIds={ownedIds}
+        statsByGame={statsByGame}
         onSelectGame={openGame}
         emptyText={emptyText ?? 'Игры не найдены'}
       />
 
       {selectedGame && (
         <GameModal
+          key={`${selectedGame.id}:${editionId || 'all'}`}
           game={selectedGame}
           isOpen={isModalOpen}
-          isOwned={isOwned(selectedGame.id)}
-          activeTab={activeLotTab}
+          editions={gameEditions}
+          copies={gameCopies}
+          initialEditionId={editionId}
+          entries={marketEntries}
           onClose={closeGame}
-          onToggleOwned={handleToggleOwned}
-          onChangeTab={setActiveLotTab}
+          onOpenMarketEntry={openMarketEntry}
+          onAddCopy={addCopy}
+          onSetEditionQuantity={setEditionQuantity}
+          onRemoveEdition={removeEdition}
           onPlaceListing={placeListing}
           onPlaceAuction={placeAuction}
         />

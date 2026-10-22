@@ -1,11 +1,14 @@
-import { Bookmark, X } from 'lucide-react';
+import { Minus, Plus, X } from 'lucide-react';
+import { useMemo, useState } from 'react';
 import { getPlatformBadgeStyle } from '../data';
-import { cx } from '../lib/cx';
-import type { Game, LotType } from '../types';
+import { MAX_COLLECTION_QUANTITY } from '../lib/constants';
+import { editionsCountLabel } from '../lib/market';
+import type { Copy, Edition, Game, MarketEntry } from '../types';
 import { ArtworkPanel } from './modal/ArtworkPanel';
+import { EditionsSection } from './modal/EditionsSection';
 import { GameActions } from './modal/GameActions';
-import { LotsSection } from './modal/LotsSection';
-import { PriceAnalytics } from './modal/PriceAnalytics';
+import { GameMarketSection } from './modal/GameMarketSection';
+import type { GameMarketTab } from './modal/GameMarketSection';
 import { SpecBox } from './modal/SpecBox';
 import { IconButton } from './ui/IconButton';
 import { ModalShell } from './ui/ModalShell';
@@ -13,81 +16,170 @@ import { ModalShell } from './ui/ModalShell';
 interface GameModalProps {
   game: Game;
   isOpen: boolean;
-  isOwned: boolean;
-  activeTab: LotType;
+  editions: readonly Edition[];
+  copies: readonly Copy[];
+  initialEditionId: string;
+  entries: readonly MarketEntry[];
   onClose: () => void;
-  onToggleOwned: () => void;
-  onChangeTab: (tab: LotType) => void;
-  onPlaceListing: () => void;
-  onPlaceAuction: () => void;
+  onOpenMarketEntry: (entry: MarketEntry) => void;
+  onAddCopy: (editionId: string) => void;
+  onSetEditionQuantity: (editionId: string, quantity: number) => void;
+  onRemoveEdition: (editionId: string) => void;
+  onPlaceListing: (editionId?: string) => void;
+  onPlaceAuction: (editionId?: string) => void;
 }
 
 const MODAL_TITLE_ID = 'modal-title';
 
-/** Detail drawer: collection action, price analytics, specs, actions and lots. */
+/** Detail drawer: abstract game info, concrete editions and game-scoped market. */
 export function GameModal({
   game,
   isOpen,
-  isOwned,
-  activeTab,
+  editions,
+  copies,
+  initialEditionId,
+  entries,
   onClose,
-  onToggleOwned,
-  onChangeTab,
+  onOpenMarketEntry,
+  onAddCopy,
+  onSetEditionQuantity,
+  onRemoveEdition,
   onPlaceListing,
   onPlaceAuction,
 }: GameModalProps) {
-  const platformStyle = getPlatformBadgeStyle(game.platform);
+  const [activeMarketTab, setActiveMarketTab] = useState<GameMarketTab>('lots');
+  const [selectedEditionId, setSelectedEditionId] = useState(() =>
+    editions.some((edition) => edition.id === initialEditionId) ? initialEditionId : '',
+  );
+
+  const platforms = useMemo(
+    () => [...new Set(editions.map((edition) => edition.platform))],
+    [editions],
+  );
+
+  const selectedEdition = editions.find((edition) => edition.id === selectedEditionId);
+  const selectedEditionCopies = selectedEdition
+    ? copies.filter((copy) => copy.editionId === selectedEdition.id)
+    : [];
+  const shelfCopy = selectedEditionCopies[0];
+  const shelfMeta = shelfCopy
+    ? [...new Set([shelfCopy.condition, shelfCopy.completeness])].join(', ')
+    : '';
 
   return (
     <ModalShell isOpen={isOpen} onClose={onClose} labelledBy={MODAL_TITLE_ID}>
       <div className="modal-header">
         <div>
           <div className="modal-header-meta">
-            <span
-              className="badge-platform"
-              data-platform={game.platform}
-              style={{ position: 'static', ...(platformStyle ?? {}) }}
-            >
-              {game.platform}
-            </span>
+            <div className="game-platforms">
+              {platforms.map((platform) => (
+                <span
+                  key={platform}
+                  className="badge-platform badge-platform--static"
+                  data-platform={platform}
+                  style={getPlatformBadgeStyle(platform)}
+                >
+                  {platform}
+                </span>
+              ))}
+            </div>
             <span className="year">{game.year}</span>
-            {game.region && <span className="meta-chip">{game.region}</span>}
-            {game.completeness && <span className="meta-chip">{game.completeness}</span>}
+            <span className="meta-chip">{editionsCountLabel(editions.length)}</span>
+            {game.genres.slice(0, 2).map((genre) => (
+              <span className="meta-chip" key={genre}>
+                {genre}
+              </span>
+            ))}
           </div>
           <h2 className="modal-title" id={MODAL_TITLE_ID}>
             {game.title}
           </h2>
-          <div className="modal-action-row">
-            <button
-              type="button"
-              className={cx('btn-collection', isOwned && 'owned')}
-              onClick={onToggleOwned}
-            >
-              <Bookmark size={14} />
-              <span>{isOwned ? 'Удалить из коллекции' : 'В коллекцию'}</span>
-            </button>
-          </div>
         </div>
         <IconButton label="Закрыть" transparent onClick={onClose}>
           <X size={20} />
         </IconButton>
       </div>
 
-      <PriceAnalytics lots={game.lots} />
-
-      <ArtworkPanel game={game} />
+      <ArtworkPanel game={game} editions={editions} />
 
       <div className="desc-grid">
         <div className="desc-text">
           <h4>Описание</h4>
           <p>{game.description}</p>
         </div>
-        <SpecBox game={game} />
+        <SpecBox game={game} platforms={platforms} editionCount={editions.length} />
       </div>
 
-      <GameActions onPlaceListing={onPlaceListing} onPlaceAuction={onPlaceAuction} />
+      <EditionsSection
+        game={game}
+        editions={editions}
+        copies={copies}
+        selectedEditionId={selectedEditionId}
+        onSelectEdition={setSelectedEditionId}
+        onAddCopy={onAddCopy}
+      />
 
-      <LotsSection game={game} activeTab={activeTab} onChangeTab={onChangeTab} />
+      {selectedEdition && shelfCopy && (
+        <div className="edition-shelf">
+          <span className="edition-shelf__title">
+            На полке: {selectedEdition.name} ({selectedEdition.platform})
+          </span>
+          <div className="edition-shelf__items">
+            <span className="edition-shelf__item" key={selectedEdition.id}>
+              <span>{shelfMeta}</span>
+              <span className="edition-shelf__quantity">
+                <button
+                  type="button"
+                  aria-label="Уменьшить количество"
+                  disabled={selectedEditionCopies.length <= 1}
+                  onClick={() =>
+                    onSetEditionQuantity(selectedEdition.id, selectedEditionCopies.length - 1)
+                  }
+                >
+                  <Minus size={12} aria-hidden="true" />
+                </button>
+                <span className="edition-shelf__quantity-value" aria-live="polite">
+                  ×{selectedEditionCopies.length}
+                </span>
+                <button
+                  type="button"
+                  aria-label="Увеличить количество"
+                  disabled={selectedEditionCopies.length >= MAX_COLLECTION_QUANTITY}
+                  onClick={() =>
+                    onSetEditionQuantity(selectedEdition.id, selectedEditionCopies.length + 1)
+                  }
+                >
+                  <Plus size={12} aria-hidden="true" />
+                </button>
+              </span>
+              <button
+                type="button"
+                className="edition-shelf__remove"
+                aria-label="Убрать издание с полки"
+                onClick={() => onRemoveEdition(selectedEdition.id)}
+              >
+                <X size={12} aria-hidden="true" />
+              </button>
+            </span>
+          </div>
+        </div>
+      )}
+
+      <GameActions
+        onPlaceListing={() => onPlaceListing(selectedEdition?.id)}
+        onPlaceAuction={() => onPlaceAuction(selectedEdition?.id)}
+      />
+
+      <GameMarketSection
+        game={game}
+        entries={entries}
+        editions={editions}
+        selectedEditionId={selectedEditionId}
+        onChangeEdition={setSelectedEditionId}
+        activeTab={activeMarketTab}
+        onChangeTab={setActiveMarketTab}
+        onOpenEntry={onOpenMarketEntry}
+      />
     </ModalShell>
   );
 }

@@ -1,49 +1,8 @@
-import { RotateCcw, Search, X } from 'lucide-react';
-import { useRef } from 'react';
-import {
-  COMPLETENESS,
-  EDITIONS,
-  LANGUAGES,
-  PLATFORM_GROUPS,
-  REGIONS,
-  YEAR_RANGES,
-} from '../data';
-import type { CatalogFilters } from '../types';
+import { Filter, FilterX, Search, X } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { cx } from '../lib/cx';
+import type { SearchFilterField } from '../lib/searchFilterConfig';
 import { FilterDropdown } from './ui/FilterDropdown';
-import type { FilterOption } from './ui/FilterDropdown';
-
-const PLATFORM_OPTIONS: ReadonlyArray<FilterOption> = PLATFORM_GROUPS.flatMap((group) =>
-  group.options.map((platform) => ({
-    value: platform,
-    label: platform,
-    group: group.label,
-  })),
-);
-
-const REGION_OPTIONS: ReadonlyArray<FilterOption> = REGIONS.map((region) => ({
-  value: region,
-  label: region,
-}));
-
-const EDITION_OPTIONS: ReadonlyArray<FilterOption> = EDITIONS.map((edition) => ({
-  value: edition,
-  label: edition,
-}));
-
-const COMPLETENESS_OPTIONS: ReadonlyArray<FilterOption> = COMPLETENESS.map((value) => ({
-  value,
-  label: value,
-}));
-
-const LANGUAGE_OPTIONS: ReadonlyArray<FilterOption> = LANGUAGES.map((language) => ({
-  value: language,
-  label: language,
-}));
-
-const YEAR_OPTIONS: ReadonlyArray<FilterOption> = YEAR_RANGES.map((range) => ({
-  value: range.value,
-  label: range.label,
-}));
 
 interface ActiveFilter {
   readonly key: string;
@@ -52,119 +11,90 @@ interface ActiveFilter {
   readonly onClear: () => void;
 }
 
-interface SearchToolbarProps {
-  filters: CatalogFilters;
-  resultCount: number;
-  onFilterChange: (patch: Partial<CatalogFilters>) => void;
+interface SearchToolbarProps<Key extends string> {
+  /** Prefix for the search input id, e.g. `catalog` or `auction`. */
+  idPrefix: string;
+  ariaLabel: string;
+  searchPlaceholder: string;
+  query: string;
+  filterValues: Readonly<Record<Key, string>>;
+  fields: readonly SearchFilterField<Key>[];
+  resultCountLabel: string;
+  onQueryChange: (query: string) => void;
+  onFilterChange: (key: Key, value: string) => void;
   onReset: () => void;
 }
 
-function getGamesCountLabel(count: number): string {
-  const mod10 = count % 10;
-  const mod100 = count % 100;
-
-  if (mod10 === 1 && mod100 !== 11) return `${count} игра`;
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return `${count} игры`;
-  return `${count} игр`;
-}
-
-/** Catalogue search, custom dropdown filters, active chips and reset. */
-export function SearchToolbar({
-  filters,
-  resultCount,
+/** Shared search, dropdown filters, active chips and reset for every section. */
+export function SearchToolbar<Key extends string>({
+  idPrefix,
+  ariaLabel,
+  searchPlaceholder,
+  query,
+  filterValues,
+  fields,
+  resultCountLabel,
+  onQueryChange,
   onFilterChange,
   onReset,
-}: SearchToolbarProps) {
+}: SearchToolbarProps<Key>) {
   const searchRef = useRef<HTMLInputElement>(null);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const activeFilters: ActiveFilter[] = [];
-  const yearRange = YEAR_RANGES.find((range) => range.value === filters.yearRange);
 
-  if (filters.query) {
+  if (query) {
     activeFilters.push({
       key: 'query',
       label: 'Поиск',
-      value: filters.query,
-      onClear: () => onFilterChange({ query: '' }),
+      value: query,
+      onClear: () => onQueryChange(''),
     });
   }
 
-  if (filters.platform) {
+  for (const field of fields) {
+    const value = filterValues[field.key];
+
+    if (!value) continue;
+
+    const optionLabel = field.options.find((option) => option.value === value)?.label ?? value;
+
     activeFilters.push({
-      key: 'platform',
-      label: 'Платформа',
-      value: filters.platform,
-      onClear: () => onFilterChange({ platform: '' }),
+      key: field.key,
+      label: field.label,
+      value: optionLabel,
+      onClear: () => onFilterChange(field.key, ''),
     });
   }
 
-  if (filters.region) {
-    activeFilters.push({
-      key: 'region',
-      label: 'Регион',
-      value: filters.region,
-      onClear: () => onFilterChange({ region: '' }),
-    });
-  }
-
-  if (filters.edition) {
-    activeFilters.push({
-      key: 'edition',
-      label: 'Издание',
-      value: filters.edition,
-      onClear: () => onFilterChange({ edition: '' }),
-    });
-  }
-
-  if (filters.completeness) {
-    activeFilters.push({
-      key: 'completeness',
-      label: 'Комплектность',
-      value: filters.completeness,
-      onClear: () => onFilterChange({ completeness: '' }),
-    });
-  }
-
-  if (filters.lang) {
-    activeFilters.push({
-      key: 'lang',
-      label: 'Язык',
-      value: filters.lang,
-      onClear: () => onFilterChange({ lang: '' }),
-    });
-  }
-
-  if (yearRange) {
-    activeFilters.push({
-      key: 'yearRange',
-      label: 'Год',
-      value: yearRange.label,
-      onClear: () => onFilterChange({ yearRange: '' }),
-    });
-  }
-
+  const activeFilterCount = fields.reduce(
+    (count, field) => count + (filterValues[field.key] ? 1 : 0),
+    0,
+  );
   const hasFilters = activeFilters.length > 0;
+  const searchId = `${idPrefix}Search`;
+  const filtersId = `${idPrefix}Filters`;
 
   return (
-    <section className="catalog-toolbar" aria-label="Поиск и фильтры каталога">
+    <section className="catalog-toolbar" aria-label={ariaLabel}>
       <div className="catalog-toolbar__top">
         <div className="catalog-search">
           <Search size={19} aria-hidden="true" />
           <input
             ref={searchRef}
-            id="catalogSearch"
+            id={searchId}
             type="search"
-            value={filters.query}
-            onChange={(event) => onFilterChange({ query: event.target.value })}
-            placeholder="Найти игру по названию"
-            aria-label="Найти игру по названию"
+            value={query}
+            onChange={(event) => onQueryChange(event.target.value)}
+            placeholder={searchPlaceholder}
+            aria-label={searchPlaceholder}
           />
-          {filters.query && (
+          {query && (
             <button
               type="button"
               className="search-clear"
               aria-label="Очистить поиск"
               onClick={() => {
-                onFilterChange({ query: '' });
+                onQueryChange('');
                 searchRef.current?.focus();
               }}
             >
@@ -175,75 +105,58 @@ export function SearchToolbar({
 
         <div className="catalog-toolbar__meta">
           <span className="catalog-results" aria-live="polite" aria-atomic="true">
-            {getGamesCountLabel(resultCount)}
+            {resultCountLabel}
           </span>
-          <button
-            type="button"
-            className="filter-reset"
-            onClick={onReset}
-            disabled={!hasFilters}
-          >
-            <RotateCcw size={14} aria-hidden="true" />
-            <span>Сбросить</span>
-          </button>
+          <div className="catalog-toolbar__actions">
+            <button
+              type="button"
+              className={cx(
+                'filter-icon-btn',
+                'filter-toggle',
+                isFiltersOpen && 'is-open',
+              )}
+              aria-expanded={isFiltersOpen}
+              aria-controls={filtersId}
+              aria-label={isFiltersOpen ? 'Скрыть фильтры' : 'Показать фильтры'}
+              title={isFiltersOpen ? 'Скрыть фильтры' : 'Показать фильтры'}
+              onClick={() => setIsFiltersOpen((isOpen) => !isOpen)}
+            >
+              <Filter size={17} aria-hidden="true" />
+              {activeFilterCount > 0 && (
+                <span className="filter-toggle__count" aria-hidden="true">
+                  {activeFilterCount}
+                </span>
+              )}
+            </button>
+            <button
+              type="button"
+              className="filter-icon-btn filter-reset"
+              onClick={onReset}
+              disabled={!hasFilters}
+              aria-label="Сбросить фильтры"
+              title="Сбросить фильтры"
+            >
+              <FilterX size={17} aria-hidden="true" />
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="catalog-filters">
-        <FilterDropdown
-          id="platformFilter"
-          label="Платформа"
-          placeholder="Все платформы"
-          value={filters.platform}
-          options={PLATFORM_OPTIONS}
-          onChange={(platform) => onFilterChange({ platform })}
-        />
-
-        <FilterDropdown
-          id="regionFilter"
-          label="Регион"
-          placeholder="Все регионы"
-          value={filters.region}
-          options={REGION_OPTIONS}
-          onChange={(region) => onFilterChange({ region })}
-        />
-
-        <FilterDropdown
-          id="editionFilter"
-          label="Издание"
-          placeholder="Все издания"
-          value={filters.edition}
-          options={EDITION_OPTIONS}
-          onChange={(edition) => onFilterChange({ edition })}
-        />
-
-        <FilterDropdown
-          id="completenessFilter"
-          label="Комплектность"
-          placeholder="Любая комплектность"
-          value={filters.completeness}
-          options={COMPLETENESS_OPTIONS}
-          onChange={(completeness) => onFilterChange({ completeness })}
-        />
-
-        <FilterDropdown
-          id="langFilter"
-          label="Язык издания"
-          placeholder="Любой язык"
-          value={filters.lang}
-          options={LANGUAGE_OPTIONS}
-          onChange={(lang) => onFilterChange({ lang })}
-        />
-
-        <FilterDropdown
-          id="yearFilter"
-          label="Год выпуска"
-          placeholder="Все годы"
-          value={filters.yearRange}
-          options={YEAR_OPTIONS}
-          onChange={(yearRange) => onFilterChange({ yearRange })}
-        />
-      </div>
+      {isFiltersOpen && (
+        <div className="catalog-filters" id={filtersId}>
+          {fields.map((field) => (
+            <FilterDropdown
+              key={field.id}
+              id={field.id}
+              label={field.label}
+              placeholder={field.placeholder}
+              value={filterValues[field.key]}
+              options={field.options}
+              onChange={(value) => onFilterChange(field.key, value)}
+            />
+          ))}
+        </div>
+      )}
 
       {activeFilters.length > 0 && (
         <div className="filter-chips" role="group" aria-label="Активные фильтры">

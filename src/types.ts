@@ -1,33 +1,71 @@
-/** A listing is either an offer to sell or a request to buy. */
-export type LotType = 'sale' | 'purchase';
-
-export interface Lot {
-  id: string;
-  type: LotType;
-  title: string;
-  condition: string;
-  user: string;
-  price: number;
-}
-
-/** Everything the form collects; the id is assigned by the store. */
-export type LotDraft = Omit<Lot, 'id'>;
-
+/** A game in the catalogue: the abstract work, without a concrete release. */
 export interface Game {
   id: string;
   title: string;
-  platform: string;
   publisher: string;
   developer: string;
   series: string;
   year: number;
-  lang: string;
-  region: string;
-  edition: string;
-  completeness: string;
-  media: string;
+  genres: string[];
   description: string;
-  lots: Lot[];
+  /** Representative artwork for the catalogue card; empty when there is none. */
+  coverImage: string;
+}
+
+/**
+ * A concrete release of a game: platform, region, language, media and the
+ * physical contents that belong to this particular edition.
+ */
+export interface Edition {
+  id: string;
+  gameId: string;
+  /** Standard, Launch Edition, Collector's Edition, … */
+  name: string;
+  platform: string;
+  region: string;
+  lang: string;
+  media: string;
+  /** ISO date (YYYY-MM-DD) or an empty string when the release date is unknown. */
+  releaseDate: string;
+  description: string;
+  /** What is inside the box, e.g. "Диск", "Мануал", "Артбук". */
+  contents: string[];
+  /** Edition-level artwork. The first image is the card cover. */
+  coverImages: string[];
+  barcode: string;
+  /**
+   * DNS `data-product` id. It identifies the exact product card and is the
+   * stable link between an edition and its external catalogue entry.
+   */
+  dnsProductId: string;
+  /** DNS article / `data-code`; useful for search and cross-checks. */
+  dnsProductCode: string;
+}
+
+/**
+ * A physical copy owned by the user. Copies always point at an edition; the
+ * collection UI groups rows by edition and shows the resulting quantity.
+ */
+export interface Copy {
+  id: string;
+  editionId: string;
+  condition: string;
+  completeness: string;
+  notes: string;
+  photos: string[];
+  createdAt: string;
+}
+
+/** Everything the collection form collects; ids are assigned by the store. */
+export type CopyDraft = Omit<Copy, 'id' | 'createdAt'>;
+
+/** Precomputed per-game numbers and badges used by catalogue cards. */
+export interface GameStats {
+  platforms: string[];
+  editionCount: number;
+  ownedCount: number;
+  lotsCount: number;
+  coverImage: string;
 }
 
 export interface CatalogFilters {
@@ -43,18 +81,24 @@ export interface CatalogFilters {
 /** A marketplace entity: a fixed-price listing or an auction. */
 export type MarketKind = 'listing' | 'auction';
 
+/** Listings can offer a copy, look for one, or propose an exchange. */
+export type MarketListingType = 'sale' | 'purchase' | 'exchange';
+
 /** Courier service ids are stable so saved entries survive label edits. */
 export type MarketDeliveryService = 'russian-post' | 'cdek' | 'yandex' | 'other';
 
 export interface MarketEntry {
   id: string;
   kind: MarketKind;
+  /** Only listings have an intention; auctions always use `null`. */
+  listingType: MarketListingType | null;
   gameId: string;
+  /**
+   * Exact edition for sale, exchange and auctions. A "buy" listing may target
+   * any edition of the game, in which case this is `null`.
+   */
+  editionId: string | null;
   title: string;
-  /** Edition of the exact copy, preselected from the linked game. */
-  edition: string;
-  /** Region of the exact copy, preselected from the linked game. */
-  region: string;
   condition: string;
   price: number;
   seller: string;

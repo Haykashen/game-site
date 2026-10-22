@@ -29,3 +29,6 @@ Thumbs.db
 Desktop.ini
 .idea/
 .vscode/
+
+# Local DNS capture used only as input for scripts/extract-dns-games.mjs
+/dns-ps-games.json

@@ -1,4 +1,20 @@
-import type { MarketKind } from '../types';
+import type { MarketKind, MarketListingType } from '../types';
+
+export const MARKET_LISTING_TYPE_OPTIONS = [
+  { value: 'sale', label: 'Продажа' },
+  { value: 'purchase', label: 'Покупка' },
+  { value: 'exchange', label: 'Обмен' },
+] as const satisfies readonly { value: MarketListingType; label: string }[];
+
+/** Human label for cards and entity headers. */
+export function listingTypeLabel(type: MarketListingType | null): string {
+  if (type === null) return 'Объявление';
+
+  return (
+    MARKET_LISTING_TYPE_OPTIONS.find((option) => option.value === type)?.label ??
+    'Объявление'
+  );
+}
 
 const shortDateFormatter = new Intl.DateTimeFormat('ru-RU', {
   day: 'numeric',
@@ -75,6 +91,26 @@ export function bidsLabel(count: number): string {
   if (last === 1 && lastTwo !== 11) return `${count} ставка`;
   if (last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)) return `${count} ставки`;
   return `${count} ставок`;
+}
+
+/** Russian plural for the catalogue tile: 1 лот, 3 лота, 5 лотов. */
+export function lotsCountLabel(count: number): string {
+  const lastTwo = count % 100;
+  const last = count % 10;
+
+  if (last === 1 && lastTwo !== 11) return `${count} лот`;
+  if (last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)) return `${count} лота`;
+  return `${count} лотов`;
+}
+
+/** Russian plural for editions: 1 издание, 3 издания, 5 изданий. */
+export function editionsCountLabel(count: number): string {
+  const lastTwo = count % 100;
+  const last = count % 10;
+
+  if (last === 1 && lastTwo !== 11) return `${count} издание`;
+  if (last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)) return `${count} издания`;
+  return `${count} изданий`;
 }
 
 /** Russian plural for the section counter: 1 объявление, 3 объявления, 5 объявлений. */

@@ -1,23 +1,27 @@
+import { editionsCountLabel } from '../../lib/market';
 import type { Game } from '../../types';
 import { SpecRow } from '../ui/SpecRow';
 
 interface SpecBoxProps {
   game: Game;
+  platforms: readonly string[];
+  editionCount: number;
 }
 
 const EMPTY_VALUE = '—';
 
-/** Publisher, developer and physical-edition details of the release. */
-export function SpecBox({ game }: SpecBoxProps) {
+/** Abstract game facts: who made it, when it came out and on what. */
+export function SpecBox({ game, platforms, editionCount }: SpecBoxProps) {
   return (
     <div className="spec-box">
       <h4>Спецификация</h4>
       <SpecRow label="Издатель" value={game.publisher} />
       <SpecRow label="Разработчик" value={game.developer || EMPTY_VALUE} />
       <SpecRow label="Серия" value={game.series || EMPTY_VALUE} />
-      <SpecRow label="Издание" value={game.edition || EMPTY_VALUE} />
-      <SpecRow label="Носитель" value={game.media || EMPTY_VALUE} />
-      <SpecRow label="Язык" value={game.lang} />
+      <SpecRow label="Платформы" value={platforms.join(', ') || EMPTY_VALUE} />
+      <SpecRow label="Жанры" value={game.genres.join(', ') || EMPTY_VALUE} />
+      <SpecRow label="Первый выпуск" value={String(game.year)} />
+      <SpecRow label="Изданий" value={editionsCountLabel(editionCount)} />
     </div>
   );
 }

@@ -19,10 +19,10 @@
     "internationalShipping": false,
     "packagingPrice": 150,
     "shipsFrom": "Москва",
-    "edition": "Standard",
-    "region": "PAL",
     "startsAt": null,
-    "bidStep": null
+    "bidStep": null,
+    "listingType": "sale",
+    "editionId": "silent-hill-2-ps2-standard-pal"
   },
   {
     "id": "listing-halo-ntsc",
@@ -43,10 +43,10 @@
     "internationalShipping": true,
     "packagingPrice": 200,
     "shipsFrom": "Москва",
-    "edition": "Standard",
-    "region": "NTSC-U",
     "startsAt": null,
-    "bidStep": null
+    "bidStep": null,
+    "listingType": "sale",
+    "editionId": "halo-combat-xbox-standard-ntsc-u"
   },
   {
     "id": "listing-elden-sealed",
@@ -68,10 +68,10 @@
     "internationalShipping": true,
     "packagingPrice": 0,
     "shipsFrom": "Санкт-Петербург",
-    "edition": "Launch Edition",
-    "region": "PAL",
     "startsAt": null,
-    "bidStep": null
+    "bidStep": null,
+    "listingType": "sale",
+    "editionId": "elden-ring-ps5-launch-pal"
   },
   {
     "id": "auction-sh2-jp",
@@ -92,10 +92,10 @@
     "internationalShipping": true,
     "packagingPrice": 250,
     "shipsFrom": "Владивосток",
-    "edition": "Standard",
-    "region": "NTSC-J",
     "startsAt": "2026-10-18T10:30:00.000Z",
-    "bidStep": 100
+    "bidStep": 100,
+    "listingType": null,
+    "editionId": "silent-hill-2-ps2-standard-ntsc-j"
   },
   {
     "id": "auction-elden-collector",
@@ -118,10 +118,10 @@
     "internationalShipping": false,
     "packagingPrice": 350,
     "shipsFrom": "Москва",
-    "edition": "Collector's Edition",
-    "region": "PAL",
     "startsAt": "2026-10-19T15:10:00.000Z",
-    "bidStep": 500
+    "bidStep": 500,
+    "listingType": null,
+    "editionId": "elden-ring-ps5-collectors-pal"
   },
   {
     "id": "auction-halo-sealed",
@@ -143,9 +143,58 @@
     "internationalShipping": true,
     "packagingPrice": 200,
     "shipsFrom": "Казань",
-    "edition": "Standard",
-    "region": "NTSC-U",
     "startsAt": "2026-10-17T08:20:00.000Z",
-    "bidStep": 200
+    "bidStep": 200,
+    "listingType": null,
+    "editionId": "halo-combat-xbox-standard-ntsc-u"
+  },
+  {
+    "id": "listing-sh2-wanted",
+    "kind": "listing",
+    "listingType": "purchase",
+    "gameId": "silent-hill-2",
+    "title": "Куплю Silent Hill 2 PAL, полный комплект",
+    "condition": "Любое",
+    "price": 5000,
+    "seller": "collector_ru",
+    "description": "Ищу PAL-издание с мануалом и вкладышем. Готов забрать в Москве или оплатить доставку.",
+    "bids": 0,
+    "endsAt": null,
+    "createdAt": "2026-10-20T11:20:00.000Z",
+    "photos": [],
+    "deliveryServices": [
+      "russian-post",
+      "cdek"
+    ],
+    "internationalShipping": false,
+    "packagingPrice": 0,
+    "shipsFrom": "Москва",
+    "startsAt": null,
+    "bidStep": null,
+    "editionId": "silent-hill-2-ps2-standard-pal"
+  },
+  {
+    "id": "listing-halo-exchange",
+    "kind": "listing",
+    "listingType": "exchange",
+    "gameId": "halo-combat",
+    "title": "Обменяю Halo: Combat Evolved NTSC-U на PAL",
+    "condition": "8/10, CIB",
+    "price": 3000,
+    "seller": "spartan_pal",
+    "description": "Американский релиз в полном комплекте. Хочу обменять на PAL-версию, возможна доплата с моей стороны.",
+    "bids": 0,
+    "endsAt": null,
+    "createdAt": "2026-10-21T09:00:00.000Z",
+    "photos": [],
+    "deliveryServices": [
+      "cdek"
+    ],
+    "internationalShipping": true,
+    "packagingPrice": 150,
+    "shipsFrom": "Санкт-Петербург",
+    "startsAt": null,
+    "bidStep": null,
+    "editionId": "halo-combat-xbox-standard-ntsc-u"
   }
 ]

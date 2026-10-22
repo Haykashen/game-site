@@ -1,0 +1,200 @@
+[
+  {
+    "id": "silent-hill-2-ps2-standard-pal",
+    "gameId": "silent-hill-2",
+    "name": "Standard",
+    "platform": "PS2",
+    "region": "PAL",
+    "lang": "Английский",
+    "media": "DVD",
+    "releaseDate": "2001-11-23",
+    "description": "Европейское издание для PS2. Классическая коробка с полноцветным мануалом и вкладышем с управлением.",
+    "contents": [
+      "Коробка",
+      "Диск",
+      "Мануал",
+      "Вкладыш с управлением"
+    ],
+    "coverImages": [],
+    "barcode": "",
+    "dnsProductId": "",
+    "dnsProductCode": ""
+  },
+  {
+    "id": "silent-hill-2-ps2-standard-ntsc-j",
+    "gameId": "silent-hill-2",
+    "name": "Standard",
+    "platform": "PS2",
+    "region": "NTSC-J",
+    "lang": "Японский",
+    "media": "DVD",
+    "releaseDate": "2001-09-24",
+    "description": "Японский релиз с Obi-полосой. Отдельная ценность для коллекционеров, которые собирают полные японские комплекты.",
+    "contents": [
+      "Коробка",
+      "Диск",
+      "Мануал",
+      "Obi-полоса"
+    ],
+    "coverImages": [],
+    "barcode": "",
+    "dnsProductId": "",
+    "dnsProductCode": ""
+  },
+  {
+    "id": "halo-combat-xbox-standard-ntsc-u",
+    "gameId": "halo-combat",
+    "name": "Standard",
+    "platform": "Xbox Original",
+    "region": "NTSC-U",
+    "lang": "Английский",
+    "media": "DVD",
+    "releaseDate": "2001-11-15",
+    "description": "Американский релиз для оригинальной Xbox. Стандартный кейс с мануалом и вкладышем.",
+    "contents": [
+      "Коробка",
+      "Диск",
+      "Мануал"
+    ],
+    "coverImages": [],
+    "barcode": "",
+    "dnsProductId": "",
+    "dnsProductCode": ""
+  },
+  {
+    "id": "halo-combat-xbox-limited-ntsc-u",
+    "gameId": "halo-combat",
+    "name": "Limited Edition",
+    "platform": "Xbox Original",
+    "region": "NTSC-U",
+    "lang": "Английский",
+    "media": "DVD",
+    "releaseDate": "2001-11-15",
+    "description": "Подарочный вариант американского релиза с дополнительными материалами в комплекте.",
+    "contents": [
+      "Коробка",
+      "Диск",
+      "Мануал",
+      "Артбук"
+    ],
+    "coverImages": [],
+    "barcode": "",
+    "dnsProductId": "",
+    "dnsProductCode": ""
+  },
+  {
+    "id": "elden-ring-ps5-standard-pal",
+    "gameId": "elden-ring",
+    "name": "Standard",
+    "platform": "PS5",
+    "region": "PAL",
+    "lang": "Русский",
+    "media": "Blu-ray",
+    "releaseDate": "2022-02-25",
+    "description": "Обычное европейское издание для PS5. Диск в стандартном кейсе, без дополнительных вложений.",
+    "contents": [
+      "Коробка",
+      "Диск"
+    ],
+    "coverImages": [
+      "https://c.dns-shop.ru/thumb/st4/fit/500/500/67bdb7146c1985609428770835f702e4/37cc0b233ceead117992d77d8324700e48f36bcc0467d9df5142de8436d25d1a.png.webp"
+    ],
+    "barcode": "",
+    "dnsProductId": "f01cafd1-cc44-11ec-8fb5-00155d8ed20b",
+    "dnsProductCode": "5036425"
+  },
+  {
+    "id": "elden-ring-ps5-launch-pal",
+    "gameId": "elden-ring",
+    "name": "Launch Edition",
+    "platform": "PS5",
+    "region": "PAL",
+    "lang": "Русский",
+    "media": "Blu-ray",
+    "releaseDate": "2022-02-25",
+    "description": "Издание к запуску: помимо диска в коробке лежат постер, наклейки и открытка с артом.",
+    "contents": [
+      "Коробка",
+      "Диск",
+      "Постер",
+      "Наклейки",
+      "Открытка"
+    ],
+    "coverImages": [
+      "https://c.dns-shop.ru/thumb/st4/fit/500/500/6a1fbab47d1b3613da974de2acac00b0/b1c5a034ba230fa18e621bfbc3eeecd936ad12aae51988686536be862d094023.jpg.webp"
+    ],
+    "barcode": "",
+    "dnsProductId": "b1e8c4b7-cfef-11eb-a27c-00155dd2ff2c",
+    "dnsProductCode": "4830212"
+  },
+  {
+    "id": "elden-ring-ps5-collectors-pal",
+    "gameId": "elden-ring",
+    "name": "Collector's Edition",
+    "platform": "PS5",
+    "region": "PAL",
+    "lang": "Русский",
+    "media": "Blu-ray",
+    "releaseDate": "2022-02-25",
+    "description": "Коллекционное издание в большой коробке: статуя, стальной кейс, артбук, саундтрек и кольцо.",
+    "contents": [
+      "Статуя Маликета",
+      "Стальной кейс",
+      "Артбук",
+      "Саундтрек",
+      "Кольцо",
+      "Коробка"
+    ],
+    "coverImages": [
+      "https://c.dns-shop.ru/thumb/st4/fit/500/500/67bdb7146c1985609428770835f702e4/37cc0b233ceead117992d77d8324700e48f36bcc0467d9df5142de8436d25d1a.png.webp"
+    ],
+    "barcode": "",
+    "dnsProductId": "",
+    "dnsProductCode": ""
+  },
+  {
+    "id": "elden-ring-ps4-standard-pal",
+    "gameId": "elden-ring",
+    "name": "Standard",
+    "platform": "PS4",
+    "region": "PAL",
+    "lang": "Русский",
+    "media": "Blu-ray",
+    "releaseDate": "2022-02-25",
+    "description": "Европейское издание для PS4. Работает на PS5 по обратной совместимости.",
+    "contents": [
+      "Коробка",
+      "Диск"
+    ],
+    "coverImages": [
+      "https://c.dns-shop.ru/thumb/st1/fit/500/500/129fd87e3366576f89f809bc14c84cc7/ca5c6044688e461a05b6bda8dc4b2edf9cb6839f3f5569ea0f183d2b02047a05.jpg.webp"
+    ],
+    "barcode": "",
+    "dnsProductId": "62171a7e-cc44-11ec-8fb5-00155d8ed20b",
+    "dnsProductCode": "5036416"
+  },
+  {
+    "id": "elden-ring-ps4-launch-pal",
+    "gameId": "elden-ring",
+    "name": "Launch Edition",
+    "platform": "PS4",
+    "region": "PAL",
+    "lang": "Русский",
+    "media": "Blu-ray",
+    "releaseDate": "2022-02-25",
+    "description": "Запусковое издание для PS4 с постером, наклейками и открыткой.",
+    "contents": [
+      "Коробка",
+      "Диск",
+      "Постер",
+      "Наклейки",
+      "Открытка"
+    ],
+    "coverImages": [
+      "https://c.dns-shop.ru/thumb/st1/fit/500/500/7c6fe4e27786cd68f3d424be4cd9dd7a/f2d9ab356189745221f0724adda382dc87d746af50074afa6076ea5598806bf8.jpg.webp"
+    ],
+    "barcode": "",
+    "dnsProductId": "249bc46a-cfef-11eb-a27c-00155dd2ff2c",
+    "dnsProductCode": "4830204"
+  }
+]

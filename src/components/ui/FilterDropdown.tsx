@@ -3,12 +3,7 @@ import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 import type { FocusEvent, KeyboardEvent } from 'react';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
 import { cx } from '../../lib/cx';
-
-export interface FilterOption {
-  readonly value: string;
-  readonly label: string;
-  readonly group?: string;
-}
+import type { FilterOption } from '../../lib/filterOptions';
 
 interface FilterDropdownProps {
   id: string;
