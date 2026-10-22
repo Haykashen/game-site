@@ -3,13 +3,29 @@
   "private": true,
   "version": "3.0.0",
   "type": "module",
-  "description": "RetroKeep — collector platform for video games (React + TypeScript single-file build)",
+  "description": "RetroKeep — collector platform for video games (React + TypeScript frontend, Fastify + Prisma backend)",
+  "workspaces": [
+    "shared",
+    "server"
+  ],
   "scripts": {
     "dev": "vite",
+    "dev:full": "concurrently -n web,api -c cyan,magenta \"vite\" \"npm run server:dev\"",
     "typecheck": "tsc --noEmit",
+    "typecheck:server": "npm run typecheck --workspace @retrokeep/server",
     "build": "npm run typecheck && vite build",
+    "build:server": "npm run build --workspace @retrokeep/server",
+    "build:all": "npm run build && npm run build:server",
     "postbuild": "node scripts/copy-standalone.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server:dev": "npm run dev --workspace @retrokeep/server",
+    "server:start": "npm run start --workspace @retrokeep/server",
+    "db:generate": "npm run prisma:generate --workspace @retrokeep/server",
+    "db:validate": "npm run prisma:validate --workspace @retrokeep/server",
+    "db:migrate": "npm run db:migrate --workspace @retrokeep/server",
+    "db:migrate:dev": "npm run db:migrate:dev --workspace @retrokeep/server",
+    "db:seed": "npm run db:seed --workspace @retrokeep/server",
+    "db:studio": "npm run db:studio --workspace @retrokeep/server"
   },
   "dependencies": {
     "lucide-react": "^1.61.0",
@@ -21,8 +37,16 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "concurrently": "^9.2.0",
     "typescript": "^7.0.2",
     "vite": "^8.3.5",
     "vite-plugin-singlefile": "^2.3.4"
+  },
+  "allowScripts": {
+    "@prisma/client@6.19.3": true,
+    "@prisma/engines@6.19.3": true,
+    "esbuild@0.27.7": true,
+    "esbuild@0.28.2": true,
+    "prisma@6.19.3": true
   }
 }

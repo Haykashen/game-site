@@ -5,6 +5,7 @@ import {
   EyeOff,
   Gamepad2,
   Gavel,
+  LogIn,
   Pencil,
   RotateCcw,
   ShoppingBag,
@@ -13,7 +14,9 @@ import {
   Truck,
   X,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import type { FormEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { deliveryLabel } from '../../lib/delivery';
 import { formatPrice } from '../../lib/formatPrice';
 import {
@@ -38,11 +41,14 @@ interface MarketEntryDetailProps {
   edition: Edition | undefined;
   titleId: string;
   isOwn: boolean;
+  isAuthenticated: boolean;
   onClose: () => void;
   onOpenGame: (gameId: string, editionId?: string) => void;
   onEdit: () => void;
   onDelete: () => void;
   onSetStatus: (status: MarketStatus) => void;
+  onPlaceBid: (amount: number) => Promise<string | null>;
+  onBuy: () => Promise<string | null>;
 }
 
 /** Entity card: the full card of a listing or auction opened from the grid. */
@@ -52,17 +58,43 @@ export function MarketEntryDetail({
   edition,
   titleId,
   isOwn,
+  isAuthenticated,
   onClose,
   onOpenGame,
   onEdit,
   onDelete,
   onSetStatus,
+  onPlaceBid,
+  onBuy,
 }: MarketEntryDetailProps) {
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [bidAmount, setBidAmount] = useState('');
+  const [tradeError, setTradeError] = useState('');
+  const [tradeMessage, setTradeMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const isAuction = entry.kind === 'auction';
   const isOver = isAuction && isAuctionOver(entry.endsAt);
   const isUpcoming = isAuction && isAuctionUpcoming(entry.startsAt);
   const listingType = isAuction ? null : entry.listingType;
+  const minimumBid = entry.bids > 0 ? entry.price + (entry.bidStep ?? 0) : entry.price;
+  const canBid =
+    isAuction &&
+    !isOwn &&
+    entry.status === 'active' &&
+    !isOver &&
+    !isUpcoming;
+  const canBuy = !isAuction && !isOwn && entry.status === 'active';
+  const buyLabel =
+    listingType === 'purchase'
+      ? 'Предложить экземпляр'
+      : listingType === 'exchange'
+        ? 'Предложить обмен'
+        : 'Оформить сделку';
+
+  useEffect(() => {
+    setBidAmount(String(minimumBid));
+    setTradeError('');
+  }, [entry.id, minimumBid]);
   const kindLabel = isAuction ? 'Аукцион' : listingTypeLabel(listingType);
   const KindIcon = isAuction
     ? Gavel
@@ -72,7 +104,9 @@ export function MarketEntryDetail({
         ? ArrowLeftRight
         : Tag;
   const priceLabel = isAuction
-    ? 'Стартовая ставка'
+    ? entry.startPrice !== undefined && entry.bids > 0
+      ? 'Текущая ставка'
+      : 'Стартовая ставка'
     : listingType === 'purchase'
       ? 'Готов купить за'
       : listingType === 'exchange'
@@ -112,6 +146,51 @@ export function MarketEntryDetail({
       : entry.packagingPrice === 0
         ? 'Бесплатно'
         : formatPrice(entry.packagingPrice);
+
+  const handleBid = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!isAuthenticated) return;
+
+    const amount = Number(bidAmount);
+
+    if (!Number.isSafeInteger(amount) || amount < minimumBid) {
+      setTradeError(`Минимальная ставка — ${formatPrice(minimumBid)}.`);
+      return;
+    }
+
+    setIsSubmitting(true);
+    setTradeError('');
+    setTradeMessage('');
+
+    const error = await onPlaceBid(amount);
+
+    if (error) {
+      setTradeError(error);
+    } else {
+      setTradeMessage('Ставка принята. Список обновлён.');
+    }
+
+    setIsSubmitting(false);
+  };
+
+  const handleBuy = async () => {
+    if (!isAuthenticated) return;
+
+    setIsSubmitting(true);
+    setTradeError('');
+    setTradeMessage('');
+
+    const error = await onBuy();
+
+    if (error) {
+      setTradeError(error);
+    } else {
+      setTradeMessage('Сделка создана. Следите за статусом в аккаунте.');
+    }
+
+    setIsSubmitting(false);
+  };
 
   return (
     <>
@@ -169,21 +248,23 @@ export function MarketEntryDetail({
 
             {entry.status === 'active' ? (
               <>
-                <button
-                  type="button"
-                  className="btn-secondary market-owner__btn"
-                  onClick={() => onSetStatus('sold')}
-                >
-                  <CheckCircle2 size={15} aria-hidden="true" />
-                  Отметить проданным
-                </button>
+                {entry.kind === 'listing' ? (
+                  <button
+                    type="button"
+                    className="btn-secondary market-owner__btn"
+                    onClick={() => onSetStatus('sold')}
+                  >
+                    <CheckCircle2 size={15} aria-hidden="true" />
+                    Отметить проданным
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   className="btn-secondary market-owner__btn"
                   onClick={() => onSetStatus('closed')}
                 >
                   <EyeOff size={15} aria-hidden="true" />
-                  Снять с продажи
+                  {entry.kind === 'auction' ? 'Закрыть аукцион' : 'Снять с продажи'}
                 </button>
               </>
             ) : (
@@ -243,6 +324,85 @@ export function MarketEntryDetail({
           </div>
         )}
       </div>
+
+      {!isOwn && (isAuction || canBuy) && (
+        <section className="market-trade" aria-label="Сделка">
+          <div className="market-trade__head">
+            <div>
+              <h4>{isAuction ? 'Ставка' : 'Сделка'}</h4>
+              <p className="market-trade__meta">
+                {isAuction
+                  ? `Минимальная ставка: ${formatPrice(minimumBid)}`
+                  : 'Сделка фиксирует цену и открывает отзывы после завершения.'}
+              </p>
+            </div>
+            {isAuction && (
+              <span className="meta-chip">{bidsLabel(entry.bids)}</span>
+            )}
+          </div>
+
+          {!isAuthenticated ? (
+            <div className="market-trade__guest">
+              <p>Войдите, чтобы участвовать в сделке.</p>
+              <Link className="btn-secondary" to="/account">
+                <LogIn size={15} aria-hidden="true" />
+                Войти в аккаунт
+              </Link>
+            </div>
+          ) : isAuction ? (
+            canBid ? (
+              <form className="market-trade__form" onSubmit={handleBid}>
+                <input
+                  type="number"
+                  className="form-control"
+                  min={minimumBid}
+                  step={1}
+                  inputMode="numeric"
+                  aria-label="Сумма ставки"
+                  value={bidAmount}
+                  onChange={(event) => setBidAmount(event.target.value)}
+                />
+                <button
+                  type="submit"
+                  className="market-form__submit"
+                  disabled={isSubmitting}
+                >
+                  <Gavel size={15} aria-hidden="true" />
+                  {isSubmitting ? 'Отправляем…' : 'Сделать ставку'}
+                </button>
+              </form>
+            ) : (
+              <p className="market-trade__meta">
+                {isUpcoming
+                  ? 'Аукцион ещё не начался.'
+                  : 'Ставки больше не принимаются.'}
+              </p>
+            )
+          ) : canBuy ? (
+            <div className="market-trade__guest">
+              <p>Сделка фиксирует цену и открывает отзывы после завершения.</p>
+              <button
+                type="button"
+                className="market-form__submit"
+                disabled={isSubmitting}
+                onClick={() => void handleBuy()}
+              >
+                <ShoppingBag size={15} aria-hidden="true" />
+                {isSubmitting ? 'Создаём…' : buyLabel}
+              </button>
+            </div>
+          ) : (
+            <p className="market-trade__meta">Лот больше недоступен для сделки.</p>
+          )}
+
+          {tradeError && (
+            <p className="market-form__error" role="alert">
+              {tradeError}
+            </p>
+          )}
+          {tradeMessage && <p className="market-form__hint">{tradeMessage}</p>}
+        </section>
+      )}
 
       <div className="desc-grid">
         <div className="desc-text">

@@ -94,7 +94,9 @@ export function ComposeEntryForm({
   );
   const [title, setTitle] = useState(entry?.title ?? '');
   const [condition, setCondition] = useState(entry?.condition ?? '');
-  const [price, setPrice] = useState(entry ? String(entry.price) : '');
+  const [price, setPrice] = useState(
+    entry ? String(entry.startPrice ?? entry.price) : '',
+  );
   const [bidStep, setBidStep] = useState(
     entry?.bidStep !== null && entry?.bidStep !== undefined ? String(entry.bidStep) : '100',
   );

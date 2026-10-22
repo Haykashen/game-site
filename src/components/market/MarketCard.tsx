@@ -43,7 +43,9 @@ export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: Ma
         ? ArrowLeftRight
         : Tag;
   const priceLabel = isAuction
-    ? 'Стартовая ставка'
+    ? entry.startPrice !== undefined && entry.bids > 0
+      ? 'Текущая ставка'
+      : 'Стартовая ставка'
     : listingType === 'purchase'
       ? 'Бюджет'
       : listingType === 'exchange'

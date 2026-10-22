@@ -1,5 +1,6 @@
 import { Disc, Settings2, UserRound } from 'lucide-react';
 import { Link, NavLink } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { useCollection } from '../context/CollectionContext';
 import { cx } from '../lib/cx';
 import { NAV_GROUPS } from './navigation';
@@ -30,6 +31,7 @@ function NavRow({ item, count }: NavRowProps) {
 
 /** Desktop navigation: brand, grouped sections and a compact account block. */
 export function Sidebar() {
+  const { user } = useAuth();
   const { ownedCount } = useCollection();
   const badges: Partial<Record<NavSectionId, number>> = { collection: ownedCount };
 
@@ -59,8 +61,8 @@ export function Sidebar() {
             <UserRound size={18} />
           </span>
           <span className="sidebar-account__meta">
-            <span className="sidebar-account__name">Гость</span>
-            <span className="sidebar-account__sub">Локальный профиль</span>
+            <span className="sidebar-account__name">{user?.displayName ?? '\u0413\u043e\u0441\u0442\u044c'}</span>
+            <span className="sidebar-account__sub">{user ? user.email ?? '\u0430\u043a\u043a\u0430\u0443\u043d\u0442' : '\u043b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u0439 \u043f\u0440\u043e\u0444\u0438\u043b\u044c'}</span>
           </span>
         </Link>
         <Link

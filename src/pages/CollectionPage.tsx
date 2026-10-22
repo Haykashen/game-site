@@ -31,8 +31,17 @@ function copiesOnShelf(count: number): string {
 
 /** Owned copies: every row is a concrete edition, not an abstract game. */
 export function CollectionPage() {
-  const { copies, editionById, games, setEditionQuantity, updateEdition, removeEdition } =
-    useCollection();
+  const {
+    copies,
+    editionById,
+    games,
+    setEditionQuantity,
+    updateEdition,
+    removeEdition,
+    isRemote,
+    isSyncing,
+    syncError,
+  } = useCollection();
   const navigate = useNavigate();
   const [editingEditionId, setEditingEditionId] = useState<string | null>(null);
 
@@ -91,6 +100,16 @@ export function CollectionPage() {
             : 'Здесь появятся конкретные издания, которые вы добавите из каталога.'
         }
       />
+
+      {syncError && (
+        <div className="market-sync-banner" role="alert">
+          {syncError}
+        </div>
+      )}
+
+      {isRemote && isSyncing && (
+        <p className="market-form__hint">Синхронизируем коллекцию с сервером…</p>
+      )}
 
       <div className="panel achievements-panel">
         <div className="achievements-icon">

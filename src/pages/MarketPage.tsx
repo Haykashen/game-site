@@ -5,6 +5,7 @@ import { PageHeading } from '../components/PageHeading';
 import { SearchToolbar } from '../components/SearchToolbar';
 import { MarketCard } from '../components/market/MarketCard';
 import { MarketDrawer } from '../components/market/MarketDrawer';
+import { useAuth } from '../context/AuthContext';
 import { useCollection } from '../context/CollectionContext';
 import { useMarketEntries } from '../hooks/useMarketEntries';
 import { useMarketPanelParam } from '../hooks/useMarketPanelParam';
@@ -57,6 +58,7 @@ const COPY: Record<MarketKind, MarketCopy> = {
 export function MarketPage({ kind }: MarketPageProps) {
   const copy = COPY[kind];
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { games, editions } = useCollection();
   const {
     entries,
@@ -65,6 +67,10 @@ export function MarketPage({ kind }: MarketPageProps) {
     updateEntry,
     removeEntry,
     setEntryStatus,
+    placeBid,
+    purchase,
+    error: marketError,
+    isRemote,
   } = useMarketEntries();
   const [showOwn, setShowOwn] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -121,35 +127,47 @@ export function MarketPage({ kind }: MarketPageProps) {
   }, [itemId]);
 
   const handleCreated = useCallback(
-    (draft: MarketDraft) => {
-      const entry = addEntry(draft);
-      openItem(entry.id, { replace: true });
+    async (draft: MarketDraft) => {
+      const entry = await addEntry(draft);
+      if (entry) openItem(entry.id, { replace: true });
     },
     [addEntry, openItem],
   );
 
   const handleUpdated = useCallback(
-    (draft: MarketDraft) => {
+    async (draft: MarketDraft) => {
       if (!selectedEntry) return;
-      updateEntry(selectedEntry.id, draft);
-      setIsEditing(false);
+      const updated = await updateEntry(selectedEntry.id, draft);
+      if (updated) setIsEditing(false);
     },
     [selectedEntry, updateEntry],
   );
 
-  const handleDelete = useCallback(() => {
+  const handleDelete = useCallback(async () => {
     if (!selectedEntry) return;
-    removeEntry(selectedEntry.id);
-    closePanel();
+    if (await removeEntry(selectedEntry.id)) closePanel();
   }, [closePanel, removeEntry, selectedEntry]);
 
   const handleSetStatus = useCallback(
-    (status: MarketStatus) => {
+    async (status: MarketStatus) => {
       if (!selectedEntry) return;
-      setEntryStatus(selectedEntry.id, status);
+      await setEntryStatus(selectedEntry.id, status);
     },
     [selectedEntry, setEntryStatus],
   );
+
+  const handlePlaceBid = useCallback(
+    async (amount: number) => {
+      if (!selectedEntry) return 'Лот не найден.';
+      return placeBid(selectedEntry.id, amount);
+    },
+    [placeBid, selectedEntry],
+  );
+
+  const handleBuy = useCallback(async () => {
+    if (!selectedEntry) return 'Лот не найден.';
+    return purchase(selectedEntry.id);
+  }, [purchase, selectedEntry]);
 
   const handleOpenGame = useCallback(
     (gameId: string, editionId?: string) => {
@@ -167,6 +185,12 @@ export function MarketPage({ kind }: MarketPageProps) {
         title={copy.title}
         description={copy.description}
       />
+
+      {marketError && (
+        <div className="market-sync-banner" role="alert">
+          {marketError}
+        </div>
+      )}
 
       <SearchToolbar
         key={kind}
@@ -253,6 +277,7 @@ export function MarketPage({ kind }: MarketPageProps) {
         isComposing={isComposing}
         isEditing={isEditing}
         isOwn={selectedIsOwn}
+        isAuthenticated={Boolean(user) || !isRemote}
         kind={kind}
         entry={selectedEntry}
         game={selectedGame}
@@ -268,6 +293,8 @@ export function MarketPage({ kind }: MarketPageProps) {
         onCancelEdit={() => setIsEditing(false)}
         onDelete={handleDelete}
         onSetStatus={handleSetStatus}
+        onPlaceBid={handlePlaceBid}
+        onBuy={handleBuy}
         onOpenGame={handleOpenGame}
       />
     </>

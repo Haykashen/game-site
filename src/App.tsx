@@ -1,5 +1,6 @@
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from './app/AppShell';
+import { AuthProvider } from './context/AuthContext';
 import { CollectionProvider } from './context/CollectionContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { AccountPage } from './pages/AccountPage';
@@ -14,21 +15,23 @@ export default function App() {
   return (
     <HashRouter>
       <ThemeProvider>
-        <CollectionProvider>
-          <AppShell>
-            <Routes>
-              <Route path="/" element={<Navigate to="/games" replace />} />
-              <Route path="/games" element={<GamesPage />} />
-              <Route path="/auctions" element={<AuctionsPage />} />
-              <Route path="/listings" element={<ListingsPage />} />
-              <Route path="/collection" element={<CollectionPage />} />
-              <Route path="/stats" element={<StatsPage />} />
-              <Route path="/account" element={<AccountPage />} />
-              <Route path="/settings" element={<SettingsPage />} />
-              <Route path="*" element={<Navigate to="/games" replace />} />
-            </Routes>
-          </AppShell>
-        </CollectionProvider>
+        <AuthProvider>
+          <CollectionProvider>
+            <AppShell>
+              <Routes>
+                <Route path="/" element={<Navigate to="/games" replace />} />
+                <Route path="/games" element={<GamesPage />} />
+                <Route path="/auctions" element={<AuctionsPage />} />
+                <Route path="/listings" element={<ListingsPage />} />
+                <Route path="/collection" element={<CollectionPage />} />
+                <Route path="/stats" element={<StatsPage />} />
+                <Route path="/account" element={<AccountPage />} />
+                <Route path="/settings" element={<SettingsPage />} />
+                <Route path="*" element={<Navigate to="/games" replace />} />
+              </Routes>
+            </AppShell>
+          </CollectionProvider>
+        </AuthProvider>
       </ThemeProvider>
     </HashRouter>
   );

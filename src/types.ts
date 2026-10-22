@@ -137,6 +137,16 @@ export interface MarketEntry {
   /** ISO timestamp of the auction end; `null` for fixed-price listings. */
   endsAt: string | null;
   createdAt: string;
+  /** Server author id; absent for entries that only exist in localStorage. */
+  authorId?: string;
+  /** Current auction price from the API; local demo entries keep it in `price`. */
+  currentPrice?: number;
+  /** Original auction starting price from the API. */
+  startPrice?: number;
+  /** Optimistic-concurrency version used by the bid endpoint. */
+  version?: number;
+  /** Auction winner after the API closes the lot. */
+  winnerId?: string | null;
 }
 
 /** Everything the placement form collects; ids, counters and status are assigned by the store. */

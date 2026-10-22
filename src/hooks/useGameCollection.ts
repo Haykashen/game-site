@@ -1,8 +1,24 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  createCopyRequest,
+  deleteEditionRequest,
+  errorMessage,
+  listCopies,
+  mapCopy,
+  setEditionQuantityRequest,
+  updateCopyEditionRequest,
+} from '../api';
+import { useAuth } from '../context/AuthContext';
 import { INITIAL_EDITIONS, INITIAL_GAMES } from '../data';
 import { mergeCatalog } from '../lib/catalog';
 import { MAX_COLLECTION_QUANTITY, STORAGE_KEYS } from '../lib/constants';
-import { createId, parseCopies, parseGames, parseOwnedIds, readStorage } from '../lib/storage';
+import {
+  createId,
+  parseCopies,
+  parseGames,
+  parseOwnedIds,
+  readStorage,
+} from '../lib/storage';
 import type { Copy, CopyDetails, Edition, Game } from '../types';
 import { usePersistentState } from './usePersistentState';
 
@@ -23,16 +39,21 @@ export interface GameCollection {
   setEditionQuantity: (editionId: string, quantity: number) => void;
   updateEdition: (editionId: string, details: CopyDetails) => void;
   removeEdition: (editionId: string) => void;
+  refresh: () => Promise<void>;
+  isRemote: boolean;
+  isSyncing: boolean;
+  syncError: string | null;
 }
 
 const EMPTY_EDITIONS: readonly Edition[] = [];
+const DEFAULT_DETAILS = 'Не указано';
 
 function createCopy(editionId: string, source?: Copy): Copy {
   return {
     id: createId(),
     editionId,
-    condition: source?.condition ?? 'Не указано',
-    completeness: source?.completeness ?? 'Не указано',
+    condition: source?.condition ?? DEFAULT_DETAILS,
+    completeness: source?.completeness ?? DEFAULT_DETAILS,
     purchasePrice: source?.purchasePrice ?? null,
     purchaseDate: source?.purchaseDate ?? '',
     notes: source?.notes ?? '',
@@ -68,6 +89,10 @@ function createLegacyCopies(
 
 /** Owns catalogue, editions and the shelf; exposes the only mutations the UI needs. */
 export function useGameCollection(): GameCollection {
+  const { status, user } = useAuth();
+  const isRemote = status === 'api' && user !== null;
+  const remoteUserId = user?.id;
+
   const [storedGames] = usePersistentState<Game[]>(
     STORAGE_KEYS.games,
     INITIAL_GAMES,
@@ -83,10 +108,42 @@ export function useGameCollection(): GameCollection {
     [legacyOwnedIds],
   );
 
-  const [copies, setCopies] = usePersistentState<Copy[]>(
+  const [localCopies, setLocalCopies] = usePersistentState<Copy[]>(
     STORAGE_KEYS.copies,
     initialCopies,
     parseCopies,
+  );
+  const [remoteCopies, setRemoteCopies] = useState<Copy[] | null>(null);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncError, setSyncError] = useState<string | null>(null);
+
+  const loadRemote = useCallback(async () => {
+    if (!isRemote) {
+      setRemoteCopies(null);
+      setIsSyncing(false);
+      return;
+    }
+
+    setIsSyncing(true);
+    setSyncError(null);
+
+    try {
+      const copies = await listCopies();
+      setRemoteCopies(copies.map(mapCopy));
+    } catch (loadError) {
+      setSyncError(errorMessage(loadError));
+    } finally {
+      setIsSyncing(false);
+    }
+  }, [isRemote]);
+
+  useEffect(() => {
+    void loadRemote();
+  }, [loadRemote, remoteUserId]);
+
+  const copies = useMemo(
+    () => (isRemote && remoteCopies !== null ? remoteCopies : localCopies),
+    [isRemote, localCopies, remoteCopies],
   );
 
   const games = useMemo(() => mergeCatalog(storedGames, INITIAL_GAMES), [storedGames]);
@@ -145,17 +202,40 @@ export function useGameCollection(): GameCollection {
     [ownedGameIdSet],
   );
 
+  const replaceRemoteEdition = useCallback(
+    (editionId: string, nextCopies: Copy[]) => {
+      setRemoteCopies((previous) => [
+        ...nextCopies,
+        ...(previous ?? []).filter((copy) => copy.editionId !== editionId),
+      ]);
+    },
+    [],
+  );
+
   const addCopy = useCallback(
     (editionId: string) => {
       if (!editionById.has(editionId)) return;
 
-      setCopies((previous) => {
+      if (isRemote) {
+        void (async () => {
+          try {
+            const copy = mapCopy(await createCopyRequest(editionId));
+            setRemoteCopies((previous) => [copy, ...(previous ?? [])]);
+            setSyncError(null);
+          } catch (mutationError) {
+            setSyncError(errorMessage(mutationError));
+          }
+        })();
+        return;
+      }
+
+      setLocalCopies((previous) => {
         const current = previous.filter((copy) => copy.editionId === editionId);
         if (current.length >= MAX_COLLECTION_QUANTITY) return previous;
         return [createCopy(editionId, current[0]), ...previous];
       });
     },
-    [editionById, setCopies],
+    [editionById, isRemote, setLocalCopies],
   );
 
   const setEditionQuantity = useCallback(
@@ -167,7 +247,20 @@ export function useGameCollection(): GameCollection {
         Math.max(0, Math.floor(quantity)),
       );
 
-      setCopies((previous) => {
+      if (isRemote) {
+        void (async () => {
+          try {
+            const copies = await setEditionQuantityRequest(editionId, target);
+            replaceRemoteEdition(editionId, copies.map(mapCopy));
+            setSyncError(null);
+          } catch (mutationError) {
+            setSyncError(errorMessage(mutationError));
+          }
+        })();
+        return;
+      }
+
+      setLocalCopies((previous) => {
         const current = previous.filter((copy) => copy.editionId === editionId);
 
         if (current.length === target) return previous;
@@ -193,19 +286,49 @@ export function useGameCollection(): GameCollection {
         return previous.filter((copy) => !removeIds.has(copy.id));
       });
     },
-    [editionById, setCopies],
+    [editionById, isRemote, replaceRemoteEdition, setLocalCopies],
   );
 
   const removeEdition = useCallback(
     (editionId: string) => {
-      setCopies((previous) => previous.filter((copy) => copy.editionId !== editionId));
+      if (isRemote) {
+        void (async () => {
+          try {
+            await deleteEditionRequest(editionId);
+            setRemoteCopies((previous) =>
+              (previous ?? []).filter((copy) => copy.editionId !== editionId),
+            );
+            setSyncError(null);
+          } catch (mutationError) {
+            setSyncError(errorMessage(mutationError));
+          }
+        })();
+        return;
+      }
+
+      setLocalCopies((previous) =>
+        previous.filter((copy) => copy.editionId !== editionId),
+      );
     },
-    [setCopies],
+    [isRemote, setLocalCopies],
   );
 
   const updateEdition = useCallback(
     (editionId: string, details: CopyDetails) => {
-      setCopies((previous) => {
+      if (isRemote) {
+        void (async () => {
+          try {
+            const copies = await updateCopyEditionRequest(editionId, details);
+            replaceRemoteEdition(editionId, copies.map(mapCopy));
+            setSyncError(null);
+          } catch (mutationError) {
+            setSyncError(errorMessage(mutationError));
+          }
+        })();
+        return;
+      }
+
+      setLocalCopies((previous) => {
         const current = previous.filter((copy) => copy.editionId === editionId);
         if (current.length === 0) return previous;
 
@@ -230,7 +353,7 @@ export function useGameCollection(): GameCollection {
         );
       });
     },
-    [setCopies],
+    [isRemote, replaceRemoteEdition, setLocalCopies],
   );
 
   return {
@@ -249,5 +372,9 @@ export function useGameCollection(): GameCollection {
     setEditionQuantity,
     updateEdition,
     removeEdition,
+    refresh: loadRemote,
+    isRemote,
+    isSyncing,
+    syncError,
   };
 }

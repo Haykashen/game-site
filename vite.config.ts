@@ -9,6 +9,14 @@ import { viteSingleFile } from 'vite-plugin-singlefile';
  */
 export default defineConfig({
   plugins: [react(), viteSingleFile()],
+  server: {
+    // In development the frontend talks to the API through the Vite proxy, so
+    // session cookies are same-origin and the offline build needs no API URL.
+    proxy: {
+      '/api': 'http://localhost:3001',
+      '/uploads': 'http://localhost:3001',
+    },
+  },
   build: {
     target: 'es2022',
     cssCodeSplit: false,

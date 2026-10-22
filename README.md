@@ -268,3 +268,7 @@ CSS-правил с селекторами `i` не срабатывала. В R
 - переключатель темы показывает солнце в светлой теме и луну в тёмной;
 - иконка поиска находится внутри поля ввода, а не в потоке над ним;
 - иконка диска на обложке — 44 px (34 px на мобильных).
+
+## Backend
+
+Fastify + PostgreSQL API: setup, Docker Compose, migrations, seed, endpoints and demo credentials are documented in [server/README.md](server/README.md).

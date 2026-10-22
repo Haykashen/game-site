@@ -2231,3 +2231,156 @@
             .edition-card__actions { flex-direction: column; }
             .edition-card__btn { width: 100%; }
         }
+
+        /* Account, API sessions and deals */
+        .account-auth { max-width: 540px; }
+        .account-auth__tabs {
+            display: flex; gap: .35rem;
+            margin-bottom: 1.1rem;
+            padding: .3rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        .account-auth__tab {
+            flex: 1;
+            min-height: 38px;
+            padding: .45rem .7rem;
+            border: 0; border-radius: 6px;
+            background: transparent; color: var(--text-muted);
+            font: 600 .78rem/1.2 'IBM Plex Mono', monospace;
+            cursor: pointer;
+        }
+        .account-auth__tab:hover { color: var(--text-main); }
+        .account-auth__tab.is-active {
+            background: var(--bg-card);
+            color: var(--brand);
+            box-shadow: 0 1px 4px rgba(0,0,0,.08);
+        }
+        .account-form { margin-top: 1rem; }
+        .account-form .market-form__grid { margin-bottom: .2rem; }
+        .account-notice {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 1rem; flex-wrap: wrap;
+            margin-bottom: 1.1rem;
+        }
+        .account-notice strong { font-size: .92rem; }
+        .account-notice p {
+            margin-top: .25rem;
+            color: var(--text-muted);
+            font-size: .8rem; line-height: 1.55;
+            max-width: 62ch;
+        }
+        .profile-actions {
+            display: flex; flex-wrap: wrap; gap: .5rem;
+            margin-top: 1rem;
+        }
+        .profile-avatar img,
+        img.profile-avatar { object-fit: cover; }
+        .account-deals-panel { margin-top: 1.1rem; }
+        .account-deals-panel__head {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            gap: 1rem; flex-wrap: wrap;
+        }
+        .account-deals {
+            display: grid; gap: .75rem;
+            margin-top: 1rem;
+        }
+        .deal-row {
+            padding: .9rem 1rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+        }
+        .deal-row__head {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            gap: .8rem; flex-wrap: wrap;
+        }
+        .deal-row__title { font-size: .9rem; font-weight: 650; }
+        .deal-row__meta {
+            margin-top: .2rem;
+            color: var(--text-muted);
+            font-size: .74rem; line-height: 1.45;
+        }
+        .deal-row__status--pending { border-color: #f59e0b; color: #b45309; }
+        .deal-row__status--completed { border-color: #16a34a; color: #15803d; }
+        .deal-row__status--cancelled { opacity: .75; }
+        html.dark .deal-row__status--pending { color: #fbbf24; }
+        html.dark .deal-row__status--completed { color: #86efac; }
+        .deal-row__actions {
+            display: flex; flex-wrap: wrap; gap: .5rem;
+            margin-top: .7rem;
+        }
+        .deal-row__reviews {
+            display: grid; gap: .35rem;
+            margin-top: .65rem;
+        }
+        .deal-review {
+            display: flex; align-items: center; gap: .3rem;
+            color: var(--text-muted);
+            font-size: .74rem; line-height: 1.45;
+        }
+        .deal-row__review-form {
+            display: grid; gap: .65rem;
+            margin-top: .8rem; padding-top: .8rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .deal-row__review-form .market-form__submit { justify-self: start; }
+
+        /* Bid and deal controls inside a market card */
+        .market-trade {
+            margin-top: 1rem;
+            padding: .95rem 1rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+        }
+        .market-trade__head {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            gap: .8rem; flex-wrap: wrap;
+            margin-bottom: .65rem;
+        }
+        .market-trade__head h4 { font-size: .88rem; font-weight: 700; }
+        .market-trade__meta {
+            color: var(--text-muted);
+            font-size: .76rem; line-height: 1.5;
+        }
+        .market-trade__form {
+            display: flex; align-items: flex-end; gap: .55rem;
+        }
+        .market-trade__form .form-control { max-width: 220px; }
+        .market-trade__guest {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: .8rem; flex-wrap: wrap;
+        }
+        .market-trade__guest p {
+            color: var(--text-muted);
+            font-size: .76rem; line-height: 1.5;
+        }
+        .market-trade__guest .btn-secondary,
+        .market-trade__guest .market-form__submit {
+            display: inline-flex; align-items: center; gap: .4rem;
+            text-decoration: none;
+        }
+
+        .market-sync-banner {
+            margin-bottom: 1rem;
+            padding: .7rem .9rem;
+            background: #fffbeb;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            color: #92400e;
+            font-size: .78rem; line-height: 1.5;
+        }
+        html.dark .market-sync-banner {
+            background: rgba(245, 158, 11, .12);
+            color: #fcd34d;
+        }
+
+        @media (max-width: 640px) {
+            .market-trade__form { flex-direction: column; align-items: stretch; }
+            .market-trade__form .form-control { max-width: none; }
+            .market-trade__form .market-form__submit { width: 100%; }
+            .account-notice { align-items: stretch; flex-direction: column; }
+            .account-notice > button { width: 100%; }
+        }

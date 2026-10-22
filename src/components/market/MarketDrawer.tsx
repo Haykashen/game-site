@@ -16,6 +16,7 @@ interface MarketDrawerProps {
   isComposing: boolean;
   isEditing: boolean;
   isOwn: boolean;
+  isAuthenticated: boolean;
   kind: MarketKind;
   entry: MarketEntry | null;
   game: Game | undefined;
@@ -31,6 +32,8 @@ interface MarketDrawerProps {
   onCancelEdit: () => void;
   onDelete: () => void;
   onSetStatus: (status: MarketStatus) => void;
+  onPlaceBid: (amount: number) => Promise<string | null>;
+  onBuy: () => Promise<string | null>;
   onOpenGame: (gameId: string, editionId?: string) => void;
 }
 
@@ -50,6 +53,7 @@ export function MarketDrawer({
   isComposing,
   isEditing,
   isOwn,
+  isAuthenticated,
   kind,
   entry,
   game,
@@ -65,6 +69,8 @@ export function MarketDrawer({
   onCancelEdit,
   onDelete,
   onSetStatus,
+  onPlaceBid,
+  onBuy,
   onOpenGame,
 }: MarketDrawerProps) {
   const [lastView, setLastView] = useState<DrawerView | null>(null);
@@ -133,11 +139,14 @@ export function MarketDrawer({
           edition={view.edition}
           titleId={TITLE_ID}
           isOwn={isOwn}
+          isAuthenticated={isAuthenticated}
           onClose={onClose}
           onOpenGame={onOpenGame}
           onEdit={onStartEdit}
           onDelete={onDelete}
           onSetStatus={onSetStatus}
+          onPlaceBid={onPlaceBid}
+          onBuy={onBuy}
         />
       ) : null}
     </ModalShell>

@@ -20,6 +20,9 @@ pnpm-debug.log*
 !.env.example
 *.local
 
+# Local API uploads (used when MinIO/S3 is unavailable)
+server/uploads/
+
 # Test coverage
 coverage/
 

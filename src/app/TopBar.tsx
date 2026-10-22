@@ -1,6 +1,7 @@
 import { Disc, Moon, Sun, UserRound } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { IconButton } from '../components/ui/IconButton';
+import { useAuth } from '../context/AuthContext';
 import { useThemeContext } from '../context/ThemeContext';
 import { findNavItem } from './navigation';
 
@@ -8,6 +9,7 @@ import { findNavItem } from './navigation';
 export function TopBar() {
   const { pathname } = useLocation();
   const { toggleTheme } = useThemeContext();
+  const { user } = useAuth();
   const section = findNavItem(pathname);
 
   return (
@@ -28,7 +30,12 @@ export function TopBar() {
           <Sun size={20} className="sun-icon" />
           <Moon size={20} className="moon-icon" />
         </IconButton>
-        <Link to="/account" className="topbar-avatar" aria-label="Аккаунт" title="Аккаунт">
+        <Link
+          to="/account"
+          className="topbar-avatar"
+          aria-label={user ? `Аккаунт: ${user.displayName}` : 'Аккаунт'}
+          title={user ? user.displayName : 'Гость'}
+        >
           <UserRound size={18} aria-hidden="true" />
         </Link>
       </div>
