@@ -91,8 +91,9 @@
         .catalog-search input::-webkit-search-cancel-button { display: none; }
         .search-clear { position: absolute; right: 0.55rem; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 7px; background: var(--bg-input); color: var(--text-muted); transition: color 0.2s, background 0.2s; }
         .search-clear:hover { color: var(--text-main); background: var(--border-color); }
-        .catalog-toolbar__meta { display: flex; align-items: center; gap: 0.7rem; flex: none; }
-        .catalog-toolbar__actions { display: flex; align-items: center; gap: 0.4rem; }
+        .catalog-toolbar__meta { display: flex; align-items: center; justify-content: flex-end; gap: 0.7rem; flex: none; flex-wrap: wrap; }
+        .catalog-toolbar__actions { display: flex; align-items: center; justify-content: flex-end; gap: 0.4rem; flex-wrap: wrap; }
+        .catalog-toolbar__hint { margin-top: 0.8rem; color: var(--text-muted); font-size: 0.74rem; line-height: 1.5; }
         .catalog-results { display: inline-flex; align-items: center; gap: 0.45rem; color: var(--text-muted); font: 600 0.68rem/1.4 'IBM Plex Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
         .catalog-results::before { content: ""; width: 7px; height: 7px; border-radius: 2px; background: var(--brand); box-shadow: 0 0 0 3px var(--brand-light); }
         .filter-icon-btn { position: relative; width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0; border: 1px solid var(--border-color); border-radius: 9px; background: transparent; color: var(--text-muted); transition: color 0.2s, border-color 0.2s, background 0.2s; }
@@ -1013,21 +1014,23 @@
         }
         .market-compose-btn > svg { flex: none; }
 
-        .market-list-head {
-            display: flex; align-items: center; justify-content: flex-end;
-            gap: .75rem; flex-wrap: wrap;
-            margin-bottom: 1rem;
+        .market-compose-btn--toolbar {
+            min-height: 44px;
+            padding: .58rem .95rem;
+            font-size: .82rem;
+            white-space: nowrap;
+            box-shadow: 3px 3px 0 rgba(120,100,216,.32);
         }
-        .market-list-hint { color: var(--text-muted); font-size: .78rem; }
+
         .market-own-toggle {
             display: inline-flex; align-items: center; gap: .38rem;
-            min-height: 34px;
-            padding: .38rem .68rem;
+            min-height: 44px;
+            padding: .45rem .72rem;
             border: 1px solid var(--border-color);
             border-radius: 999px;
             background: var(--bg-card);
             color: var(--text-muted);
-            font-size: .74rem; font-weight: 700;
+            font-size: .76rem; font-weight: 700;
             cursor: pointer;
             transition: border-color .18s ease, background .18s ease, color .18s ease;
         }
@@ -1675,6 +1678,10 @@
         }
         .btn-secondary:hover { border-color: var(--brand); background: var(--brand-light); }
 
+        @media (max-width: 980px) {
+            .catalog-toolbar--with-actions .catalog-search { flex-basis: 100%; }
+        }
+
         @media (max-width: 760px) {
             .page-heading--with-action { align-items: stretch; }
             .page-heading__action,
@@ -1683,13 +1690,32 @@
                 grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
                 gap: .9rem;
             }
-            .market-list-hint { display: none; }
+            .catalog-toolbar__hint { display: none; }
             .market-form__grid { grid-template-columns: 1fr; }
             .market-form__full { grid-column: auto; }
             .market-form__timing { grid-template-columns: 1fr; }
             .market-form__timing-error { grid-column: auto; }
             .market-card__media { height: 140px; }
             .market-carousel__stage { height: clamp(190px, 48vw, 260px); }
+        }
+
+        @media (max-width: 640px) {
+            .catalog-toolbar--with-actions .catalog-toolbar__meta {
+                flex: 1 1 100%;
+                min-width: 0;
+                flex-direction: column;
+                align-items: stretch;
+                gap: .55rem;
+            }
+            .catalog-toolbar--with-actions .catalog-toolbar__actions {
+                min-width: 0;
+                justify-content: flex-start;
+            }
+            .catalog-toolbar--with-actions .market-compose-btn--toolbar {
+                flex: 1 1 100%;
+                min-width: 0;
+                white-space: normal;
+            }
         }
 
         @media (max-width: 420px) {

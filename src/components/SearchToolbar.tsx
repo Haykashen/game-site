@@ -1,5 +1,6 @@
 import { Filter, FilterX, Search, X } from 'lucide-react';
 import { useRef, useState } from 'react';
+import type { ReactNode } from 'react';
 import { cx } from '../lib/cx';
 import type { SearchFilterField } from '../lib/searchFilterConfig';
 import { FilterDropdown } from './ui/FilterDropdown';
@@ -23,6 +24,10 @@ interface SearchToolbarProps<Key extends string> {
   onQueryChange: (query: string) => void;
   onFilterChange: (key: Key, value: string) => void;
   onReset: () => void;
+  /** Extra controls rendered after the filter buttons, e.g. page-specific actions. */
+  actions?: ReactNode;
+  /** Optional helper line shown under the search row. */
+  hint?: string;
 }
 
 /** Shared search, dropdown filters, active chips and reset for every section. */
@@ -37,6 +42,8 @@ export function SearchToolbar<Key extends string>({
   onQueryChange,
   onFilterChange,
   onReset,
+  actions,
+  hint,
 }: SearchToolbarProps<Key>) {
   const searchRef = useRef<HTMLInputElement>(null);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -75,7 +82,10 @@ export function SearchToolbar<Key extends string>({
   const filtersId = `${idPrefix}Filters`;
 
   return (
-    <section className="catalog-toolbar" aria-label={ariaLabel}>
+    <section
+      className={cx('catalog-toolbar', Boolean(actions) && 'catalog-toolbar--with-actions')}
+      aria-label={ariaLabel}
+    >
       <div className="catalog-toolbar__top">
         <div className="catalog-search">
           <Search size={19} aria-hidden="true" />
@@ -138,9 +148,12 @@ export function SearchToolbar<Key extends string>({
             >
               <FilterX size={17} aria-hidden="true" />
             </button>
+            {actions}
           </div>
         </div>
       </div>
+
+      {hint && <p className="catalog-toolbar__hint">{hint}</p>}
 
       {isFiltersOpen && (
         <div className="catalog-filters" id={filtersId}>
