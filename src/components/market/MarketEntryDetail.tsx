@@ -1,13 +1,19 @@
 import {
   ArrowLeftRight,
+  CheckCircle2,
   Clock,
+  EyeOff,
   Gamepad2,
   Gavel,
+  Pencil,
+  RotateCcw,
   ShoppingBag,
   Tag,
+  Trash2,
   Truck,
   X,
 } from 'lucide-react';
+import { useState } from 'react';
 import { deliveryLabel } from '../../lib/delivery';
 import { formatPrice } from '../../lib/formatPrice';
 import {
@@ -21,7 +27,7 @@ import {
   listingTypeLabel,
 } from '../../lib/market';
 import { cx } from '../../lib/cx';
-import type { Edition, Game, MarketEntry } from '../../types';
+import type { Edition, Game, MarketEntry, MarketStatus } from '../../types';
 import { IconButton } from '../ui/IconButton';
 import { SpecRow } from '../ui/SpecRow';
 import { MarketPhotoGallery } from './MarketPhotoGallery';
@@ -31,8 +37,12 @@ interface MarketEntryDetailProps {
   game: Game | undefined;
   edition: Edition | undefined;
   titleId: string;
+  isOwn: boolean;
   onClose: () => void;
   onOpenGame: (gameId: string, editionId?: string) => void;
+  onEdit: () => void;
+  onDelete: () => void;
+  onSetStatus: (status: MarketStatus) => void;
 }
 
 /** Entity card: the full card of a listing or auction opened from the grid. */
@@ -41,9 +51,14 @@ export function MarketEntryDetail({
   game,
   edition,
   titleId,
+  isOwn,
   onClose,
   onOpenGame,
+  onEdit,
+  onDelete,
+  onSetStatus,
 }: MarketEntryDetailProps) {
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const isAuction = entry.kind === 'auction';
   const isOver = isAuction && isAuctionOver(entry.endsAt);
   const isUpcoming = isAuction && isAuctionUpcoming(entry.startsAt);
@@ -63,17 +78,22 @@ export function MarketEntryDetail({
       : listingType === 'exchange'
         ? 'Оценка'
         : 'Цена';
-  const status = isAuction
-    ? isOver
-      ? 'Торги завершены'
-      : isUpcoming
-        ? 'Скоро откроется'
-        : 'Идут торги'
-    : listingType === 'purchase'
-      ? 'Куплю'
-      : listingType === 'exchange'
-        ? 'Обмен'
-        : 'В продаже';
+  const status =
+    entry.status === 'sold'
+      ? 'Продано'
+      : entry.status === 'closed'
+        ? 'Снято с продажи'
+        : isAuction
+          ? isOver
+            ? 'Торги завершены'
+            : isUpcoming
+              ? 'Скоро откроется'
+              : 'Идут торги'
+          : listingType === 'purchase'
+            ? 'Куплю'
+            : listingType === 'exchange'
+              ? 'Обмен'
+              : 'В продаже';
   const auctionTimerLabel = isUpcoming
     ? formatAuctionStart(entry.startsAt)
     : formatAuctionEnd(entry.endsAt);
@@ -102,7 +122,15 @@ export function MarketEntryDetail({
               <KindIcon size={13} aria-hidden="true" />
               {kindLabel}
             </span>
-            <span className="meta-chip">{status}</span>
+            <span
+              className={cx(
+                'meta-chip',
+                entry.status !== 'active' &&
+                  `market-status-chip market-status-chip--${entry.status}`,
+              )}
+            >
+              {status}
+            </span>
           </div>
           <h2 className="modal-title" id={titleId}>
             {entry.title}
@@ -112,6 +140,90 @@ export function MarketEntryDetail({
           <X size={20} />
         </IconButton>
       </div>
+
+      {isOwn && (
+        <section className="market-owner" aria-label="Управление объявлением">
+          <div className="market-owner__head">
+            <div>
+              <span className="market-owner__kicker">Ваше объявление</span>
+              <p className="market-owner__hint">
+                {entry.status === 'active'
+                  ? 'Видно всем в разделе. Можно отредактировать, снять или отметить проданным.'
+                  : 'Скрыто из общей ленты. Верните в продажу или удалите.'}
+              </p>
+            </div>
+            <span className={cx('market-owner__status', `is-${entry.status}`)}>
+              {entry.status === 'active'
+                ? 'Активно'
+                : entry.status === 'sold'
+                  ? 'Продано'
+                  : 'Снято'}
+            </span>
+          </div>
+
+          <div className="market-owner__actions">
+            <button type="button" className="btn-secondary market-owner__btn" onClick={onEdit}>
+              <Pencil size={15} aria-hidden="true" />
+              Редактировать
+            </button>
+
+            {entry.status === 'active' ? (
+              <>
+                <button
+                  type="button"
+                  className="btn-secondary market-owner__btn"
+                  onClick={() => onSetStatus('sold')}
+                >
+                  <CheckCircle2 size={15} aria-hidden="true" />
+                  Отметить проданным
+                </button>
+                <button
+                  type="button"
+                  className="btn-secondary market-owner__btn"
+                  onClick={() => onSetStatus('closed')}
+                >
+                  <EyeOff size={15} aria-hidden="true" />
+                  Снять с продажи
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                className="btn-secondary market-owner__btn"
+                onClick={() => onSetStatus('active')}
+              >
+                <RotateCcw size={15} aria-hidden="true" />
+                Вернуть в продажу
+              </button>
+            )}
+
+            {isConfirmingDelete ? (
+              <span className="market-owner__confirm">
+                <span>Удалить безвозвратно?</span>
+                <button type="button" className="market-owner__danger" onClick={onDelete}>
+                  Да, удалить
+                </button>
+                <button
+                  type="button"
+                  className="btn-secondary market-owner__btn"
+                  onClick={() => setIsConfirmingDelete(false)}
+                >
+                  Отмена
+                </button>
+              </span>
+            ) : (
+              <button
+                type="button"
+                className="market-owner__delete"
+                onClick={() => setIsConfirmingDelete(true)}
+              >
+                <Trash2 size={15} aria-hidden="true" />
+                Удалить
+              </button>
+            )}
+          </div>
+        </section>
+      )}
 
       <MarketPhotoGallery photos={entry.photos} title={entry.title} />
 

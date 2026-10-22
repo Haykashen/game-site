@@ -46,7 +46,10 @@ interface FiltersData {
 }
 
 /** JSON strings and service ids are validated at startup before being narrowed. */
-type MarketSeed = Omit<MarketEntry, 'kind' | 'deliveryServices' | 'listingType'> & {
+type MarketSeed = Omit<
+  MarketEntry,
+  'kind' | 'deliveryServices' | 'listingType' | 'status'
+> & {
   readonly kind: string;
   readonly deliveryServices: readonly string[];
   readonly listingType: string | null;
@@ -336,6 +339,7 @@ export const INITIAL_MARKET_ENTRIES: MarketEntry[] = marketSeeds.map((entry) => 
     kind: entry.kind,
     listingType: isMarketListingType(entry.listingType) ? entry.listingType : null,
     editionId: entry.editionId,
+    status: 'active',
     deliveryServices: entry.deliveryServices.filter(isDeliveryService),
   };
 });

@@ -59,6 +59,9 @@ export interface Copy {
 /** Everything the collection form collects; ids are assigned by the store. */
 export type CopyDraft = Omit<Copy, 'id' | 'createdAt'>;
 
+/** Editable physical details; shared by every copy of one edition. */
+export type CopyDetails = Pick<Copy, 'condition' | 'completeness' | 'notes' | 'photos'>;
+
 /** Precomputed per-game numbers and badges used by catalogue cards. */
 export interface GameStats {
   platforms: string[];
@@ -84,6 +87,9 @@ export type MarketKind = 'listing' | 'auction';
 /** Listings can offer a copy, look for one, or propose an exchange. */
 export type MarketListingType = 'sale' | 'purchase' | 'exchange';
 
+/** Owner-controlled lifecycle of a local listing or auction. */
+export type MarketStatus = 'active' | 'sold' | 'closed';
+
 /** Courier service ids are stable so saved entries survive label edits. */
 export type MarketDeliveryService = 'russian-post' | 'cdek' | 'yandex' | 'other';
 
@@ -103,6 +109,8 @@ export interface MarketEntry {
   price: number;
   seller: string;
   description: string;
+  /** Owner-controlled lifecycle; seeds and legacy entries default to `active`. */
+  status: MarketStatus;
   /** Data URLs of up to six photos attached by the seller. */
   photos: string[];
   /** Courier services offered by the seller; empty for legacy entries. */
@@ -124,7 +132,7 @@ export interface MarketEntry {
   createdAt: string;
 }
 
-/** Everything the placement form collects; ids and counters are assigned by the store. */
-export type MarketDraft = Omit<MarketEntry, 'id' | 'createdAt' | 'bids'>;
+/** Everything the placement form collects; ids, counters and status are assigned by the store. */
+export type MarketDraft = Omit<MarketEntry, 'id' | 'createdAt' | 'bids' | 'status'>;
 
 export type Theme = 'light' | 'dark';

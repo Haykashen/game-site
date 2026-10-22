@@ -3,7 +3,7 @@ import { INITIAL_EDITIONS, INITIAL_GAMES } from '../data';
 import { mergeCatalog } from '../lib/catalog';
 import { MAX_COLLECTION_QUANTITY, STORAGE_KEYS } from '../lib/constants';
 import { createId, parseCopies, parseGames, parseOwnedIds, readStorage } from '../lib/storage';
-import type { Copy, Edition, Game } from '../types';
+import type { Copy, CopyDetails, Edition, Game } from '../types';
 import { usePersistentState } from './usePersistentState';
 
 export interface GameCollection {
@@ -21,18 +21,21 @@ export interface GameCollection {
   getEditionCopies: (editionId: string) => Copy[];
   addCopy: (editionId: string) => void;
   setEditionQuantity: (editionId: string, quantity: number) => void;
+  updateEdition: (editionId: string, details: CopyDetails) => void;
   removeEdition: (editionId: string) => void;
 }
 
 const EMPTY_EDITIONS: readonly Edition[] = [];
 
-function createCopy(editionId: string): Copy {
+function createCopy(editionId: string, source?: Copy): Copy {
   return {
     id: createId(),
     editionId,
-    condition: 'Не указано',
-    completeness: 'Не указано',
-    notes: '',
+    condition: source?.condition ?? 'Не указано',
+    completeness: source?.completeness ?? 'Не указано',
+    notes: source?.notes ?? '',
+    // Photos are shared conceptually; keeping them on one row avoids duplicating
+    // large data URLs when the quantity stepper grows.
     photos: [],
     createdAt: new Date().toISOString(),
   };
@@ -145,9 +148,9 @@ export function useGameCollection(): GameCollection {
       if (!editionById.has(editionId)) return;
 
       setCopies((previous) => {
-        const owned = previous.filter((copy) => copy.editionId === editionId).length;
-        if (owned >= MAX_COLLECTION_QUANTITY) return previous;
-        return [createCopy(editionId), ...previous];
+        const current = previous.filter((copy) => copy.editionId === editionId);
+        if (current.length >= MAX_COLLECTION_QUANTITY) return previous;
+        return [createCopy(editionId, current[0]), ...previous];
       });
     },
     [editionById, setCopies],
@@ -173,7 +176,7 @@ export function useGameCollection(): GameCollection {
         if (target > current.length) {
           const additions = Array.from(
             { length: target - current.length },
-            () => createCopy(editionId),
+            () => createCopy(editionId, current[0]),
           );
           return [...additions, ...previous];
         }
@@ -198,6 +201,34 @@ export function useGameCollection(): GameCollection {
     [setCopies],
   );
 
+  const updateEdition = useCallback(
+    (editionId: string, details: CopyDetails) => {
+      setCopies((previous) => {
+        const current = previous.filter((copy) => copy.editionId === editionId);
+        if (current.length === 0) return previous;
+
+        const representative = [...current].sort(
+          (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt),
+        )[0];
+        const representativeId = representative?.id;
+
+        return previous.map((copy) =>
+          copy.editionId === editionId
+            ? {
+                ...copy,
+                condition: details.condition,
+                completeness: details.completeness,
+                notes: details.notes,
+                // Only one row carries the data URLs; the group shares them.
+                photos: copy.id === representativeId ? details.photos : [],
+              }
+            : copy,
+        );
+      });
+    },
+    [setCopies],
+  );
+
   return {
     games,
     editions: INITIAL_EDITIONS,
@@ -212,6 +243,7 @@ export function useGameCollection(): GameCollection {
     getEditionCopies,
     addCopy,
     setEditionQuantity,
+    updateEdition,
     removeEdition,
   };
 }

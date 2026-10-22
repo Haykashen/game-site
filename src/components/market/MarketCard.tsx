@@ -23,15 +23,18 @@ interface MarketCardProps {
   entry: MarketEntry;
   game: Game | undefined;
   edition?: Edition | undefined;
+  isOwn?: boolean;
   onSelect: (entryId: string) => void;
 }
 
 /** Entity tile for the listings and auctions pages. */
-export function MarketCard({ entry, game, edition, onSelect }: MarketCardProps) {
+export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: MarketCardProps) {
   const isAuction = entry.kind === 'auction';
   const isUpcoming = isAuction && isAuctionUpcoming(entry.startsAt);
   const listingType = isAuction ? null : entry.listingType;
   const kindLabel = isAuction ? 'Аукцион' : listingTypeLabel(listingType);
+  const statusLabel =
+    entry.status === 'sold' ? 'Продано' : entry.status === 'closed' ? 'Снято' : '';
   const KindIcon = isAuction
     ? Gavel
     : listingType === 'purchase'
@@ -60,7 +63,11 @@ export function MarketCard({ entry, game, edition, onSelect }: MarketCardProps) 
 
   return (
     <article
-      className={cx('market-card', isAuction && 'market-card--auction')}
+      className={cx(
+        'market-card',
+        isAuction && 'market-card--auction',
+        entry.status !== 'active' && 'market-card--inactive',
+      )}
       role="button"
       tabIndex={0}
       aria-label={`Открыть карточку: ${entry.title}`}
@@ -84,7 +91,15 @@ export function MarketCard({ entry, game, edition, onSelect }: MarketCardProps) 
           <KindIcon size={13} aria-hidden="true" />
           {kindLabel}
         </span>
-        <ArrowUpRight className="market-card__arrow" size={17} aria-hidden="true" />
+        <span className="market-card__top-right">
+          {isOwn && <span className="market-card__own">Моё</span>}
+          {statusLabel && (
+            <span className={cx('market-card__status', `is-${entry.status}`)}>
+              {statusLabel}
+            </span>
+          )}
+          <ArrowUpRight className="market-card__arrow" size={17} aria-hidden="true" />
+        </span>
       </div>
 
       <div className="market-card__main">

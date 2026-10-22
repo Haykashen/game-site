@@ -1,4 +1,4 @@
-import { ExternalLink, Image as ImageIcon, Minus, Package, Plus, Trash2 } from 'lucide-react';
+import { ExternalLink, Image as ImageIcon, Minus, Package, Pencil, Plus, Trash2 } from 'lucide-react';
 import { MAX_COLLECTION_QUANTITY } from '../../lib/constants';
 import { editionContentsLabel, editionLabel, formatEditionDate } from '../../lib/editions';
 import type { Copy, Edition, Game } from '../../types';
@@ -9,6 +9,7 @@ interface CopyCardProps {
   game: Game;
   quantity: number;
   onOpen: () => void;
+  onEdit: () => void;
   onQuantityChange: (quantity: number) => void;
   onRemove: () => void;
 }
@@ -20,6 +21,7 @@ export function CopyCard({
   game,
   quantity,
   onOpen,
+  onEdit,
   onQuantityChange,
   onRemove,
 }: CopyCardProps) {
@@ -100,6 +102,14 @@ export function CopyCard({
           <button type="button" className="copy-card__open" onClick={onOpen}>
             <ExternalLink size={14} aria-hidden="true" />
             Открыть игру
+          </button>
+          <button
+            type="button"
+            className="copy-card__edit"
+            aria-label={`Редактировать ${game.title} (${editionLabel(edition)})`}
+            onClick={onEdit}
+          >
+            <Pencil size={15} aria-hidden="true" />
           </button>
           <button
             type="button"

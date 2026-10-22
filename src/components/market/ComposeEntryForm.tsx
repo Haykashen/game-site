@@ -10,6 +10,7 @@ import type {
   Game,
   MarketDeliveryService,
   MarketDraft,
+  MarketEntry,
   MarketKind,
   MarketListingType,
 } from '../../types';
@@ -25,6 +26,8 @@ interface ComposeEntryFormProps {
   initialGameId: string;
   /** Edition preselected when the flow started from an edition card. */
   initialEditionId: string;
+  /** When present, the form edits this entry instead of creating a new one. */
+  entry?: MarketEntry;
   titleId: string;
   onSubmit: (draft: MarketDraft) => void;
   onCancel: () => void;
@@ -58,14 +61,21 @@ export function ComposeEntryForm({
   editions,
   initialGameId,
   initialEditionId,
+  entry,
   titleId,
   onSubmit,
   onCancel,
 }: ComposeEntryFormProps) {
-  const isAuction = kind === 'auction';
-  const defaultGameId = games.some((game) => game.id === initialGameId)
-    ? initialGameId
-    : (games[0]?.id ?? '');
+  const isEditing = Boolean(entry);
+  const formKind = entry?.kind ?? kind;
+  const isAuction = formKind === 'auction';
+  const editingGameId =
+    entry && games.some((game) => game.id === entry.gameId) ? entry.gameId : '';
+  const defaultGameId =
+    editingGameId ||
+    (games.some((game) => game.id === initialGameId)
+      ? initialGameId
+      : (games[0]?.id ?? ''));
 
   const editionsForGame = (gameId: string) => editions.filter((edition) => edition.gameId === gameId);
 
@@ -76,25 +86,45 @@ export function ComposeEntryForm({
   };
 
   const [gameId, setGameId] = useState(defaultGameId);
-  const [listingType, setListingType] = useState<MarketListingType>('sale');
-  const [editionId, setEditionId] = useState(() => defaultEditionId(defaultGameId));
-  const [title, setTitle] = useState('');
-  const [condition, setCondition] = useState('');
-  const [price, setPrice] = useState('');
-  const [bidStep, setBidStep] = useState('100');
-  const [startsAt, setStartsAt] = useState(() => formatDateTimeLocal(new Date()));
+  const [listingType, setListingType] = useState<MarketListingType>(
+    entry?.listingType ?? 'sale',
+  );
+  const [editionId, setEditionId] = useState(() =>
+    entry ? (entry.editionId ?? '') : defaultEditionId(defaultGameId),
+  );
+  const [title, setTitle] = useState(entry?.title ?? '');
+  const [condition, setCondition] = useState(entry?.condition ?? '');
+  const [price, setPrice] = useState(entry ? String(entry.price) : '');
+  const [bidStep, setBidStep] = useState(
+    entry?.bidStep !== null && entry?.bidStep !== undefined ? String(entry.bidStep) : '100',
+  );
+  const [startsAt, setStartsAt] = useState(() =>
+    entry?.startsAt
+      ? formatDateTimeLocal(new Date(entry.startsAt))
+      : formatDateTimeLocal(new Date()),
+  );
   const [endsAt, setEndsAt] = useState(() =>
-    formatDateTimeLocal(new Date(Date.now() + DEFAULT_AUCTION_DAYS * DAY_MS)),
+    entry?.endsAt
+      ? formatDateTimeLocal(new Date(entry.endsAt))
+      : formatDateTimeLocal(new Date(Date.now() + DEFAULT_AUCTION_DAYS * DAY_MS)),
   );
   const [auctionTimeError, setAuctionTimeError] = useState('');
-  const [description, setDescription] = useState('');
-  const [photos, setPhotos] = useState<string[]>([]);
+  const [description, setDescription] = useState(entry?.description ?? '');
+  const [photos, setPhotos] = useState<string[]>(entry ? [...entry.photos] : []);
   const [isProcessingPhotos, setIsProcessingPhotos] = useState(false);
-  const [deliveryServices, setDeliveryServices] = useState<MarketDeliveryService[]>([]);
+  const [deliveryServices, setDeliveryServices] = useState<MarketDeliveryService[]>(
+    entry ? [...entry.deliveryServices] : [],
+  );
   const [deliveryError, setDeliveryError] = useState('');
-  const [internationalShipping, setInternationalShipping] = useState(false);
-  const [packagingPrice, setPackagingPrice] = useState('');
-  const [shipsFrom, setShipsFrom] = useState('');
+  const [internationalShipping, setInternationalShipping] = useState(
+    entry?.internationalShipping ?? false,
+  );
+  const [packagingPrice, setPackagingPrice] = useState(
+    entry?.packagingPrice !== null && entry?.packagingPrice !== undefined
+      ? String(entry.packagingPrice)
+      : '',
+  );
+  const [shipsFrom, setShipsFrom] = useState(entry?.shipsFrom ?? '');
 
   const gameEditions = editionsForGame(gameId);
   const selectedGame = games.find((game) => game.id === gameId);
@@ -178,14 +208,14 @@ export function ComposeEntryForm({
     }
 
     onSubmit({
-      kind,
+      kind: formKind,
       listingType: isAuction ? null : listingType,
       gameId,
       editionId: trimmedEditionId || null,
       title: trimmedTitle,
       condition: trimmedCondition,
       price: numericPrice,
-      seller: AUTHOR,
+      seller: entry?.seller ?? AUTHOR,
       description: trimmedDescription,
       photos,
       deliveryServices,
@@ -211,10 +241,16 @@ export function ComposeEntryForm({
               )}
               {isAuction ? 'Аукцион' : 'Объявление'}
             </span>
-            <span className="meta-chip">Новая запись</span>
+            <span className="meta-chip">{isEditing ? 'Редактирование' : 'Новая запись'}</span>
           </div>
           <h2 className="modal-title" id={titleId}>
-            {isAuction ? 'Разместить аукцион' : 'Разместить объявление'}
+            {isEditing
+              ? isAuction
+                ? 'Редактировать аукцион'
+                : 'Редактировать объявление'
+              : isAuction
+                ? 'Разместить аукцион'
+                : 'Разместить объявление'}
           </h2>
         </div>
         <IconButton label="Закрыть" transparent onClick={onCancel}>
@@ -223,9 +259,11 @@ export function ComposeEntryForm({
       </div>
 
       <p className="market-form__lead">
-        {isAuction
-          ? 'Задайте стартовую ставку, шаг и даты торгов — карточка сразу появится в разделе.'
-          : 'Опишите издание и цену — карточка сразу появится в разделе объявлений.'}
+        {isEditing
+          ? 'Измените поля и сохраните — карточка обновится сразу.'
+          : isAuction
+            ? 'Задайте стартовую ставку, шаг и даты торгов — карточка сразу появится в разделе.'
+            : 'Опишите издание и цену — карточка сразу появится в разделе объявлений.'}
       </p>
 
       <form className="market-form" onSubmit={handleSubmit}>
@@ -526,9 +564,11 @@ export function ComposeEntryForm({
           <button type="submit" className="market-form__submit" disabled={isProcessingPhotos}>
             {isProcessingPhotos
               ? 'Обработка фото…'
-              : isAuction
-                ? 'Запустить аукцион'
-                : 'Разместить объявление'}
+              : isEditing
+                ? 'Сохранить изменения'
+                : isAuction
+                  ? 'Запустить аукцион'
+                  : 'Разместить объявление'}
           </button>
         </div>
       </form>

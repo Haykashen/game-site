@@ -1,8 +1,9 @@
 import { Trophy } from 'lucide-react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PageHeading } from '../components/PageHeading';
 import { CopyCard } from '../components/collection/CopyCard';
+import { CopyEditDrawer } from '../components/collection/CopyEditDrawer';
 import { useCollection } from '../context/CollectionContext';
 import type { Copy, Edition, Game } from '../types';
 
@@ -12,6 +13,8 @@ interface CopyItem {
   game: Game;
   quantity: number;
   latestAt: number;
+  /** Earliest row is the representative, so bulk edits do not flip card text. */
+  firstAt: number;
 }
 
 function copiesOnShelf(count: number): string {
@@ -28,8 +31,10 @@ function copiesOnShelf(count: number): string {
 
 /** Owned copies: every row is a concrete edition, not an abstract game. */
 export function CollectionPage() {
-  const { copies, editionById, games, setEditionQuantity, removeEdition } = useCollection();
+  const { copies, editionById, games, setEditionQuantity, updateEdition, removeEdition } =
+    useCollection();
   const navigate = useNavigate();
+  const [editingEditionId, setEditingEditionId] = useState<string | null>(null);
 
   const gamesById = useMemo(() => new Map(games.map((game) => [game.id, game])), [games]);
 
@@ -49,8 +54,11 @@ export function CollectionPage() {
       if (existing) {
         existing.quantity += 1;
         if (createdAt > existing.latestAt) {
-          existing.copy = copy;
           existing.latestAt = createdAt;
+        }
+        if (createdAt < existing.firstAt) {
+          existing.copy = copy;
+          existing.firstAt = createdAt;
         }
         continue;
       }
@@ -61,11 +69,16 @@ export function CollectionPage() {
         game,
         quantity: 1,
         latestAt: createdAt,
+        firstAt: createdAt,
       });
     }
 
     return [...byEdition.values()].sort((a, b) => b.latestAt - a.latestAt);
   }, [copies, editionById, gamesById]);
+
+  const editingItem = editingEditionId
+    ? (items.find((item) => item.edition.id === editingEditionId) ?? null)
+    : null;
 
   return (
     <>
@@ -113,12 +126,26 @@ export function CollectionPage() {
                   `/games?game=${encodeURIComponent(game.id)}&editionId=${encodeURIComponent(edition.id)}`,
                 )
               }
+              onEdit={() => setEditingEditionId(edition.id)}
               onQuantityChange={(nextQuantity) => setEditionQuantity(edition.id, nextQuantity)}
               onRemove={() => removeEdition(edition.id)}
             />
           ))}
         </section>
       )}
+
+      <CopyEditDrawer
+        isOpen={editingItem !== null}
+        copy={editingItem?.copy ?? null}
+        edition={editingItem?.edition ?? null}
+        game={editingItem?.game ?? null}
+        quantity={editingItem?.quantity ?? 1}
+        onClose={() => setEditingEditionId(null)}
+        onSave={(details) => {
+          if (editingItem) updateEdition(editingItem.edition.id, details);
+          setEditingEditionId(null);
+        }}
+      />
     </>
   );
 }

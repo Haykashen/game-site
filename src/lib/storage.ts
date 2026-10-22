@@ -197,6 +197,11 @@ function readListingType(
   return 'sale';
 }
 
+/** Seeds and legacy entries have no lifecycle field; they are live by default. */
+function readStatus(value: unknown): MarketEntry['status'] {
+  return value === 'sold' || value === 'closed' ? value : 'active';
+}
+
 interface EditionLookup {
   readonly byId: ReadonlyMap<string, Edition>;
   readonly firstByGame: ReadonlyMap<string, string>;
@@ -304,6 +309,7 @@ function normalizeMarketEntry(
     price,
     seller,
     description,
+    status: readStatus(value.status),
     photos,
     deliveryServices,
     internationalShipping,

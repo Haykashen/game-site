@@ -1,5 +1,5 @@
-import { Plus, RotateCcw } from 'lucide-react';
-import { useCallback, useMemo } from 'react';
+import { Plus, RotateCcw, UserRound } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PageHeading } from '../components/PageHeading';
 import { SearchToolbar } from '../components/SearchToolbar';
@@ -9,10 +9,11 @@ import { useCollection } from '../context/CollectionContext';
 import { useMarketEntries } from '../hooks/useMarketEntries';
 import { useMarketPanelParam } from '../hooks/useMarketPanelParam';
 import { useUrlFilters } from '../hooks/useUrlFilters';
+import { cx } from '../lib/cx';
 import { marketCountLabel } from '../lib/market';
 import { MARKET_FILTER_FIELDS, SEARCH_FILTER_PARAMS } from '../lib/searchFilterConfig';
 import { selectVisibleMarketEntries } from '../lib/selectVisibleMarketEntries';
-import type { MarketDraft, MarketKind } from '../types';
+import type { MarketDraft, MarketKind, MarketStatus } from '../types';
 
 interface MarketPageProps {
   kind: MarketKind;
@@ -57,7 +58,16 @@ export function MarketPage({ kind }: MarketPageProps) {
   const copy = COPY[kind];
   const navigate = useNavigate();
   const { games, editions } = useCollection();
-  const { entries, addEntry } = useMarketEntries();
+  const {
+    entries,
+    ownEntryIds,
+    addEntry,
+    updateEntry,
+    removeEntry,
+    setEntryStatus,
+  } = useMarketEntries();
+  const [showOwn, setShowOwn] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const { values: filters, setValue, reset: resetFilters } = useUrlFilters(
     SEARCH_FILTER_PARAMS,
   );
@@ -80,19 +90,35 @@ export function MarketPage({ kind }: MarketPageProps) {
     () => entries.filter((entry) => entry.kind === kind),
     [entries, kind],
   );
+  const ownCount = useMemo(
+    () => kindItems.filter((entry) => ownEntryIds.has(entry.id)).length,
+    [kindItems, ownEntryIds],
+  );
+  const baseItems = useMemo(
+    () =>
+      kindItems.filter((entry) =>
+        showOwn ? ownEntryIds.has(entry.id) : entry.status === 'active',
+      ),
+    [kindItems, ownEntryIds, showOwn],
+  );
   const visibleItems = useMemo(
-    () => selectVisibleMarketEntries(kindItems, gamesById, editionsById, editions, filters),
-    [editions, editionsById, filters, gamesById, kindItems],
+    () => selectVisibleMarketEntries(baseItems, gamesById, editionsById, editions, filters),
+    [baseItems, editions, editionsById, filters, gamesById],
   );
   const selectedEntry = useMemo(
     () => kindItems.find((entry) => entry.id === itemId) ?? null,
     [itemId, kindItems],
   );
+  const selectedIsOwn = selectedEntry ? ownEntryIds.has(selectedEntry.id) : false;
   const selectedGame = selectedEntry
     ? gamesById.get(selectedEntry.gameId)
     : undefined;
   const selectedEdition =
     selectedEntry?.editionId ? editionsById.get(selectedEntry.editionId) : undefined;
+
+  useEffect(() => {
+    setIsEditing(false);
+  }, [itemId]);
 
   const handleCreated = useCallback(
     (draft: MarketDraft) => {
@@ -100,6 +126,29 @@ export function MarketPage({ kind }: MarketPageProps) {
       openItem(entry.id, { replace: true });
     },
     [addEntry, openItem],
+  );
+
+  const handleUpdated = useCallback(
+    (draft: MarketDraft) => {
+      if (!selectedEntry) return;
+      updateEntry(selectedEntry.id, draft);
+      setIsEditing(false);
+    },
+    [selectedEntry, updateEntry],
+  );
+
+  const handleDelete = useCallback(() => {
+    if (!selectedEntry) return;
+    removeEntry(selectedEntry.id);
+    closePanel();
+  }, [closePanel, removeEntry, selectedEntry]);
+
+  const handleSetStatus = useCallback(
+    (status: MarketStatus) => {
+      if (!selectedEntry) return;
+      setEntryStatus(selectedEntry.id, status);
+    },
+    [selectedEntry, setEntryStatus],
   );
 
   const handleOpenGame = useCallback(
@@ -144,12 +193,28 @@ export function MarketPage({ kind }: MarketPageProps) {
       />
 
       <div className="market-list-head">
-        <span className="market-list-hint">{copy.hint}</span>
+        <span className="market-list-hint">
+          {showOwn ? 'Ваши лоты, включая проданные и снятые' : copy.hint}
+        </span>
+        <button
+          type="button"
+          className={cx('market-own-toggle', showOwn && 'is-active')}
+          aria-pressed={showOwn}
+          aria-label={showOwn ? 'Показать все лоты' : 'Показать только мои лоты'}
+          title={showOwn ? 'Показать все лоты' : 'Показать только мои лоты'}
+          onClick={() => setShowOwn((value) => !value)}
+        >
+          <UserRound size={15} aria-hidden="true" />
+          Мои
+          {ownCount > 0 && (
+            <span className="market-own-toggle__count">{ownCount}</span>
+          )}
+        </button>
       </div>
 
-      {kindItems.length === 0 ? (
+      {baseItems.length === 0 ? (
         <div className="market-empty">
-          <p>{copy.empty}</p>
+          <p>{showOwn ? 'У вас пока нет объявлений в этом разделе.' : copy.empty}</p>
           <button
             type="button"
             className="market-compose-btn"
@@ -179,6 +244,7 @@ export function MarketPage({ kind }: MarketPageProps) {
               entry={entry}
               game={gamesById.get(entry.gameId)}
               edition={entry.editionId ? editionsById.get(entry.editionId) : undefined}
+              isOwn={ownEntryIds.has(entry.id)}
               onSelect={openItem}
             />
           ))}
@@ -188,6 +254,8 @@ export function MarketPage({ kind }: MarketPageProps) {
       <MarketDrawer
         isOpen={isComposing || selectedEntry !== null}
         isComposing={isComposing}
+        isEditing={isEditing}
+        isOwn={selectedIsOwn}
         kind={kind}
         entry={selectedEntry}
         game={selectedGame}
@@ -198,6 +266,11 @@ export function MarketPage({ kind }: MarketPageProps) {
         initialEditionId={composeEditionId}
         onClose={closePanel}
         onCreate={handleCreated}
+        onUpdate={handleUpdated}
+        onStartEdit={() => setIsEditing(true)}
+        onCancelEdit={() => setIsEditing(false)}
+        onDelete={handleDelete}
+        onSetStatus={handleSetStatus}
         onOpenGame={handleOpenGame}
       />
     </>
