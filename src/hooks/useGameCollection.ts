@@ -33,6 +33,8 @@ function createCopy(editionId: string, source?: Copy): Copy {
     editionId,
     condition: source?.condition ?? 'Не указано',
     completeness: source?.completeness ?? 'Не указано',
+    purchasePrice: source?.purchasePrice ?? null,
+    purchaseDate: source?.purchaseDate ?? '',
     notes: source?.notes ?? '',
     // Photos are shared conceptually; keeping them on one row avoids duplicating
     // large data URLs when the quantity stepper grows.
@@ -218,6 +220,8 @@ export function useGameCollection(): GameCollection {
                 ...copy,
                 condition: details.condition,
                 completeness: details.completeness,
+                purchasePrice: details.purchasePrice,
+                purchaseDate: details.purchaseDate,
                 notes: details.notes,
                 // Only one row carries the data URLs; the group shares them.
                 photos: copy.id === representativeId ? details.photos : [],

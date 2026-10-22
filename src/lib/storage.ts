@@ -123,6 +123,24 @@ export function parseEditions(value: unknown): Edition[] | null {
     .filter((edition): edition is Edition => edition !== null);
 }
 
+/** Purchase price is an optional non-negative integer in rubles. */
+function readPurchasePrice(value: unknown): number | null {
+  return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0
+    ? value
+    : null;
+}
+
+/** Strict `YYYY-MM-DD` check so hand-edited storage cannot shift the date. */
+function readPurchaseDate(value: unknown): string {
+  const raw = readString(value);
+  if (!raw || !/^\d{4}-\d{2}-\d{2}$/.test(raw)) return '';
+
+  const date = new Date(`${raw}T00:00:00Z`);
+  return Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== raw
+    ? ''
+    : raw;
+}
+
 function normalizeCopy(value: unknown): Copy | null {
   if (!isRecord(value)) return null;
 
@@ -139,6 +157,8 @@ function normalizeCopy(value: unknown): Copy | null {
     editionId,
     condition: readString(value.condition) ?? 'Не указано',
     completeness: readString(value.completeness) ?? 'Не указано',
+    purchasePrice: readPurchasePrice(value.purchasePrice),
+    purchaseDate: readPurchaseDate(value.purchaseDate),
     notes: readString(value.notes) ?? '',
     photos: readImageList(value.photos, MAX_MARKET_PHOTOS),
     createdAt,

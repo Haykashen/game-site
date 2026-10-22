@@ -51,6 +51,10 @@ export interface Copy {
   editionId: string;
   condition: string;
   completeness: string;
+  /** Price paid in rubles; `null` when the user did not record it. */
+  purchasePrice: number | null;
+  /** ISO date (`YYYY-MM-DD`) of purchase; empty string when unknown. */
+  purchaseDate: string;
   notes: string;
   photos: string[];
   createdAt: string;
@@ -60,7 +64,10 @@ export interface Copy {
 export type CopyDraft = Omit<Copy, 'id' | 'createdAt'>;
 
 /** Editable physical details; shared by every copy of one edition. */
-export type CopyDetails = Pick<Copy, 'condition' | 'completeness' | 'notes' | 'photos'>;
+export type CopyDetails = Pick<
+  Copy,
+  'condition' | 'completeness' | 'purchasePrice' | 'purchaseDate' | 'notes' | 'photos'
+>;
 
 /** Precomputed per-game numbers and badges used by catalogue cards. */
 export interface GameStats {

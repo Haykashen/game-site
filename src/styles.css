@@ -2139,6 +2139,11 @@
             color: var(--text-muted); font-size: .72rem; line-height: 1.45;
         }
         .copy-card__contents > svg { flex: none; margin-top: .08rem; color: var(--brand); }
+        .copy-card__purchase {
+            display: flex; align-items: flex-start; gap: .32rem;
+            color: var(--text-muted); font-size: .72rem; line-height: 1.45;
+        }
+        .copy-card__purchase > svg { flex: none; margin-top: .08rem; color: var(--brand); }
         .copy-card__notes {
             display: -webkit-box;
             overflow: hidden;

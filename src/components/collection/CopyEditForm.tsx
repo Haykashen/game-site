@@ -33,6 +33,10 @@ export function CopyEditForm({
 }: CopyEditFormProps) {
   const [condition, setCondition] = useState(copy.condition);
   const [completeness, setCompleteness] = useState(copy.completeness);
+  const [purchasePrice, setPurchasePrice] = useState(
+    copy.purchasePrice === null ? '' : String(copy.purchasePrice),
+  );
+  const [purchaseDate, setPurchaseDate] = useState(copy.purchaseDate);
   const [notes, setNotes] = useState(copy.notes);
   const [photos, setPhotos] = useState<string[]>([...copy.photos]);
   const [isProcessingPhotos, setIsProcessingPhotos] = useState(false);
@@ -41,9 +45,22 @@ export function CopyEditForm({
     event.preventDefault();
     if (isProcessingPhotos) return;
 
+    const parsedPrice = purchasePrice.trim() === '' ? null : Number(purchasePrice);
+    const normalizedPrice =
+      parsedPrice !== null &&
+      Number.isSafeInteger(parsedPrice) &&
+      parsedPrice >= 0
+        ? parsedPrice
+        : null;
+    const normalizedDate = /^\d{4}-\d{2}-\d{2}$/.test(purchaseDate.trim())
+      ? purchaseDate.trim()
+      : '';
+
     onSubmit({
       condition: condition.trim() || 'Не указано',
       completeness: completeness.trim() || 'Не указано',
+      purchasePrice: normalizedPrice,
+      purchaseDate: normalizedDate,
       notes: notes.trim(),
       photos,
     });
@@ -109,6 +126,30 @@ export function CopyEditForm({
                 <option key={value} value={value} />
               ))}
             </datalist>
+          </FormField>
+
+          <FormField id="copyPurchasePrice" label="Цена покупки, ₽">
+            <input
+              id="copyPurchasePrice"
+              type="number"
+              className="form-control"
+              min={0}
+              step={1}
+              inputMode="numeric"
+              placeholder="Например, 4990"
+              value={purchasePrice}
+              onChange={(event) => setPurchasePrice(event.target.value)}
+            />
+          </FormField>
+
+          <FormField id="copyPurchaseDate" label="Дата покупки">
+            <input
+              id="copyPurchaseDate"
+              type="date"
+              className="form-control"
+              value={purchaseDate}
+              onChange={(event) => setPurchaseDate(event.target.value)}
+            />
           </FormField>
 
           <FormField id="copyNotes" label="Заметки" className="market-form__full">

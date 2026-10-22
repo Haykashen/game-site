@@ -1,4 +1,14 @@
-import { ExternalLink, Image as ImageIcon, Minus, Package, Pencil, Plus, Trash2 } from 'lucide-react';
+import {
+  ExternalLink,
+  Image as ImageIcon,
+  Minus,
+  Package,
+  Pencil,
+  Plus,
+  Trash2,
+  Wallet,
+} from 'lucide-react';
+import { formatPurchaseDetails } from '../../lib/collection';
 import { MAX_COLLECTION_QUANTITY } from '../../lib/constants';
 import { editionContentsLabel, editionLabel, formatEditionDate } from '../../lib/editions';
 import type { Copy, Edition, Game } from '../../types';
@@ -26,6 +36,7 @@ export function CopyCard({
   onRemove,
 }: CopyCardProps) {
   const cover = edition.coverImages[0];
+  const purchase = formatPurchaseDetails(copy.purchasePrice, copy.purchaseDate);
   const chips = [copy.condition, copy.completeness].filter(
     (value, index, all) => value.length > 0 && all.indexOf(value) === index,
   );
@@ -70,6 +81,13 @@ export function CopyCard({
           <Package size={13} aria-hidden="true" />
           <span>{editionContentsLabel(edition, 3)}</span>
         </p>
+
+        {purchase && (
+          <p className="copy-card__purchase">
+            <Wallet size={13} aria-hidden="true" />
+            <span>{purchase}</span>
+          </p>
+        )}
 
         {copy.notes && <p className="copy-card__notes">{copy.notes}</p>}
 
