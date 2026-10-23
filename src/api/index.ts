@@ -4,5 +4,6 @@ export * from './market';
 export * from './collection';
 export * from './deals';
 export * from './reports';
+export * from './notifications';
 export * from './users';
 export * from './mappers';

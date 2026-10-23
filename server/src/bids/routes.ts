@@ -16,6 +16,7 @@ import {
   serializeMarketEntry,
 } from '../lib/serializers.js';
 import { parse } from '../lib/validation.js';
+import { notifyNewBid } from '../notifications/events.js';
 import { closeExpiredAuctions } from '../market/auctionCloser.js';
 
 const MAX_BID_RETRIES = 4;
@@ -78,6 +79,8 @@ export function registerBidRoutes(app: FastifyInstance): void {
           },
           select: {
             id: true,
+            title: true,
+            gameId: true,
             kind: true,
             authorId: true,
             status: true,
@@ -139,6 +142,12 @@ export function registerBidRoutes(app: FastifyInstance): void {
         }
 
         const bid = await app.prisma.$transaction(async (tx) => {
+          const previousTopBid = await tx.bid.findFirst({
+            where: { marketEntryId: id },
+            orderBy: [{ amountMinor: 'desc' }, { createdAt: 'asc' }],
+            select: { bidderId: true },
+          });
+
           const updated = await tx.marketEntry.updateMany({
             where: {
               id,
@@ -155,7 +164,7 @@ export function registerBidRoutes(app: FastifyInstance): void {
 
           if (updated.count === 0) return null;
 
-          return tx.bid.create({
+          const created = await tx.bid.create({
             data: {
               marketEntryId: id,
               bidderId: user.id,
@@ -163,6 +172,19 @@ export function registerBidRoutes(app: FastifyInstance): void {
             },
             include: bidInclude,
           });
+
+          await notifyNewBid(tx, {
+            entryId: id,
+            entryTitle: entry.title,
+            gameId: entry.gameId,
+            authorId: entry.authorId,
+            bidId: created.id,
+            bidder: { id: user.id, displayName: user.displayName },
+            amountMinor,
+            previousBidderId: previousTopBid?.bidderId ?? null,
+          });
+
+          return created;
         });
 
         if (!bid) continue;

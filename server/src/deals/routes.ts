@@ -11,6 +11,10 @@ import { conflict, forbidden, notFound, unauthorized } from '../errors.js';
 import { parse } from '../lib/validation.js';
 import { isPrismaError } from '../lib/prismaErrors.js';
 import { dealStatusUpdateSchema } from '@retrokeep/shared';
+import {
+  notifyDealCreated,
+  notifyEntryStatusChange,
+} from '../notifications/events.js';
 
 async function getDealForUser(app: FastifyInstance, id: string, userId: string) {
   const deal = await app.prisma.deal.findUnique({
@@ -42,11 +46,14 @@ export function registerDealRoutes(app: FastifyInstance): void {
         select: {
           id: true,
           authorId: true,
+          title: true,
+          gameId: true,
           kind: true,
           listingType: true,
           status: true,
           moderationStatus: true,
           priceMinor: true,
+          version: true,
           author: { select: { status: true } },
           deal: { select: { id: true } },
         },
@@ -102,7 +109,7 @@ export function registerDealRoutes(app: FastifyInstance): void {
             throw conflict('ENTRY_NOT_AVAILABLE', 'Лот уже недоступен для сделки.');
           }
 
-          return tx.deal.create({
+          const deal = await tx.deal.create({
             data: {
               marketEntryId: id,
               buyerId,
@@ -112,6 +119,29 @@ export function registerDealRoutes(app: FastifyInstance): void {
             },
             include: dealInclude,
           });
+
+          await notifyDealCreated(tx, {
+            dealId: deal.id,
+            entry: { id: entry.id, title: entry.title, gameId: entry.gameId },
+            actor: { id: user.id, displayName: user.displayName },
+            counterpartyId: buyerId === user.id ? sellerId : buyerId,
+            amountMinor: entry.priceMinor,
+          });
+
+          await notifyEntryStatusChange(tx, {
+            entry: {
+              id: entry.id,
+              title: entry.title,
+              gameId: entry.gameId,
+              authorId: entry.authorId,
+              version: entry.version + 1,
+            },
+            previousStatus: 'active',
+            status: 'sold',
+            excludedUserIds: [buyerId, sellerId],
+          });
+
+          return deal;
         });
 
         const body: DealDto = serializeDeal(deal, user.id);

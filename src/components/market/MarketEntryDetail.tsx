@@ -34,6 +34,7 @@ import type { Edition, Game, MarketEntry, MarketStatus } from '../../types';
 import { ReportSection } from '../reports/ReportSection';
 import { IconButton } from '../ui/IconButton';
 import { SpecRow } from '../ui/SpecRow';
+import { EntrySubscriptionButton } from './EntrySubscriptionButton';
 import { MarketPhotoGallery } from './MarketPhotoGallery';
 
 interface MarketEntryDetailProps {
@@ -220,6 +221,12 @@ export function MarketEntryDetail({
           <X size={20} />
         </IconButton>
       </div>
+
+      {!isOwn && (
+        <div className="market-subscribe-row">
+          <EntrySubscriptionButton entryId={entry.id} />
+        </div>
+      )}
 
       {isOwn && (
         <section className="market-owner" aria-label="Управление объявлением">

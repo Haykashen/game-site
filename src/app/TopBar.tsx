@@ -1,7 +1,8 @@
-import { Disc, Moon, Sun, UserRound } from 'lucide-react';
+import { Bell, Disc, Moon, Sun, UserRound } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { IconButton } from '../components/ui/IconButton';
 import { useAuth } from '../context/AuthContext';
+import { useNotifications } from '../context/NotificationsContext';
 import { useThemeContext } from '../context/ThemeContext';
 import { findNavItem } from './navigation';
 
@@ -10,7 +11,12 @@ export function TopBar() {
   const { pathname } = useLocation();
   const { toggleTheme } = useThemeContext();
   const { user } = useAuth();
+  const { unreadCount } = useNotifications();
   const section = findNavItem(pathname);
+  const notificationLabel =
+    unreadCount > 0
+      ? `Уведомления: ${unreadCount} непрочитанных`
+      : 'Уведомления';
 
   return (
     <div className="app-topbar">
@@ -25,6 +31,19 @@ export function TopBar() {
       <div className="app-topbar__actions">
         <Link to="/settings" className="btn-lang" title="Язык и регион">
           RU
+        </Link>
+        <Link
+          to="/notifications"
+          className="topbar-notifications"
+          aria-label={notificationLabel}
+          title={notificationLabel}
+        >
+          <Bell size={19} aria-hidden="true" />
+          {unreadCount > 0 && (
+            <span className="topbar-notifications__badge" aria-hidden="true">
+              {unreadCount > 99 ? '99+' : unreadCount}
+            </span>
+          )}
         </Link>
         <IconButton label="Переключить тему" onClick={toggleTheme}>
           <Sun size={20} className="sun-icon" />

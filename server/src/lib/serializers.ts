@@ -17,7 +17,10 @@ import {
   type DealEntrySummary,
   type EditionDto,
   type GameDto,
+  type GameSubscriptionDto,
   type MarketEntryDto,
+  type MarketEntrySubscriptionDto,
+  type NotificationDto,
   type PublicUser,
   type ReportDto,
   type ReviewDto,
@@ -303,5 +306,79 @@ export function serializeReport(report: ReportWithRelations): ReportDto {
     createdAt: report.createdAt.toISOString(),
     updatedAt: report.updatedAt.toISOString(),
     resolvedAt: report.resolvedAt?.toISOString() ?? null,
+  };
+}
+
+export const notificationInclude = {
+  actor: { select: userSelect },
+  marketEntry: { select: { id: true, title: true, kind: true } },
+  game: { select: { id: true, title: true } },
+} satisfies Prisma.NotificationInclude;
+
+export type NotificationWithRelations = Prisma.NotificationGetPayload<{
+  include: typeof notificationInclude;
+}>;
+
+export function serializeNotification(
+  notification: NotificationWithRelations,
+): NotificationDto {
+  return {
+    id: notification.id,
+    type: notification.type,
+    title: notification.title,
+    message: notification.message,
+    marketEntryId: notification.marketEntryId,
+    marketEntryTitle: notification.marketEntry?.title ?? null,
+    marketEntryKind: notification.marketEntry?.kind ?? null,
+    gameId: notification.gameId,
+    gameTitle: notification.game?.title ?? null,
+    actor: notification.actor ? serializePublicUser(notification.actor) : null,
+    readAt: notification.readAt?.toISOString() ?? null,
+    createdAt: notification.createdAt.toISOString(),
+  };
+}
+
+export const gameSubscriptionInclude = {
+  game: { select: { id: true, title: true } },
+} satisfies Prisma.GameSubscriptionInclude;
+
+export type GameSubscriptionWithRelations = Prisma.GameSubscriptionGetPayload<{
+  include: typeof gameSubscriptionInclude;
+}>;
+
+export function serializeGameSubscription(
+  subscription: GameSubscriptionWithRelations,
+): GameSubscriptionDto {
+  return {
+    id: subscription.id,
+    gameId: subscription.gameId,
+    gameTitle: subscription.game.title,
+    notifyAuctions: subscription.notifyAuctions,
+    notifyListings: subscription.notifyListings,
+    createdAt: subscription.createdAt.toISOString(),
+  };
+}
+
+export const marketEntrySubscriptionInclude = {
+  marketEntry: {
+    select: { id: true, title: true, kind: true, gameId: true },
+  },
+} satisfies Prisma.MarketEntrySubscriptionInclude;
+
+export type MarketEntrySubscriptionWithRelations =
+  Prisma.MarketEntrySubscriptionGetPayload<{
+    include: typeof marketEntrySubscriptionInclude;
+  }>;
+
+export function serializeMarketEntrySubscription(
+  subscription: MarketEntrySubscriptionWithRelations,
+): MarketEntrySubscriptionDto {
+  return {
+    id: subscription.id,
+    marketEntryId: subscription.marketEntryId,
+    entryTitle: subscription.marketEntry.title,
+    entryKind: subscription.marketEntry.kind,
+    gameId: subscription.marketEntry.gameId,
+    createdAt: subscription.createdAt.toISOString(),
   };
 }

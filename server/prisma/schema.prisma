@@ -84,6 +84,21 @@ enum ReportAction {
   suspend_user
 }
 
+enum NotificationType {
+  bid_placed
+  bid_outbid
+  auction_won
+  auction_lost
+  auction_sold
+  auction_closed
+  entry_created
+  entry_sold
+  entry_closed
+  entry_reopened
+  entry_price_changed
+  deal_created
+}
+
 model User {
   id               String     @id @default(uuid()) @db.Uuid
   email            String     @unique
@@ -117,6 +132,10 @@ model User {
   reportsReceived  Report[]      @relation("ReportTarget")
   reportsModerated Report[]      @relation("ReportModerator")
   moderatedEntries MarketEntry[] @relation("MarketModerator")
+  notifications       Notification[]             @relation("NotificationRecipient")
+  notificationsSent   Notification[]             @relation("NotificationActor")
+  gameSubscriptions   GameSubscription[]
+  entrySubscriptions  MarketEntrySubscription[]
 
   @@index([displayName])
   @@map("users")
@@ -154,6 +173,8 @@ model Game {
 
   editions      Edition[]
   marketEntries MarketEntry[]
+  notifications Notification[]
+  subscriptions GameSubscription[]
 
   @@index([title])
   @@index([year])
@@ -262,10 +283,12 @@ model MarketEntry {
   moderator User?         @relation("MarketModerator", fields: [moderatorId], references: [id], onDelete: SetNull)
   game      Game          @relation(fields: [gameId], references: [id], onDelete: Restrict)
   edition   Edition?      @relation(fields: [editionId], references: [id], onDelete: SetNull)
-  photos    MarketPhoto[]
-  bids      Bid[]
-  deal      Deal?
-  reports   Report[]
+  photos        MarketPhoto[]
+  bids          Bid[]
+  deal          Deal?
+  reports       Report[]
+  notifications Notification[]
+  subscriptions MarketEntrySubscription[]
 
   @@index([kind, status, createdAt])
   @@index([authorId])
@@ -372,4 +395,59 @@ model Report {
   @@index([marketEntryId])
   @@index([targetUserId])
   @@map("reports")
+}
+
+model Notification {
+  id            String           @id @default(uuid()) @db.Uuid
+  userId        String           @map("user_id") @db.Uuid
+  type          NotificationType
+  title         String
+  message       String           @db.Text
+  marketEntryId String?          @map("market_entry_id")
+  gameId        String?          @map("game_id")
+  actorId       String?          @map("actor_id") @db.Uuid
+  dedupeKey     String?          @unique @map("dedupe_key")
+  readAt        DateTime?        @map("read_at")
+  createdAt     DateTime         @default(now()) @map("created_at")
+
+  user        User         @relation("NotificationRecipient", fields: [userId], references: [id], onDelete: Cascade)
+  actor       User?        @relation("NotificationActor", fields: [actorId], references: [id], onDelete: SetNull)
+  marketEntry MarketEntry? @relation(fields: [marketEntryId], references: [id], onDelete: SetNull)
+  game        Game?        @relation(fields: [gameId], references: [id], onDelete: SetNull)
+
+  @@index([userId, readAt, createdAt])
+  @@index([createdAt])
+  @@index([marketEntryId])
+  @@index([gameId])
+  @@map("notifications")
+}
+
+model GameSubscription {
+  id             String   @id @default(uuid()) @db.Uuid
+  userId         String   @map("user_id") @db.Uuid
+  gameId         String   @map("game_id")
+  notifyAuctions Boolean  @default(true) @map("notify_auctions")
+  notifyListings Boolean  @default(true) @map("notify_listings")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, gameId])
+  @@index([gameId])
+  @@map("game_subscriptions")
+}
+
+model MarketEntrySubscription {
+  id            String   @id @default(uuid()) @db.Uuid
+  userId        String   @map("user_id") @db.Uuid
+  marketEntryId String   @map("market_entry_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  marketEntry MarketEntry @relation(fields: [marketEntryId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, marketEntryId])
+  @@index([marketEntryId])
+  @@map("market_entry_subscriptions")
 }

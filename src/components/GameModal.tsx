@@ -6,6 +6,7 @@ import { editionsCountLabel } from '../lib/market';
 import type { Copy, Edition, Game, MarketEntry } from '../types';
 import { ArtworkPanel } from './modal/ArtworkPanel';
 import { EditionsSection } from './modal/EditionsSection';
+import { GameSubscriptionButton } from './GameSubscriptionButton';
 import { GameActions } from './modal/GameActions';
 import { GameMarketSection } from './modal/GameMarketSection';
 import type { GameMarketTab } from './modal/GameMarketSection';
@@ -164,6 +165,10 @@ export function GameModal({
           </div>
         </div>
       )}
+
+      <div className="game-subscribe-row">
+        <GameSubscriptionButton gameId={game.id} />
+      </div>
 
       <GameActions
         onPlaceListing={() => onPlaceListing(selectedEdition?.id)}

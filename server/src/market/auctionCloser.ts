@@ -1,4 +1,5 @@
 import type { PrismaClient } from '@prisma/client';
+import { notifyAuctionClosed } from '../notifications/events.js';
 
 export async function closeAuctionById(
   prisma: PrismaClient,
@@ -11,6 +12,7 @@ export async function closeAuctionById(
         bids: {
           orderBy: [{ amountMinor: 'desc' }, { createdAt: 'asc' }],
           take: 1,
+          include: { bidder: { select: { displayName: true } } },
         },
       },
     });
@@ -30,9 +32,22 @@ export async function closeAuctionById(
     const version = entry.version;
 
     if (!topBid) {
-      await tx.marketEntry.updateMany({
+      const closed = await tx.marketEntry.updateMany({
         where: { id, status: 'active', version },
         data: { status: 'closed', version: { increment: 1 } },
+      });
+
+      if (closed.count === 0) return;
+
+      await notifyAuctionClosed(tx, {
+        id: entry.id,
+        title: entry.title,
+        gameId: entry.gameId,
+        authorId: entry.authorId,
+        version: version + 1,
+        winnerId: null,
+        winnerName: null,
+        priceMinor: entry.priceMinor,
       });
       return;
     }
@@ -60,6 +75,17 @@ export async function closeAuctionById(
         status: 'pending',
       },
       update: {},
+    });
+
+    await notifyAuctionClosed(tx, {
+      id: entry.id,
+      title: entry.title,
+      gameId: entry.gameId,
+      authorId: entry.authorId,
+      version: version + 1,
+      winnerId: topBid.bidderId,
+      winnerName: topBid.bidder.displayName,
+      priceMinor: topBid.amountMinor,
     });
   });
 }

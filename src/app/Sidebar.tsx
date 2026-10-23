@@ -2,6 +2,7 @@ import { Disc, Settings2, UserRound } from 'lucide-react';
 import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCollection } from '../context/CollectionContext';
+import { useNotifications } from '../context/NotificationsContext';
 import { cx } from '../lib/cx';
 import { NAV_GROUPS, NAV_ITEMS } from './navigation';
 import type { NavItem, NavSectionId } from './navigation';
@@ -33,7 +34,11 @@ function NavRow({ item, count }: NavRowProps) {
 export function Sidebar() {
   const { user, isModerator } = useAuth();
   const { ownedCount } = useCollection();
-  const badges: Partial<Record<NavSectionId, number>> = { collection: ownedCount };
+  const { unreadCount } = useNotifications();
+  const badges: Partial<Record<NavSectionId, number>> = {
+    collection: ownedCount,
+    notifications: unreadCount,
+  };
 
   return (
     <aside className="app-sidebar">

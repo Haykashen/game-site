@@ -1,5 +1,6 @@
 import {
   BarChart3,
+  Bell,
   Gamepad2,
   Gavel,
   Library,
@@ -15,6 +16,7 @@ export type NavSectionId =
   | 'auctions'
   | 'listings'
   | 'collection'
+  | 'notifications'
   | 'stats'
   | 'account'
   | 'settings'
@@ -61,6 +63,14 @@ export const NAV_ITEMS = {
     shortLabel: 'Коллекция',
     path: '/collection',
     icon: Library,
+  },
+  notifications: {
+    id: 'notifications',
+    label: 'Уведомления',
+    pageTitle: 'Уведомления',
+    shortLabel: 'События',
+    path: '/notifications',
+    icon: Bell,
   },
   stats: {
     id: 'stats',
@@ -111,11 +121,12 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
   {
     id: 'shelf',
     label: 'Моя полка',
-    items: [NAV_ITEMS.collection, NAV_ITEMS.stats],
+    items: [NAV_ITEMS.collection, NAV_ITEMS.notifications, NAV_ITEMS.stats],
   },
 ];
 
 export const MOBILE_MORE_ITEMS: ReadonlyArray<NavItem> = [
+  NAV_ITEMS.notifications,
   NAV_ITEMS.stats,
   NAV_ITEMS.account,
   NAV_ITEMS.settings,

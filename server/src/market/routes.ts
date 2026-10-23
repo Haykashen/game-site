@@ -20,6 +20,11 @@ import {
 } from '../lib/serializers.js';
 import { storePhotoReferences } from '../lib/storage.js';
 import { parse } from '../lib/validation.js';
+import {
+  notifyEntryPriceChanged,
+  notifyEntryStatusChange,
+  notifyNewEntry,
+} from '../notifications/events.js';
 import { closeAuctionById, closeExpiredAuctions } from './auctionCloser.js';
 import { buildMarketOrderBy, buildMarketWhere } from './query.js';
 
@@ -27,10 +32,10 @@ async function assertMarketTarget(
   app: FastifyInstance,
   gameId: string,
   editionId: string | null | undefined,
-): Promise<void> {
+): Promise<{ id: string; title: string }> {
   const game = await app.prisma.game.findUnique({
     where: { id: gameId },
-    select: { id: true },
+    select: { id: true, title: true },
   });
 
   if (!game) throw notFound('Игра не найдена.');
@@ -45,6 +50,8 @@ async function assertMarketTarget(
       throw badRequest('Издание не относится к выбранной игре.');
     }
   }
+
+  return game;
 }
 
 function auctionDates(
@@ -168,7 +175,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
       if (!user) throw unauthorized();
 
       const input = parse(marketCreateSchema, request.body);
-      await assertMarketTarget(app, input.gameId, input.editionId);
+      const game = await assertMarketTarget(app, input.gameId, input.editionId);
 
       const photos = await storePhotoReferences(input.photos, 'market');
       const priceMinor = toMinorUnits(input.price);
@@ -181,35 +188,49 @@ export function registerMarketRoutes(app: FastifyInstance): void {
         }
       }
 
-      const entry = await app.prisma.marketEntry.create({
-        data: {
-          authorId: user.id,
-          kind: input.kind,
-          listingType: input.kind === 'auction' ? null : (input.listingType ?? null),
-          gameId: input.gameId,
-          editionId: input.editionId ?? null,
-          title: input.title,
-          condition: input.condition,
-          priceMinor,
-          description: input.description,
-          status: 'active',
-          deliveryServices: deliveryServicesFromApi(input.deliveryServices),
-          internationalShipping: input.internationalShipping ?? null,
-          packagingPriceMinor:
-            input.packagingPrice === null || input.packagingPrice === undefined
-              ? null
-              : toMinorUnits(input.packagingPrice),
-          shipsFrom: input.shipsFrom,
-          bidStepMinor:
-            input.kind === 'auction' && input.bidStep
-              ? toMinorUnits(input.bidStep)
-              : null,
-          startsAt: dates.startsAt,
-          endsAt: dates.endsAt,
-          currentPriceMinor: input.kind === 'auction' ? priceMinor : null,
-          ...(photos.length > 0 ? { photos: { create: photoCreateData(photos) } } : {}),
-        },
-        include: marketEntryInclude,
+      const entry = await app.prisma.$transaction(async (tx) => {
+        const created = await tx.marketEntry.create({
+          data: {
+            authorId: user.id,
+            kind: input.kind,
+            listingType: input.kind === 'auction' ? null : (input.listingType ?? null),
+            gameId: input.gameId,
+            editionId: input.editionId ?? null,
+            title: input.title,
+            condition: input.condition,
+            priceMinor,
+            description: input.description,
+            status: 'active',
+            deliveryServices: deliveryServicesFromApi(input.deliveryServices),
+            internationalShipping: input.internationalShipping ?? null,
+            packagingPriceMinor:
+              input.packagingPrice === null || input.packagingPrice === undefined
+                ? null
+                : toMinorUnits(input.packagingPrice),
+            shipsFrom: input.shipsFrom,
+            bidStepMinor:
+              input.kind === 'auction' && input.bidStep
+                ? toMinorUnits(input.bidStep)
+                : null,
+            startsAt: dates.startsAt,
+            endsAt: dates.endsAt,
+            currentPriceMinor: input.kind === 'auction' ? priceMinor : null,
+            ...(photos.length > 0 ? { photos: { create: photoCreateData(photos) } } : {}),
+          },
+          include: marketEntryInclude,
+        });
+
+        await notifyNewEntry(tx, {
+          id: created.id,
+          title: created.title,
+          kind: created.kind,
+          gameId: created.gameId,
+          authorId: created.authorId,
+          version: created.version,
+          gameTitle: game.title,
+        });
+
+        return created;
       });
 
       const body: MarketEntryDto = serializeMarketEntry(entry);
@@ -323,49 +344,59 @@ export function registerMarketRoutes(app: FastifyInstance): void {
       }
 
       try {
-      const entry = await app.prisma.marketEntry.update({
-        where: { id, version: existing.version },
-        data: {
-          version: { increment: 1 },
-          kind: validated.kind,
-          listingType:
-            validated.kind === 'auction' ? null : (validated.listingType ?? null),
-          gameId: validated.gameId,
-          editionId: validated.editionId ?? null,
-          title: validated.title,
-          condition: validated.condition,
-          priceMinor,
-          description: validated.description,
-          deliveryServices: deliveryServicesFromApi(validated.deliveryServices),
-          internationalShipping: validated.internationalShipping ?? null,
-          packagingPriceMinor:
-            validated.packagingPrice === null || validated.packagingPrice === undefined
-              ? null
-              : toMinorUnits(validated.packagingPrice),
-          shipsFrom: validated.shipsFrom,
-          bidStepMinor:
-            validated.kind === 'auction' && validated.bidStep
-              ? toMinorUnits(validated.bidStep)
-              : null,
-          startsAt: dates.startsAt,
-          endsAt: dates.endsAt,
-          currentPriceMinor:
-            existing.bidCount === 0 && validated.kind === 'auction'
-              ? priceMinor
-              : existing.currentPriceMinor,
-          ...(photos !== undefined
-            ? {
-                photos: {
-                  deleteMany: {},
-                  create: photoCreateData(photos),
-                },
-              }
-            : {}),
-        },
-        include: marketEntryInclude,
-      });
+        const entry = await app.prisma.$transaction(async (tx) => {
+          const updated = await tx.marketEntry.update({
+            where: { id, version: existing.version },
+            data: {
+              version: { increment: 1 },
+              kind: validated.kind,
+              listingType:
+                validated.kind === 'auction' ? null : (validated.listingType ?? null),
+              gameId: validated.gameId,
+              editionId: validated.editionId ?? null,
+              title: validated.title,
+              condition: validated.condition,
+              priceMinor,
+              description: validated.description,
+              deliveryServices: deliveryServicesFromApi(validated.deliveryServices),
+              internationalShipping: validated.internationalShipping ?? null,
+              packagingPriceMinor:
+                validated.packagingPrice === null || validated.packagingPrice === undefined
+                  ? null
+                  : toMinorUnits(validated.packagingPrice),
+              shipsFrom: validated.shipsFrom,
+              bidStepMinor:
+                validated.kind === 'auction' && validated.bidStep
+                  ? toMinorUnits(validated.bidStep)
+                  : null,
+              startsAt: dates.startsAt,
+              endsAt: dates.endsAt,
+              currentPriceMinor:
+                existing.bidCount === 0 && validated.kind === 'auction'
+                  ? priceMinor
+                  : existing.currentPriceMinor,
+              ...(photos !== undefined
+                ? {
+                    photos: {
+                      deleteMany: {},
+                      create: photoCreateData(photos),
+                    },
+                  }
+                : {}),
+            },
+            include: marketEntryInclude,
+          });
 
-      return reply.send(serializeMarketEntry(entry));
+          await notifyEntryPriceChanged(tx, {
+            entry: updated,
+            previousPriceMinor: existing.priceMinor,
+            priceMinor,
+          });
+
+          return updated;
+        });
+
+        return reply.send(serializeMarketEntry(entry));
       } catch (error) {
         if (isPrismaError(error, 'P2025')) {
           throw conflict(
@@ -393,6 +424,8 @@ export function registerMarketRoutes(app: FastifyInstance): void {
         select: {
           id: true,
           authorId: true,
+          title: true,
+          gameId: true,
           kind: true,
           status: true,
           endsAt: true,
@@ -411,6 +444,8 @@ export function registerMarketRoutes(app: FastifyInstance): void {
         );
       }
 
+      let shouldNotifyStatusChange = true;
+
       if (input.status === 'active') {
         if (existing.deal) {
           throw conflict('ENTRY_HAS_DEAL', 'По лоту уже создана сделка — вернуть его в продажу нельзя.');
@@ -421,6 +456,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
           existing.endsAt &&
           existing.endsAt.getTime() <= Date.now()
         ) {
+          shouldNotifyStatusChange = false;
           await closeAuctionById(app.prisma, id);
         } else {
           const changed = await app.prisma.marketEntry.updateMany({
@@ -462,6 +498,14 @@ export function registerMarketRoutes(app: FastifyInstance): void {
         where: { id },
         include: marketEntryInclude,
       });
+
+      if (shouldNotifyStatusChange) {
+        await notifyEntryStatusChange(app.prisma, {
+          entry,
+          previousStatus: existing.status,
+          status: input.status,
+        });
+      }
 
       return reply.send(serializeMarketEntry(entry));
     },
