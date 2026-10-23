@@ -10,20 +10,33 @@ import type { NavItem, NavSectionId } from './navigation';
 interface NavRowProps {
   item: NavItem;
   count: number | undefined;
+  iconCount?: number | undefined;
+  iconCountLabel?: string | undefined;
 }
 
-function NavRow({ item, count }: NavRowProps) {
+function NavRow({ item, count, iconCount, iconCountLabel }: NavRowProps) {
   const Icon = item.icon;
+  const showIconCount = iconCount !== undefined && iconCount > 0;
+  const label = showIconCount
+    ? `${item.label}: ${iconCount} ${iconCountLabel ?? 'новых'}`
+    : item.label;
 
   return (
     <NavLink
       to={item.path}
       end={item.path === '/games'}
       className={({ isActive }) => cx('nav-item', isActive && 'active')}
-      title={item.label}
-      aria-label={item.label}
+      title={label}
+      aria-label={label}
     >
-      <Icon size={18} aria-hidden="true" />
+      <span className="nav-item__icon">
+        <Icon size={18} aria-hidden="true" />
+        {showIconCount && (
+          <span className="nav-icon-badge" aria-hidden="true">
+            {iconCount > 99 ? '99+' : iconCount}
+          </span>
+        )}
+      </span>
       <span className="nav-item__label">{item.label}</span>
       {count !== undefined && count > 0 && <span className="nav-badge">{count}</span>}
     </NavLink>
@@ -37,6 +50,8 @@ export function Sidebar() {
   const { unreadCount } = useNotifications();
   const badges: Partial<Record<NavSectionId, number>> = {
     collection: ownedCount,
+  };
+  const iconBadges: Partial<Record<NavSectionId, number>> = {
     notifications: unreadCount,
   };
 
@@ -54,7 +69,15 @@ export function Sidebar() {
           <div className="nav-group" key={group.id}>
             <p className="nav-group__label">{group.label}</p>
             {group.items.map((item) => (
-              <NavRow key={item.id} item={item} count={badges[item.id]} />
+              <NavRow
+                key={item.id}
+                item={item}
+                count={badges[item.id]}
+                iconCount={iconBadges[item.id]}
+                iconCountLabel={
+                  item.id === 'notifications' ? 'непрочитанных' : undefined
+                }
+              />
             ))}
           </div>
         ))}

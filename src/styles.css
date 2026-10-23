@@ -674,7 +674,22 @@
         }
         .nav-item.active > svg { color: var(--brand); }
         .nav-item > svg { flex: none; }
+        .nav-item__icon {
+            position: relative;
+            display: inline-flex; flex: none;
+        }
+        .nav-item__icon > svg { display: block; }
+        .nav-item.active .nav-item__icon > svg { color: var(--brand); }
         .nav-item__label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .nav-icon-badge {
+            position: absolute; top: -6px; right: -9px;
+            min-width: 16px; height: 16px; padding: 0 3px;
+            display: inline-flex; align-items: center; justify-content: center;
+            border-radius: 999px;
+            background: var(--brand); color: #172013;
+            font: 700 .54rem/1 'IBM Plex Mono', monospace;
+            box-shadow: 0 0 0 2px var(--bg-card);
+        }
         .nav-badge {
             margin-left: auto; flex: none;
             padding: .22rem .42rem; border-radius: 4px;
