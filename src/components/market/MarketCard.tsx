@@ -55,6 +55,10 @@ export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: Ma
     listingType === 'sale' || listingType === null
       ? 'Фиксированная цена'
       : listingTypeLabel(listingType);
+  const photo = entry.photos[0];
+  const previewImage =
+    photo || edition?.coverImages[0] || game?.coverImage || '';
+  const hasPhotoCount = entry.photos.length > 1;
 
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -76,17 +80,43 @@ export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: Ma
       onClick={() => onSelect(entry.id)}
       onKeyDown={handleKeyDown}
     >
-      {entry.photos.length > 0 && (
-        <div className="market-card__media">
-          <img src={entry.photos[0]} alt="" loading="lazy" />
-          {entry.photos.length > 1 && (
-            <span className="market-card__photo-count">
-              <Images size={12} aria-hidden="true" />
-              {entry.photos.length} фото
-            </span>
-          )}
-        </div>
-      )}
+      <div
+        className={cx(
+          'market-card__media',
+          !previewImage && 'market-card__media--art',
+        )}
+      >
+        {previewImage ? (
+          <img src={previewImage} alt="" loading="lazy" decoding="async" />
+        ) : (
+          <div className={cx('card-cover', 'market-card__cover', game && `game-${game.id}`)}>
+            <div className="cover-art" aria-hidden="true">
+              <span className="art-orbit" />
+              <span className="art-sigil" />
+              <span className="art-horizon" />
+              <span className="art-scanline" />
+            </div>
+            <div className="card-cover-placeholder">
+              <span className="cover-kicker">RETROKEEP / MARKET</span>
+              <span className="cover-title">{game?.title ?? entry.title}</span>
+              <span className="cover-edition">
+                {edition
+                  ? `${edition.platform} • ${edition.region}`
+                  : game
+                    ? `${game.publisher} • ${game.year}`
+                    : entry.condition}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {hasPhotoCount && (
+          <span className="market-card__photo-count">
+            <Images size={12} aria-hidden="true" />
+            {entry.photos.length} фото
+          </span>
+        )}
+      </div>
 
       <div className="market-card__top">
         <span className="market-kind">
