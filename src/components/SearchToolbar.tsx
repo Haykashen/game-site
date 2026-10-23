@@ -24,6 +24,8 @@ interface SearchToolbarProps<Key extends string> {
   onQueryChange: (query: string) => void;
   onFilterChange: (key: Key, value: string) => void;
   onReset: () => void;
+  /** Extra controls rendered before the filter buttons. */
+  leadingActions?: ReactNode;
   /** Extra controls rendered after the filter buttons, e.g. page-specific actions. */
   actions?: ReactNode;
   /** Optional helper line shown under the search row. */
@@ -42,6 +44,7 @@ export function SearchToolbar<Key extends string>({
   onQueryChange,
   onFilterChange,
   onReset,
+  leadingActions,
   actions,
   hint,
 }: SearchToolbarProps<Key>) {
@@ -83,7 +86,10 @@ export function SearchToolbar<Key extends string>({
 
   return (
     <section
-      className={cx('catalog-toolbar', Boolean(actions) && 'catalog-toolbar--with-actions')}
+      className={cx(
+        'catalog-toolbar',
+        Boolean(actions || leadingActions) && 'catalog-toolbar--with-actions',
+      )}
       aria-label={ariaLabel}
     >
       <div className="catalog-toolbar__top">
@@ -118,6 +124,7 @@ export function SearchToolbar<Key extends string>({
             {resultCountLabel}
           </span>
           <div className="catalog-toolbar__actions">
+            {leadingActions}
             <button
               type="button"
               className={cx(

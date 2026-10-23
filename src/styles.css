@@ -1022,32 +1022,11 @@
             box-shadow: 3px 3px 0 rgba(120,100,216,.32);
         }
 
-        .market-own-toggle {
-            display: inline-flex; align-items: center; gap: .38rem;
-            min-height: 44px;
-            padding: .45rem .72rem;
-            border: 1px solid var(--border-color);
-            border-radius: 999px;
-            background: var(--bg-card);
-            color: var(--text-muted);
-            font-size: .76rem; font-weight: 700;
-            cursor: pointer;
-            transition: border-color .18s ease, background .18s ease, color .18s ease;
-        }
-        .market-own-toggle:hover { border-color: var(--brand); color: var(--text-main); }
+        .market-own-toggle { position: relative; }
         .market-own-toggle.is-active {
             border-color: var(--brand);
             background: var(--brand-light);
             color: var(--text-main);
-        }
-        .market-own-toggle__count {
-            min-width: 1.35rem;
-            padding: .12rem .32rem;
-            border-radius: 999px;
-            background: var(--brand);
-            color: #172013;
-            font: 700 .6rem/1.2 'IBM Plex Mono', monospace;
-            text-align: center;
         }
 
         .market-grid {

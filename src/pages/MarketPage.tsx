@@ -26,6 +26,7 @@ interface MarketCopy {
   description: string;
   cta: string;
   hint: string;
+  ownLabel: string;
   empty: string;
   searchPlaceholder: string;
   filteredEmpty: string;
@@ -38,6 +39,7 @@ const COPY: Record<MarketKind, MarketCopy> = {
     description: 'Продажа, покупка и обмен изданиями между коллекционерами.',
     cta: 'Разместить объявление',
     hint: 'Фиксированные цены и прямые предложения',
+    ownLabel: 'Мои объявления',
     empty: 'Объявлений пока нет — разместите первое.',
     searchPlaceholder: 'Найти объявление, игру или продавца',
     filteredEmpty: 'По выбранным фильтрам объявлений не найдено.',
@@ -48,6 +50,7 @@ const COPY: Record<MarketKind, MarketCopy> = {
     description: 'Торги за редкие издания: ставки и время до закрытия лота.',
     cta: 'Разместить аукцион',
     hint: 'Ставки принимаются до окончания таймера',
+    ownLabel: 'Мои лоты',
     empty: 'Аукционов пока нет — запустите первый.',
     searchPlaceholder: 'Найти аукцион, игру или продавца',
     filteredEmpty: 'По выбранным фильтрам аукционов не найдено.',
@@ -204,32 +207,40 @@ export function MarketPage({ kind }: MarketPageProps) {
         onQueryChange={(query) => setValue('query', query)}
         onFilterChange={setValue}
         onReset={resetFilters}
-        hint={showOwn ? 'Ваши лоты, включая проданные и снятые' : copy.hint}
+        hint={showOwn ? `${copy.ownLabel}, включая проданные и снятые` : copy.hint}
+        leadingActions={
+          <button
+            type="button"
+            className={cx(
+              'filter-icon-btn',
+              'market-own-toggle',
+              showOwn && 'is-active',
+            )}
+            aria-pressed={showOwn}
+            aria-label={copy.ownLabel}
+            title={copy.ownLabel}
+            onClick={() => setShowOwn((value) => !value)}
+          >
+            <UserRound size={17} aria-hidden="true" />
+            {ownCount > 0 && (
+              <span
+                className="filter-toggle__count market-own-toggle__count"
+                aria-hidden="true"
+              >
+                {ownCount}
+              </span>
+            )}
+          </button>
+        }
         actions={
-          <>
-            <button
-              type="button"
-              className={cx('market-own-toggle', showOwn && 'is-active')}
-              aria-pressed={showOwn}
-              aria-label={showOwn ? 'Показать все лоты' : 'Показать только мои лоты'}
-              title={showOwn ? 'Показать все лоты' : 'Показать только мои лоты'}
-              onClick={() => setShowOwn((value) => !value)}
-            >
-              <UserRound size={15} aria-hidden="true" />
-              Мои
-              {ownCount > 0 && (
-                <span className="market-own-toggle__count">{ownCount}</span>
-              )}
-            </button>
-            <button
-              type="button"
-              className="market-compose-btn market-compose-btn--toolbar"
-              onClick={() => openCompose()}
-            >
-              <Plus size={18} strokeWidth={2.5} aria-hidden="true" />
-              {copy.cta}
-            </button>
-          </>
+          <button
+            type="button"
+            className="market-compose-btn market-compose-btn--toolbar"
+            onClick={() => openCompose()}
+          >
+            <Plus size={18} strokeWidth={2.5} aria-hidden="true" />
+            {copy.cta}
+          </button>
         }
       />
 
