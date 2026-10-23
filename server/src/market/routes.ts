@@ -82,10 +82,13 @@ async function listMarketEntries(
 
   const authorId =
     forcedAuthorId ?? (query.authorId === 'me' ? user?.id : query.authorId);
+  const includeModeration = Boolean(
+    forcedAuthorId || (query.authorId === 'me' && user),
+  );
 
   await closeExpiredAuctions(app.prisma);
 
-  const where = buildMarketWhere(query, authorId);
+  const where = buildMarketWhere(query, authorId, includeModeration);
   const skip = (query.page - 1) * query.pageSize;
 
   const [total, entries] = await app.prisma.$transaction([
@@ -137,6 +140,21 @@ export function registerMarketRoutes(app: FastifyInstance): void {
       });
 
       if (!entry) throw notFound('Объявление не найдено.');
+
+      const user = request.user;
+      const canSeeModeration = Boolean(
+        user &&
+          (user.id === entry.authorId ||
+            user.role === 'admin' ||
+            user.role === 'moderator'),
+      );
+
+      if (
+        !canSeeModeration &&
+        (entry.moderationStatus !== 'visible' || entry.author.status !== 'active')
+      ) {
+        throw notFound('Объявление не найдено.');
+      }
 
       return reply.send(serializeMarketEntry(entry));
     },

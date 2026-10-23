@@ -28,7 +28,12 @@ export function registerBidRoutes(app: FastifyInstance): void {
     await closeExpiredAuctions(app.prisma, id);
 
     const entry = await app.prisma.marketEntry.findFirst({
-      where: { id, deletedAt: null },
+      where: {
+        id,
+        deletedAt: null,
+        moderationStatus: 'visible',
+        author: { status: 'active' },
+      },
       select: { id: true },
     });
 
@@ -65,12 +70,18 @@ export function registerBidRoutes(app: FastifyInstance): void {
 
       for (let attempt = 0; attempt < MAX_BID_RETRIES; attempt += 1) {
         const entry = await app.prisma.marketEntry.findFirst({
-          where: { id, deletedAt: null },
+          where: {
+            id,
+            deletedAt: null,
+            moderationStatus: 'visible',
+            author: { status: 'active' },
+          },
           select: {
             id: true,
             kind: true,
             authorId: true,
             status: true,
+            moderationStatus: true,
             startsAt: true,
             endsAt: true,
             priceMinor: true,
@@ -78,10 +89,18 @@ export function registerBidRoutes(app: FastifyInstance): void {
             currentPriceMinor: true,
             bidCount: true,
             version: true,
+            author: { select: { status: true } },
           },
         });
 
         if (!entry) throw notFound('Объявление не найдено.');
+
+        if (
+          entry.moderationStatus !== 'visible' ||
+          entry.author.status !== 'active'
+        ) {
+          throw notFound('Объявление не найдено.');
+        }
 
         if (entry.kind !== 'auction' || !entry.endsAt) {
           throw badRequest('Ставки принимаются только в аукционах.');
@@ -124,6 +143,7 @@ export function registerBidRoutes(app: FastifyInstance): void {
             where: {
               id,
               status: 'active',
+              moderationStatus: 'visible',
               version: entry.version,
             },
             data: {

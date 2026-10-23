@@ -97,6 +97,9 @@ export type MarketListingType = 'sale' | 'purchase' | 'exchange';
 /** Owner-controlled lifecycle of a local listing or auction. */
 export type MarketStatus = 'active' | 'sold' | 'closed';
 
+/** Moderation visibility controlled by an administrator or moderator. */
+export type MarketModerationStatus = 'visible' | 'hidden' | 'removed';
+
 /** Courier service ids are stable so saved entries survive label edits. */
 export type MarketDeliveryService = 'russian-post' | 'cdek' | 'yandex' | 'other';
 
@@ -118,6 +121,8 @@ export interface MarketEntry {
   description: string;
   /** Owner-controlled lifecycle; seeds and legacy entries default to `active`. */
   status: MarketStatus;
+  /** Moderation visibility; missing on legacy local entries, which are visible. */
+  moderationStatus?: MarketModerationStatus;
   /** Data URLs of up to six photos attached by the seller. */
   photos: string[];
   /** Courier services offered by the seller; empty for legacy entries. */

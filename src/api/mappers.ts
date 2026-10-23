@@ -18,6 +18,7 @@ export function mapMarketEntry(dto: MarketEntryDto): MarketEntry {
     seller: dto.seller,
     description: dto.description,
     status: dto.status,
+    moderationStatus: dto.moderationStatus,
     photos: [...dto.photos],
     deliveryServices: [...dto.deliveryServices],
     internationalShipping: dto.internationalShipping,

@@ -31,6 +31,7 @@ import {
 } from '../../lib/market';
 import { cx } from '../../lib/cx';
 import type { Edition, Game, MarketEntry, MarketStatus } from '../../types';
+import { ReportSection } from '../reports/ReportSection';
 import { IconButton } from '../ui/IconButton';
 import { SpecRow } from '../ui/SpecRow';
 import { MarketPhotoGallery } from './MarketPhotoGallery';
@@ -230,6 +231,11 @@ export function MarketEntryDetail({
                   ? 'Видно всем в разделе. Можно отредактировать, снять или отметить проданным.'
                   : 'Скрыто из общей ленты. Верните в продажу или удалите.'}
               </p>
+              {entry.moderationStatus && entry.moderationStatus !== 'visible' && (
+                <p className="market-form__error">
+                  Объявление скрыто модератором и не показывается другим пользователям.
+                </p>
+              )}
             </div>
             <span className={cx('market-owner__status', `is-${entry.status}`)}>
               {entry.status === 'active'
@@ -380,7 +386,7 @@ export function MarketEntryDetail({
             )
           ) : canBuy ? (
             <div className="market-trade__guest">
-              <p>Сделка фиксирует цену и открывает отзывы после завершения.</p>
+              <p>Зафиксируйте договорённость — отзыв можно оставить после завершения.</p>
               <button
                 type="button"
                 className="market-form__submit"
@@ -401,6 +407,10 @@ export function MarketEntryDetail({
             </p>
           )}
           {tradeMessage && <p className="market-form__hint">{tradeMessage}</p>}
+          <p className="market-trade__disclaimer">
+            RetroKeep не принимает оплату и не организует доставку: условия
+            обсуждаются напрямую между продавцом и покупателем.
+          </p>
         </section>
       )}
 
@@ -418,7 +428,18 @@ export function MarketEntryDetail({
           <SpecRow label="Регион" value={edition?.region ?? 'Любой'} />
           <SpecRow label="Язык" value={edition?.lang ?? '—'} />
           <SpecRow label="Состояние" value={entry.condition} />
-          <SpecRow label="Автор" value={entry.seller} />
+          <SpecRow
+            label="Автор"
+            value={
+              entry.authorId ? (
+                <Link className="spec-link" to={`/users/${entry.authorId}`}>
+                  {entry.seller}
+                </Link>
+              ) : (
+                entry.seller
+              )
+            }
+          />
           <SpecRow label="Размещено" value={formatMarketDate(entry.createdAt)} />
           {isAuction && <SpecRow label="Шаг цены" value={bidStepLabel} />}
           {isAuction && (
@@ -497,6 +518,14 @@ export function MarketEntryDetail({
           </div>
         </dl>
       </section>
+
+      <ReportSection
+        key={entry.id}
+        targetType="market_entry"
+        targetId={entry.id}
+        targetLabel={entry.title}
+        disabled={isOwn}
+      />
 
       {game && (
         <div className="market-game-strip">

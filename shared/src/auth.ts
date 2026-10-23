@@ -18,6 +18,12 @@ export const displayNameSchema = z
   .min(2, 'Никнейм должен содержать минимум 2 символа.')
   .max(40, 'Никнейм слишком длинный.');
 
+export const userRoleSchema = z.enum(['user', 'moderator', 'admin']);
+export const userStatusSchema = z.enum(['active', 'suspended', 'deleted']);
+
+export type UserRole = z.infer<typeof userRoleSchema>;
+export type UserStatus = z.infer<typeof userStatusSchema>;
+
 export const registerSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
@@ -54,6 +60,8 @@ export interface UserProfile extends PublicUser {
   city: string | null;
   dealsCompleted: number;
   createdAt: string;
+  /** Management role; the public profile never exposes it. */
+  role: UserRole;
 }
 
 export interface PublicProfile extends PublicUser {

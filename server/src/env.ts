@@ -49,6 +49,7 @@ const envSchema = z.object({
     .transform((value) => value === 'true' || value === '1'),
   SEED_DEMO_EMAIL: z.string().trim().default('demo@retrokeep.local'),
   SEED_DEMO_PASSWORD: z.string().min(8).default('demo12345'),
+  SEED_DEMO_ROLE: z.enum(['user', 'moderator', 'admin']).default('user'),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -92,4 +93,5 @@ export const env = {
   },
   seedDemoEmail: data.SEED_DEMO_EMAIL,
   seedDemoPassword: data.SEED_DEMO_PASSWORD,
+  seedDemoRole: data.SEED_DEMO_ROLE,
 } as const;

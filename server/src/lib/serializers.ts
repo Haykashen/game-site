@@ -19,6 +19,7 @@ import {
   type GameDto,
   type MarketEntryDto,
   type PublicUser,
+  type ReportDto,
   type ReviewDto,
   type UserProfile,
 } from '@retrokeep/shared';
@@ -30,6 +31,7 @@ export const userSelect = {
   displayName: true,
   avatarUrl: true,
   isDemo: true,
+  status: true,
   ratingSum: true,
   ratingCount: true,
 } satisfies Prisma.UserSelect;
@@ -65,6 +67,7 @@ export async function getUserProfile(
     city: user.city,
     dealsCompleted,
     createdAt: user.createdAt.toISOString(),
+    role: user.role,
   };
 }
 
@@ -150,6 +153,7 @@ export function serializeMarketEntry(entry: MarketEntryWithRelations): MarketEnt
     author: serializePublicUser(entry.author),
     description: entry.description,
     status: entry.status,
+    moderationStatus: entry.moderationStatus,
     photos: entry.photos.map((photo) => photo.url),
     deliveryServices: serializeDeliveryServices(entry.deliveryServices),
     internationalShipping: entry.internationalShipping,
@@ -253,5 +257,51 @@ export function serializeDeal(deal: DealWithRelations, currentUserId: string): D
     reviews: deal.reviews.map(serializeReview),
     canReview: isParticipant && deal.status === 'completed' && !hasReviewed,
     canComplete: isParticipant && deal.status === 'pending',
+  };
+}
+
+export const reportInclude = {
+  reporter: { select: userSelect },
+  targetUser: { select: userSelect },
+  moderator: { select: userSelect },
+  marketEntry: {
+    include: {
+      author: { select: userSelect },
+    },
+  },
+} satisfies Prisma.ReportInclude;
+
+export type ReportWithRelations = Prisma.ReportGetPayload<{
+  include: typeof reportInclude;
+}>;
+
+export function serializeReport(report: ReportWithRelations): ReportDto {
+  const entry = report.marketEntry;
+
+  return {
+    id: report.id,
+    targetType: report.targetType,
+    targetId: report.targetId,
+    reason: report.reason,
+    comment: report.comment,
+    status: report.status,
+    action: report.action,
+    reporter: serializePublicUser(report.reporter),
+    targetUser: report.targetUser ? serializePublicUser(report.targetUser) : null,
+    marketEntry: entry
+      ? {
+          id: entry.id,
+          title: entry.title,
+          kind: entry.kind,
+          status: entry.status,
+          moderationStatus: entry.moderationStatus,
+          author: serializePublicUser(entry.author),
+        }
+      : null,
+    moderator: report.moderator ? serializePublicUser(report.moderator) : null,
+    moderatorNote: report.moderatorNote,
+    createdAt: report.createdAt.toISOString(),
+    updatedAt: report.updatedAt.toISOString(),
+    resolvedAt: report.resolvedAt?.toISOString() ?? null,
   };
 }

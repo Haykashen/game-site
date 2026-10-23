@@ -16,8 +16,11 @@ export function AppShell({ children }: { children: ReactNode }) {
   }, [pathname]);
 
   useEffect(() => {
-    document.title = section ? `${section.pageTitle} — RetroKeep` : 'RetroKeep';
-  }, [section]);
+    const title =
+      section?.pageTitle ??
+      (pathname.startsWith('/users/') ? 'Профиль коллекционера' : null);
+    document.title = title ? `${title} — RetroKeep` : 'RetroKeep';
+  }, [pathname, section]);
 
   return (
     <div className="app-shell">

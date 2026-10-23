@@ -67,8 +67,8 @@ export function registerUserRoutes(app: FastifyInstance): void {
   app.get('/api/v1/users/:id', async (request, reply) => {
     const { id } = request.params as { id: string };
 
-    const user = await app.prisma.user.findUnique({
-      where: { id },
+    const user = await app.prisma.user.findFirst({
+      where: { id, status: 'active' },
       select: publicProfileSelect,
     });
 
@@ -95,8 +95,8 @@ export function registerUserRoutes(app: FastifyInstance): void {
     const { id } = request.params as { id: string };
     const query = parse(paginationSchema, request.query);
 
-    const user = await app.prisma.user.findUnique({
-      where: { id },
+    const user = await app.prisma.user.findFirst({
+      where: { id, status: 'active' },
       select: { id: true },
     });
 

@@ -334,7 +334,7 @@ export function AccountPage() {
       <PageHeading
         eyebrow="ACCOUNT / PROFILE"
         title="Аккаунт"
-        description="Профиль коллекционера, рейтинг и отзывы после сделок."
+        description="Профиль коллекционера, рейтинг и отзывы. Оплата и доставка по сделкам происходят вне сайта."
       />
 
       {status === 'checking' && (

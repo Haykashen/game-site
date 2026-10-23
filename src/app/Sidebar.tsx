@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCollection } from '../context/CollectionContext';
 import { cx } from '../lib/cx';
-import { NAV_GROUPS } from './navigation';
+import { NAV_GROUPS, NAV_ITEMS } from './navigation';
 import type { NavItem, NavSectionId } from './navigation';
 
 interface NavRowProps {
@@ -31,7 +31,7 @@ function NavRow({ item, count }: NavRowProps) {
 
 /** Desktop navigation: brand, grouped sections and a compact account block. */
 export function Sidebar() {
-  const { user } = useAuth();
+  const { user, isModerator } = useAuth();
   const { ownedCount } = useCollection();
   const badges: Partial<Record<NavSectionId, number>> = { collection: ownedCount };
 
@@ -53,6 +53,13 @@ export function Sidebar() {
             ))}
           </div>
         ))}
+
+        {isModerator && (
+          <div className="nav-group" key="moderation">
+            <p className="nav-group__label">Управление</p>
+            <NavRow item={NAV_ITEMS.admin} count={undefined} />
+          </div>
+        )}
       </div>
 
       <div className="sidebar-account">

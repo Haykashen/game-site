@@ -30,6 +30,8 @@ export interface AuthContextValue {
   user: UserProfile | null;
   isApiMode: boolean;
   isAuthenticated: boolean;
+  /** Admin or moderator: the account can open the moderation queue. */
+  isModerator: boolean;
   login: (input: LoginInput) => Promise<void>;
   register: (input: RegisterInput) => Promise<void>;
   logout: () => Promise<void>;
@@ -105,6 +107,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       isApiMode: status === 'api',
       isAuthenticated: Boolean(user),
+      isModerator:
+        user?.role === 'admin' || user?.role === 'moderator',
       login,
       register,
       logout,

@@ -122,12 +122,28 @@ export function useMarketEntries(): MarketStore {
     setError(null);
 
     try {
-      const page = await listMarketEntries({
-        status: 'all',
-        pageSize: 100,
-        sort: 'newest',
-      });
-      setRemoteEntries(page.items.map(mapMarketEntry));
+      const [publicPage, ownPage] = await Promise.all([
+        listMarketEntries({
+          status: 'all',
+          pageSize: 100,
+          sort: 'newest',
+        }),
+        listMarketEntries({
+          status: 'all',
+          pageSize: 100,
+          sort: 'newest',
+          authorId: 'me',
+        }),
+      ]);
+
+      // Own lots come first, including ones hidden by moderation. The public
+      // page is still needed for every other seller's entries.
+      const byId = new Map(ownPage.items.map((entry) => [entry.id, entry]));
+      for (const entry of publicPage.items) {
+        if (!byId.has(entry.id)) byId.set(entry.id, entry);
+      }
+
+      setRemoteEntries([...byId.values()].map(mapMarketEntry));
     } catch (loadError) {
       setError(errorMessage(loadError));
     } finally {

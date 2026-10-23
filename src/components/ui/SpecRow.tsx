@@ -1,6 +1,8 @@
+import type { ReactNode } from 'react';
+
 interface SpecRowProps {
   label: string;
-  value: string;
+  value: ReactNode;
 }
 
 /** Single key/value row inside the specification box. */

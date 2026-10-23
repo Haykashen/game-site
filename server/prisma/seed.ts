@@ -4,6 +4,7 @@ import editionsJson from '../../src/data/editions.json';
 import gamesJson from '../../src/data/games.json';
 import marketJson from '../../src/data/market.json';
 import { hashPassword } from '../src/auth/password.js';
+import { env } from '../src/env.js';
 import { deliveryServiceFromApi } from '../src/lib/delivery.js';
 import type {
   SeedEdition,
@@ -106,6 +107,8 @@ async function seedUsers(): Promise<Map<string, string>> {
       update: {
         displayName: name,
         isDemo: true,
+        role: 'user',
+        status: 'active',
         ratingSum: 0,
         ratingCount: 0,
         passwordHash: null,
@@ -115,6 +118,8 @@ async function seedUsers(): Promise<Map<string, string>> {
         email,
         displayName: name,
         isDemo: true,
+        role: 'user',
+        status: 'active',
         ratingSum: 0,
         ratingCount: 0,
         passwordHash: null,
@@ -125,17 +130,18 @@ async function seedUsers(): Promise<Map<string, string>> {
     userIdByName.set(name, user.id);
   }
 
-  const demoEmailAddress = (process.env.SEED_DEMO_EMAIL ?? 'demo@retrokeep.local')
-    .trim()
-    .toLowerCase();
-  const demoPassword = process.env.SEED_DEMO_PASSWORD ?? 'demo12345';
-  const passwordHash = await hashPassword(demoPassword);
+  const demoEmailAddress = env.seedDemoEmail.trim().toLowerCase();
+  const passwordHash = await hashPassword(env.seedDemoPassword);
 
   await prisma.user.upsert({
     where: { email: demoEmailAddress },
     update: {
       displayName: 'Demo Collector',
       isDemo: false,
+      role: env.seedDemoRole,
+      status: 'active',
+      suspendedAt: null,
+      suspensionReason: null,
       ratingSum: 0,
       ratingCount: 0,
       passwordHash,
@@ -145,6 +151,8 @@ async function seedUsers(): Promise<Map<string, string>> {
       email: demoEmailAddress,
       displayName: 'Demo Collector',
       isDemo: false,
+      role: env.seedDemoRole,
+      status: 'active',
       ratingSum: 0,
       ratingCount: 0,
       passwordHash,
@@ -153,7 +161,7 @@ async function seedUsers(): Promise<Map<string, string>> {
   });
 
   console.log(
-    `Seeded ${sellerNames.length} demo sellers, ${BIDDER_NAMES.length} bidders and the demo login ${demoEmailAddress}.`,
+    `Seeded ${sellerNames.length} demo sellers, ${BIDDER_NAMES.length} bidders and the demo login ${demoEmailAddress} (${env.seedDemoRole}).`,
   );
 
   return userIdByName;
@@ -206,6 +214,7 @@ async function seedMarket(userIdByName: Map<string, string>): Promise<void> {
       priceMinor: toMinor(entry.price),
       description: entry.description,
       status: 'active' as const,
+      moderationStatus: 'visible' as const,
       deliveryServices: entry.deliveryServices.map(deliveryServiceFromApi),
       internationalShipping: entry.internationalShipping,
       packagingPriceMinor:
@@ -264,6 +273,15 @@ async function seedMarket(userIdByName: Map<string, string>): Promise<void> {
 }
 
 async function main(): Promise<void> {
+  if (
+    process.env.NODE_ENV === 'production' &&
+    process.env.ALLOW_DEMO_SEED !== 'true'
+  ) {
+    throw new Error(
+      'Demo seed is disabled in production. Set ALLOW_DEMO_SEED=true only for a deliberate demo environment.',
+    );
+  }
+
   await seedCatalog();
   const userIdByName = await seedUsers();
   await seedMarket(userIdByName);

@@ -19,6 +19,7 @@ import { registerCatalogRoutes } from './catalog/routes.js';
 import { registerCollectionRoutes } from './collection/routes.js';
 import { registerDealRoutes } from './deals/routes.js';
 import { registerMarketRoutes } from './market/routes.js';
+import { registerReportRoutes } from './reports/routes.js';
 import { registerUploadRoutes } from './uploads/routes.js';
 import { registerUserRoutes } from './users/routes.js';
 import './types.js';
@@ -237,6 +238,7 @@ export async function buildApp() {
   registerMarketRoutes(app);
   registerBidRoutes(app);
   registerDealRoutes(app);
+  registerReportRoutes(app);
   registerUploadRoutes(app);
 
   return app;

@@ -2341,6 +2341,12 @@
             display: inline-flex; align-items: center; gap: .4rem;
             text-decoration: none;
         }
+        .market-trade__disclaimer {
+            margin-top: .7rem; padding-top: .65rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: .7rem; line-height: 1.5;
+        }
 
         .market-sync-banner {
             margin-bottom: 1rem;
@@ -2362,4 +2368,170 @@
             .market-trade__form .market-form__submit { width: 100%; }
             .account-notice { align-items: stretch; flex-direction: column; }
             .account-notice > button { width: 100%; }
+        }
+
+        /* Reports and moderation */
+        .spec-link {
+            color: var(--brand);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .spec-link:hover { text-decoration: underline; }
+
+        .report-section {
+            margin-top: 1rem;
+            padding: 1rem 1.1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+        .report-section__trigger {
+            display: inline-flex; align-items: center; gap: .4rem;
+            min-height: 32px; padding: .2rem 0;
+            border: 0; background: transparent;
+            color: var(--text-muted);
+            font-size: .78rem; font-weight: 600;
+        }
+        .report-section__trigger:hover { color: var(--brand); }
+        .report-section__guest {
+            display: flex; align-items: center; gap: .4rem;
+            color: var(--text-muted);
+            font-size: .78rem; line-height: 1.5;
+        }
+        .report-section__guest a { color: var(--brand); font-weight: 650; }
+
+        .report-form {
+            display: grid; gap: .75rem;
+            margin-top: .8rem;
+            padding: .9rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+        }
+        .report-form__head h4 { font-size: .9rem; font-weight: 700; }
+        .report-form__head p {
+            margin-top: .2rem;
+            color: var(--text-muted);
+            font-size: .76rem; line-height: 1.45;
+        }
+        .report-form__success {
+            padding: .65rem .75rem;
+            background: var(--emerald-light);
+            border: 1px solid var(--emerald);
+            border-radius: 8px;
+            color: var(--emerald);
+            font-size: .79rem; line-height: 1.5;
+        }
+        html.dark .report-form__success { color: #86efac; }
+
+        .user-review__text {
+            margin-top: .55rem;
+            color: var(--text-muted);
+            font-size: .85rem; line-height: 1.55;
+        }
+
+        .admin-reports__filters {
+            display: flex; align-items: flex-end; flex-wrap: wrap;
+            gap: .9rem;
+            margin-bottom: 1rem;
+        }
+        .admin-reports__filters label {
+            display: grid; gap: .35rem;
+            min-width: 180px;
+        }
+        .admin-reports { display: grid; gap: .9rem; }
+        .admin-report {
+            padding: 1rem 1.1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,.035);
+        }
+        .admin-report__head {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            gap: .8rem; flex-wrap: wrap;
+        }
+        .admin-report__reason {
+            display: flex; align-items: center; gap: .4rem;
+            color: var(--text-main);
+            font-size: .9rem; font-weight: 700;
+        }
+        .admin-report__reason svg { color: var(--brand); }
+        .admin-report__date {
+            margin-top: .2rem;
+            color: var(--text-muted);
+            font: 500 .68rem/1.4 'IBM Plex Mono', monospace;
+        }
+        .admin-report__status {
+            flex: none;
+            padding: .3rem .55rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font: 600 .65rem/1.3 'IBM Plex Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+        }
+        .admin-report__status--pending { border-color: #f59e0b; color: #b45309; }
+        .admin-report__status--in_review { border-color: var(--brand); color: var(--brand); }
+        .admin-report__status--resolved { border-color: #16a34a; color: #15803d; }
+        .admin-report__status--dismissed { opacity: .65; }
+        html.dark .admin-report__status--pending { color: #fbbf24; }
+        html.dark .admin-report__status--resolved { color: #86efac; }
+        .admin-report__target {
+            display: flex; align-items: baseline; flex-wrap: wrap;
+            gap: .4rem .6rem;
+            margin-top: .8rem;
+            padding: .7rem .75rem;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        .admin-report__label {
+            color: var(--text-muted);
+            font: 600 .62rem/1.4 'IBM Plex Mono', monospace;
+            letter-spacing: .1em; text-transform: uppercase;
+        }
+        .admin-report__target a { color: var(--brand); font-weight: 650; text-decoration: none; }
+        .admin-report__target a:hover { text-decoration: underline; }
+        .admin-report__muted { color: var(--text-muted); font-size: .75rem; }
+        .admin-report__meta {
+            display: flex; flex-wrap: wrap; gap: .35rem 1rem;
+            margin-top: .65rem;
+            color: var(--text-muted);
+            font-size: .75rem; line-height: 1.5;
+        }
+        .admin-report__meta a { color: var(--brand); font-weight: 600; text-decoration: none; }
+        .admin-report__meta a:hover { text-decoration: underline; }
+        .admin-report__comment,
+        .admin-report__note {
+            margin-top: .65rem;
+            padding: .65rem .75rem;
+            border-left: 3px solid var(--border-color);
+            background: var(--bg-main);
+            color: var(--text-muted);
+            font-size: .82rem; line-height: 1.55;
+            white-space: pre-wrap;
+        }
+        .admin-report__note { border-left-color: var(--brand); }
+        .admin-report__note-field {
+            display: grid; gap: .35rem;
+            margin-top: .75rem;
+        }
+        .admin-report__actions {
+            display: flex; align-items: center; flex-wrap: wrap;
+            gap: .5rem;
+            margin-top: .8rem;
+        }
+        .admin-report__actions .btn-secondary {
+            display: inline-flex; align-items: center; gap: .4rem;
+        }
+        .admin-report__danger { color: #b91c1c; border-color: #fca5a5; }
+        .admin-report__danger:hover:not(:disabled) { color: #991b1b; border-color: #f87171; }
+        html.dark .admin-report__danger { color: #fca5a5; border-color: #7f1d1d; }
+
+        @media (max-width: 640px) {
+            .admin-reports__filters { align-items: stretch; flex-direction: column; }
+            .admin-reports__filters label { min-width: 0; }
+            .admin-report__actions { align-items: stretch; flex-direction: column; }
+            .admin-report__actions .btn-secondary { justify-content: center; width: 100%; }
         }

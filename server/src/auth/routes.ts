@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { loginSchema, registerSchema, type AuthResponse } from '@retrokeep/shared';
-import { conflict, unauthorized } from '../errors.js';
+import { conflict, forbidden, unauthorized } from '../errors.js';
 import { getUserProfile } from '../lib/serializers.js';
 import { isPrismaError } from '../lib/prismaErrors.js';
 import { parse } from '../lib/validation.js';
@@ -82,6 +82,12 @@ export function registerAuthRoutes(app: FastifyInstance): void {
 
       if (!isValid) {
         throw unauthorized('Неверная почта или пароль.');
+      }
+
+      if (user.status !== 'active') {
+        throw forbidden(
+          'Аккаунт заблокирован. Обратитесь в поддержку, если считаете это ошибкой.',
+        );
       }
 
       await app.prisma.session.deleteMany({

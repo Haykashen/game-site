@@ -60,6 +60,8 @@ npm run dev:full
 | `S3_PUBLIC_URL` | Публичный префикс объектов |
 | `S3_FORCE_PATH_STYLE` | `true` для MinIO |
 | `SEED_DEMO_EMAIL`, `SEED_DEMO_PASSWORD` | Демо-аккаунт, создаваемый seed-скриптом |
+| `SEED_DEMO_ROLE` | Роль демо-аккаунта: `user`, `moderator` или `admin` |
+| `ALLOW_DEMO_SEED` | `true` разрешает демо-seed в production (по умолчанию запрещён) |
 
 Если S3/MinIO недоступны, сервер не падает: фотографии сохраняются в `server/uploads/` и раздаются как `/uploads/*`.
 
@@ -91,6 +93,8 @@ npm run db:studio        # Prisma Studio
 - Пароль: `demo12345`
 
 Seed импортирует игры, издания и объявления из `src/data`. Авторы объявлений создаются как demo-пользователи с `is_demo = true`; вход под ними отключён. Для локальной демонстрации используется только аккаунт выше.
+
+Чтобы проверить очередь модерации локально, задайте `SEED_DEMO_ROLE=admin` в `server/.env` и выполните `npm run db:seed` ещё раз. Роль `moderator` позволяет скрывать объявления, но блокировать пользователей может только `admin`.
 
 ## Аутентификация
 
@@ -173,6 +177,17 @@ Seed импортирует игры, издания и объявления и�
 - `GET /api/v1/deals/:id`
 - `PATCH /api/v1/deals/:id/status`
 - `POST /api/v1/deals/:id/reviews`
+
+### Reports and moderation
+
+- `POST /api/v1/reports` — жалоба на `market_entry` или `user` (только авторизованные)
+- `GET /api/v1/reports/mine` — свои жалобы
+- `GET /api/v1/admin/reports` — очередь модерации (`admin` / `moderator`)
+- `PATCH /api/v1/admin/reports/:id` — взять в работу, завершить или отклонить; действия `hide_entry` и `suspend_user`
+- `PATCH /api/v1/admin/market/:id/moderation` — скрыть, удалить или вернуть объявление
+- `PATCH /api/v1/admin/users/:id/status` — заблокировать или разблокировать пользователя (только `admin`)
+
+Один пользователь может иметь только одну открытую жалобу на конкретный лот или профиль. При блокировке пользователя его сессии удаляются, публичные лоты и профиль перестают отдаваться API. Скрытые лоты остаются доступны владельцу и модераторам.
 
 ### Uploads
 

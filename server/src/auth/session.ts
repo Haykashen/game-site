@@ -1,6 +1,7 @@
 import type { PrismaClient } from '@prisma/client';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { createHash, randomBytes } from 'node:crypto';
+import type { UserRole, UserStatus } from '@retrokeep/shared';
 import { env } from '../env.js';
 
 export const SESSION_COOKIE = 'rk_session';
@@ -10,6 +11,8 @@ export interface SessionUser {
   email: string;
   displayName: string;
   isDemo: boolean;
+  role: UserRole;
+  status: UserStatus;
 }
 
 function hashToken(token: string): string {
@@ -89,12 +92,18 @@ export async function resolveSession(
           email: true,
           displayName: true,
           isDemo: true,
+          role: true,
+          status: true,
         },
       },
     },
   });
 
-  if (!session || session.expiresAt.getTime() <= Date.now()) {
+  if (
+    !session ||
+    session.expiresAt.getTime() <= Date.now() ||
+    session.user.status !== 'active'
+  ) {
     if (session) {
       await prisma.session.delete({ where: { id: session.id } }).catch(() => undefined);
     }

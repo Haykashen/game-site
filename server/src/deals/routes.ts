@@ -45,12 +45,21 @@ export function registerDealRoutes(app: FastifyInstance): void {
           kind: true,
           listingType: true,
           status: true,
+          moderationStatus: true,
           priceMinor: true,
+          author: { select: { status: true } },
           deal: { select: { id: true } },
         },
       });
 
       if (!entry) throw notFound('Объявление не найдено.');
+
+      if (
+        entry.moderationStatus !== 'visible' ||
+        entry.author.status !== 'active'
+      ) {
+        throw conflict('ENTRY_NOT_AVAILABLE', 'Лот недоступен.');
+      }
 
       if (entry.kind !== 'listing') {
         throw conflict(
@@ -77,7 +86,9 @@ export function registerDealRoutes(app: FastifyInstance): void {
             where: {
               id,
               status: 'active',
+              moderationStatus: 'visible',
               deletedAt: null,
+              author: { status: 'active' },
               deal: { is: null },
             },
             data: {

@@ -39,15 +39,64 @@ enum DealStatus {
   cancelled
 }
 
+enum UserRole {
+  user
+  moderator
+  admin
+}
+
+enum UserStatus {
+  active
+  suspended
+  deleted
+}
+
+enum ModerationStatus {
+  visible
+  hidden
+  removed
+}
+
+enum ReportTargetType {
+  market_entry
+  user
+}
+
+enum ReportReason {
+  fraud
+  prohibited
+  offensive
+  spam
+  wrong_category
+  other
+}
+
+enum ReportStatus {
+  pending
+  in_review
+  resolved
+  dismissed
+}
+
+enum ReportAction {
+  none
+  hide_entry
+  suspend_user
+}
+
 model User {
-  id           String  @id @default(uuid()) @db.Uuid
-  email        String  @unique
-  passwordHash String? @map("password_hash")
-  displayName  String  @map("display_name")
-  phone        String?
-  city         String?
-  avatarUrl    String? @map("avatar_url") @db.Text
-  isDemo       Boolean @default(false) @map("is_demo")
+  id               String     @id @default(uuid()) @db.Uuid
+  email            String     @unique
+  passwordHash     String?    @map("password_hash")
+  displayName      String     @map("display_name")
+  phone            String?
+  city             String?
+  avatarUrl        String?    @map("avatar_url") @db.Text
+  isDemo           Boolean    @default(false) @map("is_demo")
+  role             UserRole   @default(user)
+  status           UserStatus @default(active)
+  suspendedAt      DateTime?  @map("suspended_at")
+  suspensionReason String?    @map("suspension_reason") @db.Text
 
   ratingSum   Int @default(0) @map("rating_sum")
   ratingCount Int @default(0) @map("rating_count")
@@ -55,15 +104,19 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  sessions        Session[]
-  copies          Copy[]
-  authoredEntries MarketEntry[] @relation("MarketAuthor")
-  wonEntries      MarketEntry[] @relation("MarketWinner")
-  bids            Bid[]
-  buyerDeals      Deal[]        @relation("DealBuyer")
-  sellerDeals     Deal[]        @relation("DealSeller")
-  writtenReviews  Review[]      @relation("ReviewAuthor")
-  receivedReviews Review[]      @relation("ReviewTarget")
+  sessions         Session[]
+  copies           Copy[]
+  authoredEntries  MarketEntry[] @relation("MarketAuthor")
+  wonEntries       MarketEntry[] @relation("MarketWinner")
+  bids             Bid[]
+  buyerDeals       Deal[]        @relation("DealBuyer")
+  sellerDeals      Deal[]        @relation("DealSeller")
+  writtenReviews   Review[]      @relation("ReviewAuthor")
+  receivedReviews  Review[]      @relation("ReviewTarget")
+  reportsFiled     Report[]      @relation("ReportReporter")
+  reportsReceived  Report[]      @relation("ReportTarget")
+  reportsModerated Report[]      @relation("ReportModerator")
+  moderatedEntries MarketEntry[] @relation("MarketModerator")
 
   @@index([displayName])
   @@map("users")
@@ -188,31 +241,38 @@ model MarketEntry {
   shipsFrom             String            @map("ships_from")
   bidStepMinor          Int?              @map("bid_step_minor")
 
-  startsAt          DateTime? @map("starts_at")
-  endsAt            DateTime? @map("ends_at")
-  currentPriceMinor Int?      @map("current_price_minor")
-  bidCount          Int       @default(0) @map("bid_count")
-  winnerId          String?   @map("winner_id") @db.Uuid
-  version           Int       @default(0)
-  isSeeded          Boolean   @default(false) @map("is_seeded")
-  soldAt            DateTime? @map("sold_at")
-  deletedAt         DateTime? @map("deleted_at")
-  createdAt         DateTime  @default(now()) @map("created_at")
-  updatedAt         DateTime  @updatedAt @map("updated_at")
+  startsAt          DateTime?        @map("starts_at")
+  endsAt            DateTime?        @map("ends_at")
+  currentPriceMinor Int?             @map("current_price_minor")
+  bidCount          Int              @default(0) @map("bid_count")
+  winnerId          String?          @map("winner_id") @db.Uuid
+  version           Int              @default(0)
+  isSeeded          Boolean          @default(false) @map("is_seeded")
+  soldAt            DateTime?        @map("sold_at")
+  deletedAt         DateTime?        @map("deleted_at")
+  moderationStatus  ModerationStatus @default(visible) @map("moderation_status")
+  moderationNote    String?          @map("moderation_note") @db.Text
+  moderatedAt       DateTime?        @map("moderated_at")
+  moderatorId       String?          @map("moderator_id") @db.Uuid
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
 
-  author  User          @relation("MarketAuthor", fields: [authorId], references: [id], onDelete: Restrict)
-  winner  User?         @relation("MarketWinner", fields: [winnerId], references: [id], onDelete: SetNull)
-  game    Game          @relation(fields: [gameId], references: [id], onDelete: Restrict)
-  edition Edition?      @relation(fields: [editionId], references: [id], onDelete: SetNull)
-  photos  MarketPhoto[]
-  bids    Bid[]
-  deal    Deal?
+  author    User          @relation("MarketAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  winner    User?         @relation("MarketWinner", fields: [winnerId], references: [id], onDelete: SetNull)
+  moderator User?         @relation("MarketModerator", fields: [moderatorId], references: [id], onDelete: SetNull)
+  game      Game          @relation(fields: [gameId], references: [id], onDelete: Restrict)
+  edition   Edition?      @relation(fields: [editionId], references: [id], onDelete: SetNull)
+  photos    MarketPhoto[]
+  bids      Bid[]
+  deal      Deal?
+  reports   Report[]
 
   @@index([kind, status, createdAt])
   @@index([authorId])
   @@index([gameId])
   @@index([editionId])
   @@index([endsAt])
+  @@index([moderationStatus])
   @@map("market_entries")
 }
 
@@ -281,4 +341,35 @@ model Review {
   @@unique([dealId, authorId])
   @@index([targetId])
   @@map("reviews")
+}
+
+model Report {
+  id            String           @id @default(uuid()) @db.Uuid
+  reporterId    String           @map("reporter_id") @db.Uuid
+  targetType    ReportTargetType @map("target_type")
+  targetId      String           @map("target_id") @db.Text
+  marketEntryId String?          @map("market_entry_id")
+  targetUserId  String?          @map("target_user_id") @db.Uuid
+  reason        ReportReason
+  comment       String           @default("") @db.Text
+  status        ReportStatus     @default(pending)
+  action        ReportAction     @default(none)
+  moderatorId   String?          @map("moderator_id") @db.Uuid
+  moderatorNote String?          @map("moderator_note") @db.Text
+  activeKey     String?          @unique @map("active_key")
+  createdAt     DateTime         @default(now()) @map("created_at")
+  updatedAt     DateTime         @updatedAt @map("updated_at")
+  resolvedAt    DateTime?        @map("resolved_at")
+
+  reporter    User         @relation("ReportReporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  targetUser  User?        @relation("ReportTarget", fields: [targetUserId], references: [id], onDelete: Cascade)
+  marketEntry MarketEntry? @relation(fields: [marketEntryId], references: [id], onDelete: Cascade)
+  moderator   User?        @relation("ReportModerator", fields: [moderatorId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@index([targetType, targetId])
+  @@index([reporterId])
+  @@index([marketEntryId])
+  @@index([targetUserId])
+  @@map("reports")
 }

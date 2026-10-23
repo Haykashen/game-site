@@ -4,12 +4,14 @@ import { AuthProvider } from './context/AuthContext';
 import { CollectionProvider } from './context/CollectionContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { AccountPage } from './pages/AccountPage';
+import { AdminReportsPage } from './pages/AdminReportsPage';
 import { AuctionsPage } from './pages/AuctionsPage';
 import { CollectionPage } from './pages/CollectionPage';
 import { GamesPage } from './pages/GamesPage';
 import { ListingsPage } from './pages/ListingsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { StatsPage } from './pages/StatsPage';
+import { UserProfilePage } from './pages/UserProfilePage';
 
 export default function App() {
   return (
@@ -26,6 +28,8 @@ export default function App() {
                 <Route path="/collection" element={<CollectionPage />} />
                 <Route path="/stats" element={<StatsPage />} />
                 <Route path="/account" element={<AccountPage />} />
+                <Route path="/users/:id" element={<UserProfilePage />} />
+                <Route path="/admin/reports" element={<AdminReportsPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="*" element={<Navigate to="/games" replace />} />
               </Routes>

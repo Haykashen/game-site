@@ -1,15 +1,17 @@
 import { Ellipsis } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { useEscapeKey } from '../hooks/useEscapeKey';
 import { cx } from '../lib/cx';
-import { MOBILE_ITEMS, MOBILE_MORE_ITEMS } from './navigation';
+import { MOBILE_ITEMS, MOBILE_MORE_ITEMS, NAV_ITEMS } from './navigation';
 
 /** Bottom tab bar with a small "more" sheet for stats, account and settings. */
 export function MobileNav() {
   const [isMoreOpen, setIsMoreOpen] = useState(false);
   const { pathname } = useLocation();
+  const { isModerator } = useAuth();
 
   useEffect(() => {
     setIsMoreOpen(false);
@@ -18,7 +20,10 @@ export function MobileNav() {
   useEscapeKey(() => setIsMoreOpen(false), isMoreOpen);
   useBodyScrollLock(isMoreOpen);
 
-  const isMoreActive = MOBILE_MORE_ITEMS.some((item) => pathname === item.path);
+  const moreItems = isModerator
+    ? [...MOBILE_MORE_ITEMS, NAV_ITEMS.admin]
+    : MOBILE_MORE_ITEMS;
+  const isMoreActive = moreItems.some((item) => pathname === item.path);
 
   return (
     <>
@@ -61,7 +66,7 @@ export function MobileNav() {
             aria-label="Дополнительные разделы"
           >
             <p className="mobile-sheet__label">Ещё</p>
-            {MOBILE_MORE_ITEMS.map((item) => {
+            {moreItems.map((item) => {
               const Icon = item.icon;
 
               return (

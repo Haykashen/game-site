@@ -106,7 +106,11 @@ export function MarketPage({ kind }: MarketPageProps) {
   const baseItems = useMemo(
     () =>
       kindItems.filter((entry) =>
-        showOwn ? ownEntryIds.has(entry.id) : entry.status === 'active',
+        showOwn
+          ? ownEntryIds.has(entry.id)
+          : entry.status === 'active' &&
+            (entry.moderationStatus === undefined ||
+              entry.moderationStatus === 'visible'),
       ),
     [kindItems, ownEntryIds, showOwn],
   );

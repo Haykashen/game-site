@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
-    "build": "tsup src/server.ts --format esm --target node22 --out-dir dist --clean --sourcemap",
+    "build": "tsup",
     "typecheck": "tsc --noEmit",
     "prisma:generate": "prisma generate",
     "prisma:validate": "prisma validate",

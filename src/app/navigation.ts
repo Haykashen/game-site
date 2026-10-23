@@ -1,4 +1,13 @@
-import { BarChart3, Gamepad2, Gavel, Library, Settings2, Tag, UserRound } from 'lucide-react';
+import {
+  BarChart3,
+  Gamepad2,
+  Gavel,
+  Library,
+  Settings2,
+  ShieldCheck,
+  Tag,
+  UserRound,
+} from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 export type NavSectionId =
@@ -8,7 +17,8 @@ export type NavSectionId =
   | 'collection'
   | 'stats'
   | 'account'
-  | 'settings';
+  | 'settings'
+  | 'admin';
 
 export interface NavItem {
   readonly id: NavSectionId;
@@ -75,6 +85,14 @@ export const NAV_ITEMS = {
     shortLabel: 'Настройки',
     path: '/settings',
     icon: Settings2,
+  },
+  admin: {
+    id: 'admin',
+    label: 'Модерация',
+    pageTitle: 'Очередь жалоб',
+    shortLabel: 'Модерация',
+    path: '/admin/reports',
+    icon: ShieldCheck,
   },
 } as const satisfies Record<NavSectionId, NavItem>;
 

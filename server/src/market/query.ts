@@ -5,8 +5,14 @@ import { resolveYearRange } from '../lib/catalogData.js';
 export function buildMarketWhere(
   query: MarketSearchQuery,
   authorId: string | undefined,
+  includeModeration = false,
 ): Prisma.MarketEntryWhereInput {
   const and: Prisma.MarketEntryWhereInput[] = [{ deletedAt: null }];
+
+  if (!includeModeration) {
+    and.push({ moderationStatus: 'visible' });
+    and.push({ author: { status: 'active' } });
+  }
 
   if (query.status !== 'all') and.push({ status: query.status });
   if (query.kind) and.push({ kind: query.kind });

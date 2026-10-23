@@ -12,6 +12,7 @@ import {
 export const marketKindSchema = z.enum(['listing', 'auction']);
 export const marketListingTypeSchema = z.enum(['sale', 'purchase', 'exchange']);
 export const marketStatusSchema = z.enum(['active', 'sold', 'closed']);
+export const marketModerationStatusSchema = z.enum(['visible', 'hidden', 'removed']);
 export const marketDeliveryServiceSchema = z.enum([
   'russian-post',
   'cdek',
@@ -22,6 +23,7 @@ export const marketDeliveryServiceSchema = z.enum([
 export type MarketKind = z.infer<typeof marketKindSchema>;
 export type MarketListingType = z.infer<typeof marketListingTypeSchema>;
 export type MarketStatus = z.infer<typeof marketStatusSchema>;
+export type MarketModerationStatus = z.infer<typeof marketModerationStatusSchema>;
 export type MarketDeliveryService = z.infer<typeof marketDeliveryServiceSchema>;
 
 const marketFieldsSchema = z.object({
@@ -163,6 +165,8 @@ export interface MarketEntryDto {
   author: PublicUser;
   description: string;
   status: MarketStatus;
+  /** Moderation visibility; hidden/removed entries stay available to their owner and admins. */
+  moderationStatus: MarketModerationStatus;
   photos: string[];
   deliveryServices: MarketDeliveryService[];
   internationalShipping: boolean | null;

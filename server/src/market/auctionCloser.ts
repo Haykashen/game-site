@@ -19,6 +19,7 @@ export async function closeAuctionById(
       !entry ||
       entry.kind !== 'auction' ||
       entry.status !== 'active' ||
+      entry.moderationStatus !== 'visible' ||
       !entry.endsAt ||
       entry.endsAt.getTime() > Date.now()
     ) {
@@ -72,6 +73,8 @@ export async function closeExpiredAuctions(
       kind: 'auction',
       status: 'active',
       deletedAt: null,
+      moderationStatus: 'visible',
+      author: { status: 'active' },
       endsAt: { lte: new Date() },
       ...(onlyId ? { id: onlyId } : {}),
     },

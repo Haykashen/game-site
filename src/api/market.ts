@@ -16,6 +16,8 @@ export interface MarketListParams {
   page?: number;
   pageSize?: number;
   sort?: 'newest' | 'oldest' | 'endingSoon' | 'priceAsc' | 'priceDesc';
+  /** `me` requests the current user's lots, including ones hidden by moderation. */
+  authorId?: 'me';
 }
 
 export function listMarketEntries(
@@ -28,6 +30,7 @@ export function listMarketEntries(
   if (params.page) query.set('page', String(params.page));
   if (params.pageSize) query.set('pageSize', String(params.pageSize));
   if (params.sort) query.set('sort', params.sort);
+  if (params.authorId) query.set('authorId', params.authorId);
 
   const suffix = query.toString();
   return apiRequest<Paginated<MarketEntryDto>>(
