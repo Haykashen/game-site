@@ -5,6 +5,7 @@ import type {
   MarketDraft,
   MarketEntry,
   MarketKind,
+  MarketListingType,
   MarketStatus,
 } from '../../types';
 import { ModalShell } from '../ui/ModalShell';
@@ -18,6 +19,8 @@ interface MarketDrawerProps {
   isOwn: boolean;
   isAuthenticated: boolean;
   kind: MarketKind;
+  /** Preset for a new listing; omitted means the shared listing feed. */
+  initialListingType?: MarketListingType | undefined;
   entry: MarketEntry | null;
   game: Game | undefined;
   edition: Edition | undefined;
@@ -55,6 +58,7 @@ export function MarketDrawer({
   isOwn,
   isAuthenticated,
   kind,
+  initialListingType,
   entry,
   game,
   edition,
@@ -93,8 +97,15 @@ export function MarketDrawer({
         : { type: 'entry', entry, game, edition }
       : lastView;
 
+  const composeKey = [
+    'compose',
+    kind,
+    initialListingType ?? 'all',
+    initialGameId,
+    initialEditionId,
+  ].join('-');
   const focusKey = isComposing
-    ? `compose-${initialGameId}-${initialEditionId}`
+    ? composeKey
     : isEditing
       ? `edit-${entry?.id ?? 'closed'}`
       : (entry?.id ?? 'closed');
@@ -108,8 +119,9 @@ export function MarketDrawer({
     >
       {view?.type === 'compose' ? (
         <ComposeEntryForm
-          key={`compose-${initialGameId}-${initialEditionId}`}
+          key={composeKey}
           kind={kind}
+          initialListingType={initialListingType}
           games={games}
           editions={editions}
           initialGameId={initialGameId}

@@ -16,6 +16,15 @@ export function listingTypeLabel(type: MarketListingType | null): string {
   );
 }
 
+/** Canonical route for a listing intention. */
+export function marketListingPath(
+  type: MarketListingType | null | undefined,
+): string {
+  if (type === 'purchase') return '/listings/purchases';
+  if (type === 'exchange') return '/listings/exchange';
+  return '/listings/sales';
+}
+
 const shortDateFormatter = new Intl.DateTimeFormat('ru-RU', {
   day: 'numeric',
   month: 'short',
@@ -114,11 +123,21 @@ export function editionsCountLabel(count: number): string {
 }
 
 /** Russian plural for the section counter: 1 объявление, 3 объявления, 5 объявлений. */
-export function marketCountLabel(count: number, kind: MarketKind): string {
+export function marketCountLabel(
+  count: number,
+  kind: MarketKind,
+  listingType?: MarketListingType,
+): string {
   const forms =
     kind === 'auction'
       ? (['аукцион', 'аукциона', 'аукционов'] as const)
-      : (['объявление', 'объявления', 'объявлений'] as const);
+      : listingType === 'sale'
+        ? (['продажа', 'продажи', 'продаж'] as const)
+        : listingType === 'purchase'
+          ? (['покупка', 'покупки', 'покупок'] as const)
+          : listingType === 'exchange'
+            ? (['обмен', 'обмена', 'обменов'] as const)
+            : (['объявление', 'объявления', 'объявлений'] as const);
 
   const lastTwo = count % 100;
   const last = count % 10;

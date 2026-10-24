@@ -28,6 +28,18 @@ export default function App() {
                   <Route path="/games" element={<GamesPage />} />
                   <Route path="/auctions" element={<AuctionsPage />} />
                   <Route path="/listings" element={<ListingsPage />} />
+                  <Route
+                    path="/listings/sales"
+                    element={<ListingsPage listingType="sale" />}
+                  />
+                  <Route
+                    path="/listings/purchases"
+                    element={<ListingsPage listingType="purchase" />}
+                  />
+                  <Route
+                    path="/listings/exchange"
+                    element={<ListingsPage listingType="exchange" />}
+                  />
                   <Route path="/collection" element={<CollectionPage />} />
                   <Route path="/stats" element={<StatsPage />} />
                   <Route path="/notifications" element={<NotificationsPage />} />

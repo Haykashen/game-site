@@ -4,7 +4,10 @@ import type { FormEvent } from 'react';
 import { cx } from '../../lib/cx';
 import { DELIVERY_SERVICES } from '../../lib/delivery';
 import { editionLabel } from '../../lib/editions';
-import { MARKET_LISTING_TYPE_OPTIONS } from '../../lib/market';
+import {
+  listingTypeLabel,
+  MARKET_LISTING_TYPE_OPTIONS,
+} from '../../lib/market';
 import type {
   Edition,
   Game,
@@ -20,6 +23,8 @@ import { PhotoPicker } from './PhotoPicker';
 
 interface ComposeEntryFormProps {
   kind: MarketKind;
+  /** Preset for a new listing; ignored when editing an existing entry. */
+  initialListingType?: MarketListingType | undefined;
   games: readonly Game[];
   editions: readonly Edition[];
   /** Game preselected when the flow started from a game card. */
@@ -57,6 +62,7 @@ function formatDateTimeLocal(date: Date): string {
 /** The placement card: a compact form for a new listing or auction. */
 export function ComposeEntryForm({
   kind,
+  initialListingType,
   games,
   editions,
   initialGameId,
@@ -87,7 +93,7 @@ export function ComposeEntryForm({
 
   const [gameId, setGameId] = useState(defaultGameId);
   const [listingType, setListingType] = useState<MarketListingType>(
-    entry?.listingType ?? 'sale',
+    entry?.listingType ?? initialListingType ?? 'sale',
   );
   const [editionId, setEditionId] = useState(() =>
     entry ? (entry.editionId ?? '') : defaultEditionId(defaultGameId),
@@ -131,6 +137,12 @@ export function ComposeEntryForm({
   const gameEditions = editionsForGame(gameId);
   const selectedGame = games.find((game) => game.id === gameId);
   const isPurchase = !isAuction && listingType === 'purchase';
+  const listingComposeTitle =
+    listingType === 'purchase'
+      ? 'Разместить покупку'
+      : listingType === 'exchange'
+        ? 'Предложить обмен'
+        : 'Разместить продажу';
 
   const handleGameChange = (nextGameId: string) => {
     setGameId(nextGameId);
@@ -241,7 +253,7 @@ export function ComposeEntryForm({
               ) : (
                 <Tag size={13} aria-hidden="true" />
               )}
-              {isAuction ? 'Аукцион' : 'Объявление'}
+              {isAuction ? 'Аукцион' : listingTypeLabel(listingType)}
             </span>
             <span className="meta-chip">{isEditing ? 'Редактирование' : 'Новая запись'}</span>
           </div>
@@ -252,7 +264,7 @@ export function ComposeEntryForm({
                 : 'Редактировать объявление'
               : isAuction
                 ? 'Разместить аукцион'
-                : 'Разместить объявление'}
+                : listingComposeTitle}
           </h2>
         </div>
         <IconButton label="Закрыть" transparent onClick={onCancel}>
@@ -265,7 +277,11 @@ export function ComposeEntryForm({
           ? 'Измените поля и сохраните — карточка обновится сразу.'
           : isAuction
             ? 'Задайте стартовую ставку, шаг и даты торгов — карточка сразу появится в разделе.'
-            : 'Опишите издание и цену — карточка сразу появится в разделе объявлений.'}
+            : listingType === 'purchase'
+              ? 'Опишите, какое издание ищете, — карточка сразу появится в разделе покупок.'
+              : listingType === 'exchange'
+                ? 'Опишите издание и условия обмена — карточка сразу появится в разделе обмена.'
+                : 'Опишите издание и цену — карточка сразу появится в разделе продаж.'}
       </p>
 
       <form className="market-form" onSubmit={handleSubmit}>
@@ -570,7 +586,7 @@ export function ComposeEntryForm({
                 ? 'Сохранить изменения'
                 : isAuction
                   ? 'Запустить аукцион'
-                  : 'Разместить объявление'}
+                  : listingComposeTitle}
           </button>
         </div>
       </form>

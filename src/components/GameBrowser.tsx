@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCollection } from '../context/CollectionContext';
 import { useMarketEntries } from '../hooks/useMarketEntries';
 import { gameCoverImage } from '../lib/editions';
+import { marketListingPath } from '../lib/market';
 import type { Game, GameStats, MarketEntry } from '../types';
 import { GameGrid } from './GameGrid';
 import { GameModal } from './GameModal';
@@ -119,31 +120,35 @@ export function GameBrowser({
   }, [onCloseGame]);
 
   const placeEntry = useCallback(
-    (section: 'listings' | 'auctions', selectedEditionId?: string) => {
+    (path: string, selectedEditionId?: string) => {
       if (!selectedGameId) return;
 
       const params = new URLSearchParams({ compose: '1', game: selectedGameId });
       if (selectedEditionId) params.set('editionId', selectedEditionId);
 
-      navigate(`/${section}?${params.toString()}`);
+      navigate(`${path}?${params.toString()}`);
     },
     [navigate, selectedGameId],
   );
 
   const placeListing = useCallback(
-    (selectedEditionId?: string) => placeEntry('listings', selectedEditionId),
+    (selectedEditionId?: string) =>
+      placeEntry(marketListingPath('sale'), selectedEditionId),
     [placeEntry],
   );
 
   const placeAuction = useCallback(
-    (selectedEditionId?: string) => placeEntry('auctions', selectedEditionId),
+    (selectedEditionId?: string) => placeEntry('/auctions', selectedEditionId),
     [placeEntry],
   );
 
   const openMarketEntry = useCallback(
     (entry: MarketEntry) => {
-      const section = entry.kind === 'auction' ? 'auctions' : 'listings';
-      navigate(`/${section}?item=${encodeURIComponent(entry.id)}`);
+      const path =
+        entry.kind === 'auction'
+          ? '/auctions'
+          : marketListingPath(entry.listingType);
+      navigate(`${path}?item=${encodeURIComponent(entry.id)}`);
     },
     [navigate],
   );

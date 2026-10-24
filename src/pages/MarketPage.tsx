@@ -14,10 +14,17 @@ import { cx } from '../lib/cx';
 import { marketCountLabel } from '../lib/market';
 import { MARKET_FILTER_FIELDS, SEARCH_FILTER_PARAMS } from '../lib/searchFilterConfig';
 import { selectVisibleMarketEntries } from '../lib/selectVisibleMarketEntries';
-import type { MarketDraft, MarketKind, MarketStatus } from '../types';
+import type {
+  MarketDraft,
+  MarketKind,
+  MarketListingType,
+  MarketStatus,
+} from '../types';
 
 interface MarketPageProps {
   kind: MarketKind;
+  /** When set, only listings with this intention are shown. */
+  listingType?: MarketListingType | undefined;
 }
 
 interface MarketCopy {
@@ -32,7 +39,7 @@ interface MarketCopy {
   filteredEmpty: string;
 }
 
-const COPY: Record<MarketKind, MarketCopy> = {
+const COPY: Record<MarketKind | MarketListingType, MarketCopy> = {
   listing: {
     eyebrow: 'MARKET / LISTINGS',
     title: 'Объявления',
@@ -43,6 +50,39 @@ const COPY: Record<MarketKind, MarketCopy> = {
     empty: 'Объявлений пока нет — разместите первое.',
     searchPlaceholder: 'Найти объявление, игру или продавца',
     filteredEmpty: 'По выбранным фильтрам объявлений не найдено.',
+  },
+  sale: {
+    eyebrow: 'MARKET / SALES',
+    title: 'Продажи',
+    description: 'Издания, которые коллекционеры готовы передать в новую коллекцию.',
+    cta: 'Разместить продажу',
+    hint: 'Фиксированные цены и прямые предложения',
+    ownLabel: 'Мои продажи',
+    empty: 'Продаж пока нет — разместите первое объявление.',
+    searchPlaceholder: 'Найти продажу, игру или продавца',
+    filteredEmpty: 'По выбранным фильтрам продаж не найдено.',
+  },
+  purchase: {
+    eyebrow: 'MARKET / PURCHASES',
+    title: 'Покупки',
+    description: 'Запросы на покупку изданий: найдите нужную версию или предложите свою.',
+    cta: 'Разместить покупку',
+    hint: 'Запросы на конкретные издания или любую версию',
+    ownLabel: 'Мои покупки',
+    empty: 'Покупок пока нет — разместите первый запрос.',
+    searchPlaceholder: 'Найти покупку, игру или покупателя',
+    filteredEmpty: 'По выбранным фильтрам покупок не найдено.',
+  },
+  exchange: {
+    eyebrow: 'MARKET / EXCHANGE',
+    title: 'Обмен',
+    description: 'Обмен изданиями между коллекционерами без покупки за деньги.',
+    cta: 'Предложить обмен',
+    hint: 'Прямой обмен изданиями по договорённости',
+    ownLabel: 'Мои обмены',
+    empty: 'Обменных предложений пока нет — разместите первое.',
+    searchPlaceholder: 'Найти обмен, игру или коллекционера',
+    filteredEmpty: 'По выбранным фильтрам обменов не найдено.',
   },
   auction: {
     eyebrow: 'MARKET / AUCTIONS',
@@ -58,8 +98,11 @@ const COPY: Record<MarketKind, MarketCopy> = {
 };
 
 /** Shared marketplace page: search/filters, entity grid, CTA and URL drawer. */
-export function MarketPage({ kind }: MarketPageProps) {
-  const copy = COPY[kind];
+export function MarketPage({ kind, listingType }: MarketPageProps) {
+  const selectedListingType = kind === 'listing' ? listingType : undefined;
+  const copyKey: MarketKind | MarketListingType =
+    kind === 'listing' ? (selectedListingType ?? 'listing') : kind;
+  const copy = COPY[copyKey];
   const navigate = useNavigate();
   const { user } = useAuth();
   const { games, editions } = useCollection();
@@ -99,20 +142,27 @@ export function MarketPage({ kind }: MarketPageProps) {
     () => entries.filter((entry) => entry.kind === kind),
     [entries, kind],
   );
+  const scopedItems = useMemo(
+    () =>
+      selectedListingType
+        ? kindItems.filter((entry) => entry.listingType === selectedListingType)
+        : kindItems,
+    [kindItems, selectedListingType],
+  );
   const ownCount = useMemo(
-    () => kindItems.filter((entry) => ownEntryIds.has(entry.id)).length,
-    [kindItems, ownEntryIds],
+    () => scopedItems.filter((entry) => ownEntryIds.has(entry.id)).length,
+    [scopedItems, ownEntryIds],
   );
   const baseItems = useMemo(
     () =>
-      kindItems.filter((entry) =>
+      scopedItems.filter((entry) =>
         showOwn
           ? ownEntryIds.has(entry.id)
           : entry.status === 'active' &&
             (entry.moderationStatus === undefined ||
               entry.moderationStatus === 'visible'),
       ),
-    [kindItems, ownEntryIds, showOwn],
+    [scopedItems, ownEntryIds, showOwn],
   );
   const visibleItems = useMemo(
     () => selectVisibleMarketEntries(baseItems, gamesById, editionsById, editions, filters),
@@ -200,14 +250,18 @@ export function MarketPage({ kind }: MarketPageProps) {
       )}
 
       <SearchToolbar
-        key={kind}
-        idPrefix={kind}
+        key={copyKey}
+        idPrefix={copyKey}
         ariaLabel={`Поиск и фильтры: ${copy.title}`}
         searchPlaceholder={copy.searchPlaceholder}
         query={filters.query}
         filterValues={filters}
         fields={MARKET_FILTER_FIELDS}
-        resultCountLabel={marketCountLabel(visibleItems.length, kind)}
+        resultCountLabel={marketCountLabel(
+          visibleItems.length,
+          kind,
+          selectedListingType,
+        )}
         onQueryChange={(query) => setValue('query', query)}
         onFilterChange={setValue}
         onReset={resetFilters}
@@ -294,6 +348,7 @@ export function MarketPage({ kind }: MarketPageProps) {
         isOwn={selectedIsOwn}
         isAuthenticated={Boolean(user) || !isRemote}
         kind={kind}
+        initialListingType={selectedListingType}
         entry={selectedEntry}
         game={selectedGame}
         edition={selectedEdition}

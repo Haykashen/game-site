@@ -1,4 +1,5 @@
 import {
+  ArrowLeftRight,
   BarChart3,
   Bell,
   Gamepad2,
@@ -6,6 +7,7 @@ import {
   Library,
   Settings2,
   ShieldCheck,
+  ShoppingBag,
   Tag,
   UserRound,
 } from 'lucide-react';
@@ -15,6 +17,9 @@ export type NavSectionId =
   | 'games'
   | 'auctions'
   | 'listings'
+  | 'sales'
+  | 'purchases'
+  | 'exchange'
   | 'collection'
   | 'notifications'
   | 'stats'
@@ -48,6 +53,7 @@ export const NAV_ITEMS = {
     path: '/auctions',
     icon: Gavel,
   },
+  /** Shared, unfiltered listing feed. Kept for old links and the mobile tab. */
   listings: {
     id: 'listings',
     label: 'Объявления',
@@ -55,6 +61,30 @@ export const NAV_ITEMS = {
     shortLabel: 'Объявления',
     path: '/listings',
     icon: Tag,
+  },
+  sales: {
+    id: 'sales',
+    label: 'Продажи',
+    pageTitle: 'Продажи',
+    shortLabel: 'Продажи',
+    path: '/listings/sales',
+    icon: Tag,
+  },
+  purchases: {
+    id: 'purchases',
+    label: 'Покупки',
+    pageTitle: 'Покупки',
+    shortLabel: 'Покупки',
+    path: '/listings/purchases',
+    icon: ShoppingBag,
+  },
+  exchange: {
+    id: 'exchange',
+    label: 'Обмен',
+    pageTitle: 'Обмен',
+    shortLabel: 'Обмен',
+    path: '/listings/exchange',
+    icon: ArrowLeftRight,
   },
   collection: {
     id: 'collection',
@@ -116,7 +146,13 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
   {
     id: 'market',
     label: 'Маркет',
-    items: [NAV_ITEMS.games, NAV_ITEMS.auctions, NAV_ITEMS.listings],
+    items: [
+      NAV_ITEMS.games,
+      NAV_ITEMS.auctions,
+      NAV_ITEMS.sales,
+      NAV_ITEMS.purchases,
+      NAV_ITEMS.exchange,
+    ],
   },
   {
     id: 'shelf',
@@ -141,8 +177,11 @@ export const MOBILE_ITEMS: ReadonlyArray<NavItem> = [
 
 export function findNavItem(pathname: string): NavItem | null {
   return (
-    Object.values(NAV_ITEMS).find(
-      (item) => pathname === item.path || pathname.startsWith(`${item.path}/`),
-    ) ?? null
+    Object.values(NAV_ITEMS)
+      .filter(
+        (item) => pathname === item.path || pathname.startsWith(`${item.path}/`),
+      )
+      // Nested routes such as /listings/sales must win over /listings.
+      .sort((left, right) => right.path.length - left.path.length)[0] ?? null
   );
 }
