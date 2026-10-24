@@ -5,6 +5,8 @@ import {
   Gamepad2,
   Gavel,
   Library,
+  MessagesSquare,
+  Newspaper,
   Settings2,
   ShieldCheck,
   ShoppingBag,
@@ -20,6 +22,8 @@ export type NavSectionId =
   | 'sales'
   | 'purchases'
   | 'exchange'
+  | 'discussions'
+  | 'news'
   | 'collection'
   | 'notifications'
   | 'stats'
@@ -85,6 +89,22 @@ export const NAV_ITEMS = {
     shortLabel: 'Обмен',
     path: '/listings/exchange',
     icon: ArrowLeftRight,
+  },
+  discussions: {
+    id: 'discussions',
+    label: 'Обсуждения',
+    pageTitle: 'Обсуждения',
+    shortLabel: 'Темы',
+    path: '/discussions',
+    icon: MessagesSquare,
+  },
+  news: {
+    id: 'news',
+    label: 'Новости',
+    pageTitle: 'Новости',
+    shortLabel: 'Новости',
+    path: '/news',
+    icon: Newspaper,
   },
   collection: {
     id: 'collection',
@@ -155,6 +175,11 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
     ],
   },
   {
+    id: 'community',
+    label: 'Сообщество',
+    items: [NAV_ITEMS.discussions, NAV_ITEMS.news],
+  },
+  {
     id: 'shelf',
     label: 'Моя полка',
     items: [NAV_ITEMS.collection, NAV_ITEMS.notifications, NAV_ITEMS.stats],
@@ -162,6 +187,8 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
 ];
 
 export const MOBILE_MORE_ITEMS: ReadonlyArray<NavItem> = [
+  NAV_ITEMS.discussions,
+  NAV_ITEMS.news,
   NAV_ITEMS.notifications,
   NAV_ITEMS.stats,
   NAV_ITEMS.account,

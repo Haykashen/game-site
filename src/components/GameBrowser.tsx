@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCollection } from '../context/CollectionContext';
 import { useMarketEntries } from '../hooks/useMarketEntries';
+import { discussionRoutePath } from '../lib/discussions';
 import { gameCoverImage } from '../lib/editions';
 import { marketListingPath } from '../lib/market';
 import type { Game, GameStats, MarketEntry } from '../types';
@@ -153,6 +154,13 @@ export function GameBrowser({
     [navigate],
   );
 
+  const openGameDiscussions = useCallback(
+    (targetGameId: string) => {
+      navigate(discussionRoutePath(targetGameId));
+    },
+    [navigate],
+  );
+
   return (
     <>
       <GameGrid
@@ -173,6 +181,7 @@ export function GameBrowser({
           entries={marketEntries}
           onClose={closeGame}
           onOpenMarketEntry={openMarketEntry}
+          onOpenDiscussions={openGameDiscussions}
           onAddCopy={addCopy}
           onSetEditionQuantity={setEditionQuantity}
           onRemoveEdition={removeEdition}

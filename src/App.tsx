@@ -8,8 +8,10 @@ import { AccountPage } from './pages/AccountPage';
 import { AdminReportsPage } from './pages/AdminReportsPage';
 import { AuctionsPage } from './pages/AuctionsPage';
 import { CollectionPage } from './pages/CollectionPage';
+import { DiscussionsPage } from './pages/DiscussionsPage';
 import { GamesPage } from './pages/GamesPage';
 import { ListingsPage } from './pages/ListingsPage';
+import { NewsPage } from './pages/NewsPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { StatsPage } from './pages/StatsPage';
@@ -40,6 +42,8 @@ export default function App() {
                     path="/listings/exchange"
                     element={<ListingsPage listingType="exchange" />}
                   />
+                  <Route path="/discussions" element={<DiscussionsPage />} />
+                  <Route path="/news" element={<NewsPage />} />
                   <Route path="/collection" element={<CollectionPage />} />
                   <Route path="/stats" element={<StatsPage />} />
                   <Route path="/notifications" element={<NotificationsPage />} />

@@ -23,6 +23,7 @@ interface GameModalProps {
   entries: readonly MarketEntry[];
   onClose: () => void;
   onOpenMarketEntry: (entry: MarketEntry) => void;
+  onOpenDiscussions: (gameId: string) => void;
   onAddCopy: (editionId: string) => void;
   onSetEditionQuantity: (editionId: string, quantity: number) => void;
   onRemoveEdition: (editionId: string) => void;
@@ -42,6 +43,7 @@ export function GameModal({
   entries,
   onClose,
   onOpenMarketEntry,
+  onOpenDiscussions,
   onAddCopy,
   onSetEditionQuantity,
   onRemoveEdition,
@@ -184,6 +186,7 @@ export function GameModal({
         activeTab={activeMarketTab}
         onChangeTab={setActiveMarketTab}
         onOpenEntry={onOpenMarketEntry}
+        onOpenDiscussions={() => onOpenDiscussions(game.id)}
       />
     </ModalShell>
   );

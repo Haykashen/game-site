@@ -88,6 +88,56 @@ export interface CatalogFilters {
   completeness: string;
 }
 
+/** Reply inside a community discussion topic. */
+export interface DiscussionComment {
+  id: string;
+  author: string;
+  body: string;
+  /** ISO timestamp of the reply. */
+  createdAt: string;
+}
+
+/** A game-scoped topic shown in the community feed and the game card. */
+export interface Discussion {
+  id: string;
+  gameId: string;
+  title: string;
+  /** One-line preview for the feed card. */
+  excerpt: string;
+  /** Full topic text; paragraphs are separated by blank lines. */
+  body: string;
+  author: string;
+  /** ISO timestamp of the opening post. */
+  createdAt: string;
+  /** ISO timestamp of the last reply or edit. */
+  updatedAt: string;
+  views: number;
+  tags: string[];
+  /** Pinned topics surface first and are used as the game's main discussion. */
+  pinned: boolean;
+  comments: DiscussionComment[];
+}
+
+/** Editorial sections used by the news feed. */
+export type NewsCategory = 'release' | 'guide' | 'community' | 'update';
+
+/** A news article from the DiscVault editorial feed. */
+export interface NewsPost {
+  id: string;
+  title: string;
+  /** Short card preview and article lead. */
+  excerpt: string;
+  /** Full article text; paragraphs are separated by blank lines. */
+  body: string;
+  category: NewsCategory;
+  author: string;
+  /** ISO timestamp of publication. */
+  publishedAt: string;
+  /** Related catalogue game, or null for site-wide stories. */
+  gameId: string | null;
+  tags: string[];
+}
+
 /** A marketplace entity: a fixed-price listing or an auction. */
 export type MarketKind = 'listing' | 'auction';
 
