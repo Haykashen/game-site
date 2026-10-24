@@ -7,7 +7,7 @@ import type {
   NotificationReadResponse,
   Paginated,
   SubscriptionListDto,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import { apiRequest } from './client';
 
 export interface NotificationListParams {

@@ -7,7 +7,7 @@ import {
   toMinorUnits,
   type BidDto,
   type PlaceBidResponse,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import { badRequest, conflict, forbidden, notFound, unauthorized } from '../errors.js';
 import {
   bidInclude,

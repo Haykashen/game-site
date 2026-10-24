@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { MarketCreateInput } from '@retrokeep/shared';
+import type { MarketCreateInput } from '@discvault/shared';
 import {
   createDealRequest,
   createMarketEntry,

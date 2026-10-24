@@ -1,7 +1,7 @@
 import { copyFileSync, statSync } from 'node:fs';
 
 const source = 'dist/index.html';
-const target = 'retrokeep_stage3.html';
+const target = 'discvault_stage3.html';
 
 copyFileSync(source, target);
 

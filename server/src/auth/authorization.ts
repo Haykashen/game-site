@@ -1,5 +1,5 @@
 import type { FastifyRequest } from 'fastify';
-import type { UserRole } from '@retrokeep/shared';
+import type { UserRole } from '@discvault/shared';
 import { forbidden, unauthorized } from '../errors.js';
 import type { SessionUser } from './session.js';
 

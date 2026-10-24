@@ -1,7 +1,7 @@
 import type { PrismaClient } from '@prisma/client';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { createHash, randomBytes } from 'node:crypto';
-import type { UserRole, UserStatus } from '@retrokeep/shared';
+import type { UserRole, UserStatus } from '@discvault/shared';
 import { env } from '../env.js';
 
 export const SESSION_COOKIE = 'rk_session';

@@ -10,7 +10,7 @@ import {
   type NotificationReadAllResponse,
   type NotificationReadResponse,
   type SubscriptionListDto,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import { notFound, unauthorized } from '../errors.js';
 import {
   gameSubscriptionInclude,

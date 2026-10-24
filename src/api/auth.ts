@@ -4,7 +4,7 @@ import type {
   RegisterInput,
   UpdateProfileInput,
   UserProfile,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import { apiRequest } from './client';
 
 export function fetchCurrentUser(): Promise<AuthResponse> {

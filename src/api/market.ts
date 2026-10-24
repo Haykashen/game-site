@@ -7,7 +7,7 @@ import type {
   MarketUpdateInput,
   Paginated,
   PlaceBidResponse,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import { apiRequest } from './client';
 
 export interface MarketListParams {

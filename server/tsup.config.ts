@@ -12,5 +12,5 @@ export default defineConfig({
   outDir: 'dist',
   clean: true,
   sourcemap: true,
-  noExternal: ['@retrokeep/shared'],
+  noExternal: ['@discvault/shared'],
 });

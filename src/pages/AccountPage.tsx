@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
-import type { DealDto } from '@retrokeep/shared';
+import type { DealDto } from '@discvault/shared';
 import {
   createReview,
   errorMessage,
@@ -466,7 +466,7 @@ export function AccountPage() {
           </form>
 
           <p className="market-form__hint">
-            Демо-аккаунт: demo@retrokeep.local / demo12345
+            Демо-аккаунт: demo@discvault.local / demo12345
           </p>
         </div>
       )}

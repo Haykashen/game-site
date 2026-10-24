@@ -32,7 +32,7 @@ function releaseDate(value: string): Date | null {
 }
 
 function demoEmail(slug: string): string {
-  return `${slug}@demo.retrokeep.local`;
+  return `${slug}@demo.discvault.local`;
 }
 
 function slugify(value: string): string {

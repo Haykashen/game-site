@@ -415,7 +415,7 @@ export function MarketEntryDetail({
           )}
           {tradeMessage && <p className="market-form__hint">{tradeMessage}</p>}
           <p className="market-trade__disclaimer">
-            RetroKeep не принимает оплату и не организует доставку: условия
+            DiscVault не принимает оплату и не организует доставку: условия
             обсуждаются напрямую между продавцом и покупателем.
           </p>
         </section>

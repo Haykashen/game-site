@@ -1,7 +1,7 @@
 import { Flag } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import type { ReportTargetType } from '@retrokeep/shared';
+import type { ReportTargetType } from '@discvault/shared';
 import { useAuth } from '../../context/AuthContext';
 import { ReportForm } from './ReportForm';
 

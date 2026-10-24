@@ -1,4 +1,5 @@
 import { BarChart3 } from 'lucide-react';
+import vaultArt from '../assets/discvault-vault.svg';
 import { PageHeading } from '../components/PageHeading';
 import { SectionPlaceholder } from '../components/SectionPlaceholder';
 
@@ -15,6 +16,10 @@ export function StatsPage() {
         title="Аналитика коллекции в разработке"
         description="Диаграммы будут строиться по вашей полке и лотам каталога — без ручного ввода."
         chips={['Стоимость коллекции', 'Платформы', 'Серии', 'Динамика цен']}
+        artwork={{
+          src: vaultArt,
+          alt: 'Хранилище DiscVault с дисками, картриджами и стеллажом физических изданий',
+        }}
       />
     </>
   );

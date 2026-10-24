@@ -1,5 +1,5 @@
 import type { FastifyInstance } from 'fastify';
-import { loginSchema, registerSchema, type AuthResponse } from '@retrokeep/shared';
+import { loginSchema, registerSchema, type AuthResponse } from '@discvault/shared';
 import { conflict, forbidden, unauthorized } from '../errors.js';
 import { getUserProfile } from '../lib/serializers.js';
 import { isPrismaError } from '../lib/prismaErrors.js';

@@ -202,7 +202,7 @@ export async function buildApp() {
   });
 
   app.get('/', async () => ({
-    service: 'retrokeep-api',
+    service: 'discvault-api',
     version: '1.0.0',
     docs: '/api/health',
   }));
@@ -213,7 +213,7 @@ export async function buildApp() {
 
       return reply.send({
         status: 'ok',
-        service: 'retrokeep-api',
+        service: 'discvault-api',
         database: 'up',
         time: new Date().toISOString(),
       });
@@ -222,7 +222,7 @@ export async function buildApp() {
 
       return reply.code(503).send({
         status: 'degraded',
-        service: 'retrokeep-api',
+        service: 'discvault-api',
         database: 'down',
         time: new Date().toISOString(),
       });

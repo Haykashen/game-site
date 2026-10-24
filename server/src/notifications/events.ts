@@ -1,5 +1,5 @@
 import type { Prisma, PrismaClient } from '@prisma/client';
-import { fromMinorUnits } from '@retrokeep/shared';
+import { fromMinorUnits } from '@discvault/shared';
 
 type Db = PrismaClient | Prisma.TransactionClient;
 

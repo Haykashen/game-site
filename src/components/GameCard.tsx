@@ -74,7 +74,7 @@ function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
 
         <div className="card-cover-placeholder">
           <span className="cover-kicker">
-            {'RETROKEEP '}
+            {'DISCVAULT '}
             <span className="cover-slash">/</span>
             {' ARCHIVE NO. '}
             <span className="cover-number">{String(game.year).slice(-2)}</span>

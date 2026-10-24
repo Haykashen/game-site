@@ -25,7 +25,7 @@ import {
   type ReportDto,
   type ReviewDto,
   type UserProfile,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import { serializeDeliveryServices } from './delivery.js';
 import { ratingFrom } from './rating.js';
 

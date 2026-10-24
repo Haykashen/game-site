@@ -19,7 +19,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     const title =
       section?.pageTitle ??
       (pathname.startsWith('/users/') ? 'Профиль коллекционера' : null);
-    document.title = title ? `${title} — RetroKeep` : 'RetroKeep';
+    document.title = title ? `${title} — DiscVault` : 'DiscVault';
   }, [pathname, section]);
 
   return (

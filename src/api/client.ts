@@ -1,4 +1,4 @@
-import type { ApiErrorBody } from '@retrokeep/shared';
+import type { ApiErrorBody } from '@discvault/shared';
 
 export class ApiError extends Error {
   readonly status: number;

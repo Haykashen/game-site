@@ -97,7 +97,7 @@ export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: Ma
               <span className="art-scanline" />
             </div>
             <div className="card-cover-placeholder">
-              <span className="cover-kicker">RETROKEEP / MARKET</span>
+              <span className="cover-kicker">DISCVAULT / MARKET</span>
               <span className="cover-title">{game?.title ?? entry.title}</span>
               <span className="cover-edition">
                 {edition

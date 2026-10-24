@@ -1,9 +1,9 @@
 {
-  "name": "retrokeep",
+  "name": "discvault",
   "private": true,
   "version": "3.0.0",
   "type": "module",
-  "description": "RetroKeep — collector platform for video games (React + TypeScript frontend, Fastify + Prisma backend)",
+  "description": "DiscVault — collector platform for video games (React + TypeScript frontend, Fastify + Prisma backend)",
   "workspaces": [
     "shared",
     "server"
@@ -12,20 +12,20 @@
     "dev": "vite",
     "dev:full": "concurrently -n web,api -c cyan,magenta \"vite\" \"npm run server:dev\"",
     "typecheck": "tsc --noEmit",
-    "typecheck:server": "npm run typecheck --workspace @retrokeep/server",
+    "typecheck:server": "npm run typecheck --workspace @discvault/server",
     "build": "npm run typecheck && vite build",
-    "build:server": "npm run build --workspace @retrokeep/server",
+    "build:server": "npm run build --workspace @discvault/server",
     "build:all": "npm run build && npm run build:server",
     "postbuild": "node scripts/copy-standalone.mjs",
     "preview": "vite preview",
-    "server:dev": "npm run dev --workspace @retrokeep/server",
-    "server:start": "npm run start --workspace @retrokeep/server",
-    "db:generate": "npm run prisma:generate --workspace @retrokeep/server",
-    "db:validate": "npm run prisma:validate --workspace @retrokeep/server",
-    "db:migrate": "npm run db:migrate --workspace @retrokeep/server",
-    "db:migrate:dev": "npm run db:migrate:dev --workspace @retrokeep/server",
-    "db:seed": "npm run db:seed --workspace @retrokeep/server",
-    "db:studio": "npm run db:studio --workspace @retrokeep/server"
+    "server:dev": "npm run dev --workspace @discvault/server",
+    "server:start": "npm run start --workspace @discvault/server",
+    "db:generate": "npm run prisma:generate --workspace @discvault/server",
+    "db:validate": "npm run prisma:validate --workspace @discvault/server",
+    "db:migrate": "npm run db:migrate --workspace @discvault/server",
+    "db:migrate:dev": "npm run db:migrate:dev --workspace @discvault/server",
+    "db:seed": "npm run db:seed --workspace @discvault/server",
+    "db:studio": "npm run db:studio --workspace @discvault/server"
   },
   "dependencies": {
     "lucide-react": "^1.61.0",

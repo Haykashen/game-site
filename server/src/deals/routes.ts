@@ -5,12 +5,12 @@ import {
   paginated,
   reviewCreateSchema,
   type DealDto,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import { dealInclude, reviewInclude, serializeDeal, serializeReview } from '../lib/serializers.js';
 import { conflict, forbidden, notFound, unauthorized } from '../errors.js';
 import { parse } from '../lib/validation.js';
 import { isPrismaError } from '../lib/prismaErrors.js';
-import { dealStatusUpdateSchema } from '@retrokeep/shared';
+import { dealStatusUpdateSchema } from '@discvault/shared';
 import {
   notifyDealCreated,
   notifyEntryStatusChange,

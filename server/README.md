@@ -1,4 +1,4 @@
-# RetroKeep API
+# DiscVault API
 
 Backend на Fastify + TypeScript + PostgreSQL + Prisma. Обслуживает каталог, коллекцию, маркет, аукционы, сделки, отзывы и загрузку фотографий. Frontend обращается к API по same-origin путям `/api/v1/*` (в dev-режиме через Vite proxy).
 
@@ -89,7 +89,7 @@ npm run db:studio        # Prisma Studio
 
 После `npm run db:seed`:
 
-- Email: `demo@retrokeep.local`
+- Email: `demo@discvault.local`
 - Пароль: `demo12345`
 
 Seed импортирует игры, издания и объявления из `src/data`. Авторы объявлений создаются как demo-пользователи с `is_demo = true`; вход под ними отключён. Для локальной демонстрации используется только аккаунт выше.

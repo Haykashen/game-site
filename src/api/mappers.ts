@@ -1,4 +1,4 @@
-import type { CopyDto, MarketEntryDto } from '@retrokeep/shared';
+import type { CopyDto, MarketEntryDto } from '@discvault/shared';
 import type { Copy, MarketEntry } from '../types';
 
 /**

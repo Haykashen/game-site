@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client';
-import type { MarketSearchQuery } from '@retrokeep/shared';
+import type { MarketSearchQuery } from '@discvault/shared';
 import { resolveYearRange } from '../lib/catalogData.js';
 
 export function buildMarketWhere(

@@ -1,7 +1,7 @@
 import { RefreshCw, Star, UserRound } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import type { PublicProfile, ReviewDto } from '@retrokeep/shared';
+import type { PublicProfile, ReviewDto } from '@discvault/shared';
 import {
   errorMessage,
   fetchPublicProfile,

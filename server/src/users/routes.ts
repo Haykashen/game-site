@@ -6,7 +6,7 @@ import {
   updateProfileSchema,
   type PublicProfile,
   type UpdateProfileInput,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import { notFound, unauthorized } from '../errors.js';
 import { isPrismaError } from '../lib/prismaErrors.js';
 import { storePhotoReference } from '../lib/storage.js';

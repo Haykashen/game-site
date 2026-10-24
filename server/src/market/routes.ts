@@ -10,7 +10,7 @@ import {
   type MarketCreateInput,
   type MarketEntryDto,
   type MarketSearchQuery,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import { badRequest, conflict, forbidden, notFound, unauthorized } from '../errors.js';
 import { deliveryServicesFromApi, serializeDeliveryServices } from '../lib/delivery.js';
 import { isPrismaError } from '../lib/prismaErrors.js';

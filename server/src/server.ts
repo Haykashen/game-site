@@ -12,7 +12,7 @@ async function shutdown(signal: string): Promise<void> {
   if (isShuttingDown) return;
   isShuttingDown = true;
 
-  app.log.info({ signal }, 'Shutting down RetroKeep API');
+  app.log.info({ signal }, 'Shutting down DiscVault API');
   stopWorker();
 
   try {
@@ -30,7 +30,7 @@ process.on('SIGTERM', () => void shutdown('SIGTERM'));
 try {
   await app.listen({ host: env.host, port: env.port });
 } catch (error) {
-  app.log.error({ err: error }, 'Failed to start RetroKeep API');
+  app.log.error({ err: error }, 'Failed to start DiscVault API');
   stopWorker();
   await app.close();
   process.exit(1);

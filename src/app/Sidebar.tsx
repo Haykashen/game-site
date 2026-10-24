@@ -1,5 +1,6 @@
-import { Disc, Settings2, UserRound } from 'lucide-react';
+import { Settings2, UserRound } from 'lucide-react';
 import { Link, NavLink } from 'react-router-dom';
+import { BrandMark } from '../components/BrandMark';
 import { useAuth } from '../context/AuthContext';
 import { useCollection } from '../context/CollectionContext';
 import { useNotifications } from '../context/NotificationsContext';
@@ -57,11 +58,9 @@ export function Sidebar() {
 
   return (
     <aside className="app-sidebar">
-      <Link to="/games" className="app-sidebar__brand" aria-label="RetroKeep — каталог игр">
-        <span className="logo-icon">
-          <Disc size={22} className="animate-spin-slow" aria-hidden="true" />
-        </span>
-        <span className="logo-text">RetroKeep</span>
+      <Link to="/games" className="app-sidebar__brand" aria-label="DiscVault — каталог игр">
+        <BrandMark className="logo-icon" />
+        <span className="logo-text">DiscVault</span>
       </Link>
 
       <div className="app-sidebar__nav" role="navigation" aria-label="Основная навигация">

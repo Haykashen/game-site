@@ -17,7 +17,7 @@ import type {
   ReportReason,
   ReportStatus,
   ReportTargetType,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import {
   errorMessage,
   listAdminReports,

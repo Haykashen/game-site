@@ -47,7 +47,7 @@ const envSchema = z.object({
     .enum(['true', 'false', '1', '0'])
     .default('true')
     .transform((value) => value === 'true' || value === '1'),
-  SEED_DEMO_EMAIL: z.string().trim().default('demo@retrokeep.local'),
+  SEED_DEMO_EMAIL: z.string().trim().default('demo@discvault.local'),
   SEED_DEMO_PASSWORD: z.string().min(8).default('demo12345'),
   SEED_DEMO_ROLE: z.enum(['user', 'moderator', 'admin']).default('user'),
 });

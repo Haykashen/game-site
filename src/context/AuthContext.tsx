@@ -12,7 +12,7 @@ import type {
   RegisterInput,
   UpdateProfileInput,
   UserProfile,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import {
   checkApiHealth,
   fetchCurrentUser,

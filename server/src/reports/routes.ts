@@ -9,7 +9,7 @@ import {
   reportCreateSchema,
   reportUpdateSchema,
   type ReportUpdateInput,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import { requireRoles } from '../auth/authorization.js';
 import { badRequest, conflict, forbidden, notFound, unauthorized } from '../errors.js';
 import { isPrismaError } from '../lib/prismaErrors.js';

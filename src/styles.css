@@ -266,14 +266,13 @@
         .purchases-price { color: var(--amber); }
         
         .hidden { display: none !important; }
-        .animate-spin-slow { animation: spin 10s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.2); border-radius: 99px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.4); }
 
-        /* RETROKEEP VISUAL PASS 01 — retro gaming, balanced catalog */
+        /* DISCVAULT VISUAL PASS 01 — retro gaming, balanced catalog */
         :root {
             color-scheme: light;
             --bg-main: #f3f0e7;
@@ -323,12 +322,20 @@
         button, input, select, textarea { font-family: 'Space Grotesk', sans-serif; }
         .max-w-7xl { max-width: 86rem; padding-left: clamp(1rem, 3vw, 2.5rem); padding-right: clamp(1rem, 3vw, 2.5rem); }
         nav { border-bottom-color: var(--border-color); box-shadow: 0 4px 24px rgba(0,0,0,.08); }
+        .brand-mark { display: block; flex: none; }
         .logo-icon {
-            border-radius: 8px;
-            background: var(--brand);
-            color: #172013;
-            padding: .6rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 9px;
+            background: transparent;
+            color: inherit;
+            padding: 0;
             box-shadow: 3px 3px 0 rgba(120,100,216,.55);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .app-sidebar__brand:hover .logo-icon {
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0 rgba(120,100,216,.65);
         }
         .logo-text {
             background: none;
@@ -487,7 +494,7 @@
         }
 
 
-        /* RETROKEEP VISUAL PASS 02 — original genre-inspired cover art */
+        /* DISCVAULT VISUAL PASS 02 — original genre-inspired cover art */
         .card-cover { position: relative; }
         .cover-art {
             position: absolute; inset: 0; overflow: hidden; z-index: 1;
@@ -749,22 +756,103 @@
             background: var(--glass-bg);
             -webkit-backdrop-filter: blur(12px);
             backdrop-filter: blur(12px);
+            overflow: hidden;
         }
+        .app-topbar__banner {
+            position: absolute; inset: 0; z-index: 0;
+            overflow: hidden; pointer-events: none;
+            background:
+                radial-gradient(95% 220% at 50% 50%, var(--banner-glow) 0%, transparent 58%),
+                linear-gradient(90deg, transparent 0%, var(--banner-tint) 36%, var(--banner-tint) 64%, transparent 100%);
+        }
+        .app-topbar__banner-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(241,243,233,.055) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(241,243,233,.055) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: .55;
+            -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+        }
+        .app-topbar__banner-art {
+            position: absolute; left: 50%; top: 50%;
+            width: 118px; height: 118px;
+            display: grid; place-items: center;
+            transform: translate(-50%, -50%) rotate(-8deg);
+            color: var(--banner-accent); opacity: .14;
+            filter: drop-shadow(0 0 20px var(--banner-glow));
+        }
+        .app-topbar__banner-art::before {
+            content: "";
+            position: absolute; inset: -9%;
+            border: 1px solid currentColor; border-radius: 50%;
+            opacity: .45;
+        }
+        .app-topbar__banner-art svg { width: 100%; height: 100%; }
+        .app-topbar__banner-rule {
+            position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--banner-accent) 16%, transparent 45%, var(--banner-accent) 78%, transparent 100%);
+            opacity: .5;
+        }
+        .app-topbar--lime { --banner-accent: #c0fa58; --banner-glow: rgba(192,250,88,.18); --banner-tint: rgba(192,250,88,.04); }
+        .app-topbar--amber { --banner-accent: #ffd17c; --banner-glow: rgba(255,209,124,.18); --banner-tint: rgba(255,209,124,.04); }
+        .app-topbar--pink { --banner-accent: #f071a5; --banner-glow: rgba(240,113,165,.18); --banner-tint: rgba(240,113,165,.04); }
+        .app-topbar--emerald { --banner-accent: #80d6a0; --banner-glow: rgba(128,214,160,.18); --banner-tint: rgba(128,214,160,.04); }
+        .app-topbar--violet { --banner-accent: #b18cff; --banner-glow: rgba(177,140,255,.2); --banner-tint: rgba(177,140,255,.045); }
+        .app-topbar--muted { --banner-accent: #a1ad9d; --banner-glow: rgba(161,173,157,.14); --banner-tint: rgba(161,173,157,.03); }
+        .app-topbar__brand,
+        .app-topbar__heading,
+        .app-topbar__actions { position: relative; z-index: 1; }
         .app-topbar__brand {
             display: none; flex: none; align-items: center;
             text-decoration: none;
         }
         .app-topbar__brand-mark {
-            width: 30px; height: 30px; display: grid; place-items: center;
-            border-radius: 7px; background: var(--brand); color: #172013;
+            width: 30px; height: 30px;
+            border-radius: 7px;
             box-shadow: 2px 2px 0 rgba(120,100,216,.5);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .app-topbar__brand:hover .app-topbar__brand-mark {
+            transform: translate(-1px, -1px);
+            box-shadow: 3px 3px 0 rgba(120,100,216,.6);
+        }
+        .app-topbar__heading {
+            min-width: 0;
+            display: flex; flex-direction: column; justify-content: center;
+            gap: .2rem;
+        }
+        .app-topbar__eyebrow {
+            display: flex; align-items: center; gap: .42rem;
+            min-width: 0;
+            color: var(--text-muted);
+            font: 600 .5rem/1.2 'IBM Plex Mono', monospace;
+            letter-spacing: .16em; text-transform: uppercase;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .app-topbar__eyebrow::before {
+            content: "";
+            width: 14px; height: 2px; flex: none;
+            border-radius: 999px;
+            background: var(--banner-accent);
+            box-shadow: 0 0 8px var(--banner-glow);
         }
         .app-topbar__title {
             min-width: 0;
             color: var(--text-main);
-            font-size: 1.02rem; font-weight: 700; letter-spacing: -.035em;
+            font-size: 1.02rem; font-weight: 700; letter-spacing: -.035em; line-height: 1.15;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
+        html:not(.dark) .app-topbar__banner-grid {
+            background-image:
+                linear-gradient(rgba(32,37,31,.055) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(32,37,31,.055) 1px, transparent 1px);
+        }
+        html:not(.dark) .app-topbar__banner-art { opacity: .12; }
+        html:not(.dark) .app-topbar__banner-art,
+        html:not(.dark) .app-topbar__banner-rule,
+        html:not(.dark) .app-topbar__eyebrow::before { filter: brightness(.62) saturate(.9); }
         .app-topbar__actions { margin-left: auto; display: flex; align-items: center; gap: .5rem; }
         .app-topbar .btn-lang {
             padding: .6rem .55rem; text-decoration: none;
@@ -818,6 +906,42 @@
             border: 1px dashed var(--border-color);
             border-radius: 14px;
         }
+        .placeholder-panel--with-art {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr);
+            align-items: center;
+            gap: clamp(1.25rem, 3vw, 2.5rem);
+            padding: clamp(.9rem, 2vw, 1.35rem);
+            text-align: left;
+        }
+        .placeholder-body {
+            display: flex; flex-direction: column; align-items: center; gap: .55rem;
+            width: 100%;
+        }
+        .placeholder-panel--with-art .placeholder-body {
+            align-items: flex-start;
+            padding: clamp(.35rem, 1.2vw, 1rem) clamp(.35rem, 1.2vw, 1rem) clamp(.35rem, 1.2vw, 1rem) 0;
+        }
+        .placeholder-panel--with-art .placeholder-chips { justify-content: flex-start; }
+        .placeholder-artwork,
+        .collection-empty__art {
+            position: relative;
+            margin: 0;
+            overflow: hidden;
+            background: #0b100c;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 5px 5px 0 rgba(120, 100, 216, .28), 0 18px 38px rgba(0, 0, 0, .16);
+        }
+        .placeholder-artwork::after,
+        .collection-empty__art::after {
+            content: "";
+            position: absolute; inset: 0;
+            pointer-events: none;
+            background: repeating-linear-gradient(to bottom, transparent 0 3px, rgba(255, 255, 255, .035) 4px);
+        }
+        .placeholder-artwork img,
+        .collection-empty__art img { display: block; width: 100%; height: auto; }
         .placeholder-icon {
             width: 56px; height: 56px; margin-bottom: .45rem;
             display: grid; place-items: center;
@@ -842,6 +966,10 @@
             background: var(--bg-main); color: var(--text-muted);
             border: 1px solid var(--border-color); border-radius: 5px;
             font: 500 .65rem/1.4 'IBM Plex Mono', monospace;
+        }
+        @media (max-width: 980px) {
+            .placeholder-panel--with-art { grid-template-columns: 1fr; padding: clamp(1rem, 4vw, 1.5rem); }
+            .placeholder-panel--with-art .placeholder-body { padding: .25rem 0 .5rem; }
         }
 
         .achievements-panel { display: flex; align-items: center; gap: .9rem; margin-bottom: 1.5rem; }
@@ -994,6 +1122,12 @@
             .profile-avatar { grid-row: span 2; }
             .profile-meta { grid-column: 2; }
             .profile-rating { grid-column: 2; justify-self: start; margin: 0; }
+
+            .app-topbar__banner-art { display: none; }
+            .app-topbar__banner-grid { opacity: .4; }
+            .app-topbar__eyebrow { display: none; }
+            .app-topbar__heading { gap: 0; }
+            .app-topbar__banner-rule { opacity: .38; }
         }
 
         @keyframes sheet-in {
@@ -2102,7 +2236,9 @@
             gap: 1rem;
             margin-bottom: 3rem;
         }
-        .collection-empty { margin-top: .5rem; }
+        .collection-empty { margin-top: .5rem; gap: 1.05rem; }
+        .collection-empty__art { width: min(100%, 760px); }
+        .collection-empty > p { max-width: 560px; }
         .copy-card {
             display: flex; flex-direction: column;
             overflow: hidden;

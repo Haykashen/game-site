@@ -15,7 +15,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { LucideIcon } from 'lucide-react';
-import type { NotificationDto, NotificationType } from '@retrokeep/shared';
+import type { NotificationDto, NotificationType } from '@discvault/shared';
 import {
   errorMessage,
   listNotifications,

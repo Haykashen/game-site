@@ -5,15 +5,15 @@ services:
     image: postgres:17-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: retrokeep
-      POSTGRES_PASSWORD: retrokeep
-      POSTGRES_DB: retrokeep
+      POSTGRES_USER: discvault
+      POSTGRES_PASSWORD: discvault
+      POSTGRES_DB: discvault
     ports:
       - '5432:5432'
     volumes:
-      - retrokeep-postgres:/var/lib/postgresql/data
+      - discvault-postgres:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U retrokeep -d retrokeep']
+      test: ['CMD-SHELL', 'pg_isready -U discvault -d discvault']
       interval: 5s
       timeout: 5s
       retries: 10
@@ -29,7 +29,7 @@ services:
       - '9000:9000'
       - '9001:9001'
     volumes:
-      - retrokeep-minio:/data
+      - discvault-minio:/data
 
   minio-init:
     image: minio/mc:latest
@@ -39,11 +39,11 @@ services:
     entrypoint: >
       /bin/sh -c "
       until mc alias set local http://minio:9000 minioadmin minioadmin; do sleep 1; done;
-      mc mb --ignore-existing local/retrokeep;
-      mc anonymous set download local/retrokeep;
-      echo 'MinIO bucket retrokeep is ready'
+      mc mb --ignore-existing local/discvault;
+      mc anonymous set download local/discvault;
+      echo 'MinIO bucket discvault is ready'
       "
 
 volumes:
-  retrokeep-postgres:
-  retrokeep-minio:
+  discvault-postgres:
+  discvault-minio:

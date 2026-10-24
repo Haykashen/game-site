@@ -9,7 +9,7 @@ import {
   type CollectionStatsDto,
   type CopyDetailsInput,
   type CopyDto,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import { conflict, notFound, unauthorized } from '../errors.js';
 import { serializeCopy } from '../lib/serializers.js';
 import { storePhotoReferences } from '../lib/storage.js';

@@ -1,5 +1,5 @@
 import type { DeliveryService } from '@prisma/client';
-import type { MarketDeliveryService } from '@retrokeep/shared';
+import type { MarketDeliveryService } from '@discvault/shared';
 
 const TO_API: Record<DeliveryService, MarketDeliveryService> = {
   russian_post: 'russian-post',

@@ -9,7 +9,7 @@ import type {
   ReportDto,
   ReportUpdateInput,
   UserProfile,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import { apiRequest } from './client';
 
 function querySuffix(

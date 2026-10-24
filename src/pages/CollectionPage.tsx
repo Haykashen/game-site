@@ -1,6 +1,7 @@
 import { Trophy } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import shelfArt from '../assets/discvault-shelf.svg';
 import { PageHeading } from '../components/PageHeading';
 import { CopyCard } from '../components/collection/CopyCard';
 import { CopyEditDrawer } from '../components/collection/CopyEditDrawer';
@@ -126,6 +127,15 @@ export function CollectionPage() {
 
       {items.length === 0 ? (
         <div className="market-empty collection-empty">
+          <figure className="collection-empty__art">
+            <img
+              src={shelfArt}
+              alt="Полка DiscVault с играми для приставок, картриджами и CRT-телевизором"
+              width={1600}
+              height={1000}
+              decoding="async"
+            />
+          </figure>
           <p>В коллекции пока нет экземпляров. Откройте игру и добавьте нужное издание.</p>
           <Link className="market-compose-btn" to="/games">
             Перейти в каталог

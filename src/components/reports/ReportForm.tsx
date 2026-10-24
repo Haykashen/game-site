@@ -1,7 +1,7 @@
 import { Send } from 'lucide-react';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import type { ReportReason, ReportTargetType } from '@retrokeep/shared';
+import type { ReportReason, ReportTargetType } from '@discvault/shared';
 import { createReport, errorMessage } from '../../api';
 import { FormField } from '../ui/FormField';
 

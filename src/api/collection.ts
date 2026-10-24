@@ -2,7 +2,7 @@ import type {
   CopyDetailsInput,
   CopyDto,
   CollectionStatsDto,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import { apiRequest } from './client';
 
 export function listCopies(): Promise<CopyDto[]> {

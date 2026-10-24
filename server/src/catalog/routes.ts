@@ -8,7 +8,7 @@ import {
   type EditionDetailDto,
   type GameDetailDto,
   type GameWithStatsDto,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import { notFound } from '../errors.js';
 import { resolveYearRange, seedFilters, seedPlatforms } from '../lib/catalogData.js';
 import { serializeEdition, serializeGame } from '../lib/serializers.js';

@@ -1,0 +1,924 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="shelf-title shelf-desc">
+  <title id="shelf-title">DiscVault shelf with console games</title>
+  <desc id="shelf-desc">A dark retro game shelf filled with console boxes, cartridges and discs, with a CRT television and a controller lit by lime and warm amber light.</desc>
+  <defs>
+    <radialGradient id="shelf-bg" cx="48%" cy="38%" r="82%">
+      <stop offset="0%" stop-color="#142017"/>
+      <stop offset="48%" stop-color="#0b100c"/>
+      <stop offset="100%" stop-color="#060906"/>
+    </radialGradient>
+    <radialGradient id="shelf-halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c0fa58" stop-opacity=".13"/>
+      <stop offset="52%" stop-color="#c0fa58" stop-opacity=".04"/>
+      <stop offset="100%" stop-color="#c0fa58" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shelf-warm" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffd17c" stop-opacity=".22"/>
+      <stop offset="100%" stop-color="#ffd17c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="shelf-metal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#52664d"/>
+      <stop offset="18%" stop-color="#2b382b"/>
+      <stop offset="45%" stop-color="#151d16"/>
+      <stop offset="72%" stop-color="#2f3d2d"/>
+      <stop offset="100%" stop-color="#101610"/>
+    </linearGradient>
+    <linearGradient id="shelf-metal2" x1="0" y1="0" x2="0.9" y2="1">
+      <stop offset="0%" stop-color="#394b37"/>
+      <stop offset="48%" stop-color="#1b251b"/>
+      <stop offset="100%" stop-color="#0c110d"/>
+    </linearGradient>
+    <linearGradient id="shelf-door" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5c7354"/>
+      <stop offset="16%" stop-color="#32452f"/>
+      <stop offset="46%" stop-color="#172017"/>
+      <stop offset="73%" stop-color="#293a28"/>
+      <stop offset="100%" stop-color="#0e140f"/>
+    </linearGradient>
+    <linearGradient id="shelf-screen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2f5a45"/>
+      <stop offset="52%" stop-color="#142b20"/>
+      <stop offset="100%" stop-color="#0a130e"/>
+    </linearGradient>
+    <linearGradient id="shelf-floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#172017"/>
+      <stop offset="100%" stop-color="#080c09"/>
+    </linearGradient>
+    <pattern id="shelf-grid" width="56" height="56" patternUnits="userSpaceOnUse">
+      <path d="M 56 0 L 0 0 0 56" fill="none" stroke="#87a273" stroke-width="1" opacity=".16"/>
+      <circle cx="56" cy="56" r="1.2" fill="#c0fa58" opacity=".2"/>
+    </pattern>
+    <pattern id="shelf-scan" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="1" fill="#ffffff" opacity=".055"/>
+    </pattern>
+    <pattern id="shelf-micro" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r=".7" fill="#c0fa58" opacity=".12"/>
+      <circle cx="11" cy="8" r=".55" fill="#7864d8" opacity=".14"/>
+    </pattern>
+    <filter id="shelf-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="shelf-soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+    <filter id="shelf-shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="14" stdDeviation="13" flood-color="#000000" flood-opacity=".55"/>
+    </filter>
+    <clipPath id="shelf-doorClip"><circle cx="520" cy="520" r="260"/></clipPath>
+    <clipPath id="shelf-screenClip"><rect x="677" y="303" width="246" height="184" rx="12"/></clipPath>
+    <style>
+      .shelf-mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+      .shelf-sans { font-family: 'Space Grotesk', ui-sans-serif, sans-serif; }
+    </style>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#shelf-bg)"/>
+  <rect width="1600" height="1000" fill="url(#shelf-grid)" opacity=".5"/>
+  <rect width="1600" height="1000" fill="url(#shelf-micro)" opacity=".5"/>
+  <ellipse cx="800" cy="470" rx="720" ry="500" fill="url(#shelf-halo)" opacity=".3"/>
+  <ellipse cx="1390" cy="430" rx="320" ry="380" fill="url(#shelf-warm)" opacity=".32"/>
+
+  <!-- wall and floor -->
+  <rect x="0" y="0" width="1600" height="820" fill="#0c120d" opacity=".5"/>
+  <path d="M 0 812 L 1600 812 L 1600 1000 L 0 1000 Z" fill="url(#shelf-floor)"/>
+  <path d="M 0 812 L 800 866 L 1600 812" fill="none" stroke="#3a4b39" stroke-width="1.8" opacity=".45"/>
+  <path d="M 110 812 L 430 1000" stroke="#2c3a2c" stroke-width="1.1" opacity=".24"/>
+  <path d="M 800 866 L 800 1000" stroke="#2c3a2c" stroke-width="1.1" opacity=".24"/>
+  <path d="M 1490 812 L 1170 1000" stroke="#2c3a2c" stroke-width="1.1" opacity=".24"/>
+  <rect width="1600" height="1000" fill="url(#shelf-scan)" opacity=".8"/>
+
+  <!-- top labels -->
+  <g class="shelf-mono">
+    <rect x="76" y="56" width="8" height="8" rx="2" fill="#c0fa58" filter="url(#shelf-glow)"/>
+    <text x="98" y="66" font-size="15" letter-spacing="4.6" fill="#c0fa58">DISCVAULT // THE SHELF</text>
+    <text x="1524" y="66" text-anchor="end" font-size="11" letter-spacing="3" fill="#a1ad9d">COLLECTION / 128 TITLES</text>
+  </g>
+
+  <!-- shelf frame -->
+  <g filter="url(#shelf-shadow)">
+    <rect x="142" y="128" width="1316" height="704" rx="8" fill="#0a0f0b" stroke="#344432" stroke-width="2.4"/>
+    <rect x="154" y="140" width="1292" height="680" fill="#111a12" stroke="#263426" stroke-width="1.5"/>
+    <rect x="156" y="142" width="6" height="676" fill="#2b3828"/>
+    <rect x="1438" y="142" width="6" height="676" fill="#2b3828"/>
+    <g>
+    <rect x="182" y="168" width="332" height="110" fill="#101711" opacity=".72"/>
+    <rect x="186" y="172" width="324" height="100" fill="#0b100c" opacity=".55"/>
+    <g transform="translate(193.0 184.4) rotate(0.28 0 80.6)">
+    <rect width="20.1" height="80.6" rx="2" fill="#5b4a2d" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="20.1" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="16.1" height="3" fill="#80d6a0" opacity=".75"/>
+    <rect x="2" y="75.6" width="16.1" height="2" fill="#000000" opacity=".35"/>
+    <text x="10.1" y="68.6" transform="rotate(-90 10.1 68.6)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#80d6a0" opacity=".9">SAT</text>
+  </g><g transform="translate(218.0 178.2) rotate(-0.08 0 86.8)">
+    <rect width="20.3" height="86.8" rx="2" fill="#4a5b2c" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="20.3" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="16.3" height="3" fill="#c0fa58" opacity=".75"/>
+    <rect x="2" y="81.8" width="16.3" height="2" fill="#000000" opacity=".35"/>
+    <text x="10.1" y="74.8" transform="rotate(-90 10.1 74.8)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#c0fa58" opacity=".9">CD</text>
+  </g><g transform="translate(240.6 198.8) rotate(-1.42 0 66.2)">
+    <rect width="26.2" height="66.2" rx="2" fill="#2d4b3a" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="26.2" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="22.2" height="3" fill="#f071a5" opacity=".75"/>
+    <rect x="2" y="61.2" width="22.2" height="2" fill="#000000" opacity=".35"/>
+    <text x="13.1" y="54.2" transform="rotate(-90 13.1 54.2)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#f071a5" opacity=".9">SPACE</text>
+  </g><g transform="translate(270.7 193.2) rotate(0.79 0 71.8)">
+    <rect width="27.8" height="71.8" rx="2" fill="#2d4b3a" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="27.8" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="23.8" height="3" fill="#ffd17c" opacity=".75"/>
+    <rect x="2" y="66.8" width="23.8" height="2" fill="#000000" opacity=".35"/>
+    <text x="13.9" y="59.8" transform="rotate(-90 13.9 59.8)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#ffd17c" opacity=".9">SNES</text>
+  </g><g transform="translate(303.3 225.0)">
+    <rect width="40.7" height="40.0" rx="4" fill="#3b5a45" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="32.7" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 32.7" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 32.7" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="28.7" height="6.0" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="22.7" height="8" rx="1" fill="#c0fa58" opacity=".82"/>
+    <text x="20.4" y="30.0" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#c0fa58">FIGHT</text>
+  </g><g transform="translate(348.9 203.0) rotate(0.86 0 62.0)">
+    <rect width="20.9" height="62.0" rx="2" fill="#2d4b3a" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="20.9" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="16.9" height="3" fill="#7864d8" opacity=".75"/>
+    <rect x="2" y="57.0" width="16.9" height="2" fill="#000000" opacity=".35"/>
+    <text x="10.5" y="50.0" transform="rotate(-90 10.5 50.0)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#7864d8" opacity=".9">P1</text>
+  </g><g transform="translate(372.8 220.5)">
+    <rect width="35.9" height="44.5" rx="4" fill="#2f4b55" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="27.9" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 27.9" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 27.9" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="23.9" height="10.5" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="17.9" height="8" rx="1" fill="#7864d8" opacity=".82"/>
+    <text x="17.9" y="34.5" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#7864d8">ARC</text>
+  </g><g transform="translate(413.5 188.7)">
+    <rect width="27.910962756723166" height="76.30428465874866" rx="2" fill="#4a5b2c" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="4" y="4" width="19.910962756723166" height="28.99562817032449" fill="#0b100c" opacity=".7"/>
+    <rect x="8" y="9" width="11.910962756723166" height="3" fill="#f071a5" opacity=".85"/>
+    <circle cx="13.955481378361583" cy="48.07169933501165" r="3.6284251583740117" fill="none" stroke="#f071a5" stroke-width="1.2" opacity=".55"/>
+    <text x="13.955481378361583" y="70.30428465874866" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1" fill="#f071a5" opacity=".9">CD</text>
+  </g><g transform="translate(444.4 221.5)">
+    <rect width="38.8" height="43.5" rx="4" fill="#2f4b55" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="30.8" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 30.8" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 30.8" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="26.8" height="9.5" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="20.8" height="8" rx="1" fill="#ffd17c" opacity=".82"/>
+    <text x="19.4" y="33.5" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#ffd17c">ARC</text>
+  </g><g transform="translate(486.7 181.6) rotate(-1.20 0 83.4)">
+    <rect width="15.8" height="83.4" rx="2" fill="#3e3e48" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="15.8" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="11.8" height="3" fill="#ffd17c" opacity=".75"/>
+    <rect x="2" y="78.4" width="11.8" height="2" fill="#000000" opacity=".35"/>
+    <text x="7.9" y="71.4" transform="rotate(-90 7.9 71.4)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#ffd17c" opacity=".9">RACE</text>
+  </g>
+    <rect x="179" y="270" width="338" height="9" rx="2" fill="#263326" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="179" y="270" width="338" height="2" fill="#ffffff" opacity=".13"/>
+    <rect x="187" y="275" width="322" height="2" rx="1" fill="#c0fa58" opacity=".85" filter="url(#glow)"/>
+  </g><g>
+    <rect x="182" y="290" width="332" height="110" fill="#101711" opacity=".72"/>
+    <rect x="186" y="294" width="324" height="100" fill="#0b100c" opacity=".55"/>
+    <g transform="translate(193.0 342.2)">
+    <rect width="40.6" height="44.8" rx="4" fill="#4a5b2c" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="32.6" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 32.6" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 32.6" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="28.6" height="10.8" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="22.6" height="8" rx="1" fill="#7864d8" opacity=".82"/>
+    <text x="20.3" y="34.8" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#7864d8">SAT</text>
+  </g><g transform="translate(239.2 355.5)">
+    <rect width="31.468336490448564" height="31.468336490448564" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="23.468336490448564" height="23.468336490448564" rx="1" fill="#4a5b2c"/>
+    <circle cx="15.734168245224282" cy="15.734168245224282" r="8.496450852421113" fill="none" stroke="#c0fa58" stroke-width="1.4" opacity=".8"/>
+    <circle cx="15.734168245224282" cy="15.734168245224282" r="2.5174669192358854" fill="#c0fa58" opacity=".7"/>
+    <path d="M 6 8 H 25.468336490448564" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="23.468336490448564" width="23.468336490448564" height="2" fill="#000000" opacity=".35"/>
+  </g><g transform="translate(273.7 330.0) rotate(0.96 0 57.0)">
+    <rect width="18.9" height="57.0" rx="2" fill="#3e3e48" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="18.9" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="14.9" height="3" fill="#ffd17c" opacity=".75"/>
+    <rect x="2" y="52.0" width="14.9" height="2" fill="#000000" opacity=".35"/>
+    <text x="9.4" y="45.0" transform="rotate(-90 9.4 45.0)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#ffd17c" opacity=".9">SNES</text>
+  </g><g transform="translate(296.4 355.6)">
+    <rect width="31.402386761270463" height="31.402386761270463" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="23.402386761270463" height="23.402386761270463" rx="1" fill="#3b5a45"/>
+    <circle cx="15.701193380635232" cy="15.701193380635232" r="8.478644425543026" fill="none" stroke="#f5f0d0" stroke-width="1.4" opacity=".8"/>
+    <circle cx="15.701193380635232" cy="15.701193380635232" r="2.512190940901637" fill="#f5f0d0" opacity=".7"/>
+    <path d="M 6 8 H 25.402386761270463" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="23.402386761270463" width="23.402386761270463" height="2" fill="#000000" opacity=".35"/>
+  </g><g transform="translate(330.8 355.5)">
+    <rect width="31.50020773895085" height="31.50020773895085" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="23.50020773895085" height="23.50020773895085" rx="1" fill="#5b4a2d"/>
+    <circle cx="15.750103869475424" cy="15.750103869475424" r="8.50505608951673" fill="none" stroke="#c0fa58" stroke-width="1.4" opacity=".8"/>
+    <circle cx="15.750103869475424" cy="15.750103869475424" r="2.520016619116068" fill="#c0fa58" opacity=".7"/>
+    <path d="M 6 8 H 25.50020773895085" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="23.50020773895085" width="23.50020773895085" height="2" fill="#000000" opacity=".35"/>
+  </g><g transform="translate(365.3 346.1)">
+    <rect width="40.850285288412124" height="40.850285288412124" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="32.850285288412124" height="32.850285288412124" rx="1" fill="#5d3b4c"/>
+    <circle cx="20.425142644206062" cy="20.425142644206062" r="11.029577027871275" fill="none" stroke="#80d6a0" stroke-width="1.4" opacity=".8"/>
+    <circle cx="20.425142644206062" cy="20.425142644206062" r="3.26802282307297" fill="#80d6a0" opacity=".7"/>
+    <path d="M 6 8 H 34.850285288412124" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="32.850285288412124" width="32.850285288412124" height="2" fill="#000000" opacity=".35"/>
+  </g><g transform="translate(409.2 349.3)">
+    <rect width="37.66117840912193" height="37.66117840912193" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="29.66117840912193" height="29.66117840912193" rx="1" fill="#5a2f3a"/>
+    <circle cx="18.830589204560965" cy="18.830589204560965" r="10.168518170462923" fill="none" stroke="#c0fa58" stroke-width="1.4" opacity=".8"/>
+    <circle cx="18.830589204560965" cy="18.830589204560965" r="3.0128942727297545" fill="#c0fa58" opacity=".7"/>
+    <path d="M 6 8 H 31.66117840912193" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="29.66117840912193" width="29.66117840912193" height="2" fill="#000000" opacity=".35"/>
+  </g><g transform="translate(449.8 331.2)">
+    <rect width="42.7" height="55.8" rx="4" fill="#464a2f" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="34.7" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 34.7" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 34.7" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="30.7" height="21.8" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="24.7" height="8" rx="1" fill="#7864d8" opacity=".82"/>
+    <text x="21.3" y="45.8" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#7864d8">SPACE</text>
+  </g>
+    <rect x="179" y="392" width="338" height="9" rx="2" fill="#263326" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="179" y="392" width="338" height="2" fill="#ffffff" opacity=".13"/>
+    <rect x="187" y="397" width="322" height="2" rx="1" fill="#c0fa58" opacity=".85" filter="url(#glow)"/>
+  </g><g>
+    <rect x="182" y="412" width="332" height="110" fill="#101711" opacity=".72"/>
+    <rect x="186" y="416" width="324" height="100" fill="#0b100c" opacity=".55"/>
+    <g transform="translate(193.0 444.5) rotate(0.06 0 64.5)">
+    <rect width="28.0" height="64.5" rx="2" fill="#5d3b4c" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="28.0" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="24.0" height="3" fill="#7864d8" opacity=".75"/>
+    <rect x="2" y="59.5" width="24.0" height="2" fill="#000000" opacity=".35"/>
+    <text x="14.0" y="52.5" transform="rotate(-90 14.0 52.5)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#7864d8" opacity=".9">MD</text>
+  </g><g transform="translate(224.6 465.9)">
+    <rect width="42.5" height="43.1" rx="4" fill="#5b4a2d" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="34.5" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 34.5" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 34.5" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="30.5" height="9.1" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="24.5" height="8" rx="1" fill="#f071a5" opacity=".82"/>
+    <text x="21.3" y="33.1" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#f071a5">N64</text>
+  </g><g transform="translate(272.4 458.3)">
+    <rect width="34.5" height="50.7" rx="4" fill="#2d4b3a" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="26.5" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 26.5" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 26.5" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="22.5" height="16.7" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="16.5" height="8" rx="1" fill="#7864d8" opacity=".82"/>
+    <text x="17.3" y="40.7" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#7864d8">PCE</text>
+  </g><g transform="translate(312.0 463.6)">
+    <rect width="39.3" height="45.4" rx="4" fill="#2b4b4b" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="31.3" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 31.3" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 31.3" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="27.3" height="11.4" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="21.3" height="8" rx="1" fill="#ffd17c" opacity=".82"/>
+    <text x="19.6" y="35.4" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#ffd17c">RACE</text>
+  </g><g transform="translate(355.8 433.7) rotate(-1.51 0 75.3)">
+    <rect width="17.3" height="75.3" rx="2" fill="#5a2f3a" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="17.3" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="13.3" height="3" fill="#f5f0d0" opacity=".75"/>
+    <rect x="2" y="70.3" width="13.3" height="2" fill="#000000" opacity=".35"/>
+    <text x="8.6" y="63.3" transform="rotate(-90 8.6 63.3)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#f5f0d0" opacity=".9">SPACE</text>
+  </g><g transform="translate(377.9 436.9) rotate(0.88 0 72.1)">
+    <rect width="24.1" height="72.1" rx="2" fill="#2b4b4b" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="24.1" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="20.1" height="3" fill="#c0fa58" opacity=".75"/>
+    <rect x="2" y="67.1" width="20.1" height="2" fill="#000000" opacity=".35"/>
+    <text x="12.1" y="60.1" transform="rotate(-90 12.1 60.1)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#c0fa58" opacity=".9">N64</text>
+  </g><g transform="translate(404.8 427.9) rotate(0.65 0 81.1)">
+    <rect width="29.8" height="81.1" rx="2" fill="#5b4a2d" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="29.8" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="25.8" height="3" fill="#f5f0d0" opacity=".75"/>
+    <rect x="2" y="76.1" width="25.8" height="2" fill="#000000" opacity=".35"/>
+    <text x="14.9" y="69.1" transform="rotate(-90 14.9 69.1)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#f5f0d0" opacity=".9">N64</text>
+  </g><g transform="translate(439.2 427.2) rotate(-0.52 0 81.8)">
+    <rect width="26.8" height="81.8" rx="2" fill="#2f4b55" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="26.8" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="22.8" height="3" fill="#7864d8" opacity=".75"/>
+    <rect x="2" y="76.8" width="22.8" height="2" fill="#000000" opacity=".35"/>
+    <text x="13.4" y="69.8" transform="rotate(-90 13.4 69.8)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#7864d8" opacity=".9">RPG</text>
+  </g>
+    <rect x="179" y="514" width="338" height="9" rx="2" fill="#263326" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="179" y="514" width="338" height="2" fill="#ffffff" opacity=".13"/>
+    <rect x="187" y="519" width="322" height="2" rx="1" fill="#c0fa58" opacity=".85" filter="url(#glow)"/>
+  </g><g>
+    <rect x="182" y="534" width="332" height="110" fill="#101711" opacity=".72"/>
+    <rect x="186" y="538" width="324" height="100" fill="#0b100c" opacity=".55"/>
+    <g transform="translate(193.0 559.4)">
+    <rect width="38.73049205541611" height="71.56015857215971" rx="2" fill="#3b5a45" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="4" y="4" width="30.730492055416107" height="27.19286025742069" fill="#0b100c" opacity=".7"/>
+    <rect x="8" y="9" width="22.730492055416107" height="3" fill="#ffd17c" opacity=".85"/>
+    <circle cx="19.365246027708054" cy="45.08289990046062" r="5.034963967204094" fill="none" stroke="#ffd17c" stroke-width="1.2" opacity=".55"/>
+    <text x="19.365246027708054" y="65.56015857215971" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1" fill="#ffd17c" opacity=".9">P1</text>
+  </g><g transform="translate(234.7 592.6)">
+    <rect width="38.381473027635366" height="38.381473027635366" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="30.381473027635366" height="30.381473027635366" rx="1" fill="#2f4b55"/>
+    <circle cx="19.190736513817683" cy="19.190736513817683" r="10.36299771746155" fill="none" stroke="#ffd17c" stroke-width="1.4" opacity=".8"/>
+    <circle cx="19.190736513817683" cy="19.190736513817683" r="3.0705178422108292" fill="#ffd17c" opacity=".7"/>
+    <path d="M 6 8 H 32.381473027635366" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="30.381473027635366" width="30.381473027635366" height="2" fill="#000000" opacity=".35"/>
+  </g><g transform="translate(276.1 566.6)">
+    <rect width="38.800227504223585" height="64.4235540474765" rx="2" fill="#5a2f3a" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="4" y="4" width="30.800227504223585" height="24.48095053804107" fill="#0b100c" opacity=".7"/>
+    <rect x="8" y="9" width="22.800227504223585" height="3" fill="#f071a5" opacity=".85"/>
+    <circle cx="19.400113752111793" cy="40.586839049910196" r="5.044029575549066" fill="none" stroke="#f071a5" stroke-width="1.2" opacity=".55"/>
+    <text x="19.400113752111793" y="58.4235540474765" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1" fill="#f071a5" opacity=".9">CD</text>
+  </g><g transform="translate(317.9 591.9)">
+    <rect width="39.147767428308725" height="39.147767428308725" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="31.147767428308725" height="31.147767428308725" rx="1" fill="#4b455f"/>
+    <circle cx="19.573883714154363" cy="19.573883714154363" r="10.569897205643356" fill="none" stroke="#f5f0d0" stroke-width="1.4" opacity=".8"/>
+    <circle cx="19.573883714154363" cy="19.573883714154363" r="3.131821394264698" fill="#f5f0d0" opacity=".7"/>
+    <path d="M 6 8 H 33.147767428308725" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="31.147767428308725" width="31.147767428308725" height="2" fill="#000000" opacity=".35"/>
+  </g><g transform="translate(360.1 576.3)">
+    <rect width="43.2" height="54.7" rx="4" fill="#5b4a2d" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="35.2" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 35.2" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 35.2" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="31.2" height="20.7" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="25.2" height="8" rx="1" fill="#7864d8" opacity=".82"/>
+    <text x="21.6" y="44.7" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#7864d8">SPACE</text>
+  </g><g transform="translate(407.9 545.2) rotate(-1.39 0 85.8)">
+    <rect width="26.5" height="85.8" rx="2" fill="#464a2f" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="26.5" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="22.5" height="3" fill="#c0fa58" opacity=".75"/>
+    <rect x="2" y="80.8" width="22.5" height="2" fill="#000000" opacity=".35"/>
+    <text x="13.2" y="73.8" transform="rotate(-90 13.2 73.8)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#c0fa58" opacity=".9">RACE</text>
+  </g><g transform="translate(437.3 577.4)">
+    <rect width="39.1" height="53.6" rx="4" fill="#3e3e48" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="31.1" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 31.1" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 31.1" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="27.1" height="19.6" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="21.1" height="8" rx="1" fill="#ffd17c" opacity=".82"/>
+    <text x="19.6" y="43.6" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#ffd17c">SAT</text>
+  </g><g transform="translate(481.3 570.0) rotate(-0.81 0 61.0)">
+    <rect width="17.6" height="61.0" rx="2" fill="#2f4b55" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="17.6" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="13.6" height="3" fill="#f071a5" opacity=".75"/>
+    <rect x="2" y="56.0" width="13.6" height="2" fill="#000000" opacity=".35"/>
+    <text x="8.8" y="49.0" transform="rotate(-90 8.8 49.0)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#f071a5" opacity=".9">MD</text>
+  </g>
+    <rect x="179" y="636" width="338" height="9" rx="2" fill="#263326" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="179" y="636" width="338" height="2" fill="#ffffff" opacity=".13"/>
+    <rect x="187" y="641" width="322" height="2" rx="1" fill="#c0fa58" opacity=".85" filter="url(#glow)"/>
+  </g><g>
+    <rect x="182" y="656" width="332" height="110" fill="#101711" opacity=".72"/>
+    <rect x="186" y="660" width="324" height="100" fill="#0b100c" opacity=".55"/>
+    <g transform="translate(193.0 699.6)">
+    <rect width="40.5" height="53.4" rx="4" fill="#3e3e48" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="32.5" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 32.5" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 32.5" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="28.5" height="19.4" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="22.5" height="8" rx="1" fill="#c0fa58" opacity=".82"/>
+    <text x="20.2" y="43.4" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#c0fa58">P1</text>
+  </g><g transform="translate(236.7 720.0)">
+    <rect width="32.97262585395947" height="32.97262585395947" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="24.97262585395947" height="24.97262585395947" rx="1" fill="#3e3e48"/>
+    <circle cx="16.486312926979735" cy="16.486312926979735" r="8.902608980569058" fill="none" stroke="#7864d8" stroke-width="1.4" opacity=".8"/>
+    <circle cx="16.486312926979735" cy="16.486312926979735" r="2.6378100683167576" fill="#7864d8" opacity=".7"/>
+    <path d="M 6 8 H 26.97262585395947" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="24.97262585395947" width="24.97262585395947" height="2" fill="#000000" opacity=".35"/>
+  </g><g transform="translate(272.6 718.8)">
+    <rect width="34.1650898209773" height="34.1650898209773" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="26.1650898209773" height="26.1650898209773" rx="1" fill="#4b455f"/>
+    <circle cx="17.08254491048865" cy="17.08254491048865" r="9.224574251663872" fill="none" stroke="#f071a5" stroke-width="1.4" opacity=".8"/>
+    <circle cx="17.08254491048865" cy="17.08254491048865" r="2.733207185678184" fill="#f071a5" opacity=".7"/>
+    <path d="M 6 8 H 28.1650898209773" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="26.1650898209773" width="26.1650898209773" height="2" fill="#000000" opacity=".35"/>
+  </g><g transform="translate(309.8 662.8) rotate(0.09 0 90.2)">
+    <rect width="24.7" height="90.2" rx="2" fill="#5a2f3a" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="24.7" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="20.7" height="3" fill="#f5f0d0" opacity=".75"/>
+    <rect x="2" y="85.2" width="20.7" height="2" fill="#000000" opacity=".35"/>
+    <text x="12.4" y="78.2" transform="rotate(-90 12.4 78.2)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#f5f0d0" opacity=".9">GBA</text>
+  </g><g transform="translate(338.6 699.5)">
+    <rect width="46.6" height="53.5" rx="4" fill="#2f4b55" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="38.6" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 38.6" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 38.6" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="34.6" height="19.5" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="28.6" height="8" rx="1" fill="#ffd17c" opacity=".82"/>
+    <text x="23.3" y="43.5" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#ffd17c">PCE</text>
+  </g><g transform="translate(389.4 702.4)">
+    <rect width="46.7" height="50.6" rx="4" fill="#5a2f3a" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="38.7" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 38.7" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 38.7" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="34.7" height="16.6" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="28.7" height="8" rx="1" fill="#f5f0d0" opacity=".82"/>
+    <text x="23.4" y="40.6" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#f5f0d0">RACE</text>
+  </g><g transform="translate(440.1 670.7) rotate(-0.92 0 82.3)">
+    <rect width="14.0" height="82.3" rx="2" fill="#4a5b2c" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="14.0" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="10.0" height="3" fill="#7864d8" opacity=".75"/>
+    <rect x="2" y="77.3" width="10.0" height="2" fill="#000000" opacity=".35"/>
+    
+  </g><g transform="translate(457.9 682.4) rotate(-1.34 0 70.6)">
+    <rect width="18.9" height="70.6" rx="2" fill="#4b455f" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="18.9" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="14.9" height="3" fill="#ffd17c" opacity=".75"/>
+    <rect x="2" y="65.6" width="14.9" height="2" fill="#000000" opacity=".35"/>
+    <text x="9.4" y="58.6" transform="rotate(-90 9.4 58.6)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#ffd17c" opacity=".9">SAT</text>
+  </g>
+    <rect x="179" y="758" width="338" height="9" rx="2" fill="#263326" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="179" y="758" width="338" height="2" fill="#ffffff" opacity=".13"/>
+    <rect x="187" y="763" width="322" height="2" rx="1" fill="#c0fa58" opacity=".85" filter="url(#glow)"/>
+  </g>
+    <g>
+    <rect x="1086" y="168" width="332" height="110" fill="#101711" opacity=".72"/>
+    <rect x="1090" y="172" width="324" height="100" fill="#0b100c" opacity=".55"/>
+    <g transform="translate(1097.0 200.4) rotate(1.28 0 64.6)">
+    <rect width="23.6" height="64.6" rx="2" fill="#2f4b55" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="23.6" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="19.6" height="3" fill="#f071a5" opacity=".75"/>
+    <rect x="2" y="59.6" width="19.6" height="2" fill="#000000" opacity=".35"/>
+    <text x="11.8" y="52.6" transform="rotate(-90 11.8 52.6)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#f071a5" opacity=".9">FIGHT</text>
+  </g><g transform="translate(1124.4 221.8)">
+    <rect width="35.3" height="43.2" rx="4" fill="#4a5b2c" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="27.3" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 27.3" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 27.3" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="23.3" height="9.2" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="17.3" height="8" rx="1" fill="#80d6a0" opacity=".82"/>
+    <text x="17.6" y="33.2" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#80d6a0">MD</text>
+  </g><g transform="translate(1165.3 227.6)">
+    <rect width="37.35743320686743" height="37.35743320686743" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="29.357433206867427" height="29.357433206867427" rx="1" fill="#5b4a2d"/>
+    <circle cx="18.678716603433713" cy="18.678716603433713" r="10.086506965854205" fill="none" stroke="#f071a5" stroke-width="1.4" opacity=".8"/>
+    <circle cx="18.678716603433713" cy="18.678716603433713" r="2.9885946565493944" fill="#f071a5" opacity=".7"/>
+    <path d="M 6 8 H 31.357433206867427" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="29.357433206867427" width="29.357433206867427" height="2" fill="#000000" opacity=".35"/>
+  </g><g transform="translate(1205.6 180.2) rotate(-0.45 0 84.8)">
+    <rect width="29.3" height="84.8" rx="2" fill="#4a5b2c" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="29.3" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="25.3" height="3" fill="#c0fa58" opacity=".75"/>
+    <rect x="2" y="79.8" width="25.3" height="2" fill="#000000" opacity=".35"/>
+    <text x="14.6" y="72.8" transform="rotate(-90 14.6 72.8)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#c0fa58" opacity=".9">SAT</text>
+  </g><g transform="translate(1237.9 180.6) rotate(-0.73 0 84.4)">
+    <rect width="27.0" height="84.4" rx="2" fill="#513d5a" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="27.0" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="23.0" height="3" fill="#c0fa58" opacity=".75"/>
+    <rect x="2" y="79.4" width="23.0" height="2" fill="#000000" opacity=".35"/>
+    <text x="13.5" y="72.4" transform="rotate(-90 13.5 72.4)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#c0fa58" opacity=".9">DVD</text>
+  </g><g transform="translate(1267.5 177.4) rotate(-0.24 0 87.6)">
+    <rect width="29.3" height="87.6" rx="2" fill="#5a2f3a" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="29.3" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="25.3" height="3" fill="#f5f0d0" opacity=".75"/>
+    <rect x="2" y="82.6" width="25.3" height="2" fill="#000000" opacity=".35"/>
+    <text x="14.7" y="75.6" transform="rotate(-90 14.7 75.6)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#f5f0d0" opacity=".9">CD</text>
+  </g><g transform="translate(1301.0 177.8) rotate(1.08 0 87.2)">
+    <rect width="22.6" height="87.2" rx="2" fill="#5b4a2d" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="22.6" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="18.6" height="3" fill="#f071a5" opacity=".75"/>
+    <rect x="2" y="82.2" width="18.6" height="2" fill="#000000" opacity=".35"/>
+    <text x="11.3" y="75.2" transform="rotate(-90 11.3 75.2)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#f071a5" opacity=".9">PCE</text>
+  </g><g transform="translate(1327.1 206.8) rotate(0.18 0 58.2)">
+    <rect width="27.7" height="58.2" rx="2" fill="#2d4b3a" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="27.7" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="23.7" height="3" fill="#7864d8" opacity=".75"/>
+    <rect x="2" y="53.2" width="23.7" height="2" fill="#000000" opacity=".35"/>
+    <text x="13.9" y="46.2" transform="rotate(-90 13.9 46.2)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#7864d8" opacity=".9">DC</text>
+  </g><g transform="translate(1357.0 193.5)">
+    <rect width="40.790616530925035" height="71.52585902018473" rx="2" fill="#4b455f" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="4" y="4" width="32.790616530925035" height="27.179826427670196" fill="#0b100c" opacity=".7"/>
+    <rect x="8" y="9" width="24.790616530925035" height="3" fill="#7864d8" opacity=".85"/>
+    <circle cx="20.395308265462518" cy="45.061291182716374" r="5.302780149020255" fill="none" stroke="#7864d8" stroke-width="1.2" opacity=".55"/>
+    <text x="20.395308265462518" y="65.52585902018473" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1" fill="#7864d8" opacity=".9">SAT</text>
+  </g>
+    <rect x="1083" y="270" width="338" height="9" rx="2" fill="#263326" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="1083" y="270" width="338" height="2" fill="#ffffff" opacity=".13"/>
+    <rect x="1091" y="275" width="322" height="2" rx="1" fill="#c0fa58" opacity=".85" filter="url(#glow)"/>
+  </g><g>
+    <rect x="1086" y="290" width="332" height="110" fill="#101711" opacity=".72"/>
+    <rect x="1090" y="294" width="324" height="100" fill="#0b100c" opacity=".55"/>
+    <g transform="translate(1097.0 319.3) rotate(-1.05 0 67.7)">
+    <rect width="18.9" height="67.7" rx="2" fill="#5d3b4c" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="18.9" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="14.9" height="3" fill="#80d6a0" opacity=".75"/>
+    <rect x="2" y="62.7" width="14.9" height="2" fill="#000000" opacity=".35"/>
+    <text x="9.4" y="55.7" transform="rotate(-90 9.4 55.7)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#80d6a0" opacity=".9">DVD</text>
+  </g><g transform="translate(1118.8 353.8)">
+    <rect width="33.19272409565747" height="33.19272409565747" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="25.192724095657468" height="25.192724095657468" rx="1" fill="#3b5a45"/>
+    <circle cx="16.596362047828734" cy="16.596362047828734" r="8.962035505827517" fill="none" stroke="#f5f0d0" stroke-width="1.4" opacity=".8"/>
+    <circle cx="16.596362047828734" cy="16.596362047828734" r="2.6554179276525973" fill="#f5f0d0" opacity=".7"/>
+    <path d="M 6 8 H 27.192724095657468" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="25.192724095657468" width="25.192724095657468" height="2" fill="#000000" opacity=".35"/>
+  </g><g transform="translate(1155.0 311.7) rotate(-1.47 0 75.3)">
+    <rect width="16.4" height="75.3" rx="2" fill="#5a2f3a" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="16.4" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="12.4" height="3" fill="#f5f0d0" opacity=".75"/>
+    <rect x="2" y="70.3" width="12.4" height="2" fill="#000000" opacity=".35"/>
+    <text x="8.2" y="63.3" transform="rotate(-90 8.2 63.3)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#f5f0d0" opacity=".9">PSX</text>
+  </g><g transform="translate(1175.4 340.7)">
+    <rect width="45.1" height="46.3" rx="4" fill="#513d5a" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="37.1" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 37.1" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 37.1" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="33.1" height="12.3" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="27.1" height="8" rx="1" fill="#80d6a0" opacity=".82"/>
+    <text x="22.5" y="36.3" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#80d6a0">DC</text>
+  </g><g transform="translate(1226.1 314.6) rotate(-1.08 0 72.4)">
+    <rect width="29.3" height="72.4" rx="2" fill="#2b4b4b" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="29.3" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="25.3" height="3" fill="#ffd17c" opacity=".75"/>
+    <rect x="2" y="67.4" width="25.3" height="2" fill="#000000" opacity=".35"/>
+    <text x="14.7" y="60.4" transform="rotate(-90 14.7 60.4)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#ffd17c" opacity=".9">FIGHT</text>
+  </g><g transform="translate(1259.9 315.7) rotate(1.33 0 71.3)">
+    <rect width="20.3" height="71.3" rx="2" fill="#5b4a2d" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="20.3" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="16.3" height="3" fill="#ffd17c" opacity=".75"/>
+    <rect x="2" y="66.3" width="16.3" height="2" fill="#000000" opacity=".35"/>
+    <text x="10.2" y="59.3" transform="rotate(-90 10.2 59.3)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#ffd17c" opacity=".9">PSX</text>
+  </g><g transform="translate(1284.6 320.6) rotate(1.37 0 66.4)">
+    <rect width="17.2" height="66.4" rx="2" fill="#4b455f" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="17.2" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="13.2" height="3" fill="#f071a5" opacity=".75"/>
+    <rect x="2" y="61.4" width="13.2" height="2" fill="#000000" opacity=".35"/>
+    <text x="8.6" y="54.4" transform="rotate(-90 8.6 54.4)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#f071a5" opacity=".9">RPG</text>
+  </g><g transform="translate(1303.9 301.6) rotate(-1.00 0 85.4)">
+    <rect width="25.6" height="85.4" rx="2" fill="#5a2f3a" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="25.6" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="21.6" height="3" fill="#80d6a0" opacity=".75"/>
+    <rect x="2" y="80.4" width="21.6" height="2" fill="#000000" opacity=".35"/>
+    <text x="12.8" y="73.4" transform="rotate(-90 12.8 73.4)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#80d6a0" opacity=".9">ARC</text>
+  </g><g transform="translate(1333.6 306.7) rotate(1.01 0 80.3)">
+    <rect width="21.3" height="80.3" rx="2" fill="#5a2f3a" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="21.3" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="17.3" height="3" fill="#f5f0d0" opacity=".75"/>
+    <rect x="2" y="75.3" width="17.3" height="2" fill="#000000" opacity=".35"/>
+    <text x="10.7" y="68.3" transform="rotate(-90 10.7 68.3)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#f5f0d0" opacity=".9">P1</text>
+  </g><g transform="translate(1357.6 329.6) rotate(-0.09 0 57.4)">
+    <rect width="22.7" height="57.4" rx="2" fill="#4a5b2c" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="22.7" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="18.7" height="3" fill="#c0fa58" opacity=".75"/>
+    <rect x="2" y="52.4" width="18.7" height="2" fill="#000000" opacity=".35"/>
+    <text x="11.4" y="45.4" transform="rotate(-90 11.4 45.4)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#c0fa58" opacity=".9">RACE</text>
+  </g>
+    <rect x="1083" y="392" width="338" height="9" rx="2" fill="#263326" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="1083" y="392" width="338" height="2" fill="#ffffff" opacity=".13"/>
+    <rect x="1091" y="397" width="322" height="2" rx="1" fill="#c0fa58" opacity=".85" filter="url(#glow)"/>
+  </g><g>
+    <rect x="1086" y="412" width="332" height="110" fill="#101711" opacity=".72"/>
+    <rect x="1090" y="416" width="324" height="100" fill="#0b100c" opacity=".55"/>
+    <g transform="translate(1097.0 436.9) rotate(-0.41 0 72.1)">
+    <rect width="24.4" height="72.1" rx="2" fill="#4b455f" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="24.4" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="20.4" height="3" fill="#7864d8" opacity=".75"/>
+    <rect x="2" y="67.1" width="20.4" height="2" fill="#000000" opacity=".35"/>
+    <text x="12.2" y="60.1" transform="rotate(-90 12.2 60.1)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#7864d8" opacity=".9">CD</text>
+  </g><g transform="translate(1123.8 469.6)">
+    <rect width="39.403567001223564" height="39.403567001223564" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="31.403567001223564" height="31.403567001223564" rx="1" fill="#4a5b2c"/>
+    <circle cx="19.701783500611782" cy="19.701783500611782" r="10.638963090330362" fill="none" stroke="#7864d8" stroke-width="1.4" opacity=".8"/>
+    <circle cx="19.701783500611782" cy="19.701783500611782" r="3.1522853600978853" fill="#7864d8" opacity=".7"/>
+    <path d="M 6 8 H 33.403567001223564" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="31.403567001223564" width="31.403567001223564" height="2" fill="#000000" opacity=".35"/>
+  </g><g transform="translate(1166.2 443.0) rotate(-1.03 0 66.0)">
+    <rect width="23.3" height="66.0" rx="2" fill="#2b4b4b" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="23.3" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="19.3" height="3" fill="#c0fa58" opacity=".75"/>
+    <rect x="2" y="61.0" width="19.3" height="2" fill="#000000" opacity=".35"/>
+    <text x="11.6" y="54.0" transform="rotate(-90 11.6 54.0)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#c0fa58" opacity=".9">SAT</text>
+  </g><g transform="translate(1192.1 441.5) rotate(1.09 0 67.5)">
+    <rect width="14.9" height="67.5" rx="2" fill="#5d3b4c" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="14.9" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="10.9" height="3" fill="#f071a5" opacity=".75"/>
+    <rect x="2" y="62.5" width="10.9" height="2" fill="#000000" opacity=".35"/>
+    
+  </g><g transform="translate(1211.3 475.0)">
+    <rect width="34.0438861832954" height="34.0438861832954" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="26.0438861832954" height="26.0438861832954" rx="1" fill="#4a5b2c"/>
+    <circle cx="17.0219430916477" cy="17.0219430916477" r="9.191849269489758" fill="none" stroke="#f071a5" stroke-width="1.4" opacity=".8"/>
+    <circle cx="17.0219430916477" cy="17.0219430916477" r="2.723510894663632" fill="#f071a5" opacity=".7"/>
+    <path d="M 6 8 H 28.0438861832954" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="26.0438861832954" width="26.0438861832954" height="2" fill="#000000" opacity=".35"/>
+  </g><g transform="translate(1248.3 449.6) rotate(0.74 0 59.4)">
+    <rect width="16.9" height="59.4" rx="2" fill="#2f4b55" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="16.9" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="12.9" height="3" fill="#80d6a0" opacity=".75"/>
+    <rect x="2" y="54.4" width="12.9" height="2" fill="#000000" opacity=".35"/>
+    <text x="8.4" y="47.4" transform="rotate(-90 8.4 47.4)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#80d6a0" opacity=".9">P1</text>
+  </g><g transform="translate(1267.9 453.1)">
+    <rect width="39.5" height="55.9" rx="4" fill="#464a2f" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="31.5" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 31.5" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 31.5" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="27.5" height="21.9" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="21.5" height="8" rx="1" fill="#ffd17c" opacity=".82"/>
+    <text x="19.7" y="45.9" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#ffd17c">SPACE</text>
+  </g><g transform="translate(1310.4 471.8)">
+    <rect width="37.235871370881796" height="37.235871370881796" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="29.235871370881796" height="29.235871370881796" rx="1" fill="#5b4a2d"/>
+    <circle cx="18.617935685440898" cy="18.617935685440898" r="10.053685270138086" fill="none" stroke="#f071a5" stroke-width="1.4" opacity=".8"/>
+    <circle cx="18.617935685440898" cy="18.617935685440898" r="2.9788697096705437" fill="#f071a5" opacity=".7"/>
+    <path d="M 6 8 H 31.235871370881796" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="29.235871370881796" width="29.235871370881796" height="2" fill="#000000" opacity=".35"/>
+  </g><g transform="translate(1350.7 460.1)">
+    <rect width="41.0" height="48.9" rx="4" fill="#5d3b4c" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="33.0" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 33.0" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 33.0" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="29.0" height="14.9" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="23.0" height="8" rx="1" fill="#f071a5" opacity=".82"/>
+    <text x="20.5" y="38.9" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#f071a5">DC</text>
+  </g>
+    <rect x="1083" y="514" width="338" height="9" rx="2" fill="#263326" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="1083" y="514" width="338" height="2" fill="#ffffff" opacity=".13"/>
+    <rect x="1091" y="519" width="322" height="2" rx="1" fill="#c0fa58" opacity=".85" filter="url(#glow)"/>
+  </g><g>
+    <rect x="1086" y="534" width="332" height="110" fill="#101711" opacity=".72"/>
+    <rect x="1090" y="538" width="324" height="100" fill="#0b100c" opacity=".55"/>
+    <g transform="translate(1097.0 572.0) rotate(0.34 0 59.0)">
+    <rect width="25.6" height="59.0" rx="2" fill="#3b5a45" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="25.6" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="21.6" height="3" fill="#ffd17c" opacity=".75"/>
+    <rect x="2" y="54.0" width="21.6" height="2" fill="#000000" opacity=".35"/>
+    <text x="12.8" y="47.0" transform="rotate(-90 12.8 47.0)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#ffd17c" opacity=".9">PCE</text>
+  </g><g transform="translate(1125.3 563.8) rotate(0.71 0 67.2)">
+    <rect width="16.7" height="67.2" rx="2" fill="#513d5a" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="16.7" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="12.7" height="3" fill="#7864d8" opacity=".75"/>
+    <rect x="2" y="62.2" width="12.7" height="2" fill="#000000" opacity=".35"/>
+    <text x="8.4" y="55.2" transform="rotate(-90 8.4 55.2)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#7864d8" opacity=".9">DC</text>
+  </g><g transform="translate(1146.6 588.2)">
+    <rect width="45.5" height="42.8" rx="4" fill="#2b4b4b" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="37.5" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 37.5" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 37.5" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="33.5" height="8.8" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="27.5" height="8" rx="1" fill="#80d6a0" opacity=".82"/>
+    <text x="22.7" y="32.8" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#80d6a0">CD</text>
+  </g><g transform="translate(1195.7 593.9)">
+    <rect width="37.137916871812195" height="37.137916871812195" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="29.137916871812195" height="29.137916871812195" rx="1" fill="#2f4b55"/>
+    <circle cx="18.568958435906097" cy="18.568958435906097" r="10.027237555389293" fill="none" stroke="#f071a5" stroke-width="1.4" opacity=".8"/>
+    <circle cx="18.568958435906097" cy="18.568958435906097" r="2.9710333497449755" fill="#f071a5" opacity=".7"/>
+    <path d="M 6 8 H 31.137916871812195" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="29.137916871812195" width="29.137916871812195" height="2" fill="#000000" opacity=".35"/>
+  </g><g transform="translate(1235.9 551.7) rotate(0.07 0 79.3)">
+    <rect width="14.8" height="79.3" rx="2" fill="#464a2f" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="14.8" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="10.8" height="3" fill="#ffd17c" opacity=".75"/>
+    <rect x="2" y="74.3" width="10.8" height="2" fill="#000000" opacity=".35"/>
+    
+  </g><g transform="translate(1253.1 556.9) rotate(-0.68 0 74.1)">
+    <rect width="26.0" height="74.1" rx="2" fill="#4b455f" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="26.0" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="22.0" height="3" fill="#f5f0d0" opacity=".75"/>
+    <rect x="2" y="69.1" width="22.0" height="2" fill="#000000" opacity=".35"/>
+    <text x="13.0" y="62.1" transform="rotate(-90 13.0 62.1)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#f5f0d0" opacity=".9">SNES</text>
+  </g><g transform="translate(1283.7 576.6)">
+    <rect width="41.5" height="54.4" rx="4" fill="#2b4b4b" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="33.5" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 33.5" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 33.5" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="29.5" height="20.4" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="23.5" height="8" rx="1" fill="#ffd17c" opacity=".82"/>
+    <text x="20.8" y="44.4" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#ffd17c">P1</text>
+  </g><g transform="translate(1328.9 556.8)">
+    <rect width="37.36099826171994" height="74.24640768533573" rx="2" fill="#5d3b4c" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="4" y="4" width="29.360998261719942" height="28.213634920427577" fill="#0b100c" opacity=".7"/>
+    <rect x="8" y="9" width="21.360998261719942" height="3" fill="#7864d8" opacity=".85"/>
+    <circle cx="18.68049913085997" cy="46.775236841761505" r="4.856929774023593" fill="none" stroke="#7864d8" stroke-width="1.2" opacity=".55"/>
+    <text x="18.68049913085997" y="68.24640768533573" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1" fill="#7864d8" opacity=".9">RPG</text>
+  </g>
+    <rect x="1083" y="636" width="338" height="9" rx="2" fill="#263326" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="1083" y="636" width="338" height="2" fill="#ffffff" opacity=".13"/>
+    <rect x="1091" y="641" width="322" height="2" rx="1" fill="#c0fa58" opacity=".85" filter="url(#glow)"/>
+  </g><g>
+    <rect x="1086" y="656" width="332" height="110" fill="#101711" opacity=".72"/>
+    <rect x="1090" y="660" width="324" height="100" fill="#0b100c" opacity=".55"/>
+    <g transform="translate(1097.0 667.8) rotate(-1.59 0 85.2)">
+    <rect width="28.6" height="85.2" rx="2" fill="#4b455f" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="28.6" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="24.6" height="3" fill="#ffd17c" opacity=".75"/>
+    <rect x="2" y="80.2" width="24.6" height="2" fill="#000000" opacity=".35"/>
+    <text x="14.3" y="73.2" transform="rotate(-90 14.3 73.2)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#ffd17c" opacity=".9">N64</text>
+  </g><g transform="translate(1127.7 667.9) rotate(0.58 0 85.1)">
+    <rect width="17.4" height="85.1" rx="2" fill="#5a2f3a" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="17.4" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="13.4" height="3" fill="#f071a5" opacity=".75"/>
+    <rect x="2" y="80.1" width="13.4" height="2" fill="#000000" opacity=".35"/>
+    <text x="8.7" y="73.1" transform="rotate(-90 8.7 73.1)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#f071a5" opacity=".9">SPACE</text>
+  </g><g transform="translate(1147.4 679.0)">
+    <rect width="28.027657467871904" height="73.986817156896" rx="2" fill="#5b4a2d" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="4" y="4" width="20.027657467871904" height="28.114990519620477" fill="#0b100c" opacity=".7"/>
+    <rect x="8" y="9" width="12.027657467871904" height="3" fill="#ffd17c" opacity=".85"/>
+    <circle cx="14.013828733935952" cy="46.611694808844476" r="3.643595470823348" fill="none" stroke="#ffd17c" stroke-width="1.2" opacity=".55"/>
+    <text x="14.013828733935952" y="67.986817156896" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1" fill="#ffd17c" opacity=".9">DVD</text>
+  </g><g transform="translate(1178.4 690.8) rotate(1.54 0 62.2)">
+    <rect width="17.5" height="62.2" rx="2" fill="#2d4b3a" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="17.5" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="13.5" height="3" fill="#f071a5" opacity=".75"/>
+    <rect x="2" y="57.2" width="13.5" height="2" fill="#000000" opacity=".35"/>
+    <text x="8.7" y="50.2" transform="rotate(-90 8.7 50.2)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#f071a5" opacity=".9">PSX</text>
+  </g><g transform="translate(1198.1 718.7)">
+    <rect width="34.31972257466987" height="34.31972257466987" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="26.319722574669868" height="26.319722574669868" rx="1" fill="#5b4a2d"/>
+    <circle cx="17.159861287334934" cy="17.159861287334934" r="9.266325095160864" fill="none" stroke="#ffd17c" stroke-width="1.4" opacity=".8"/>
+    <circle cx="17.159861287334934" cy="17.159861287334934" r="2.7455778059735896" fill="#ffd17c" opacity=".7"/>
+    <path d="M 6 8 H 28.319722574669868" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="26.319722574669868" width="26.319722574669868" height="2" fill="#000000" opacity=".35"/>
+  </g><g transform="translate(1235.4 679.2)">
+    <rect width="29.662734728306532" height="73.77906521596014" rx="2" fill="#2b4b4b" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="4" y="4" width="21.662734728306532" height="28.036044782064856" fill="#0b100c" opacity=".7"/>
+    <rect x="8" y="9" width="13.662734728306532" height="3" fill="#f071a5" opacity=".85"/>
+    <circle cx="14.831367364153266" cy="46.48081108605489" r="3.856155514679849" fill="none" stroke="#f071a5" stroke-width="1.2" opacity=".55"/>
+    <text x="14.831367364153266" y="67.77906521596014" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1" fill="#f071a5" opacity=".9">GBA</text>
+  </g><g transform="translate(1268.1 673.7) rotate(0.25 0 79.3)">
+    <rect width="22.9" height="79.3" rx="2" fill="#5a2f3a" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="22.9" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="18.9" height="3" fill="#ffd17c" opacity=".75"/>
+    <rect x="2" y="74.3" width="18.9" height="2" fill="#000000" opacity=".35"/>
+    <text x="11.4" y="67.3" transform="rotate(-90 11.4 67.3)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#ffd17c" opacity=".9">DC</text>
+  </g><g transform="translate(1295.0 709.7)">
+    <rect width="43.1" height="43.3" rx="4" fill="#5a2f3a" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="35.1" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 35.1" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 35.1" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="31.1" height="9.3" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="25.1" height="8" rx="1" fill="#80d6a0" opacity=".82"/>
+    <text x="21.6" y="33.3" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#80d6a0">RPG</text>
+  </g><g transform="translate(1343.4 665.2) rotate(1.42 0 87.8)">
+    <rect width="20.2" height="87.8" rx="2" fill="#2d4b3a" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="20.2" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="16.2" height="3" fill="#7864d8" opacity=".75"/>
+    <rect x="2" y="82.8" width="16.2" height="2" fill="#000000" opacity=".35"/>
+    <text x="10.1" y="75.8" transform="rotate(-90 10.1 75.8)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.4" fill="#7864d8" opacity=".9">MD</text>
+  </g><g transform="translate(1366.7 717.1)">
+    <rect width="35.87657780991867" height="35.87657780991867" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="27.876577809918672" height="27.876577809918672" rx="1" fill="#513d5a"/>
+    <circle cx="17.938288904959336" cy="17.938288904959336" r="9.686676008678042" fill="none" stroke="#c0fa58" stroke-width="1.4" opacity=".8"/>
+    <circle cx="17.938288904959336" cy="17.938288904959336" r="2.870126224793494" fill="#c0fa58" opacity=".7"/>
+    <path d="M 6 8 H 29.876577809918672" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="27.876577809918672" width="27.876577809918672" height="2" fill="#000000" opacity=".35"/>
+  </g>
+    <rect x="1083" y="758" width="338" height="9" rx="2" fill="#263326" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="1083" y="758" width="338" height="2" fill="#ffffff" opacity=".13"/>
+    <rect x="1091" y="763" width="322" height="2" rx="1" fill="#c0fa58" opacity=".85" filter="url(#glow)"/>
+  </g>
+
+    <!-- center display niche -->
+    <rect x="562" y="146" width="476" height="664" rx="4" fill="#0b110c" stroke="#334331" stroke-width="1.8"/>
+    <rect x="571" y="155" width="458" height="646" fill="#0e150f" opacity=".9"/>
+
+    <!-- top center: boxed console and small poster -->
+    <g transform="translate(660 178)">
+      <rect width="280" height="54" rx="3" fill="#2b3a2c" stroke="#0a0f0b" stroke-width="1.4"/>
+      <rect x="8" y="8" width="112" height="38" fill="#101711"/>
+      <rect x="14" y="14" width="72" height="4" fill="#c0fa58" opacity=".8"/>
+      <circle cx="94" cy="28" r="4" fill="#7864d8"/>
+      <text x="238" y="22" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="2" fill="#a1ad9d">CONSOLE / 16-BIT</text>
+      <text x="238" y="35" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10" letter-spacing="1.4" fill="#f1f3e9">DV-16</text>
+      <text x="238" y="47" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1.6" fill="#c0fa58">READY</text>
+    </g>
+
+    <!-- CRT television -->
+    <g filter="url(#shelf-shadow)">
+      <rect x="652" y="272" width="296" height="250" rx="16" fill="#1a241b" stroke="#52664d" stroke-width="2.2"/>
+      <rect x="664" y="284" width="272" height="216" rx="12" fill="#080c09" stroke="#0a0f0b" stroke-width="3"/>
+      <rect x="677" y="303" width="246" height="184" rx="12" fill="url(#shelf-screen)" stroke="#2d442f" stroke-width="2"/>
+      <g clip-path="url(#shelf-screenClip)">
+        <circle cx="856" cy="344" r="34" fill="#ffd17c" opacity=".72"/>
+        <circle cx="856" cy="344" r="52" fill="#ffd17c" opacity=".08"/>
+        <path d="M 677 470 L 748 384 L 816 452 L 884 370 L 940 452 L 980 408 L 980 487 L 677 487 Z" fill="#0b1810" opacity=".9"/>
+        <path d="M 677 487 L 748 422 L 816 468 L 884 402 L 940 466 L 980 436 L 980 487 Z" fill="#12251a"/>
+        <rect x="690" y="456" width="18" height="18" fill="#c0fa58" opacity=".9"/>
+        <rect x="698" y="448" width="18" height="18" fill="#c0fa58" opacity=".55"/>
+        <rect x="706" y="440" width="10" height="10" fill="#c0fa58"/>
+        <path d="M 700 474 H 730" stroke="#c0fa58" stroke-width="2" opacity=".4"/>
+        <rect x="677" y="303" width="246" height="184" fill="url(#shelf-scan)" opacity=".7"/>
+        <text x="800" y="324" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="8" letter-spacing="3.4" fill="#e3ffb0" opacity=".8">PLAYER ONE</text>
+        <text x="800" y="470" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="2.8" fill="#c0fa58" opacity=".8">PRESS START</text>
+      </g>
+      <circle cx="930" cy="516" r="4" fill="#c0fa58" filter="url(#shelf-glow)"/>
+      <rect x="682" y="512" width="40" height="3" rx="1.5" fill="#52664d"/>
+      <rect x="874" y="512" width="64" height="3" rx="1.5" fill="#52664d"/>
+    </g>
+
+    <!-- console below tv -->
+    <g>
+      <rect x="668" y="552" width="264" height="62" rx="6" fill="#202d21" stroke="#4c6048" stroke-width="1.6"/>
+      <rect x="680" y="562" width="150" height="36" rx="3" fill="#0b100c"/>
+      <rect x="688" y="569" width="104" height="4" fill="#c0fa58" opacity=".65"/>
+      <rect x="688" y="580" width="64" height="3" fill="#7864d8" opacity=".7"/>
+      <circle cx="896" cy="578" r="7" fill="#0b100c" stroke="#c0fa58" stroke-width="1.4"/>
+      <circle cx="896" cy="578" r="2.6" fill="#c0fa58" filter="url(#shelf-glow)"/>
+      <rect x="850" y="566" width="28" height="5" rx="2.5" fill="#0b100c"/>
+      <rect x="850" y="576" width="28" height="5" rx="2.5" fill="#0b100c"/>
+      <text x="918" y="602" text-anchor="end" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.8" fill="#a1ad9d">DISCVAULT</text>
+    </g>
+
+    <!-- shelf below console -->
+    <rect x="604" y="638" width="392" height="10" rx="3" fill="#263326" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="614" y="631" width="372" height="2" rx="1" fill="#c0fa58" opacity=".8" filter="url(#shelf-glow)"/>
+    <g transform="translate(624.0 568.0)">
+    <rect width="54" height="54" rx="2" fill="#17211b" stroke="#3c4c3c" stroke-width="1.2"/>
+    <rect x="4" y="4" width="46" height="46" rx="1" fill="#4b455f"/>
+    <circle cx="27" cy="27" r="14.580000000000002" fill="none" stroke="#7864d8" stroke-width="1.4" opacity=".8"/>
+    <circle cx="27" cy="27" r="4.32" fill="#7864d8" opacity=".7"/>
+    <path d="M 6 8 H 48" stroke="#ffffff" stroke-width="1" opacity=".3"/>
+    <rect x="4" y="46" width="46" height="2" fill="#000000" opacity=".35"/>
+  </g>
+    <g transform="translate(694.0 572.0)">
+    <rect width="46.0" height="56.0" rx="4" fill="#5d3b4c" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="38.0" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 38.0" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 38.0" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="34.0" height="22.0" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="28.0" height="8" rx="1" fill="#f071a5" opacity=".82"/>
+    <text x="23.0" y="46.0" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#f071a5">PCE</text>
+  </g>
+    <g transform="translate(756.0 578.0) rotate(0.00 0 52.0)">
+    <rect width="26.0" height="52.0" rx="2" fill="#2f4b55" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="26.0" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="22.0" height="3" fill="#c0fa58" opacity=".75"/>
+    <rect x="2" y="47.0" width="22.0" height="2" fill="#000000" opacity=".35"/>
+    <text x="13.0" y="40.0" transform="rotate(-90 13.0 40.0)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#c0fa58" opacity=".9">RPG</text>
+  </g>
+    <g transform="translate(788.0 584.0) rotate(0.00 0 46.0)">
+    <rect width="22.0" height="46.0" rx="2" fill="#5b4a2d" stroke="#0a0f0b" stroke-width="1"/>
+    <rect width="22.0" height="3" rx="1" fill="#ffffff" opacity=".14"/>
+    <rect x="2" y="12" width="18.0" height="3" fill="#ffd17c" opacity=".75"/>
+    <rect x="2" y="41.0" width="18.0" height="2" fill="#000000" opacity=".35"/>
+    <text x="11.0" y="34.0" transform="rotate(-90 11.0 34.0)" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.4" fill="#ffd17c" opacity=".9">MD</text>
+  </g>
+    <g transform="translate(824.0 566.0)">
+    <rect width="38" height="64" rx="2" fill="#2d4b3a" stroke="#0a0f0b" stroke-width="1.2"/>
+    <rect x="4" y="4" width="30" height="24.32" fill="#0b100c" opacity=".7"/>
+    <rect x="8" y="9" width="22" height="3" fill="#c0fa58" opacity=".85"/>
+    <circle cx="19" cy="40.32" r="4.94" fill="none" stroke="#c0fa58" stroke-width="1.2" opacity=".55"/>
+    <text x="19" y="58" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6" letter-spacing="1" fill="#c0fa58" opacity=".9">SAT</text>
+  </g>
+    <g transform="translate(874.0 578.0)">
+    <rect width="42.0" height="50.0" rx="4" fill="#3e3e48" stroke="#0a0f0b" stroke-width="1.4"/>
+    <rect x="4" y="5" width="34.0" height="3" rx="1.5" fill="#ffffff" opacity=".14"/>
+    <path d="M 8 13 H 34.0" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <path d="M 8 17 H 34.0" stroke="#0a0f0b" stroke-width="2" opacity=".8"/>
+    <rect x="6" y="23" width="30.0" height="16.0" rx="2" fill="#0b100c" opacity=".85"/>
+    <rect x="9" y="27" width="24.0" height="8" rx="1" fill="#80d6a0" opacity=".82"/>
+    <text x="21.0" y="40.0" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="6.5" letter-spacing="1.2" fill="#80d6a0">N64</text>
+  </g>
+    <ellipse cx="800" cy="684" rx="170" ry="13" fill="#000000" opacity=".32"/>
+
+    <!-- bottom center: controller and stacked cases -->
+    <g transform="translate(642 700)">
+      <path d="M 0 42 C 0 18 18 8 42 8 H 98 C 122 8 140 18 140 42 C 140 62 128 76 110 76 H 96 L 82 62 H 58 L 44 76 H 30 C 12 76 0 62 0 42 Z" fill="#202d21" stroke="#52664d" stroke-width="1.6"/>
+      <rect x="34" y="28" width="18" height="18" rx="3" fill="#0b100c"/>
+      <rect x="41" y="21" width="4" height="32" rx="2" fill="#c0fa58" opacity=".8"/>
+      <circle cx="104" cy="30" r="5" fill="#f071a5"/>
+      <circle cx="116" cy="42" r="5" fill="#ffd17c"/>
+      <rect x="58" y="40" width="26" height="5" rx="2.5" fill="#0b100c"/>
+      <path d="M 20 70 C 36 88 76 88 92 70" fill="none" stroke="#52664d" stroke-width="1.4" opacity=".7"/>
+      <text x="70" y="96" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="2.4" fill="#a1ad9d">DISCVAULT / PAD 01</text>
+    </g>
+    <g transform="translate(836 690)">
+      <rect width="98" height="70" rx="3" fill="#3b5a45" stroke="#0a0f0b" stroke-width="1.2"/>
+      <rect x="7" y="8" width="84" height="25" fill="#0b100c" opacity=".65"/>
+      <rect x="13" y="14" width="52" height="4" fill="#c0fa58" opacity=".8"/>
+      <circle cx="49" cy="52" r="10" fill="none" stroke="#c0fa58" stroke-width="1.4" opacity=".7"/>
+      <text x="49" y="66" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="1.6" fill="#c0fa58">DV / 128</text>
+    </g>
+  </g>
+
+  <!-- top objects: lava lamp and boombox -->
+  <g filter="url(#shelf-shadow)" transform="translate(175 0)">
+    <ellipse cx="250" cy="128" rx="54" ry="12" fill="#000000" opacity=".35"/>
+    <rect x="228" y="74" width="44" height="8" rx="3" fill="#202d21" stroke="#52664d" stroke-width="1.2"/>
+    <path d="M 232 78 C 220 48 232 18 250 18 C 268 18 280 48 268 78 Z" fill="#7864d8" opacity=".28"/>
+    <path d="M 235 78 C 228 56 238 34 250 34 C 262 34 272 56 265 78 Z" fill="#f071a5" opacity=".28"/>
+    <circle cx="250" cy="58" r="14" fill="#f071a5" opacity=".35" filter="url(#shelf-soft)"/>
+    <rect x="238" y="78" width="24" height="5" fill="#0b100c"/>
+    <text x="250" y="104" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="2.4" fill="#a1ad9d">CHILL</text>
+  </g>
+  <g filter="url(#shelf-shadow)">
+    <rect x="1326" y="86" width="178" height="44" rx="5" fill="#202d21" stroke="#52664d" stroke-width="1.4"/>
+    <rect x="1336" y="96" width="48" height="24" rx="2" fill="#0b100c"/>
+    <rect x="1342" y="102" width="28" height="3" fill="#c0fa58" opacity=".7"/>
+    <circle cx="1420" cy="108" r="8" fill="#0b100c" stroke="#52664d" stroke-width="1.2"/>
+    <circle cx="1442" cy="108" r="8" fill="#0b100c" stroke="#52664d" stroke-width="1.2"/>
+    <rect x="1408" y="92" width="52" height="4" fill="#101711"/>
+    <text x="1415" y="124" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" letter-spacing="2" fill="#a1ad9d">DV / STEREO</text>
+  </g>
+
+  <!-- rug and floor props -->
+  <g>
+    <path d="M 530 850 L 1070 850 L 1180 950 L 420 950 Z" fill="#1a241b" stroke="#40543b" stroke-width="1.6"/>
+    <path d="M 574 866 L 1026 866 L 1112 934 L 488 934 Z" fill="none" stroke="#c0fa58" stroke-width="1.2" opacity=".45"/>
+    <path d="M 640 884 L 960 884 M 606 902 L 994 902" stroke="#7864d8" stroke-width="1.2" opacity=".4"/>
+    <path d="M 770 866 L 770 934 M 860 866 L 860 934" stroke="#f071a5" stroke-width="1.1" opacity=".28"/>
+    <ellipse cx="800" cy="952" rx="320" ry="20" fill="#000000" opacity=".35"/>
+    <g transform="translate(700 900) rotate(-8)">
+      <path d="M 0 24 C 0 10 10 4 24 4 H 62 C 76 4 86 10 86 24 C 86 36 78 44 66 44 H 58 L 50 36 H 32 L 24 44 H 16 C 4 44 0 36 0 24 Z" fill="#202d21" stroke="#52664d" stroke-width="1.2"/>
+      <rect x="20" y="16" width="12" height="12" rx="2" fill="#0b100c"/>
+      <circle cx="64" cy="18" r="3" fill="#f071a5"/>
+      <circle cx="72" cy="26" r="3" fill="#ffd17c"/>
+    </g>
+  </g>
+
+  <g><circle cx="1337.1" cy="244.7" r="1.25" fill="#f071a5" opacity="0.12"/><circle cx="247.1" cy="681.8" r="1.73" fill="#f071a5" opacity="0.19"/><circle cx="1345.8" cy="537.1" r="1.78" fill="#c0fa58" opacity="0.20"/><circle cx="605.7" cy="713.0" r="1.15" fill="#7864d8" opacity="0.20"/><circle cx="1349.4" cy="664.5" r="1.99" fill="#c0fa58" opacity="0.27"/><circle cx="620.3" cy="530.7" r="1.49" fill="#c0fa58" opacity="0.12"/><circle cx="839.1" cy="687.2" r="1.57" fill="#c0fa58" opacity="0.16"/><circle cx="758.9" cy="529.4" r="1.60" fill="#7864d8" opacity="0.27"/><circle cx="1041.8" cy="617.7" r="0.88" fill="#f071a5" opacity="0.26"/><circle cx="1331.9" cy="866.9" r="2.15" fill="#f071a5" opacity="0.20"/><circle cx="132.9" cy="154.0" r="0.78" fill="#f071a5" opacity="0.11"/><circle cx="380.4" cy="157.6" r="1.31" fill="#7864d8" opacity="0.24"/><circle cx="408.9" cy="643.2" r="0.86" fill="#c0fa58" opacity="0.19"/><circle cx="685.0" cy="632.0" r="2.03" fill="#f071a5" opacity="0.21"/><circle cx="1272.0" cy="481.8" r="2.20" fill="#c0fa58" opacity="0.10"/><circle cx="1191.2" cy="563.6" r="1.68" fill="#f071a5" opacity="0.08"/><circle cx="1405.2" cy="394.9" r="1.28" fill="#f071a5" opacity="0.11"/><circle cx="354.9" cy="647.7" r="1.62" fill="#f071a5" opacity="0.18"/><circle cx="730.8" cy="269.3" r="1.01" fill="#c0fa58" opacity="0.22"/><circle cx="299.9" cy="669.8" r="1.54" fill="#f071a5" opacity="0.26"/><circle cx="1291.0" cy="817.4" r="2.32" fill="#c0fa58" opacity="0.13"/><circle cx="881.5" cy="547.0" r="1.62" fill="#f071a5" opacity="0.28"/><circle cx="985.9" cy="391.5" r="1.87" fill="#c0fa58" opacity="0.15"/><circle cx="925.8" cy="867.7" r="1.68" fill="#f071a5" opacity="0.16"/></g>
+  <g class="shelf-mono">
+    <text x="76" y="954" font-size="9" letter-spacing="3.4" fill="#a1ad9d">COLLECTION / STORAGE / PLAY</text>
+    <text x="1524" y="954" text-anchor="end" font-size="9" letter-spacing="3.4" fill="#c0fa58">DISCVAULT 2026</text>
+  </g>
+</svg>

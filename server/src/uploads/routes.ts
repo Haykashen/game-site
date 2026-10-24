@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { photoReferenceSchema } from '@retrokeep/shared';
+import { photoReferenceSchema } from '@discvault/shared';
 import { badRequest, unauthorized } from '../errors.js';
 import { storePhotoReference, storeUpload } from '../lib/storage.js';
 import { parse } from '../lib/validation.js';

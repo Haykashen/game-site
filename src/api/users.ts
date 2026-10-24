@@ -1,4 +1,4 @@
-import type { Paginated, PublicProfile, ReviewDto } from '@retrokeep/shared';
+import type { Paginated, PublicProfile, ReviewDto } from '@discvault/shared';
 import { apiRequest } from './client';
 
 export interface ReviewListParams {

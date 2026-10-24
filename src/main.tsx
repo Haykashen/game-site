@@ -1,7 +1,10 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
+import { migrateLegacyStorage } from './lib/constants';
 import './styles.css';
+
+migrateLegacyStorage();
 
 const container = document.getElementById('root');
 

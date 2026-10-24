@@ -1,5 +1,5 @@
 {
-  "name": "@retrokeep/server",
+  "name": "@discvault/server",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -25,7 +25,7 @@
     "@fastify/static": "^10.0.0",
     "@node-rs/argon2": "^2.2.2",
     "@prisma/client": "6.19.3",
-    "@retrokeep/shared": "*",
+    "@discvault/shared": "*",
     "dotenv": "^17.2.0",
     "fastify": "^5.12.7",
     "zod": "^3.25.76"

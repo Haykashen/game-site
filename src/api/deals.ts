@@ -4,7 +4,7 @@ import type {
   Paginated,
   ReviewCreateInput,
   ReviewDto,
-} from '@retrokeep/shared';
+} from '@discvault/shared';
 import { apiRequest } from './client';
 
 export interface DealListParams {
