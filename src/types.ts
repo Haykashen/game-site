@@ -1,3 +1,5 @@
+import type { MarketItemType } from '@discvault/shared';
+
 /** A game in the catalogue: the abstract work, without a concrete release. */
 export interface Game {
   id: string;
@@ -75,10 +77,14 @@ export interface GameStats {
   editionCount: number;
   ownedCount: number;
   lotsCount: number;
+  salesCount: number;
+  purchasesCount: number;
+  exchangeCount: number;
   coverImage: string;
 }
 
 export interface CatalogFilters {
+  itemType: string;
   query: string;
   platform: string;
   lang: string;
@@ -168,14 +174,14 @@ export type MarketModerationStatus = 'visible' | 'hidden' | 'removed';
 export type MarketDeliveryService = 'russian-post' | 'cdek' | 'yandex' | 'other';
 
 export interface MarketEntry {
+  itemType: MarketItemType;
   id: string;
   kind: MarketKind;
   /** Only listings have an intention; auctions always use `null`. */
   listingType: MarketListingType | null;
   gameId: string;
   /**
-   * Exact edition for sale, exchange and auctions. A "buy" listing may target
-   * any edition of the game, in which case this is `null`.
+   * Exact edition for games; optional for game-related loot and buy requests.
    */
   editionId: string | null;
   title: string;

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { PublicUser } from './auth.js';
+import { marketItemTypeSchema, type MarketItemType } from './marketItems.js';
 import {
   idSchema,
   isoDateTimeSchema,
@@ -28,6 +29,7 @@ export type MarketDeliveryService = z.infer<typeof marketDeliveryServiceSchema>;
 
 const marketFieldsSchema = z.object({
   kind: marketKindSchema,
+  itemType: marketItemTypeSchema.default('game'),
   listingType: marketListingTypeSchema.nullable().optional(),
   gameId: idSchema,
   editionId: idSchema.nullable().optional(),
@@ -102,7 +104,7 @@ export const marketCreateSchema = marketFieldsSchema.superRefine((value, ctx) =>
     }
   }
 
-  if (value.kind === 'auction' && !value.editionId) {
+  if (value.itemType === 'game' && value.kind === 'auction' && !value.editionId) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       path: ['editionId'],
@@ -110,7 +112,7 @@ export const marketCreateSchema = marketFieldsSchema.superRefine((value, ctx) =>
     });
   }
 
-  if (value.kind === 'listing' && value.listingType !== 'purchase' && !value.editionId) {
+  if (value.itemType === 'game' && value.kind === 'listing' && value.listingType !== 'purchase' && !value.editionId) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       path: ['editionId'],
@@ -124,6 +126,7 @@ export const marketUpdateSchema = marketFieldsSchema.partial().extend({
 });
 
 export const marketSearchSchema = paginationSchema.extend({
+  itemType: marketItemTypeSchema.optional(),
   kind: marketKindSchema.optional(),
   listingType: marketListingTypeSchema.optional(),
   status: z.enum(['active', 'sold', 'closed', 'all']).default('active'),
@@ -149,6 +152,7 @@ export const bidCreateSchema = z.object({
 });
 
 export interface MarketEntryDto {
+  itemType: MarketItemType;
   id: string;
   kind: MarketKind;
   listingType: MarketListingType | null;

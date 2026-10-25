@@ -7,6 +7,7 @@ import type {
   MarketListingType,
 } from '../types';
 import { MAX_MARKET_PHOTOS } from './constants';
+import { marketItemTypeSchema } from '@discvault/shared';
 import { isDeliveryService } from './delivery';
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -298,6 +299,9 @@ function normalizeMarketEntry(
   if (kind === 'listing' && endsAt !== null) return null;
 
   const listingType = readListingType(value.listingType, kind);
+  const parsedItemType = marketItemTypeSchema.safeParse(value.itemType ?? 'game');
+  if (!parsedItemType.success) return null;
+  const itemType = parsedItemType.data;
   const directEditionId = readString(value.editionId);
   const legacyEdition = readString(value.edition);
   const legacyRegion = readString(value.region);
@@ -310,7 +314,7 @@ function normalizeMarketEntry(
       ? lookup.byLegacyKey.get(`${gameId}|${legacyEdition}|${legacyRegion}`) ?? null
       : null;
   let editionId = directMatch ?? legacyMatch;
-  const editionRequired = kind === 'auction' || listingType !== 'purchase';
+  const editionRequired = itemType === 'game' && (kind === 'auction' || listingType !== 'purchase');
 
   if (!editionId && editionRequired) {
     editionId = lookup.firstByGame.get(gameId) ?? null;
@@ -322,6 +326,7 @@ function normalizeMarketEntry(
     id,
     kind,
     listingType,
+    itemType,
     gameId,
     editionId,
     title,

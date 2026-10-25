@@ -1,4 +1,5 @@
 import { MAX_MARKET_PHOTOS } from '../lib/constants';
+import { marketItemTypeSchema } from '@discvault/shared';
 import { isDeliveryService } from '../lib/delivery';
 import { parseEditions, parseGames } from '../lib/storage';
 import type { Edition, Game, MarketEntry } from '../types';
@@ -48,8 +49,9 @@ interface FiltersData {
 /** JSON strings and service ids are validated at startup before being narrowed. */
 type MarketSeed = Omit<
   MarketEntry,
-  'kind' | 'deliveryServices' | 'listingType' | 'status'
+  'kind' | 'deliveryServices' | 'listingType' | 'status' | 'itemType'
 > & {
+  readonly itemType?: string;
   readonly kind: string;
   readonly deliveryServices: readonly string[];
   readonly listingType: string | null;
@@ -224,7 +226,7 @@ for (const entry of marketSeeds) {
     entry.kind === 'auction' ||
     (entry.kind === 'listing' && entry.listingType !== 'purchase');
 
-  if (editionRequired && entry.editionId === null) {
+  if ((entry.itemType ?? 'game') === 'game' && editionRequired && entry.editionId === null) {
     throw new Error(
       `У записи «${entry.id}» в src/data/market.json должно быть указано издание (editionId).`,
     );
@@ -336,6 +338,7 @@ export const INITIAL_MARKET_ENTRIES: MarketEntry[] = marketSeeds.map((entry) => 
 
   return {
     ...entry,
+    itemType: marketItemTypeSchema.parse(entry.itemType ?? 'game'),
     kind: entry.kind,
     listingType: isMarketListingType(entry.listingType) ? entry.listingType : null,
     editionId: entry.editionId,

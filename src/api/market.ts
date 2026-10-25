@@ -17,7 +17,8 @@ export interface MarketListParams {
   pageSize?: number;
   sort?: 'newest' | 'oldest' | 'endingSoon' | 'priceAsc' | 'priceDesc';
   /** `me` requests the current user's lots, including ones hidden by moderation. */
-  authorId?: 'me';
+  authorId?: string;
+  itemType?: import('@discvault/shared').MarketItemType;
 }
 
 export function listMarketEntries(
@@ -31,6 +32,7 @@ export function listMarketEntries(
   if (params.pageSize) query.set('pageSize', String(params.pageSize));
   if (params.sort) query.set('sort', params.sort);
   if (params.authorId) query.set('authorId', params.authorId);
+  if (params.itemType) query.set('itemType', params.itemType);
 
   const suffix = query.toString();
   return apiRequest<Paginated<MarketEntryDto>>(

@@ -21,6 +21,9 @@ const EMPTY_STATS: GameStats = {
   editionCount: 0,
   ownedCount: 0,
   lotsCount: 0,
+  salesCount: 0,
+  purchasesCount: 0,
+  exchangeCount: 0,
   coverImage: '',
 };
 

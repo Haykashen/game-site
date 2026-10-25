@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client';
-import type { MarketSearchQuery } from '@discvault/shared';
+import { MARKET_ITEM_OPTIONS, type MarketSearchQuery } from '@discvault/shared';
 import { resolveYearRange } from '../lib/catalogData.js';
 
 export function buildMarketWhere(
@@ -16,6 +16,7 @@ export function buildMarketWhere(
 
   if (query.status !== 'all') and.push({ status: query.status });
   if (query.kind) and.push({ kind: query.kind });
+  if (query.itemType) and.push({ itemType: query.itemType });
   if (query.listingType) and.push({ listingType: query.listingType });
   if (query.gameId) and.push({ gameId: query.gameId });
   if (query.editionId) and.push({ editionId: query.editionId });
@@ -50,6 +51,7 @@ export function buildMarketWhere(
     const q = query.q;
     and.push({
       OR: [
+        { itemType: { in: MARKET_ITEM_OPTIONS.filter((option) => option.label.toLowerCase().includes(q.toLowerCase())).map((option) => option.value) } },
         { title: { contains: q, mode: 'insensitive' } },
         { description: { contains: q, mode: 'insensitive' } },
         { condition: { contains: q, mode: 'insensitive' } },

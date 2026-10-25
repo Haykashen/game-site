@@ -8,6 +8,8 @@ import {
   Tag,
 } from 'lucide-react';
 import type { KeyboardEvent } from 'react';
+import { marketItemLabel } from '@discvault/shared';
+import { ProfileLink } from '../ProfileLink';
 import { formatPrice } from '../../lib/formatPrice';
 import {
   bidsLabel,
@@ -138,15 +140,16 @@ export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: Ma
         <h2 className="market-card__title">{entry.title}</h2>
         <p className="market-card__game">
           {game
-            ? `${game.title}${edition ? ` • ${edition.platform} • ${edition.region}` : ' • любое издание'}`
+            ? `${game.title}${edition ? ` • ${edition.platform} • ${edition.region}` : entry.itemType === 'game' ? ' • любое издание' : ' • отдельный предмет'}`
             : 'Игра не найдена'}
         </p>
       </div>
 
       <div className="market-card__chips">
+        <span className={cx('market-chip', entry.itemType !== 'game' && 'market-chip--loot')}>{marketItemLabel(entry.itemType)}</span>
         {edition && <span className="market-chip">{edition.name}</span>}
         <span className="market-chip">{entry.condition}</span>
-        <span className="market-chip">{entry.seller}</span>
+        <span className="market-chip"><ProfileLink name={entry.seller} userId={entry.authorId} /></span>
       </div>
 
       <div className="market-card__bottom">

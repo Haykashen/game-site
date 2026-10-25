@@ -7,3 +7,5 @@ export * from './deals.js';
 export * from './reports.js';
 export * from './notifications.js';
 export * from './community.js';
+export * from './gameRatings.js';
+export * from './marketItems.js';

@@ -1,5 +1,6 @@
 import { Gavel, Tag, X } from 'lucide-react';
 import { useState } from 'react';
+import { MARKET_ITEM_OPTIONS, marketItemLabel, type MarketItemType } from '@discvault/shared';
 import type { FormEvent } from 'react';
 import { cx } from '../../lib/cx';
 import { DELIVERY_SERVICES } from '../../lib/delivery';
@@ -92,6 +93,8 @@ export function ComposeEntryForm({
   };
 
   const [gameId, setGameId] = useState(defaultGameId);
+  const [itemType, setItemType] = useState<MarketItemType>(entry?.itemType ?? 'game');
+  const isLoot = itemType !== 'game';
   const [listingType, setListingType] = useState<MarketListingType>(
     entry?.listingType ?? initialListingType ?? 'sale',
   );
@@ -146,13 +149,13 @@ export function ComposeEntryForm({
 
   const handleGameChange = (nextGameId: string) => {
     setGameId(nextGameId);
-    setEditionId(defaultEditionId(nextGameId));
+    setEditionId(isLoot ? '' : defaultEditionId(nextGameId));
   };
 
   const handleListingTypeChange = (nextType: MarketListingType) => {
     setListingType(nextType);
 
-    if (nextType !== 'purchase' && !editionId) {
+    if (!isLoot && nextType !== 'purchase' && !editionId) {
       setEditionId(editionsForGame(gameId)[0]?.id ?? '');
     }
   };
@@ -201,7 +204,7 @@ export function ComposeEntryForm({
       return;
     }
 
-    if (!isPurchase && !trimmedEditionId) return;
+    if (!isLoot && !isPurchase && !trimmedEditionId) return;
     if (trimmedEditionId && !gameEditions.some((edition) => edition.id === trimmedEditionId)) {
       return;
     }
@@ -223,6 +226,7 @@ export function ComposeEntryForm({
 
     onSubmit({
       kind: formKind,
+      itemType,
       listingType: isAuction ? null : listingType,
       gameId,
       editionId: trimmedEditionId || null,
@@ -278,14 +282,26 @@ export function ComposeEntryForm({
           : isAuction
             ? 'Задайте стартовую ставку, шаг и даты торгов — карточка сразу появится в разделе.'
             : listingType === 'purchase'
-              ? 'Опишите, какое издание ищете, — карточка сразу появится в разделе покупок.'
+              ? 'Опишите, какую игру или лут ищете, — карточка появится в разделе покупок.'
               : listingType === 'exchange'
-                ? 'Опишите издание и условия обмена — карточка сразу появится в разделе обмена.'
-                : 'Опишите издание и цену — карточка сразу появится в разделе продаж.'}
+                ? 'Опишите игру или лут и условия обмена.'
+                : 'Опишите игру или лут и укажите цену.'}
       </p>
 
       <form className="market-form" onSubmit={handleSubmit}>
         <div className="market-form__grid">
+          <FormField id="marketItemType" label="Что размещаете" className="market-form__full">
+            <select id="marketItemType" className="form-control" value={itemType} required
+              onChange={(event) => {
+                const next = event.target.value as MarketItemType;
+                setItemType(next);
+                if (next === 'game' && !isPurchase && !editionId) setEditionId(defaultEditionId(gameId));
+                if (itemType === 'game' && next !== 'game' && !initialEditionId) setEditionId('');
+              }}>
+              {MARKET_ITEM_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+            </select>
+            <p className="market-form__hint">Лут продаётся отдельно от игры: выберите предмет, который получит покупатель.</p>
+          </FormField>
           <FormField id="marketGame" label="Игра" className="market-form__full">
             <select
               id="marketGame"
@@ -338,15 +354,15 @@ export function ComposeEntryForm({
             </FormField>
           )}
 
-          <FormField id="marketEdition" label="Издание" className="market-form__full">
+          <FormField id="marketEdition" label={isLoot ? 'Издание (необязательно)' : 'Издание'} className="market-form__full">
             <select
               id="marketEdition"
               className="form-control"
-              required={!isPurchase}
+              required={!isPurchase && !isLoot}
               value={editionId}
               onChange={(event) => setEditionId(event.target.value)}
             >
-              {isPurchase && <option value="">Любое издание</option>}
+              {(isPurchase || isLoot) && <option value="">{isLoot ? 'Без привязки к изданию' : 'Любое издание'}</option>}
               {gameEditions.length === 0 && <option value="">Нет изданий</option>}
               {gameEditions.map((edition) => (
                 <option key={edition.id} value={edition.id}>
@@ -355,7 +371,7 @@ export function ComposeEntryForm({
               ))}
             </select>
             <p className="market-form__hint">
-              {isPurchase
+              {isLoot ? 'Укажите издание, если предмет относится к конкретной версии игры. Игра в комплект не включена.' : isPurchase
                 ? 'Для покупки можно оставить «Любое издание», если готовы взять любую версию.'
                 : 'Издание определяет платформу, регион, язык и комплектацию лота.'}
             </p>
@@ -370,7 +386,7 @@ export function ComposeEntryForm({
               maxLength={120}
               placeholder={
                 selectedGame
-                  ? `${selectedGame.title} — полный комплект`
+                  ? `${selectedGame.title} — ${isLoot ? marketItemLabel(itemType).toLowerCase() : 'полный комплект'}`
                   : 'Например, полный комплект CIB'
               }
               value={title}
@@ -385,7 +401,7 @@ export function ComposeEntryForm({
               className="form-control"
               required
               maxLength={60}
-              placeholder="9/10, CIB"
+              placeholder={isLoot ? 'Оригинал, без повреждений' : '9/10, CIB'}
               value={condition}
               onChange={(event) => setCondition(event.target.value)}
             />

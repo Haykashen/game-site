@@ -1,5 +1,6 @@
 import { YEAR_RANGES } from '../data';
 import { listingTypeLabel } from './market';
+import { marketItemLabel } from '@discvault/shared';
 import type { CatalogFilters, Edition, Game, MarketEntry } from '../types';
 
 /**
@@ -30,8 +31,10 @@ export function selectVisibleMarketEntries(
   }
 
   return entries.filter((entry) => {
+    if (filters.itemType && entry.itemType !== filters.itemType) return false;
     const game = gamesById.get(entry.gameId);
     const edition = entry.editionId ? editionsById.get(entry.editionId) : undefined;
+    if (!edition && entry.itemType !== 'game' && (filters.platform || filters.region || filters.edition || filters.lang)) return false;
     const gameEditions = editionsByGame.get(entry.gameId) ?? [];
 
     if (query) {
@@ -44,6 +47,7 @@ export function selectVisibleMarketEntries(
         entry.description,
         entry.condition,
         listingTypeLabel(entry.listingType),
+        marketItemLabel(entry.itemType),
         edition?.name,
         edition?.platform,
         edition?.region,

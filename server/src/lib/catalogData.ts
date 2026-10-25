@@ -34,6 +34,7 @@ export interface SeedEdition {
 }
 
 export interface SeedMarketEntry {
+  itemType?: import('@discvault/shared').MarketItemType;
   id: string;
   kind: 'listing' | 'auction';
   listingType: 'sale' | 'purchase' | 'exchange' | null;

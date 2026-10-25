@@ -16,6 +16,7 @@ import { resolveSession } from './auth/session.js';
 import { registerAuthRoutes } from './auth/routes.js';
 import { registerBidRoutes } from './bids/routes.js';
 import { registerCatalogRoutes } from './catalog/routes.js';
+import { registerGameRatingRoutes } from './catalog/ratings.js';
 import { registerCollectionRoutes } from './collection/routes.js';
 import { registerDealRoutes } from './deals/routes.js';
 import { registerDiscussionRoutes } from './discussions/routes.js';
@@ -237,6 +238,7 @@ export async function buildApp() {
   registerAuthRoutes(app);
   registerUserRoutes(app);
   registerCatalogRoutes(app);
+  registerGameRatingRoutes(app);
   registerCollectionRoutes(app);
   registerMarketRoutes(app);
   registerBidRoutes(app);

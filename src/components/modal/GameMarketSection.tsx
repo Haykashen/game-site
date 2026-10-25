@@ -42,7 +42,7 @@ export function GameMarketSection({
   const editionById = new Map(editions.map((edition) => [edition.id, edition]));
   const gameEntries = entries.filter((entry) => entry.gameId === game.id);
   const scopedEntries = selectedEditionId
-    ? gameEntries.filter((entry) => entry.editionId === selectedEditionId)
+    ? gameEntries.filter((entry) => entry.editionId === selectedEditionId || (entry.itemType !== 'game' && entry.editionId === null))
     : gameEntries;
   const auctionLots = scopedEntries.filter((entry) => entry.kind === 'auction');
   const salePurchaseListings = scopedEntries.filter(

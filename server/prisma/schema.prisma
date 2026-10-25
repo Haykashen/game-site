@@ -12,6 +12,17 @@ enum MarketKind {
   auction
 }
 
+enum MarketItemType {
+  game
+  cover
+  manual
+  map
+  soundtrack
+  figure
+  steelbook
+  other
+}
+
 enum ListingType {
   sale
   purchase
@@ -146,6 +157,7 @@ model User {
   authoredDiscussions Discussion[]               @relation("DiscussionAuthor")
   discussionComments  DiscussionComment[]        @relation("DiscussionCommentAuthor")
   authoredNews        NewsPost[]                 @relation("NewsAuthor")
+  gameRatings         GameRating[]
 
   @@index([displayName])
   @@map("users")
@@ -187,10 +199,26 @@ model Game {
   subscriptions GameSubscription[]
   discussions   Discussion[]
   newsPosts     NewsPost[]
+  ratings       GameRating[]
 
   @@index([title])
   @@index([year])
   @@map("games")
+}
+
+model GameRating {
+  userId    String   @map("user_id") @db.Uuid
+  gameId    String   @map("game_id")
+  score     Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@id([userId, gameId])
+  @@index([gameId])
+  @@map("game_ratings")
 }
 
 model Edition {
@@ -259,6 +287,7 @@ model MarketEntry {
   id          String       @id @default(uuid())
   authorId    String       @map("author_id") @db.Uuid
   kind        MarketKind
+  itemType    MarketItemType @default(game) @map("item_type")
   listingType ListingType? @map("listing_type")
   gameId      String       @map("game_id")
   editionId   String?      @map("edition_id")

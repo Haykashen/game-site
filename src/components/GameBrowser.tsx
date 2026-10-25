@@ -81,11 +81,16 @@ export function GameBrowser({
       ownedByGame.set(edition.gameId, (ownedByGame.get(edition.gameId) ?? 0) + 1);
     }
 
-    const auctionCounts = new Map<string, number>();
+    const marketCounts = new Map<string, { lotsCount: number; salesCount: number; purchasesCount: number; exchangeCount: number }>();
 
     for (const entry of marketEntries) {
-      if (entry.kind !== 'auction') continue;
-      auctionCounts.set(entry.gameId, (auctionCounts.get(entry.gameId) ?? 0) + 1);
+      if (entry.status !== 'active' || (entry.moderationStatus && entry.moderationStatus !== 'visible')) continue;
+      const counts = marketCounts.get(entry.gameId) ?? { lotsCount: 0, salesCount: 0, purchasesCount: 0, exchangeCount: 0 };
+      if (entry.kind === 'auction') counts.lotsCount += 1;
+      else if (entry.listingType === 'sale') counts.salesCount += 1;
+      else if (entry.listingType === 'purchase') counts.purchasesCount += 1;
+      else if (entry.listingType === 'exchange') counts.exchangeCount += 1;
+      marketCounts.set(entry.gameId, counts);
     }
 
     const stats = new Map<string, GameStats>();
@@ -98,7 +103,10 @@ export function GameBrowser({
         platforms,
         editionCount: editionsForGame.length,
         ownedCount: ownedByGame.get(game.id) ?? 0,
-        lotsCount: auctionCounts.get(game.id) ?? 0,
+        lotsCount: marketCounts.get(game.id)?.lotsCount ?? 0,
+        salesCount: marketCounts.get(game.id)?.salesCount ?? 0,
+        purchasesCount: marketCounts.get(game.id)?.purchasesCount ?? 0,
+        exchangeCount: marketCounts.get(game.id)?.exchangeCount ?? 0,
         coverImage: gameCoverImage(game, editionsForGame),
       });
     }

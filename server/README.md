@@ -138,6 +138,14 @@ Seed импортирует игры, издания, объявления, об
 - `GET /api/v1/catalog/editions/:id`
 - `GET /api/v1/catalog/filters`
 
+### Game ratings
+
+- `GET /api/v1/catalog/games/:id/ratings` — средняя оценка активных пользователей, число голосов и свой балл при наличии сессии.
+- `PUT /api/v1/catalog/games/:id/ratings` — поставить или изменить оценку: `{ "score": 8 }`, целое число от 1 до 10, нужна сессия.
+- `DELETE /api/v1/catalog/games/:id/ratings` — удалить свой голос, нужна сессия.
+
+Один пользователь имеет один голос на игру. Оценки игр хранятся отдельно от рейтинга продавца и отзывов по сделкам. Перед запуском примените миграции (`npm run db:migrate`).
+
 ### Collection
 
 - `GET /api/v1/collection/copies`
@@ -150,6 +158,12 @@ Seed импортирует игры, издания, объявления, об
 - `GET /api/v1/collection/stats`
 
 ### Market
+
+`itemType`: `game`, `cover`, `manual`, `map`, `soundtrack`, `figure`, `steelbook`,
+`other`. Старые клиенты без поля создают `game`. Для лута издание необязательно,
+игра обязательна; если издание передано, оно должно принадлежать указанной игре.
+Параметр `itemType` в `GET /api/v1/market` фильтрует категорию. После первой
+ставки категория лота неизменяема. Перед запуском примените миграции.
 
 - `GET /api/v1/market`
 - `GET /api/v1/market/mine`

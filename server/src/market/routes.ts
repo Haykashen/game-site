@@ -193,6 +193,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
           data: {
             authorId: user.id,
             kind: input.kind,
+            itemType: input.itemType,
             listingType: input.kind === 'auction' ? null : (input.listingType ?? null),
             gameId: input.gameId,
             editionId: input.editionId ?? null,
@@ -257,6 +258,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
       if (existing.authorId !== user.id) throw forbidden('Это не ваше объявление.');
 
       const merged = {
+        itemType: input.itemType ?? existing.itemType,
         kind: input.kind ?? existing.kind,
         listingType:
           input.listingType !== undefined ? input.listingType : existing.listingType,
@@ -308,6 +310,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
         };
 
         const immutableChanged =
+          validated.itemType !== existing.itemType ||
           validated.kind !== existing.kind ||
           validated.gameId !== existing.gameId ||
           (validated.editionId ?? null) !== existing.editionId ||
@@ -320,7 +323,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
         if (immutableChanged) {
           throw conflict(
             'AUCTION_HAS_BIDS',
-            'После первой ставки нельзя менять игру, издание, цену, шаг и даты аукциона.',
+            'После первой ставки нельзя менять предмет, игру, издание, цену, шаг и даты аукциона.',
           );
         }
       }
@@ -350,6 +353,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
             data: {
               version: { increment: 1 },
               kind: validated.kind,
+              itemType: validated.itemType,
               listingType:
                 validated.kind === 'auction' ? null : (validated.listingType ?? null),
               gameId: validated.gameId,

@@ -7,6 +7,7 @@ import type { Copy, Edition, Game, MarketEntry } from '../types';
 import { ArtworkPanel } from './modal/ArtworkPanel';
 import { EditionsSection } from './modal/EditionsSection';
 import { GameSubscriptionButton } from './GameSubscriptionButton';
+import { GameRatings } from './GameRatings';
 import { GameActions } from './modal/GameActions';
 import { GameMarketSection } from './modal/GameMarketSection';
 import type { GameMarketTab } from './modal/GameMarketSection';
@@ -104,6 +105,7 @@ export function GameModal({
       </div>
 
       <ArtworkPanel game={game} editions={editions} />
+      <GameRatings gameId={game.id} />
 
       <div className="desc-grid">
         <div className="desc-text">

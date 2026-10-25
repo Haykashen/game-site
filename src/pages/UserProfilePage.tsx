@@ -1,12 +1,20 @@
 import { RefreshCw, Star, UserRound } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import type { PublicProfile, ReviewDto } from '@discvault/shared';
 import {
   errorMessage,
   fetchPublicProfile,
   listUserReviews,
+  listMarketEntries,
+  mapMarketEntry,
 } from '../api';
+import { INITIAL_MARKET_ENTRIES } from '../data';
+import { getDemoProfile } from '../lib/publicProfiles';
+import { useCollection } from '../context/CollectionContext';
+import type { MarketEntry } from '../types';
+import { MarketCard } from '../components/market/MarketCard';
+import { ProfileLink } from '../components/ProfileLink';
 import { PageHeading } from '../components/PageHeading';
 import { ReportSection } from '../components/reports/ReportSection';
 import { SpecRow } from '../components/ui/SpecRow';
@@ -38,13 +46,26 @@ function formatReviewDate(iso: string): string {
 /** Public collector profile with reviews and a report action. */
 export function UserProfilePage() {
   const { id } = useParams<{ id: string }>();
+  return <PublicProfileContent key={id} id={id} />;
+}
+
+function PublicProfileContent({ id }: { id: string | undefined }) {
   const { user } = useAuth();
+  const { games, getEdition } = useCollection();
+  const navigate = useNavigate();
+  const requestId = useRef(0);
+  const [entries, setEntries] = useState<MarketEntry[]>([]);
+  const [marketPage, setMarketPage] = useState(1);
+  const [reviewPage, setReviewPage] = useState(1);
+  const [marketTotal, setMarketTotal] = useState(0);
+  const [reviewTotal, setReviewTotal] = useState(0);
   const [profile, setProfile] = useState<PublicProfile | null>(null);
   const [reviews, setReviews] = useState<ReviewDto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
   const loadProfile = useCallback(async () => {
+    const currentRequest = ++requestId.current;
     if (!id) {
       setError('Пользователь не найден.');
       setIsLoading(false);
@@ -55,23 +76,40 @@ export function UserProfilePage() {
     setError('');
 
     try {
-      const [nextProfile, reviewPage] = await Promise.all([
+      const demoProfile = getDemoProfile(id);
+      if (demoProfile) {
+        const demoEntries = INITIAL_MARKET_ENTRIES.filter((entry) => entry.seller === demoProfile.displayName && entry.status === 'active');
+        setProfile(demoProfile);
+        setReviews([]);
+        setReviewTotal(0);
+        setEntries(demoEntries.slice((marketPage - 1) * 12, marketPage * 12));
+        setMarketTotal(demoEntries.length);
+        return;
+      }
+      const [nextProfile, nextReviews, market] = await Promise.all([
         fetchPublicProfile(id),
-        listUserReviews(id, { page: 1, pageSize: 50 }),
+        listUserReviews(id, { page: reviewPage, pageSize: 12 }),
+        listMarketEntries({ authorId: id, status: 'active', page: marketPage, pageSize: 12 }),
       ]);
+      if (requestId.current !== currentRequest) return;
       setProfile(nextProfile);
-      setReviews(reviewPage.items);
+      setReviews(nextReviews.items);
+      setReviewTotal(nextReviews.total);
+      setEntries(market.items.map(mapMarketEntry));
+      setMarketTotal(market.total);
     } catch (loadError) {
+      if (requestId.current !== currentRequest) return;
       setProfile(null);
       setReviews([]);
       setError(errorMessage(loadError));
     } finally {
-      setIsLoading(false);
+      if (requestId.current === currentRequest) setIsLoading(false);
     }
-  }, [id]);
+  }, [id, marketPage, reviewPage]);
 
   useEffect(() => {
     void loadProfile();
+    return () => { requestId.current += 1; };
   }, [loadProfile]);
 
   const isOwnProfile = Boolean(profile && user?.id === profile.id);
@@ -120,8 +158,7 @@ export function UserProfilePage() {
               <div className="profile-meta">
                 <p className="profile-name">{profile.displayName}</p>
                 <p className="profile-sub">
-                  {profile.city ?? 'Город не указан'} · на сайте с{' '}
-                  {formatMemberSince(profile.memberSince)}
+                  {profile.city ?? 'Город не указан'} · {profile.memberSince ? `на сайте с ${formatMemberSince(profile.memberSince)}` : 'Демонстрационный профиль'}
                 </p>
               </div>
               <span className="profile-rating">
@@ -153,20 +190,43 @@ export function UserProfilePage() {
                 <SpecRow label="Сделки" value={String(profile.dealsCompleted)} />
               </div>
             </div>
+            {isOwnProfile && <Link className="btn-secondary" to="/account">Редактировать профиль</Link>}
           </div>
+
+          {getDemoProfile(profile.id) && (
+            <p className="panel-hint">Демонстрационный профиль. Рейтинг и отзывы доступны для пользователей в сетевом режиме.</p>
+          )}
+
+          <section className="panel account-deals-panel" aria-label="Объявления пользователя">
+            <div className="account-deals-panel__head">
+              <h3 className="panel-title">Активные объявления и аукционы · {marketTotal}</h3>
+            </div>
+            {entries.length === 0 ? <p className="panel-hint">Активных объявлений пока нет.</p> : (
+              <div className="market-grid">
+                {entries.map((entry) => (
+                  <MarketCard key={entry.id} entry={entry}
+                    game={games.find((game) => game.id === entry.gameId)}
+                    edition={entry.editionId ? getEdition(entry.editionId) : undefined}
+                    isOwn={isOwnProfile}
+                    onSelect={() => navigate(`${entry.kind === 'auction' ? '/auctions' : '/listings'}?item=${encodeURIComponent(entry.id)}`)} />
+                ))}
+              </div>
+            )}
+            {marketTotal > 12 && <ProfilePagination page={marketPage} total={marketTotal} onChange={setMarketPage} label="Объявления" />}
+          </section>
 
           <ReportSection
             key={profile.id}
             targetType="user"
             targetId={profile.id}
             targetLabel={profile.displayName}
-            disabled={isOwnProfile}
+            disabled={isOwnProfile || Boolean(getDemoProfile(profile.id))}
           />
 
           <div className="panel account-deals-panel">
             <div className="account-deals-panel__head">
               <div>
-                <h3 className="panel-title">Отзывы</h3>
+                <h3 className="panel-title">Отзывы · {reviewTotal}</h3>
                 <p className="panel-hint">
                   Отзывы появляются после завершённых сделок.
                 </p>
@@ -193,7 +253,7 @@ export function UserProfilePage() {
                           <Star size={13} aria-hidden="true" /> {review.rating}/5
                         </p>
                         <p className="deal-row__meta">
-                          {review.author.displayName} · {formatReviewDate(review.createdAt)}
+                          <ProfileLink name={review.author.displayName} userId={review.author.id} /> · {formatReviewDate(review.createdAt)}
                         </p>
                       </div>
                     </div>
@@ -204,9 +264,20 @@ export function UserProfilePage() {
                 ))}
               </div>
             )}
+            {reviewTotal > 12 && <ProfilePagination page={reviewPage} total={reviewTotal} onChange={setReviewPage} label="Отзывы" />}
           </div>
         </>
       )}
     </>
   );
+}
+
+function ProfilePagination({ page, total, onChange, label }: {
+  page: number; total: number; onChange: (page: number) => void; label: string;
+}) {
+  return <nav className="profile-actions" aria-label={`${label}: страницы`}>
+    <button className="btn-secondary" disabled={page === 1} onClick={() => onChange(page - 1)}>Назад</button>
+    <span className="panel-hint">{page} / {Math.ceil(total / 12)}</span>
+    <button className="btn-secondary" disabled={page * 12 >= total} onClick={() => onChange(page + 1)}>Далее</button>
+  </nav>;
 }

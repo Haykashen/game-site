@@ -17,6 +17,8 @@ import {
 import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { marketItemLabel } from '@discvault/shared';
+import { ProfileLink } from '../ProfileLink';
 import { deliveryLabel } from '../../lib/delivery';
 import { formatPrice } from '../../lib/formatPrice';
 import {
@@ -203,6 +205,7 @@ export function MarketEntryDetail({
               <KindIcon size={13} aria-hidden="true" />
               {kindLabel}
             </span>
+            <span className="meta-chip">{marketItemLabel(entry.itemType)}</span>
             <span
               className={cx(
                 'meta-chip',
@@ -430,21 +433,16 @@ export function MarketEntryDetail({
         <div className="spec-box">
           <h4>{isAuction ? 'О лоте' : 'Об объявлении'}</h4>
           <SpecRow label="Игра" value={game?.title ?? '—'} />
-          <SpecRow label="Платформа" value={edition?.platform ?? 'Любая'} />
-          <SpecRow label="Издание" value={edition?.name ?? 'Любое издание'} />
+          <SpecRow label="Предмет" value={marketItemLabel(entry.itemType)} />
+          <SpecRow label="Платформа" value={edition?.platform ?? (entry.itemType === 'game' ? 'Любая' : 'Не указана')} />
+          <SpecRow label="Издание" value={edition?.name ?? (entry.itemType === 'game' ? 'Любое издание' : 'Без привязки к изданию')} />
           <SpecRow label="Регион" value={edition?.region ?? 'Любой'} />
           <SpecRow label="Язык" value={edition?.lang ?? '—'} />
           <SpecRow label="Состояние" value={entry.condition} />
           <SpecRow
             label="Автор"
             value={
-              entry.authorId ? (
-                <Link className="spec-link" to={`/users/${entry.authorId}`}>
-                  {entry.seller}
-                </Link>
-              ) : (
-                entry.seller
-              )
+              <ProfileLink name={entry.seller} userId={entry.authorId} />
             }
           />
           <SpecRow label="Размещено" value={formatMarketDate(entry.createdAt)} />

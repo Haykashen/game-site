@@ -20,6 +20,7 @@ import type {
  */
 export function mapMarketEntry(dto: MarketEntryDto): MarketEntry {
   return {
+    itemType: dto.itemType ?? 'game',
     id: dto.id,
     kind: dto.kind,
     listingType: dto.listingType,

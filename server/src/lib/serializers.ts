@@ -148,6 +148,7 @@ export type MarketEntryWithRelations = Prisma.MarketEntryGetPayload<{
 
 export function serializeMarketEntry(entry: MarketEntryWithRelations): MarketEntryDto {
   return {
+    itemType: entry.itemType,
     id: entry.id,
     kind: entry.kind,
     listingType: entry.listingType,

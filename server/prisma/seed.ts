@@ -217,6 +217,7 @@ async function seedMarket(userIdByName: Map<string, string>): Promise<void> {
     const data = {
       authorId,
       kind: entry.kind,
+      itemType: entry.itemType ?? 'game',
       listingType: isAuction ? null : entry.listingType,
       gameId: entry.gameId,
       editionId: entry.editionId,

@@ -8,6 +8,8 @@ import {
 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
+import { Link } from 'react-router-dom';
+import { ProfileLink } from '../components/ProfileLink';
 import type { DealDto } from '@discvault/shared';
 import {
   createReview,
@@ -96,7 +98,7 @@ function DealRow({ deal, currentUserId, onRefresh }: DealRowProps) {
           <p className="deal-row__title">{deal.entry.title}</p>
           <p className="deal-row__meta">
             {isBuyer ? 'Покупка' : 'Продажа'} · {formatPrice(deal.amount)} ·{' '}
-            {isBuyer ? deal.seller.displayName : deal.buyer.displayName}
+            <ProfileLink name={isBuyer ? deal.seller.displayName : deal.buyer.displayName} userId={isBuyer ? deal.seller.id : deal.buyer.id} />
           </p>
         </div>
         <span
@@ -513,6 +515,7 @@ export function AccountPage() {
             </div>
 
             <div className="profile-actions">
+              <Link className="btn-secondary" to={`/users/${encodeURIComponent(user.id)}`}>Публичный профиль</Link>
               <button
                 type="button"
                 className="btn-secondary"

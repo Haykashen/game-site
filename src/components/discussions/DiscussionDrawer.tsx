@@ -10,6 +10,7 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { ProfileLink } from '../ProfileLink';
 import {
   buildDiscussionReplyTree,
   discussionReplyCount,
@@ -58,7 +59,7 @@ function CommentNode({ comment, onReplyClick }: CommentNodeProps) {
         </span>
         <div className="discussion-comment__body">
           <div className="discussion-comment__head">
-            <span className="feed-author">{comment.author}</span>
+            <ProfileLink className="feed-author spec-link" name={comment.author} userId={comment.authorId} />
             <time dateTime={comment.createdAt}>
               {formatFeedDateTime(comment.createdAt)}
             </time>
@@ -202,7 +203,7 @@ export function DiscussionDrawer({
               <span className="feed-avatar" aria-hidden="true">
                 {discussion.author.slice(0, 1).toUpperCase()}
               </span>
-              {discussion.author}
+              <ProfileLink name={discussion.author} userId={discussion.authorId} />
             </span>
             <span className="feed-stats">
               <MessageSquare size={14} aria-hidden="true" />

@@ -1,5 +1,6 @@
 import { ArrowUpRight, Eye, Gamepad2, MessageSquare, Pin } from 'lucide-react';
 import type { KeyboardEvent } from 'react';
+import { ProfileLink } from '../ProfileLink';
 import { cx } from '../../lib/cx';
 import { discussionReplyCount } from '../../lib/discussions';
 import { commentsCountLabel, formatFeedDate } from '../../lib/feed';
@@ -60,7 +61,7 @@ export function DiscussionCard({ discussion, game, onSelect }: DiscussionCardPro
           <span className="feed-avatar" aria-hidden="true">
             {discussion.author.slice(0, 1).toUpperCase()}
           </span>
-          {discussion.author}
+          <ProfileLink name={discussion.author} userId={discussion.authorId} />
         </span>
         <span className="feed-stats">
           <MessageSquare size={13} aria-hidden="true" />

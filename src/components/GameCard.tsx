@@ -2,8 +2,9 @@ import { memo } from 'react';
 import type { KeyboardEvent } from 'react';
 import { Check, Disc, Eye, Layers } from 'lucide-react';
 import { getPlatformBadgeStyle } from '../data';
+import { NAV_ITEMS } from '../app/navigation';
 import { cx } from '../lib/cx';
-import { editionsCountLabel, lotsCountLabel } from '../lib/market';
+import { editionsCountLabel } from '../lib/market';
 import type { Game, GameStats } from '../types';
 
 interface GameCardProps {
@@ -26,6 +27,12 @@ function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
 
   const visiblePlatforms = stats.platforms.slice(0, 2);
   const hiddenPlatforms = stats.platforms.length - visiblePlatforms.length;
+  const marketStats = [
+    { section: NAV_ITEMS.auctions, count: stats.lotsCount },
+    { section: NAV_ITEMS.sales, count: stats.salesCount },
+    { section: NAV_ITEMS.purchases, count: stats.purchasesCount },
+    { section: NAV_ITEMS.exchange, count: stats.exchangeCount },
+  ];
 
   return (
     <div
@@ -109,7 +116,19 @@ function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
           <span className="lang-info">
             <Layers size={14} /> {editionsCountLabel(stats.editionCount)}
           </span>
-          <span className="lots-count">{lotsCountLabel(stats.lotsCount)}</span>
+          <div className="card-market-stats" aria-label="Активные предложения по игре">
+            {marketStats.map(({ section, count }) => {
+              const Icon = section.icon;
+              const label = `${section.label}: ${count}`;
+              return (
+                <span key={section.id} className={cx('card-market-stat', count === 0 && 'card-market-stat--empty')}
+                  role="img" aria-label={label} title={label}>
+                  <Icon size={14} aria-hidden="true" />
+                  <span aria-hidden="true">{count}</span>
+                </span>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

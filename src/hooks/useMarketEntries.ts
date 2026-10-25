@@ -43,6 +43,7 @@ const SEED_ENTRY_IDS = new Set(INITIAL_MARKET_ENTRIES.map((entry) => entry.id));
 
 function draftToApiInput(draft: MarketDraft): MarketCreateInput {
   return {
+    itemType: draft.itemType,
     kind: draft.kind,
     listingType: draft.listingType,
     gameId: draft.gameId,

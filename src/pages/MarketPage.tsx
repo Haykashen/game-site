@@ -43,7 +43,7 @@ const COPY: Record<MarketKind | MarketListingType, MarketCopy> = {
   listing: {
     eyebrow: 'MARKET / LISTINGS',
     title: 'Объявления',
-    description: 'Продажа, покупка и обмен изданиями между коллекционерами.',
+    description: 'Продажа, покупка и обмен играми и лутом между коллекционерами.',
     cta: 'Разместить объявление',
     hint: 'Фиксированные цены и прямые предложения',
     ownLabel: 'Мои объявления',
@@ -54,7 +54,7 @@ const COPY: Record<MarketKind | MarketListingType, MarketCopy> = {
   sale: {
     eyebrow: 'MARKET / SALES',
     title: 'Продажи',
-    description: 'Издания, которые коллекционеры готовы передать в новую коллекцию.',
+    description: 'Игры, издания и лут для вашей коллекции.',
     cta: 'Разместить продажу',
     hint: 'Фиксированные цены и прямые предложения',
     ownLabel: 'Мои продажи',
@@ -65,9 +65,9 @@ const COPY: Record<MarketKind | MarketListingType, MarketCopy> = {
   purchase: {
     eyebrow: 'MARKET / PURCHASES',
     title: 'Покупки',
-    description: 'Запросы на покупку изданий: найдите нужную версию или предложите свою.',
+    description: 'Запросы на покупку игр и лута: найдите нужный предмет или предложите свой.',
     cta: 'Разместить покупку',
-    hint: 'Запросы на конкретные издания или любую версию',
+    hint: 'Игры, издания и отдельные предметы',
     ownLabel: 'Мои покупки',
     empty: 'Покупок пока нет — разместите первый запрос.',
     searchPlaceholder: 'Найти покупку, игру или покупателя',
@@ -76,9 +76,9 @@ const COPY: Record<MarketKind | MarketListingType, MarketCopy> = {
   exchange: {
     eyebrow: 'MARKET / EXCHANGE',
     title: 'Обмен',
-    description: 'Обмен изданиями между коллекционерами без покупки за деньги.',
+    description: 'Обмен играми и лутом между коллекционерами.',
     cta: 'Предложить обмен',
-    hint: 'Прямой обмен изданиями по договорённости',
+    hint: 'Прямой обмен играми и лутом по договорённости',
     ownLabel: 'Мои обмены',
     empty: 'Обменных предложений пока нет — разместите первое.',
     searchPlaceholder: 'Найти обмен, игру или коллекционера',
@@ -87,7 +87,7 @@ const COPY: Record<MarketKind | MarketListingType, MarketCopy> = {
   auction: {
     eyebrow: 'MARKET / AUCTIONS',
     title: 'Аукционы',
-    description: 'Торги за редкие издания: ставки и время до закрытия лота.',
+    description: 'Торги за игры, редкие издания и лут: ставки и время до закрытия лота.',
     cta: 'Разместить аукцион',
     hint: 'Ставки принимаются до окончания таймера',
     ownLabel: 'Мои лоты',
