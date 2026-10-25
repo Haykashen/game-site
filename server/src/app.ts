@@ -18,7 +18,9 @@ import { registerBidRoutes } from './bids/routes.js';
 import { registerCatalogRoutes } from './catalog/routes.js';
 import { registerCollectionRoutes } from './collection/routes.js';
 import { registerDealRoutes } from './deals/routes.js';
+import { registerDiscussionRoutes } from './discussions/routes.js';
 import { registerMarketRoutes } from './market/routes.js';
+import { registerNewsRoutes } from './news/routes.js';
 import { registerNotificationRoutes } from './notifications/routes.js';
 import { registerReportRoutes } from './reports/routes.js';
 import { registerUploadRoutes } from './uploads/routes.js';
@@ -239,6 +241,8 @@ export async function buildApp() {
   registerMarketRoutes(app);
   registerBidRoutes(app);
   registerDealRoutes(app);
+  registerDiscussionRoutes(app);
+  registerNewsRoutes(app);
   registerNotificationRoutes(app);
   registerReportRoutes(app);
   registerUploadRoutes(app);

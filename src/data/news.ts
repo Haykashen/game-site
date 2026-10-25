@@ -1,5 +1,5 @@
 import type { NewsPost } from '../types';
-import { INITIAL_GAMES } from './index';
+import gamesJson from './games.json';
 
 /** Editorial demo feed; newest articles come first. */
 export const NEWS_POSTS: readonly NewsPost[] = [
@@ -101,7 +101,7 @@ export const NEWS_POSTS: readonly NewsPost[] = [
   },
 ];
 
-const gameIds = new Set(INITIAL_GAMES.map((game) => game.id));
+const gameIds = new Set(gamesJson.map((game) => game.id));
 
 for (const post of NEWS_POSTS) {
   if (post.gameId !== null && !gameIds.has(post.gameId)) {

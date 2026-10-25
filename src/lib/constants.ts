@@ -4,6 +4,7 @@ export const STORAGE_KEYS = {
   owned: 'discvault_owned',
   copies: 'discvault_copies',
   market: 'discvault_market',
+  discussionReplies: 'discvault_discussion_replies',
   theme: 'theme',
 } as const;
 

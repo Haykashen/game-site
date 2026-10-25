@@ -6,4 +6,5 @@ export * from './deals';
 export * from './reports';
 export * from './notifications';
 export * from './users';
+export * from './community';
 export * from './mappers';

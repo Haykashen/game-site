@@ -2,6 +2,8 @@ import type {
   Bid,
   Copy,
   CopyPhoto,
+  Discussion,
+  DiscussionComment,
   Edition,
   Game,
   MarketEntry,
@@ -15,11 +17,15 @@ import {
   type CopyDto,
   type DealDto,
   type DealEntrySummary,
+  type DiscussionCommentDto,
+  type DiscussionDetailDto,
+  type DiscussionSummaryDto,
   type EditionDto,
   type GameDto,
   type GameSubscriptionDto,
   type MarketEntryDto,
   type MarketEntrySubscriptionDto,
+  type NewsPostDto,
   type NotificationDto,
   type PublicUser,
   type ReportDto,
@@ -175,6 +181,141 @@ export function serializeMarketEntry(entry: MarketEntryWithRelations): MarketEnt
     soldAt: entry.soldAt?.toISOString() ?? null,
     createdAt: entry.createdAt.toISOString(),
     updatedAt: entry.updatedAt.toISOString(),
+  };
+}
+
+export const discussionListInclude = {
+  author: { select: userSelect },
+  _count: { select: { comments: true } },
+} satisfies Prisma.DiscussionInclude;
+
+export type DiscussionSummaryWithRelations = Prisma.DiscussionGetPayload<{
+  include: typeof discussionListInclude;
+}>;
+
+export const discussionDetailInclude = {
+  author: { select: userSelect },
+  comments: {
+    include: { author: { select: userSelect } },
+    orderBy: { createdAt: 'asc' },
+  },
+} satisfies Prisma.DiscussionInclude;
+
+export type DiscussionDetailWithRelations = Prisma.DiscussionGetPayload<{
+  include: typeof discussionDetailInclude;
+}>;
+
+export type DiscussionCommentWithAuthor = DiscussionComment & {
+  author: SelectedUser;
+};
+
+function discussionBase(
+  discussion: Discussion,
+  author: SelectedUser,
+  commentCount: number,
+): DiscussionSummaryDto {
+  return {
+    id: discussion.id,
+    gameId: discussion.gameId,
+    title: discussion.title,
+    excerpt: discussion.excerpt,
+    body: discussion.body,
+    authorId: discussion.authorId,
+    author: serializePublicUser(author),
+    createdAt: discussion.createdAt.toISOString(),
+    updatedAt: discussion.updatedAt.toISOString(),
+    views: discussion.views,
+    tags: [...discussion.tags],
+    pinned: discussion.pinned,
+    commentCount,
+  };
+}
+
+export function serializeDiscussionSummary(
+  discussion: DiscussionSummaryWithRelations,
+): DiscussionSummaryDto {
+  return discussionBase(
+    discussion,
+    discussion.author,
+    discussion._count.comments,
+  );
+}
+
+export function serializeDiscussionComment(
+  comment: DiscussionCommentWithAuthor,
+  replies: DiscussionCommentDto[] = [],
+): DiscussionCommentDto {
+  return {
+    id: comment.id,
+    discussionId: comment.discussionId,
+    parentId: comment.parentId,
+    author: serializePublicUser(comment.author),
+    body: comment.body,
+    createdAt: comment.createdAt.toISOString(),
+    updatedAt: comment.updatedAt.toISOString(),
+    replies,
+  };
+}
+
+/** Rebuilds arbitrary-depth reply threads from the flat comment rows. */
+export function buildDiscussionCommentTree(
+  comments: readonly DiscussionCommentWithAuthor[],
+): DiscussionCommentDto[] {
+  const byId = new Map<string, DiscussionCommentDto>();
+  const roots: DiscussionCommentDto[] = [];
+
+  for (const comment of comments) {
+    byId.set(comment.id, serializeDiscussionComment(comment));
+  }
+
+  for (const comment of comments) {
+    const dto = byId.get(comment.id);
+
+    if (!dto) continue;
+
+    const parent = comment.parentId ? byId.get(comment.parentId) : undefined;
+
+    if (parent) {
+      parent.replies.push(dto);
+    } else {
+      roots.push(dto);
+    }
+  }
+
+  return roots;
+}
+
+export function serializeDiscussionDetail(
+  discussion: DiscussionDetailWithRelations,
+): DiscussionDetailDto {
+  return {
+    ...discussionBase(discussion, discussion.author, discussion.comments.length),
+    comments: buildDiscussionCommentTree(discussion.comments),
+  };
+}
+
+export const newsPostInclude = {
+  author: { select: userSelect },
+} satisfies Prisma.NewsPostInclude;
+
+export type NewsPostWithAuthor = Prisma.NewsPostGetPayload<{
+  include: typeof newsPostInclude;
+}>;
+
+export function serializeNewsPost(post: NewsPostWithAuthor): NewsPostDto {
+  return {
+    id: post.id,
+    title: post.title,
+    excerpt: post.excerpt,
+    body: post.body,
+    category: post.category,
+    authorId: post.authorId,
+    author: serializePublicUser(post.author),
+    publishedAt: post.publishedAt.toISOString(),
+    gameId: post.gameId,
+    tags: [...post.tags],
+    createdAt: post.createdAt.toISOString(),
+    updatedAt: post.updatedAt.toISOString(),
   };
 }
 

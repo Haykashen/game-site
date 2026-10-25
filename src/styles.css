@@ -3243,6 +3243,16 @@
         .feed-empty p { max-width: 34rem; font-size: .86rem; line-height: 1.6; }
         .feed-empty__action { margin-top: .4rem; }
         .feed-empty__action .btn-secondary { min-height: 40px; }
+        .feed-sync-note {
+            margin: -.2rem 0 1rem;
+            padding: .55rem .7rem;
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-card);
+            color: var(--text-muted);
+            font-size: .78rem;
+            line-height: 1.5;
+        }
 
         .discussion-detail__meta {
             display: flex;
@@ -3299,13 +3309,23 @@
             padding: 0;
         }
         .discussion-comment {
-            display: flex;
-            align-items: flex-start;
-            gap: .65rem;
+            display: block;
             padding: .8rem .85rem;
             border: 1px solid var(--border-color);
             border-radius: 10px;
             background: var(--bg-main);
+        }
+        .discussion-comment__row {
+            display: flex;
+            align-items: flex-start;
+            gap: .65rem;
+        }
+        .discussion-comments__list--replies {
+            gap: .55rem;
+            margin-top: .6rem;
+            margin-left: 1.05rem;
+            padding-left: .8rem;
+            border-left: 1px solid var(--border-color);
         }
         .feed-avatar--comment { width: 30px; height: 30px; font-size: .72rem; }
         .discussion-comment__body {
@@ -3331,7 +3351,99 @@
             font-size: .83rem;
             line-height: 1.55;
         }
+        .discussion-comment__reply {
+            display: inline-flex;
+            align-items: center;
+            gap: .3rem;
+            align-self: flex-start;
+            padding: .1rem 0;
+            border: 0;
+            background: none;
+            color: var(--text-muted);
+            font-size: .7rem;
+            cursor: pointer;
+        }
+        .discussion-comment__reply:hover { color: var(--brand); }
         .discussion-comments__empty { color: var(--text-muted); font-size: .85rem; }
+        .discussion-comments__error {
+            color: #b91c1c;
+            font-size: .78rem;
+            line-height: 1.5;
+        }
+        html.dark .discussion-comments__error { color: #fca5a5; }
+        .discussion-reply-form {
+            display: flex;
+            flex-direction: column;
+            gap: .55rem;
+            padding: .9rem;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-main);
+        }
+        .discussion-reply-form__label {
+            color: var(--text-muted);
+            font: 600 .68rem/1.4 'IBM Plex Mono', monospace;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+        .discussion-reply-form__target {
+            display: flex;
+            flex-direction: column;
+            gap: .3rem;
+            padding: .55rem .7rem;
+            border-left: 2px solid var(--brand);
+            border-radius: 6px;
+            background: var(--bg-card);
+            color: var(--text-muted);
+            font-size: .78rem;
+            line-height: 1.5;
+        }
+        .discussion-reply-form__target span {
+            display: -webkit-box;
+            overflow: hidden;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+        .discussion-reply-form__cancel {
+            align-self: flex-start;
+            padding: 0;
+            border: 0;
+            background: none;
+            color: var(--brand);
+            font-size: .7rem;
+            cursor: pointer;
+        }
+        .discussion-reply-form__input {
+            width: 100%;
+            min-height: 88px;
+            resize: vertical;
+            padding: .7rem .75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            font: inherit;
+            font-size: .84rem;
+            line-height: 1.55;
+        }
+        .discussion-reply-form__input:focus {
+            outline: none;
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px var(--brand-light);
+        }
+        .discussion-reply-form__actions { display: flex; justify-content: flex-end; }
+        .discussion-reply-form__error {
+            color: #b91c1c;
+            font-size: .73rem;
+            line-height: 1.45;
+        }
+        html.dark .discussion-reply-form__error { color: #fca5a5; }
+        .discussion-reply-form__hint {
+            color: var(--text-muted);
+            font-size: .82rem;
+            line-height: 1.55;
+        }
+        .discussion-reply-form__hint a { color: var(--brand); }
         .discussion-detail__actions {
             display: flex;
             flex-wrap: wrap;

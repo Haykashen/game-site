@@ -1,12 +1,13 @@
 import { MessagesSquare } from 'lucide-react';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { DiscussionCard } from '../components/discussions/DiscussionCard';
 import { DiscussionDrawer } from '../components/discussions/DiscussionDrawer';
 import { FeedEmpty } from '../components/feed/FeedEmpty';
 import { PageHeading } from '../components/PageHeading';
 import { SearchToolbar } from '../components/SearchToolbar';
+import { useAuth } from '../context/AuthContext';
 import { INITIAL_GAMES } from '../data';
-import { DISCUSSIONS } from '../data/discussions';
+import { useDiscussions } from '../hooks/useDiscussions';
 import { useItemPanelParam } from '../hooks/useItemPanelParam';
 import { useUrlFilters } from '../hooks/useUrlFilters';
 import { topicsCountLabel } from '../lib/feed';
@@ -35,29 +36,52 @@ const GAME_BY_ID = new Map(INITIAL_GAMES.map((game) => [game.id, game]));
 export function DiscussionsPage() {
   const { values, setValue, reset } = useUrlFilters(DISCUSSION_FILTER_PARAMS);
   const { itemId, openItem, closeItem } = useItemPanelParam();
+  const { user, isApiMode } = useAuth();
+  const {
+    discussions: allDiscussions,
+    isLoading,
+    isDetailLoading,
+    error,
+    detailError,
+    loadDiscussion,
+    reply,
+  } = useDiscussions();
+
+  useEffect(() => {
+    if (itemId) void loadDiscussion(itemId);
+  }, [itemId, loadDiscussion]);
 
   const discussions = useMemo(() => {
     const query = values.query.trim().toLocaleLowerCase('ru-RU');
 
-    return DISCUSSIONS.filter((discussion) => {
-      if (values.game && discussion.gameId !== values.game) return false;
-      if (!query) return true;
+    return allDiscussions
+      .filter((discussion) => {
+        if (values.game && discussion.gameId !== values.game) return false;
+        if (!query) return true;
 
-      const game = GAME_BY_ID.get(discussion.gameId);
+        const game = GAME_BY_ID.get(discussion.gameId);
 
-      return [discussion.title, discussion.excerpt, discussion.body, discussion.author, ...discussion.tags, game?.title ?? '']
-        .join(' ')
-        .toLocaleLowerCase('ru-RU')
-        .includes(query);
-    }).sort(
-      (left, right) =>
-        Number(right.pinned) - Number(left.pinned) ||
-        Date.parse(right.updatedAt) - Date.parse(left.updatedAt),
-    );
-  }, [values.game, values.query]);
+        return [
+          discussion.title,
+          discussion.excerpt,
+          discussion.body,
+          discussion.author,
+          ...discussion.tags,
+          game?.title ?? '',
+        ]
+          .join(' ')
+          .toLocaleLowerCase('ru-RU')
+          .includes(query);
+      })
+      .sort(
+        (left, right) =>
+          Number(right.pinned) - Number(left.pinned) ||
+          Date.parse(right.updatedAt) - Date.parse(left.updatedAt),
+      );
+  }, [allDiscussions, values.game, values.query]);
 
   const selectedDiscussion = itemId
-    ? DISCUSSIONS.find((discussion) => discussion.id === itemId) ?? null
+    ? allDiscussions.find((discussion) => discussion.id === itemId) ?? null
     : null;
   const selectedGame = selectedDiscussion
     ? GAME_BY_ID.get(selectedDiscussion.gameId)
@@ -89,6 +113,12 @@ export function DiscussionsPage() {
         onReset={handleReset}
       />
 
+      {error && (
+        <p className="feed-sync-note" role="status">
+          Сервер обсуждений недоступен — показаны демонстрационные темы.
+        </p>
+      )}
+
       {discussions.length === 0 ? (
         <FeedEmpty
           icon={MessagesSquare}
@@ -101,7 +131,7 @@ export function DiscussionsPage() {
           }
         />
       ) : (
-        <div className="discussion-grid">
+        <div className="discussion-grid" aria-busy={isLoading}>
           {discussions.map((discussion) => (
             <DiscussionCard
               key={discussion.id}
@@ -116,6 +146,11 @@ export function DiscussionsPage() {
       <DiscussionDrawer
         discussion={selectedDiscussion}
         game={selectedGame}
+        isApiMode={isApiMode}
+        isAuthenticated={Boolean(user)}
+        isLoading={isDetailLoading}
+        error={detailError}
+        onReply={reply}
         onClose={closeItem}
       />
     </>

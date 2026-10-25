@@ -99,6 +99,13 @@ enum NotificationType {
   deal_created
 }
 
+enum NewsCategory {
+  release
+  guide
+  community
+  update
+}
+
 model User {
   id               String     @id @default(uuid()) @db.Uuid
   email            String     @unique
@@ -136,6 +143,9 @@ model User {
   notificationsSent   Notification[]             @relation("NotificationActor")
   gameSubscriptions   GameSubscription[]
   entrySubscriptions  MarketEntrySubscription[]
+  authoredDiscussions Discussion[]               @relation("DiscussionAuthor")
+  discussionComments  DiscussionComment[]        @relation("DiscussionCommentAuthor")
+  authoredNews        NewsPost[]                 @relation("NewsAuthor")
 
   @@index([displayName])
   @@map("users")
@@ -175,6 +185,8 @@ model Game {
   marketEntries MarketEntry[]
   notifications Notification[]
   subscriptions GameSubscription[]
+  discussions   Discussion[]
+  newsPosts     NewsPost[]
 
   @@index([title])
   @@index([year])
@@ -450,4 +462,72 @@ model MarketEntrySubscription {
   @@unique([userId, marketEntryId])
   @@index([marketEntryId])
   @@map("market_entry_subscriptions")
+}
+
+model Discussion {
+  id        String   @id @default(uuid())
+  gameId    String   @map("game_id")
+  authorId  String   @map("author_id") @db.Uuid
+  title     String
+  excerpt   String   @db.Text
+  body      String   @db.Text
+  tags      String[]
+  pinned    Boolean  @default(false)
+  views     Int      @default(0)
+  isSeeded  Boolean  @default(false) @map("is_seeded")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  game     Game                @relation(fields: [gameId], references: [id], onDelete: Restrict)
+  author   User                @relation("DiscussionAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  comments DiscussionComment[]
+
+  @@index([gameId, pinned, updatedAt])
+  @@index([updatedAt])
+  @@index([authorId])
+  @@map("discussions")
+}
+
+model DiscussionComment {
+  id           String   @id @default(uuid())
+  discussionId String   @map("discussion_id")
+  authorId     String   @map("author_id") @db.Uuid
+  parentId     String?  @map("parent_id")
+  body         String   @db.Text
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  discussion Discussion          @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+  author     User                @relation("DiscussionCommentAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  parent     DiscussionComment?  @relation("DiscussionThread", fields: [parentId], references: [id], onDelete: Cascade)
+  replies    DiscussionComment[] @relation("DiscussionThread")
+
+  @@index([discussionId, createdAt])
+  @@index([parentId])
+  @@index([authorId])
+  @@map("discussion_comments")
+}
+
+model NewsPost {
+  id          String       @id @default(uuid())
+  authorId    String       @map("author_id") @db.Uuid
+  gameId      String?      @map("game_id")
+  title       String
+  excerpt     String       @db.Text
+  body        String       @db.Text
+  category    NewsCategory
+  tags        String[]
+  isSeeded    Boolean      @default(false) @map("is_seeded")
+  publishedAt DateTime     @default(now()) @map("published_at")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  author User  @relation("NewsAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  game   Game? @relation(fields: [gameId], references: [id], onDelete: SetNull)
+
+  @@index([publishedAt])
+  @@index([category, publishedAt])
+  @@index([gameId])
+  @@index([authorId])
+  @@map("news_posts")
 }

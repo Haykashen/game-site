@@ -3,6 +3,8 @@ import { PrismaClient } from '@prisma/client';
 import editionsJson from '../../src/data/editions.json';
 import gamesJson from '../../src/data/games.json';
 import marketJson from '../../src/data/market.json';
+import { DISCUSSIONS } from '../../src/data/discussions.js';
+import { NEWS_POSTS } from '../../src/data/news.js';
 import { hashPassword } from '../src/auth/password.js';
 import { env } from '../src/env.js';
 import { deliveryServiceFromApi } from '../src/lib/delivery.js';
@@ -96,9 +98,18 @@ async function seedCatalog(): Promise<void> {
 async function seedUsers(): Promise<Map<string, string>> {
   const entries = marketJson as unknown as SeedMarketEntry[];
   const sellerNames = [...new Set(entries.map((entry) => entry.seller))];
+  const communityNames = [
+    ...DISCUSSIONS.map((discussion) => discussion.author),
+    ...DISCUSSIONS.flatMap((discussion) =>
+      discussion.comments.map((comment) => comment.author),
+    ),
+    ...NEWS_POSTS.map((post) => post.author),
+  ];
   const userIdByName = new Map<string, string>();
 
-  for (const name of [...sellerNames, ...BIDDER_NAMES]) {
+  for (const name of [
+    ...new Set([...sellerNames, ...BIDDER_NAMES, ...communityNames]),
+  ]) {
     const email = demoEmail(slugify(name));
     const isBidder = (BIDDER_NAMES as readonly string[]).includes(name);
 
@@ -272,6 +283,88 @@ async function seedMarket(userIdByName: Map<string, string>): Promise<void> {
   console.log(`Seeded ${entries.length} market entries and their demo bids.`);
 }
 
+async function seedCommunity(userIdByName: Map<string, string>): Promise<void> {
+  // Seeded threads are rebuilt from the demo data so re-running the seed
+  // restores their initial replies and removes local test comments.
+  await prisma.discussion.deleteMany({ where: { isSeeded: true } });
+  await prisma.newsPost.deleteMany({ where: { isSeeded: true } });
+
+  let commentCount = 0;
+
+  for (const discussion of DISCUSSIONS) {
+    const authorId = userIdByName.get(discussion.author);
+
+    if (!authorId) {
+      throw new Error(`No demo user for discussion author "${discussion.author}".`);
+    }
+
+    await prisma.discussion.create({
+      data: {
+        id: discussion.id,
+        gameId: discussion.gameId,
+        authorId,
+        title: discussion.title,
+        excerpt: discussion.excerpt,
+        body: discussion.body,
+        tags: discussion.tags,
+        pinned: discussion.pinned,
+        views: discussion.views,
+        isSeeded: true,
+        createdAt: new Date(discussion.createdAt),
+        updatedAt: new Date(discussion.updatedAt),
+      },
+    });
+
+    for (const comment of discussion.comments) {
+      const commentAuthorId = userIdByName.get(comment.author);
+
+      if (!commentAuthorId) {
+        throw new Error(`No demo user for discussion comment author "${comment.author}".`);
+      }
+
+      await prisma.discussionComment.create({
+        data: {
+          id: comment.id,
+          discussionId: discussion.id,
+          authorId: commentAuthorId,
+          parentId: comment.parentId ?? null,
+          body: comment.body,
+          createdAt: new Date(comment.createdAt),
+          updatedAt: new Date(comment.updatedAt ?? comment.createdAt),
+        },
+      });
+      commentCount += 1;
+    }
+  }
+
+  for (const post of NEWS_POSTS) {
+    const authorId = userIdByName.get(post.author);
+
+    if (!authorId) {
+      throw new Error(`No demo user for news author "${post.author}".`);
+    }
+
+    await prisma.newsPost.create({
+      data: {
+        id: post.id,
+        authorId,
+        gameId: post.gameId,
+        title: post.title,
+        excerpt: post.excerpt,
+        body: post.body,
+        category: post.category,
+        tags: post.tags,
+        isSeeded: true,
+        publishedAt: new Date(post.publishedAt),
+      },
+    });
+  }
+
+  console.log(
+    `Seeded ${DISCUSSIONS.length} discussions with ${commentCount} replies and ${NEWS_POSTS.length} news posts.`,
+  );
+}
+
 async function main(): Promise<void> {
   if (
     process.env.NODE_ENV === 'production' &&
@@ -285,6 +378,7 @@ async function main(): Promise<void> {
   await seedCatalog();
   const userIdByName = await seedUsers();
   await seedMarket(userIdByName);
+  await seedCommunity(userIdByName);
 }
 
 main()

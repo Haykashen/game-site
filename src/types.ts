@@ -91,10 +91,18 @@ export interface CatalogFilters {
 /** Reply inside a community discussion topic. */
 export interface DiscussionComment {
   id: string;
+  /** Author id when the reply came from the API; absent in local demo data. */
+  authorId?: string;
   author: string;
   body: string;
+  /** Parent message for a threaded reply; `null` for a root-level reply. */
+  parentId?: string | null;
   /** ISO timestamp of the reply. */
   createdAt: string;
+  /** ISO timestamp of the last edit; absent when the reply was never edited. */
+  updatedAt?: string;
+  /** Nested replies loaded from the API. */
+  replies?: DiscussionComment[];
 }
 
 /** A game-scoped topic shown in the community feed and the game card. */
@@ -107,6 +115,8 @@ export interface Discussion {
   /** Full topic text; paragraphs are separated by blank lines. */
   body: string;
   author: string;
+  /** Author id when the topic came from the API; absent in local demo data. */
+  authorId?: string;
   /** ISO timestamp of the opening post. */
   createdAt: string;
   /** ISO timestamp of the last reply or edit. */
@@ -115,6 +125,8 @@ export interface Discussion {
   tags: string[];
   /** Pinned topics surface first and are used as the game's main discussion. */
   pinned: boolean;
+  /** Replies at every nesting level; used by feed cards without loading the thread. */
+  commentCount?: number;
   comments: DiscussionComment[];
 }
 
@@ -131,6 +143,8 @@ export interface NewsPost {
   body: string;
   category: NewsCategory;
   author: string;
+  /** Author id when the article came from the API; absent in local demo data. */
+  authorId?: string;
   /** ISO timestamp of publication. */
   publishedAt: string;
   /** Related catalogue game, or null for site-wide stories. */

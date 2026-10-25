@@ -1,5 +1,18 @@
-import type { CopyDto, MarketEntryDto } from '@discvault/shared';
-import type { Copy, MarketEntry } from '../types';
+import type {
+  CopyDto,
+  DiscussionCommentDto,
+  DiscussionDetailDto,
+  DiscussionSummaryDto,
+  MarketEntryDto,
+  NewsPostDto,
+} from '@discvault/shared';
+import type {
+  Copy,
+  Discussion,
+  DiscussionComment,
+  MarketEntry,
+  NewsPost,
+} from '../types';
 
 /**
  * The API stores auction prices separately, while the original demo model kept
@@ -48,5 +61,61 @@ export function mapCopy(dto: CopyDto): Copy {
     notes: dto.notes,
     photos: [...dto.photos],
     createdAt: dto.createdAt,
+  };
+}
+
+export function mapDiscussionComment(
+  dto: DiscussionCommentDto,
+): DiscussionComment {
+  return {
+    id: dto.id,
+    authorId: dto.author.id,
+    author: dto.author.displayName,
+    body: dto.body,
+    parentId: dto.parentId,
+    createdAt: dto.createdAt,
+    updatedAt: dto.updatedAt,
+    replies: dto.replies.map(mapDiscussionComment),
+  };
+}
+
+export function mapDiscussionSummary(dto: DiscussionSummaryDto): Discussion {
+  return {
+    id: dto.id,
+    gameId: dto.gameId,
+    title: dto.title,
+    excerpt: dto.excerpt,
+    body: dto.body,
+    authorId: dto.authorId,
+    author: dto.author.displayName,
+    createdAt: dto.createdAt,
+    updatedAt: dto.updatedAt,
+    views: dto.views,
+    tags: [...dto.tags],
+    pinned: dto.pinned,
+    commentCount: dto.commentCount,
+    comments: [],
+  };
+}
+
+export function mapDiscussionDetail(dto: DiscussionDetailDto): Discussion {
+  return {
+    ...mapDiscussionSummary(dto),
+    comments: dto.comments.map(mapDiscussionComment),
+  };
+}
+
+export function mapNewsPost(dto: NewsPostDto): NewsPost {
+  return {
+    id: dto.id,
+    title: dto.title,
+    excerpt: dto.excerpt,
+    body: dto.body,
+    category: dto.category,
+    authorId: dto.authorId,
+    author: dto.author.displayName,
+    publishedAt: dto.publishedAt,
+    gameId: dto.gameId,
+    tags: [...dto.tags],
   };
 }

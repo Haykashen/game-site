@@ -1,6 +1,7 @@
 import { ArrowUpRight, Eye, Gamepad2, MessageSquare, Pin } from 'lucide-react';
 import type { KeyboardEvent } from 'react';
 import { cx } from '../../lib/cx';
+import { discussionReplyCount } from '../../lib/discussions';
 import { commentsCountLabel, formatFeedDate } from '../../lib/feed';
 import type { Discussion, Game } from '../../types';
 
@@ -63,7 +64,7 @@ export function DiscussionCard({ discussion, game, onSelect }: DiscussionCardPro
         </span>
         <span className="feed-stats">
           <MessageSquare size={13} aria-hidden="true" />
-          {commentsCountLabel(discussion.comments.length)}
+          {commentsCountLabel(discussionReplyCount(discussion))}
         </span>
         <span className="feed-stats">
           <Eye size={13} aria-hidden="true" />

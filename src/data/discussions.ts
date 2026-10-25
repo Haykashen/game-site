@@ -1,5 +1,5 @@
 import type { Discussion } from '../types';
-import { INITIAL_GAMES } from './index';
+import gamesJson from './games.json';
 
 /**
  * Demo discussion topics. The first pinned topic per game is the one opened
@@ -30,12 +30,14 @@ export const DISCUSSIONS: readonly Discussion[] = [
       },
       {
         id: 'comment-sh2-collection-2',
+        parentId: 'comment-sh2-collection-1',
         author: 'mistwalker',
         body: 'Спасибо! А насколько у PAL часто встречается вкладыш с управлением? В объявлениях его иногда вообще не упоминают.',
         createdAt: '2026-10-20T08:15:00.000Z',
       },
       {
         id: 'comment-sh2-collection-3',
+        parentId: 'comment-sh2-collection-2',
         author: 'disk_keeper',
         body: 'У моего PAL-издания вкладыш был, но без него встречается чаще, чем хотелось бы. Поэтому просите фото комплектации до оплаты — это реально экономит нервы.',
         createdAt: '2026-10-23T18:40:00.000Z',
@@ -66,6 +68,7 @@ export const DISCUSSIONS: readonly Discussion[] = [
       },
       {
         id: 'comment-sh2-endings-2',
+        parentId: 'comment-sh2-endings-1',
         author: 'laura_s',
         body: 'Согласна. И именно поэтому мне нравится, что игра не даёт одной «правильной» трактовки — каждая концовка что-то меняет в прочтении.',
         createdAt: '2026-10-21T09:30:00.000Z',
@@ -96,12 +99,14 @@ export const DISCUSSIONS: readonly Discussion[] = [
       },
       {
         id: 'comment-halo-region-2',
+        parentId: 'comment-halo-region-1',
         author: 'banshee_777',
         body: 'А по комплектации? У моего PAL-издания мануал на нескольких языках, но вкладыш довольно скромный.',
         createdAt: '2026-10-18T14:00:00.000Z',
       },
       {
         id: 'comment-halo-region-3',
+        parentId: 'comment-halo-region-2',
         author: 'spartan_shelf',
         body: 'Да, у NTSC-U буклет визуально интереснее, но глобально комплектация похожая. Если цель — именно игра, я бы взял регион своей консоли.',
         createdAt: '2026-10-22T16:25:00.000Z',
@@ -132,12 +137,14 @@ export const DISCUSSIONS: readonly Discussion[] = [
       },
       {
         id: 'comment-er-collectors-2',
+        parentId: 'comment-er-collectors-1',
         author: 'tarnished_one',
         body: 'Спасибо! А коробка на вторичке часто идёт с потёртостями? Мне важна именно сохранность внешнего бокса.',
         createdAt: '2026-10-17T09:05:00.000Z',
       },
       {
         id: 'comment-er-collectors-3',
+        parentId: 'comment-er-collectors-2',
         author: 'roundtable_keep',
         body: 'Часто да. Просите отдельные фото углов и внутренних лотков. Если продавец не хочет показывать — лучше пройти мимо.',
         createdAt: '2026-10-23T11:15:00.000Z',
@@ -168,6 +175,7 @@ export const DISCUSSIONS: readonly Discussion[] = [
       },
       {
         id: 'comment-er-build-2',
+        parentId: 'comment-er-build-1',
         author: 'ranni_fan',
         body: 'А стоит ли качать веру ради бафов? Вижу, что многие советуют, но не хочу усложнять себе первый билд.',
         createdAt: '2026-10-22T07:10:00.000Z',
@@ -176,7 +184,7 @@ export const DISCUSSIONS: readonly Discussion[] = [
   },
 ];
 
-const gameIds = new Set(INITIAL_GAMES.map((game) => game.id));
+const gameIds = new Set(gamesJson.map((game) => game.id));
 
 for (const discussion of DISCUSSIONS) {
   if (!gameIds.has(discussion.gameId)) {

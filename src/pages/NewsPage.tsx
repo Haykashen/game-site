@@ -6,7 +6,7 @@ import { NewsDrawer } from '../components/news/NewsDrawer';
 import { PageHeading } from '../components/PageHeading';
 import { SearchToolbar } from '../components/SearchToolbar';
 import { INITIAL_GAMES } from '../data';
-import { NEWS_POSTS } from '../data/news';
+import { useNewsFeed } from '../hooks/useNewsFeed';
 import { useItemPanelParam } from '../hooks/useItemPanelParam';
 import { useUrlFilters } from '../hooks/useUrlFilters';
 import { newsCountLabel } from '../lib/feed';
@@ -36,11 +36,12 @@ const GAME_BY_ID = new Map(INITIAL_GAMES.map((game) => [game.id, game]));
 export function NewsPage() {
   const { values, setValue, reset } = useUrlFilters(NEWS_FILTER_PARAMS);
   const { itemId, openItem, closeItem } = useItemPanelParam();
+  const { posts: allPosts, isLoading, error } = useNewsFeed();
 
   const news = useMemo(() => {
     const query = values.query.trim().toLocaleLowerCase('ru-RU');
 
-    return NEWS_POSTS.filter((post) => {
+    return allPosts.filter((post) => {
       if (values.category && post.category !== values.category) return false;
       if (!query) return true;
 
@@ -53,10 +54,10 @@ export function NewsPage() {
     }).sort(
       (left, right) => Date.parse(right.publishedAt) - Date.parse(left.publishedAt),
     );
-  }, [values.category, values.query]);
+  }, [allPosts, values.category, values.query]);
 
   const selectedNews = itemId
-    ? NEWS_POSTS.find((post) => post.id === itemId) ?? null
+    ? allPosts.find((post) => post.id === itemId) ?? null
     : null;
   const selectedGame = selectedNews?.gameId
     ? GAME_BY_ID.get(selectedNews.gameId)
@@ -88,6 +89,12 @@ export function NewsPage() {
         onReset={handleReset}
       />
 
+      {error && (
+        <p className="feed-sync-note" role="status">
+          Сервер новостей недоступен — показаны демонстрационные материалы.
+        </p>
+      )}
+
       {news.length === 0 ? (
         <FeedEmpty
           icon={Newspaper}
@@ -100,7 +107,7 @@ export function NewsPage() {
           }
         />
       ) : (
-        <div className="news-grid">
+        <div className="news-grid" aria-busy={isLoading}>
           {news.map((post, index) => (
             <NewsCard
               key={post.id}
