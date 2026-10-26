@@ -93,7 +93,8 @@ function parseTitle(title,platform){
   const region=title.match(/(?:\(|\[| - )(EU|US|UK|ASIA|JAP|JP)(?: ver\.)?(?:\)|\]|$)/i)?.[1]?.toUpperCase();
   const russian=/русск(?:ая версия|ие субтитры)/iu.test(title);
   const english=/английская версия/iu.test(title);
-  const voice=/русская версия/iu.test(title)?['русский']:english?['английский']:[];
+  // "Russian version" alone does not establish the audio language.
+  const voice=/русская озвучка|полностью на русском/iu.test(title)?['русский']:english?['английский']:[];
   const metadata=[];
   let name=clean(title.replace(/Премьерное Издание \(Launch Edition\)/giu,'Launch Edition').replace(/Коллекционное издание \(Collectors Edition\)/giu,"Collector's Edition").replace(/\(([^()]*)\)|\[([^\[\]]*)\]/gu,(whole,a,b)=>{
     const inner=a??b;
