@@ -21,7 +21,7 @@ export function MobileNav() {
   useBodyScrollLock(isMoreOpen);
 
   const moreItems = isModerator
-    ? [...MOBILE_MORE_ITEMS, NAV_ITEMS.admin]
+    ? [...MOBILE_MORE_ITEMS, NAV_ITEMS.analytics, NAV_ITEMS.admin]
     : MOBILE_MORE_ITEMS;
   const isMoreActive = moreItems.some((item) => pathname === item.path);
 

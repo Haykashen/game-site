@@ -192,6 +192,10 @@ Seed импортирует игры, издания, объявления, об
 - `PATCH /api/v1/deals/:id/status`
 - `POST /api/v1/deals/:id/reviews`
 
+### Admin analytics
+
+- `GET /api/v1/admin/analytics?period=7d|30d|90d|365d` — KPI по играм и пользователям, динамика, топ игр, продавцов, покупателей и коллекционеров (`admin` / `moderator`)
+
 ### Reports and moderation
 
 - `POST /api/v1/reports` — жалоба на `market_entry` или `user` (только авторизованные)

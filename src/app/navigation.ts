@@ -2,6 +2,7 @@ import {
   ArrowLeftRight,
   BarChart3,
   Bell,
+  ChartNoAxesCombined,
   Gamepad2,
   Gavel,
   Library,
@@ -29,6 +30,7 @@ export type NavSectionId =
   | 'stats'
   | 'account'
   | 'settings'
+  | 'analytics'
   | 'admin';
 
 export interface NavItem {
@@ -145,6 +147,14 @@ export const NAV_ITEMS = {
     shortLabel: 'Настройки',
     path: '/settings',
     icon: Settings2,
+  },
+  analytics: {
+    id: 'analytics',
+    label: 'Аналитика',
+    pageTitle: 'Аналитика',
+    shortLabel: 'Аналитика',
+    path: '/admin/analytics',
+    icon: ChartNoAxesCombined,
   },
   admin: {
     id: 'admin',

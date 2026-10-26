@@ -13,6 +13,7 @@ import { isPrismaError } from './lib/prismaErrors.js';
 import { ensureStorageReady } from './lib/storage.js';
 import { prisma } from './prisma.js';
 import { resolveSession } from './auth/session.js';
+import { registerAnalyticsRoutes } from './analytics/routes.js';
 import { registerAuthRoutes } from './auth/routes.js';
 import { registerBidRoutes } from './bids/routes.js';
 import { registerCatalogRoutes } from './catalog/routes.js';
@@ -236,6 +237,7 @@ export async function buildApp() {
   app.get('/api/v1/health', healthHandler);
 
   registerAuthRoutes(app);
+  registerAnalyticsRoutes(app);
   registerUserRoutes(app);
   registerCatalogRoutes(app);
   registerGameRatingRoutes(app);

@@ -28,6 +28,7 @@ export const HEADER_BANNERS: Record<NavSectionId, HeaderBannerMeta> = {
   stats: { kicker: 'SHELF / STATISTICS', tone: 'lime' },
   account: { kicker: 'PROFILE / ACCOUNT', tone: 'violet' },
   settings: { kicker: 'SYSTEM / SETTINGS', tone: 'muted' },
+  analytics: { kicker: 'ADMIN / ANALYTICS', tone: 'lime' },
   admin: { kicker: 'SYSTEM / MODERATION', tone: 'pink' },
 };
 

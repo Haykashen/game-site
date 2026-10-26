@@ -5,6 +5,7 @@ import { CollectionProvider } from './context/CollectionContext';
 import { NotificationsProvider } from './context/NotificationsContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { AccountPage } from './pages/AccountPage';
+import { AdminAnalyticsPage } from './pages/AdminAnalyticsPage';
 import { AdminReportsPage } from './pages/AdminReportsPage';
 import { AuctionsPage } from './pages/AuctionsPage';
 import { CollectionPage } from './pages/CollectionPage';
@@ -49,6 +50,7 @@ export default function App() {
                   <Route path="/notifications" element={<NotificationsPage />} />
                   <Route path="/account" element={<AccountPage />} />
                   <Route path="/users/:id" element={<UserProfilePage />} />
+                  <Route path="/admin/analytics" element={<AdminAnalyticsPage />} />
                   <Route path="/admin/reports" element={<AdminReportsPage />} />
                   <Route path="/settings" element={<SettingsPage />} />
                   <Route path="*" element={<Navigate to="/games" replace />} />

@@ -7,4 +7,5 @@ export * from './reports';
 export * from './notifications';
 export * from './users';
 export * from './community';
+export * from './analytics';
 export * from './mappers';

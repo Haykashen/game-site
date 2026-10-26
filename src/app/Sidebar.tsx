@@ -82,8 +82,9 @@ export function Sidebar() {
         ))}
 
         {isModerator && (
-          <div className="nav-group" key="moderation">
-            <p className="nav-group__label">Управление</p>
+          <div className="nav-group" key="administration">
+            <p className="nav-group__label">Администрирование</p>
+            <NavRow item={NAV_ITEMS.analytics} count={undefined} />
             <NavRow item={NAV_ITEMS.admin} count={undefined} />
           </div>
         )}
