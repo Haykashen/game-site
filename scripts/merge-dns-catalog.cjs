@@ -1,0 +1,10 @@
+const fs=require('node:fs');
+const {mergeCatalog}=require('./lib/merge-dns-catalog.cjs');
+const [baseFile,additionFile,outputFile]=process.argv.slice(2);
+if(!baseFile||!additionFile||!outputFile)throw Error('Usage: merge-dns-catalog.cjs base.json addition.json output.json');
+const base=JSON.parse(fs.readFileSync(baseFile,'utf8')),addition=JSON.parse(fs.readFileSync(additionFile,'utf8'));
+base.source.sourceCards ??= base.stats.sourceCards;
+addition.source.sourceCards ??= addition.stats.sourceCards;
+const merged=mergeCatalog(base,addition);
+fs.writeFileSync(outputFile,JSON.stringify(merged.document,null,2)+'\n');
+console.log(JSON.stringify({...merged.summary,stats:merged.document.stats,newTitles:merged.newTitles},null,2));

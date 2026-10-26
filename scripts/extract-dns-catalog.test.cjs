@@ -4,6 +4,23 @@ const { extract, parseName } = require('./extract-dns-catalog.cjs');
 const card = (id, title, body = '') => `<div class="catalog-product" data-product="${id}" data-code="001"><a class="catalog-product__name" title="${title}" href="/product/${id}/">WRONG visible title</a>${body}</div>`;
 const editions = result => result.games.flatMap(g => g.platforms.flatMap(p => p.editions));
 
+test('Xbox generations, shorthand and legacy quoted titles normalize without leaking platforms into titles',()=>{
+  for(const delimiter of ['/','\\','/Xbox ']){
+    const parsed=parseName('Игра для Xbox One'+delimiter+'Series X "Example" Deluxe Edition (18+) (Шутер)');
+    assert.equal(parsed.gameTitle,'Example');
+    assert.deepEqual(parsed.platforms,['Xbox One','Xbox Series X']);
+    assert.equal(parsed.editionName,'Deluxe Edition');
+  }
+  assert.deepEqual(parseName('Игра Example (Xbox ONE, Xbox Series S, Xbox Series X)').platforms,['Xbox One','Xbox Series S','Xbox Series X']);
+});
+test('digital editions and add-ons retain their product identity and base game',()=>{
+  const result=extract(card('dlc','Дополнение для игры Fortnite: Transformers Pack (Xbox Series S, Xbox Series X) [цифровое издание]'),'xbox.html');
+  assert.equal(result.games[0].title,'Fortnite');
+  assert.equal(editions(result)[0].contentType,'addon');
+  assert.equal(editions(result)[0].editionType,'цифровое издание');
+  assert.equal(editions(result)[0].name,'Дополнение: Transformers Pack');
+});
+
 test('groups platforms and editions, retains product IDs, and reads title attribute', () => {
   const result = extract(card('a', 'Игра Example: Complete Edition (PS5)') + card('b', 'Игра Example (PS4)') + card('c', 'Игра Example Deluxe Edition (PS5)'), 'test.html');
   assert.equal(result.games.length, 1);

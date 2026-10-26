@@ -47,7 +47,7 @@ jobs:
       - run: npm run typecheck:server
       - run: node --import tsx --test scripts/market-items.test.ts
       - run: node --import tsx --test scripts/api-catalog.test.ts scripts/catalog-database.test.ts
-      - run: node --import tsx --test scripts/dns-catalog.test.cjs scripts/edition-artwork.test.ts
+      - run: node --import tsx --test scripts/dns-catalog.test.cjs scripts/merge-dns-catalog.test.cjs scripts/edition-artwork.test.ts
       - run: node --test scripts/deployment*.test.mjs
       - run: bash -n deploy/auto-deploy.sh
       - run: npm run build:all

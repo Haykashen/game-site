@@ -48,6 +48,12 @@
     "textColor": "#ffffff"
   },
   {
+    "name": "Xbox Series S",
+    "group": "Xbox",
+    "color": "#107c10",
+    "textColor": "#ffffff"
+  },
+  {
     "name": "Xbox Series X",
     "group": "Xbox",
     "color": "#1f2937",

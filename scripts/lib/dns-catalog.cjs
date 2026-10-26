@@ -49,11 +49,11 @@ function planCatalog(document, games, editions) {
     else if (!existing.coverImage && coverImage) updateGames.push({ id: gameId, data: { coverImage } });
     mappings.push({ sourceId: source.id, gameId, sourceTitle: source.title, title: existing?.title ?? source.title, matched: Boolean(existing) });
     for (const platform of source.platforms) {
-      if (!['PS3','PS4','PS5'].includes(platform.name)) throw Error('Unresolved platform: ' + platform.name);
+      if (!['PS3','PS4','PS5','Xbox One','Xbox 360','Xbox Series X','Xbox Series S'].includes(platform.name)) throw Error('Unresolved platform: ' + platform.name);
       for (const product of platform.editions) {
         if (!source.productIds.includes(product.id) || !product.platforms.includes(platform.name)) throw Error('Product/platform mismatch: ' + product.id);
         const covers = coverImages(product.images ?? []);
-        const id = product.platforms.length > 1 ? `${product.id}-${platform.name.toLowerCase()}` : product.id;
+        const id = product.platforms.length > 1 ? `${product.id}-${platform.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')}` : product.id;
         const matches = editions.filter(e=>e.dnsProductId === product.id && e.platform === platform.name);
         if (matches.length > 1) throw Error('Ambiguous existing DNS edition: ' + product.id);
         const prior = matches[0] ?? editionById.get(id);
@@ -69,9 +69,9 @@ function planCatalog(document, games, editions) {
           if (!prior.dnsProductCode && product.code) data.dnsProductCode = product.code;
           if (Object.keys(data).length) updateEditions.push({ id: prior.id, data });
         } else {
-          const description = [product.ageRating ? `Возрастное ограничение: ${product.ageRating}.` : '', product.voiceLanguages?.length ? `Озвучка: ${product.voiceLanguages.join(', ')}.` : ''].filter(Boolean).join(' ');
+          const description = [product.contentType === 'addon' ? 'Дополнение к игре.' : '', product.editionType === 'цифровое издание' ? 'Цифровое издание.' : '', product.ageRating ? `Возрастное ограничение: ${product.ageRating}.` : '', product.voiceLanguages?.length ? `Озвучка: ${product.voiceLanguages.join(', ')}.` : ''].filter(Boolean).join(' ');
           createEditions.push({ id, gameId, name: product.name === 'стандартное издание' ? 'Standard' : product.name,
-            platform: platform.name, region: 'Не указан', lang: product.interfaceLanguages?.join(', ') || 'Не указан', media: 'Не указан',
+            platform: platform.name, region: 'Не указан', lang: product.interfaceLanguages?.join(', ') || 'Не указан', media: product.editionType === 'цифровое издание' ? 'Цифровое издание' : 'Не указан',
             releaseDate: product.releaseDate ? new Date(product.releaseDate + 'T00:00:00.000Z') : null,
             description, contents: [], coverImages: covers, barcode: '', dnsProductId: product.id, dnsProductCode: product.code ?? '' });
         }

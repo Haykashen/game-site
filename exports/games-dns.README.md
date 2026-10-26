@@ -1,14 +1,17 @@
-# Выгрузка games-dns.html
+# Объединённый каталог DNS: PlayStation и Xbox
 
 Файл: `games-dns.json` (UTF-8). Структура: `games[] → platforms[] → editions[] → images[]`.
 
 Проверено по исходному HTML:
 
-- 1 192 карточки и 1 192 уникальных `data-product` — все сохранены.
-- 839 групп игр; 995 групп платформ; 1 196 вложенных записей товаров.
-- 4 товара помечены одновременно PS4 и PS5: один ID присутствует под обеими платформами.
-- Изображения есть у всех товаров: 4 953 ссылки после удаления точных повторов внутри товара.
-- Даты выхода извлечены для 1 173 товаров; у остальных дата не указана.
+- 1 714 уникальных `data-product`: 1 192 PlayStation и 522 Xbox — все сохранены.
+- 906 групп игр; 1 501 группа платформ; 1 888 вложенных записей товаров.
+- Товар с несколькими платформами присутствует под каждой с одним исходным ID.
+- Изображения есть у всех товаров. Все ссылки взяты из `<picture>` соответствующих карточек.
+- Даты выпуска указаны для 1 597 товаров; отсутствующие или явно ошибочные даты — `null`.
+- Xbox-выгрузка отдельно сохранена в `games-dns-xbox.json`: 401 группа игр,
+  522 товара, 692 записи платформ/изданий. Среди товаров 81 цифровой и 14 дополнений.
+- Метаданные обоих исходных HTML, SHA-256 и даты извлечения — в `source.files`.
 
 ## Поля и идентификаторы
 
@@ -42,22 +45,41 @@ Director's Cut и PlayStation Hits, выделяются отдельно. Ра�
 не схлопываются, даже если название издания совпадает: могут отличаться языки,
 дата или комплект поставки. Неуказанное издание обозначено «Не указано».
 
+Xbox ONE приведён к Xbox One; поддерживаются Xbox 360, Xbox One, Xbox Series S,
+Xbox Series X, включая старые записи `Xbox One/Series X` и `Xbox One\\Series X`.
+Русские названия известных игр сопоставлены с английскими явным словарём.
+Цифровые товары сохраняют `editionType`, дополнения — `contentType: addon`
+и название «Дополнение: ...» внутри базовой игры. Исходные тексты не удаляются.
+
+Siege X сопоставлен с Rainbow Six Siege по
+[официальному описанию Ubisoft](https://toronto.ubisoft.com/ubisoft-toronto-enters-the-operation-on-rainbow-six-siege-x/),
+Gone Fission — с Fallout 76 по
+[примечаниям Bethesda](https://fallout.bethesda.net/en-US/news/fallout-76-gone-fission-release-notes).
+Эти уточнения отмечены в `groupingAnnotation`. У Xbox FC 27 дата 25.09.2006
+сохранена в `releaseDateText`; `releaseDate: null` и `dataQualityNotes`
+помечают её как требующую проверки.
+
 Ремейки, ремастеры и сборники с отдельными названиями сохранены отдельно от
 оригиналов. Resident Evil 4 Gold Edition отнесено к ремейку по
 [официальному сообщению Capcom](https://www.capcom.co.jp/ir/english/news/pdf/e240313.pdf);
 это уточнение явно отмечено в `groupingAnnotation`. Дата товара из DNS не исправлялась.
 Группировка основана на названиях; это подготовленная выгрузка, не сопоставление
-с внутренними ID базы DiscVault. Импорт в БД не выполнялся.
+с внутренними ID базы DiscVault. При импорте сохраняются существующие ID игры
+и издания; повторный запуск не создаёт новые записи.
 
 ## Повторная выгрузка
 
 ```powershell
 npm install --prefix .deploy/tools --no-save --package-lock=false cheerio
-node scripts/extract-dns-catalog.cjs "C:/Users/Hayka/Downloads/games-dns.html" exports/games-dns.json
+node scripts/extract-dns-catalog.cjs "C:/Users/Hayka/Downloads/game-dns-xbox.html" exports/games-dns-xbox.json
+node scripts/merge-dns-catalog.cjs exports/games-dns.json exports/games-dns-xbox.json exports/games-dns.json
 node --test scripts/extract-dns-catalog.test.cjs
 ```
 
-В JSON записаны SHA-256 исходника, время извлечения, статистика и правила полей.
+Объединение сохраняет существующие группы и товарные записи, добавляя платформы
+и товары. Конфликт назначения одного ID разным играм останавливает обработку.
+
+В JSON записаны SHA-256 исходников, время извлечения, статистика и правила полей.
 Проверены все товарные ID, соответствие `sourceTitle` атрибутам HTML и точное
 совпадение множества ссылок из `<picture>` для каждого товара. Шесть тестов
 покрывают группировку, HTML-сущности, картинки, несколько платформ, старый формат

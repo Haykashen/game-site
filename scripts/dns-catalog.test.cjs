@@ -38,3 +38,10 @@ test('ambiguous existing titles and identity collisions abort without guessing',
   assert.throws(()=>planCatalog(source(),[{id:'a',title:'Example'},{id:'b',title:'EXAMPLE'}],[]),/Ambiguous/);
   assert.throws(()=>planCatalog(source(),[{id:'game-source',title:'Another game'}],[]),/collision/);
 });
+test('Xbox digital add-ons use stable edition IDs per generation and an explicit media type',()=>{
+  const document=source('Example',['Xbox One','Xbox Series S','Xbox Series X']);
+  for(const p of document.games[0].platforms)Object.assign(p.editions[0],{editionType:'цифровое издание',contentType:'addon',name:'Дополнение: Pack'});
+  const plan=planCatalog(document,[],[]);
+  assert.deepEqual(plan.createEditions.map(e=>e.id),['sku-xbox-one','sku-xbox-series-s','sku-xbox-series-x']);
+  assert.ok(plan.createEditions.every(e=>e.media==='Цифровое издание'&&e.description.startsWith('Дополнение к игре.')));
+});
