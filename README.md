@@ -41,6 +41,22 @@ npm run preview   # предпросмотр production-сборки
 CSS и JS встроены внутрь, поэтому файл открывается напрямую с диска. Единственный
 внешний ресурс — Google Fonts, как и в исходной версии.
 
+## Публикация тестового стенда
+
+Для полноценной проверки с API, PostgreSQL и HTTPS подготовлен Docker Compose
+стенд: Caddy раздаёт `dist/index.html` и проксирует `/api/*` и `/uploads/*` на
+Fastify, PostgreSQL и загрузки хранятся в volumes. Инструкция по VPS:
+[`deploy/README.md`](deploy/README.md).
+
+Коротко на сервере с Docker:
+
+```bash
+cp deploy/env.production.example .env
+# заполнить APP_DOMAIN, пароли и SEED_DEMO_*
+docker compose -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.prod.yml exec api npx prisma db seed
+```
+
 ## Разделы и маршруты
 
 | Маршрут       | Раздел                                                  |

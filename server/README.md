@@ -40,6 +40,11 @@ npm run dev:full
 
 `GET /api/health` отвечает `200`, когда процесс и PostgreSQL готовы. Если БД недоступна, возвращается `503` и `{"status":"degraded","database":"down"}`; frontend в этом случае автоматически остаётся в локальном демо-режиме.
 
+## Публикация тестового стенда
+
+Готовый Docker Compose стенд с Caddy, PostgreSQL и HTTPS описан в
+[`deploy/README.md`](../deploy/README.md).
+
 ## Переменные окружения
 
 Файл `server/.env` (пример — `server/.env.example`):

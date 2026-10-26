@@ -1,0 +1,17 @@
+node_modules
+**/node_modules
+dist
+**/dist
+.git
+.gitignore
+.env
+**/.env
+server/uploads
+server/dist
+*.log
+discvault_stage3.html
+retrokeep_stage3.html
+dns-ps-games.json
+sites
+coverage
+.vite
