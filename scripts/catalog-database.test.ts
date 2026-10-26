@@ -85,6 +85,20 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
     const oldLink=await app.inject({method:'GET',url:'/api/v1/catalog/editions/'+aliasId});
     assert.equal(oldLink.statusCode,200);assert.equal(oldLink.json().id,canonicalId);
     assert.equal(runImport().duplicateGroups,0);
+    const scan='https://showgames.ru/image/cache/catalog/covers/ps5/fixture-855x1000.jpg';
+    const sourceProduct={id:importedId+'-sku',name:'Standard',platforms:['PS5'],images:['https://c.dns-shop.ru/thumb/st1/fit/500/500/test/cover.jpg.webp'],interfaceLanguages:['русский']};
+    await writeFile(input,JSON.stringify({warnings:[],games:[{id:importedId,title:'DNS fixture '+id,productIds:[sourceProduct.id,'showgames-'+id],platforms:[{name:'PS5',editions:[sourceProduct,
+      {id:'showgames-'+id,sourceProvider:'showgames',name:'Standard',platforms:['PS5'],images:[scan],interfaceLanguages:['русский']},
+    ]}]}]}));
+    const scansPreview=runImport();
+    assert.equal(scansPreview.createGames,0);assert.equal(scansPreview.createEditions,1);
+    runImport('--apply','--expect='+scansPreview.hash);
+    const refreshed=await app.prisma.edition.findUniqueOrThrow({where:{id:canonicalId}});
+    assert.equal(refreshed.coverImages[0],scan);
+    assert.ok(refreshed.coverImages.includes(sourceProduct.images[0]!));
+    assert.ok(refreshed.coverImages.some(url=>url.includes('/back.jpg')));
+    assert.equal((await app.prisma.copy.findUniqueOrThrow({where:{id:copy.id}})).editionId,canonicalId);
+    assert.equal(runImport().createEditions,0);assert.equal(runImport().updateEditions,0);assert.equal(runImport().duplicateGroups,0);
   } finally {
     await app.prisma.marketEntry.deleteMany({where:{id:id+'-listing'}});
     await app.prisma.user.deleteMany({where:{id:ownerId}});

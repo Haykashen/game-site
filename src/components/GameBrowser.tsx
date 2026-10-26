@@ -4,7 +4,7 @@ import { useCollection } from '../context/CollectionContext';
 import { ApiState } from './ApiState';
 import { useMarketEntries } from '../hooks/useMarketEntries';
 import { discussionRoutePath } from '../lib/discussions';
-import { gameCoverImage } from '../lib/editions';
+import { gameCoverImage, gameCoverImages } from '../lib/editions';
 import { marketListingPath } from '../lib/market';
 import type { Game, GameStats, MarketEntry } from '../types';
 import { GameGrid } from './GameGrid';
@@ -109,6 +109,7 @@ export function GameBrowser({
         purchasesCount: marketCounts.get(game.id)?.purchasesCount ?? 0,
         exchangeCount: marketCounts.get(game.id)?.exchangeCount ?? 0,
         coverImage: gameCoverImage(game, editionsForGame),
+        coverImages: gameCoverImages(game, editionsForGame),
       });
     }
 

@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { FallbackImage } from './FallbackImage';
 import type { KeyboardEvent } from 'react';
 import { Check, Disc, Eye, Layers } from 'lucide-react';
 import { getPlatformBadgeStyle } from '../data/reference';
@@ -45,7 +46,7 @@ function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
     >
       <div className="card-cover">
         {stats.coverImage && (
-          <img className="card-cover__image" src={stats.coverImage} alt="" loading="lazy" referrerPolicy="no-referrer" onError={event => { event.currentTarget.style.visibility = 'hidden'; }} />
+          <FallbackImage className="card-cover__image" images={stats.coverImages ?? [stats.coverImage]} alt="" loading="lazy" />
         )}
 
         <div className="cover-art" aria-hidden="true">

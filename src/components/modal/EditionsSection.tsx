@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { FallbackImage } from '../FallbackImage';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Check, Image as ImageIcon, Layers, Package, Plus } from 'lucide-react';
@@ -90,7 +91,7 @@ function EditionCard({
     >
       <div className="edition-card__cover">
         {cover ? (
-          <img src={cover} alt="" loading="lazy" referrerPolicy="no-referrer" />
+          <FallbackImage images={edition.coverImages} alt="" loading="lazy" />
         ) : (
           <div className="edition-card__placeholder">
             <ImageIcon size={28} aria-hidden="true" />

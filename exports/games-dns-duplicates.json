@@ -2,11 +2,53 @@
   {
     "gameId": "6cc3ece6-b97d-11ed-90ac-00155d8ed209",
     "game": "The Witcher 3: Wild Hunt",
+    "platform": "PS5",
+    "name": "Complete Edition",
+    "productIds": [
+      "6cc3ece6-b97d-11ed-90ac-00155d8ed209",
+      "showgames-10674"
+    ]
+  },
+  {
+    "gameId": "6cc3ece6-b97d-11ed-90ac-00155d8ed209",
+    "game": "The Witcher 3: Wild Hunt",
     "platform": "PS4",
     "name": "Game Of The Year Edition",
     "productIds": [
       "6e3c4f0c-22a4-11ed-9009-00155d8ed20b",
-      "966071cb-6379-11e6-9bdd-00155d033307"
+      "966071cb-6379-11e6-9bdd-00155d033307",
+      "showgames-2603",
+      "showgames-8673"
+    ]
+  },
+  {
+    "gameId": "b1b000af-2519-11ed-900c-00155d8ed209",
+    "game": "Grand Theft Auto V",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "b1b000af-2519-11ed-900c-00155d8ed209",
+      "showgames-10232"
+    ]
+  },
+  {
+    "gameId": "b1b000af-2519-11ed-900c-00155d8ed209",
+    "game": "Grand Theft Auto V",
+    "platform": "PS4",
+    "name": "Premium Edition",
+    "productIds": [
+      "d821c47b-d828-11e9-a20c-00155d03332b",
+      "showgames-9026"
+    ]
+  },
+  {
+    "gameId": "7b43d76e-3a7c-11ee-9128-00155d8ed209",
+    "game": "Marvel's Spider-Man 2",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "7b43d76e-3a7c-11ee-9128-00155d8ed209",
+      "showgames-11053"
     ]
   },
   {
@@ -16,7 +58,8 @@
     "name": "стандартное издание",
     "productIds": [
       "6e64e646-7e69-11f0-9378-0050569d21a3",
-      "81f761e0-19a3-4824-b8da-da9003f8d8f7"
+      "81f761e0-19a3-4824-b8da-da9003f8d8f7",
+      "showgames-12197"
     ]
   },
   {
@@ -26,7 +69,48 @@
     "name": "стандартное издание",
     "productIds": [
       "566ed337-7e69-11f0-9378-0050569d21a3",
-      "8e7d3e31-8b58-458a-9dd2-f89810b17657"
+      "8e7d3e31-8b58-458a-9dd2-f89810b17657",
+      "showgames-12201"
+    ]
+  },
+  {
+    "gameId": "0132a22a-8b9e-11eb-a238-00155dd2ff05",
+    "game": "It Takes Two",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "0132a22a-8b9e-11eb-a238-00155dd2ff05",
+      "showgames-9791"
+    ]
+  },
+  {
+    "gameId": "9d30c33d-a01c-11f1-94a4-0050569d21a3",
+    "game": "EA Sports FC 27",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "9d30c33d-a01c-11f1-94a4-0050569d21a3",
+      "showgames-12702"
+    ]
+  },
+  {
+    "gameId": "9d30c33d-a01c-11f1-94a4-0050569d21a3",
+    "game": "EA Sports FC 27",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "7f46b17a-a01c-11f1-94a4-0050569d21a3",
+      "showgames-12706"
+    ]
+  },
+  {
+    "gameId": "ee0dd243-0d17-11eb-a20f-00155df1b805",
+    "game": "Mortal Kombat 11",
+    "platform": "PS5",
+    "name": "Ultimate",
+    "productIds": [
+      "ee0dd243-0d17-11eb-a20f-00155df1b805",
+      "showgames-9664"
     ]
   },
   {
@@ -36,7 +120,348 @@
     "name": "Ultimate",
     "productIds": [
       "4c8ea26b-282c-11ed-9010-00155d8ed20c",
-      "bcc5a072-0d17-11eb-a20f-00155df1b805"
+      "bcc5a072-0d17-11eb-a20f-00155df1b805",
+      "showgames-9665"
+    ]
+  },
+  {
+    "gameId": "ee0dd243-0d17-11eb-a20f-00155df1b805",
+    "game": "Mortal Kombat 11",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "2e1418e2-ff9c-11e9-a20d-00155d03332b",
+      "showgames-9376"
+    ]
+  },
+  {
+    "gameId": "ee0dd243-0d17-11eb-a20f-00155df1b805",
+    "game": "Mortal Kombat 11",
+    "platform": "PS4",
+    "name": "Steelbook Edition",
+    "productIds": [
+      "1854eb22-291f-11e9-a208-00155df1b805",
+      "showgames-8872"
+    ]
+  },
+  {
+    "gameId": "ee0dd243-0d17-11eb-a20f-00155df1b805",
+    "game": "Mortal Kombat 11",
+    "platform": "PS4",
+    "name": "Ultimate / Kollector's Edition",
+    "productIds": [
+      "81819021-2481-11eb-a211-00155d03332b",
+      "showgames-9686"
+    ]
+  },
+  {
+    "gameId": "31378855-07d4-11e8-80a7-00155d03330d",
+    "game": "Red Dead Redemption 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "31378855-07d4-11e8-80a7-00155d03330d",
+      "showgames-6391"
+    ]
+  },
+  {
+    "gameId": "c78b33fc-9dc4-11f0-9394-0050569d21a3",
+    "game": "Ghost Of Yotei",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "c78b33fc-9dc4-11f0-9394-0050569d21a3",
+      "showgames-12214"
+    ]
+  },
+  {
+    "gameId": "c78b33fc-9dc4-11f0-9394-0050569d21a3",
+    "game": "Ghost Of Yotei",
+    "platform": "PS5",
+    "name": "Complete Edition",
+    "productIds": [
+      "9e8a7da6-bd35-11f1-94c9-0050569d21a3",
+      "showgames-12755"
+    ]
+  },
+  {
+    "gameId": "ecbb3de9-86bf-11ef-927e-0050569d21a3",
+    "game": "Minecraft",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "ecbb3de9-86bf-11ef-927e-0050569d21a3",
+      "showgames-11819"
+    ]
+  },
+  {
+    "gameId": "ecbb3de9-86bf-11ef-927e-0050569d21a3",
+    "game": "Minecraft",
+    "platform": "PS4",
+    "name": "PlayStation 4 Edition",
+    "productIds": [
+      "bdb1e0ac-4720-11ea-a20d-00155df1b805",
+      "showgames-2489"
+    ]
+  },
+  {
+    "gameId": "1bbac4d4-f5bf-11ec-8fdc-00155d8ed209",
+    "game": "Gran Turismo 7",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "1bbac4d4-f5bf-11ec-8fdc-00155d8ed209",
+      "showgames-10206"
+    ]
+  },
+  {
+    "gameId": "1bbac4d4-f5bf-11ec-8fdc-00155d8ed209",
+    "game": "Gran Turismo 7",
+    "platform": "PS5",
+    "name": "25th Anniversary Edition",
+    "productIds": [
+      "584d7e2c-2261-11ec-8ef9-00155d8ed20c",
+      "showgames-10248"
+    ]
+  },
+  {
+    "gameId": "1bbac4d4-f5bf-11ec-8fdc-00155d8ed209",
+    "game": "Gran Turismo 7",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "a49718b1-1b6d-11ec-8ef0-00155d8ed20c",
+      "showgames-10205"
+    ]
+  },
+  {
+    "gameId": "611f0aa3-69c8-11ef-925e-0050569d21a3",
+    "game": "Astro Bot",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "611f0aa3-69c8-11ef-925e-0050569d21a3",
+      "showgames-11679"
+    ]
+  },
+  {
+    "gameId": "96e15d3e-78f3-11f1-946c-0050569d21a3",
+    "game": "Assassin's Creed Black Flag Resynced",
+    "platform": "PS5",
+    "name": "Launch Edition",
+    "productIds": [
+      "96e15d3e-78f3-11f1-946c-0050569d21a3",
+      "showgames-12559"
+    ]
+  },
+  {
+    "gameId": "96e15d3e-78f3-11f1-946c-0050569d21a3",
+    "game": "Assassin's Creed Black Flag Resynced",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "96e1566a-78f3-11f1-946c-0050569d21a3",
+      "showgames-12554"
+    ]
+  },
+  {
+    "gameId": "de9b186d-326c-11ed-901b-00155d8ed209",
+    "game": "The Last of Us: Part I (Remake)",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "de9b186d-326c-11ed-901b-00155d8ed209",
+      "showgames-10481"
+    ]
+  },
+  {
+    "gameId": "6bbec5ae-b0d1-11ed-909f-00155d8ed209",
+    "game": "Hogwarts Legacy",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "6bbec5ae-b0d1-11ed-909f-00155d8ed209",
+      "showgames-10689"
+    ]
+  },
+  {
+    "gameId": "6bbec5ae-b0d1-11ed-909f-00155d8ed209",
+    "game": "Hogwarts Legacy",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "6cf324c3-f0a9-11ed-90e7-00155d8ed209",
+      "showgames-10857"
+    ]
+  },
+  {
+    "gameId": "2d51dffd-9fdc-11ee-919d-00155d8ed209",
+    "game": "Cyberpunk 2077",
+    "platform": "PS5",
+    "name": "Ultimate Edition",
+    "productIds": [
+      "2d51dffd-9fdc-11ee-919d-00155d8ed209",
+      "showgames-11204"
+    ]
+  },
+  {
+    "gameId": "f661df1e-6c00-11ee-915b-00155d8ed20a",
+    "game": "EA Sports UFC 5",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "f661df1e-6c00-11ee-915b-00155d8ed20a",
+      "showgames-11055"
+    ]
+  },
+  {
+    "gameId": "1017a03e-5fbb-11f1-9461-0050569d0a4d",
+    "game": "EA Sports UFC 6",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "1017a03e-5fbb-11f1-9461-0050569d0a4d",
+      "showgames-12514"
+    ]
+  },
+  {
+    "gameId": "79ce9977-f758-11f0-93fd-0050569d0a4d",
+    "game": "Resident Evil Requiem",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "79ce9977-f758-11f0-93fd-0050569d0a4d",
+      "showgames-12360"
+    ]
+  },
+  {
+    "gameId": "79ce9977-f758-11f0-93fd-0050569d0a4d",
+    "game": "Resident Evil Requiem",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "7dc860ab-f758-11f0-93fd-0050569d0a4d",
+      "showgames-12370"
+    ]
+  },
+  {
+    "gameId": "79ce9977-f758-11f0-93fd-0050569d0a4d",
+    "game": "Resident Evil Requiem",
+    "platform": "PS5",
+    "name": "Lenticular Edition",
+    "productIds": [
+      "79cea302-f758-11f0-93fd-0050569d0a4d",
+      "showgames-12377"
+    ]
+  },
+  {
+    "gameId": "8e6b33c7-21a4-11f1-9414-0050569d21a3",
+    "game": "Atomic Heart",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "65012641-b0d1-11ed-909f-00155d8ed209",
+      "showgames-10694"
+    ]
+  },
+  {
+    "gameId": "8e6b33c7-21a4-11f1-9414-0050569d21a3",
+    "game": "Atomic Heart",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "5ef8b9fa-b0d1-11ed-909f-00155d8ed209",
+      "showgames-10695"
+    ]
+  },
+  {
+    "gameId": "9f0c9d13-4aa2-11f1-944e-0050569d0a4d",
+    "game": "007 First Light",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "9f0c9d13-4aa2-11f1-944e-0050569d0a4d",
+      "showgames-12488"
+    ]
+  },
+  {
+    "gameId": "7460e630-3a7c-11ee-9128-00155d8ed209",
+    "game": "Mortal Kombat 1",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "7460e630-3a7c-11ee-9128-00155d8ed209",
+      "showgames-10979"
+    ]
+  },
+  {
+    "gameId": "1ad302a3-ac4c-11ea-a210-00155d03332b",
+    "game": "Marvel’s Spider-Man: Miles Morales",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "1ad302a3-ac4c-11ea-a210-00155d03332b",
+      "showgames-9657"
+    ]
+  },
+  {
+    "gameId": "1ad302a3-ac4c-11ea-a210-00155d03332b",
+    "game": "Marvel’s Spider-Man: Miles Morales",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "d67e8bb0-0445-11eb-a20f-00155df1b805",
+      "showgames-9660"
+    ]
+  },
+  {
+    "gameId": "9313246b-ad86-11f0-93a3-0050569d5825",
+    "game": "Metro: Redux",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "9313246b-ad86-11f0-93a3-0050569d5825",
+      "showgames-2675"
+    ]
+  },
+  {
+    "gameId": "2e9705a0-b3a8-11eb-a261-00155d42eb15",
+    "game": "Metro Exodus",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "5ef050ff-a9bb-11e8-9547-00155d03330d",
+      "showgames-8942"
+    ]
+  },
+  {
+    "gameId": "c6c73a65-58a6-11ec-8f44-00155d8ed20b",
+    "game": "Uncharted: Legacy of Thieves Collection",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "c6c73a65-58a6-11ec-8f44-00155d8ed20b",
+      "showgames-10182"
+    ]
+  },
+  {
+    "gameId": "f00f6df0-f4c1-11ef-92f1-0050569d21a3",
+    "game": "Split Fiction",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "f00f6df0-f4c1-11ef-92f1-0050569d21a3",
+      "showgames-11951"
+    ]
+  },
+  {
+    "gameId": "33ff14b7-3475-11f1-9438-0050569d0a4d",
+    "game": "Pragmata",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "33ff14b7-3475-11f1-9438-0050569d0a4d",
+      "showgames-12328"
     ]
   },
   {
@@ -46,7 +471,128 @@
     "name": "стандартное издание",
     "productIds": [
       "ab5fba98-2519-11ed-900c-00155d8ed209",
-      "ee65ea05-3867-11e8-9dc5-00155d03330d"
+      "ee65ea05-3867-11e8-9dc5-00155d03330d",
+      "showgames-7815"
+    ]
+  },
+  {
+    "gameId": "ab5fba98-2519-11ed-900c-00155d8ed209",
+    "game": "Marvel’s Spider-Man",
+    "platform": "PS4",
+    "name": "Game of the Year Edition",
+    "productIds": [
+      "610d7eb1-c589-11e9-a20c-00155d03332b",
+      "showgames-8865"
+    ]
+  },
+  {
+    "gameId": "4dee4783-42fa-11ed-902e-00155d8ed209",
+    "game": "Bloodborne",
+    "platform": "PS4",
+    "name": "Game of the Year Edition",
+    "productIds": [
+      "4dee4783-42fa-11ed-902e-00155d8ed209",
+      "showgames-2390"
+    ]
+  },
+  {
+    "gameId": "bea35dca-e380-11eb-a28f-00155dbd7634",
+    "game": "Ghost of Tsushima",
+    "platform": "PS5",
+    "name": "Director's Cut",
+    "productIds": [
+      "bea35dca-e380-11eb-a28f-00155dbd7634",
+      "showgames-9925"
+    ]
+  },
+  {
+    "gameId": "bea35dca-e380-11eb-a28f-00155dbd7634",
+    "game": "Ghost of Tsushima",
+    "platform": "PS4",
+    "name": "Director's Cut",
+    "productIds": [
+      "3225ff7b-e380-11eb-a28f-00155dbd7634",
+      "showgames-9924"
+    ]
+  },
+  {
+    "gameId": "bea35dca-e380-11eb-a28f-00155dbd7634",
+    "game": "Ghost of Tsushima",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "a0ba15e5-3850-11eb-a211-00155d03332b",
+      "showgames-9222"
+    ]
+  },
+  {
+    "gameId": "0a848b77-a435-11e8-9547-00155d03330d",
+    "game": "Ratchet & Clank",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "showgames-2523",
+      "showgames-8109"
+    ]
+  },
+  {
+    "gameId": "6cc51a94-f758-11f0-93fd-0050569d0a4d",
+    "game": "Reanimal",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "6cc51a94-f758-11f0-93fd-0050569d0a4d",
+      "showgames-12348"
+    ]
+  },
+  {
+    "gameId": "6cc51a94-f758-11f0-93fd-0050569d0a4d",
+    "game": "Reanimal",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "6cc526b9-f758-11f0-93fd-0050569d0a4d",
+      "showgames-12349"
+    ]
+  },
+  {
+    "gameId": "d839853e-0ae9-11f0-9315-0050569d0a4d",
+    "game": "Clair Obscur Expedition 33",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "d839853e-0ae9-11f0-9315-0050569d0a4d",
+      "showgames-12013"
+    ]
+  },
+  {
+    "gameId": "5be691a0-c415-11ef-92c9-0050569d0a4d",
+    "game": "SnowRunner",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "5be691a0-c415-11ef-92c9-0050569d0a4d",
+      "showgames-10266"
+    ]
+  },
+  {
+    "gameId": "5be691a0-c415-11ef-92c9-0050569d0a4d",
+    "game": "SnowRunner",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "5be6796b-c415-11ef-92c9-0050569d0a4d",
+      "showgames-9152"
+    ]
+  },
+  {
+    "gameId": "32bc041f-014d-11ef-9205-0050569d0a4d",
+    "game": "Resident Evil 4 Remake",
+    "platform": "PS5",
+    "name": "Gold Edition",
+    "productIds": [
+      "32bc041f-014d-11ef-9205-0050569d0a4d",
+      "showgames-11345"
     ]
   },
   {
@@ -56,7 +602,8 @@
     "name": "стандартное издание",
     "productIds": [
       "03c2b4ae-c6ed-11ed-90b9-00155d8ed209",
-      "2b2dbb98-d75a-11ed-90cb-00155d8ed209"
+      "2b2dbb98-d75a-11ed-90cb-00155d8ed209",
+      "showgames-10741"
     ]
   },
   {
@@ -66,7 +613,138 @@
     "name": "стандартное издание",
     "productIds": [
       "03c2b4ab-c6ed-11ed-90b9-00155d8ed209",
-      "2b2dbb90-d75a-11ed-90cb-00155d8ed209"
+      "2b2dbb90-d75a-11ed-90cb-00155d8ed209",
+      "showgames-10740"
+    ]
+  },
+  {
+    "gameId": "32bc041f-014d-11ef-9205-0050569d0a4d",
+    "game": "Resident Evil 4 Remake",
+    "platform": "PS4",
+    "name": "Gold Edition",
+    "productIds": [
+      "3109a01b-014d-11ef-9205-0050569d0a4d",
+      "showgames-11346"
+    ]
+  },
+  {
+    "gameId": "130efc20-5fe5-11ed-9051-00155d8ed209",
+    "game": "God of War: Ragnarok",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "130efc20-5fe5-11ed-9051-00155d8ed209",
+      "showgames-10569"
+    ]
+  },
+  {
+    "gameId": "130efc20-5fe5-11ed-9051-00155d8ed209",
+    "game": "God of War: Ragnarok",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "130efc21-5fe5-11ed-9051-00155d8ed209",
+      "showgames-10570"
+    ]
+  },
+  {
+    "gameId": "0f83d492-5fbb-11f1-9461-0050569d0a4d",
+    "game": "Gothic Remake",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "0f83d492-5fbb-11f1-9461-0050569d0a4d",
+      "showgames-12516"
+    ]
+  },
+  {
+    "gameId": "759ae0e1-2007-11e8-9dc5-00155d03330d",
+    "game": "Detroit: Become Human",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "759ae0e1-2007-11e8-9dc5-00155d03330d",
+      "showgames-7099"
+    ]
+  },
+  {
+    "gameId": "f77b6810-86bf-11ef-927e-0050569d21a3",
+    "game": "Horizon Zero Dawn Remastered",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "f77b6810-86bf-11ef-927e-0050569d21a3",
+      "showgames-11882"
+    ]
+  },
+  {
+    "gameId": "b5dacd7b-a5ba-11e8-9547-00155d03330d",
+    "game": "God of War III Remastered",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "a97f2a87-e3d7-11e4-9470-00155d03361b",
+      "showgames-2451"
+    ]
+  },
+  {
+    "gameId": "381ade75-690a-11f0-9363-0050569d21a3",
+    "game": "Mafia: The Old Country",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "381ade75-690a-11f0-9363-0050569d21a3",
+      "showgames-12128"
+    ]
+  },
+  {
+    "gameId": "4c0a0d7b-ac4c-11ea-a210-00155d03332b",
+    "game": "Horizon Forbidden West",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "4c0a0d7b-ac4c-11ea-a210-00155d03332b",
+      "showgames-10180"
+    ]
+  },
+  {
+    "gameId": "4c0a0d7b-ac4c-11ea-a210-00155d03332b",
+    "game": "Horizon Forbidden West",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "4f19b197-0c86-11ec-a2b2-00155dbd7634",
+      "showgames-10181"
+    ]
+  },
+  {
+    "gameId": "75cfedea-a08d-11ea-a210-00155d03332b",
+    "game": "Mafia Trilogy",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "75cfedea-a08d-11ea-a210-00155d03332b",
+      "showgames-9281"
+    ]
+  },
+  {
+    "gameId": "570622de-8b0b-11f1-947e-0050569d21a3",
+    "game": "Mortal Shell II",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "570622de-8b0b-11f1-947e-0050569d21a3",
+      "showgames-12638"
+    ]
+  },
+  {
+    "gameId": "e563bedd-e3af-11eb-a28f-00155dbd7634",
+    "game": "Death Stranding",
+    "platform": "PS5",
+    "name": "Director's Cut",
+    "productIds": [
+      "e563bedd-e3af-11eb-a28f-00155dbd7634",
+      "showgames-10028"
     ]
   },
   {
@@ -77,7 +755,59 @@
     "productIds": [
       "06ba4a7f-85a9-11e9-a20b-00155d03332b",
       "7f2c1679-63e7-11ed-9056-00155d8ed209",
-      "e7630b6f-ba81-11e9-a20b-00155df1b805"
+      "e7630b6f-ba81-11e9-a20b-00155df1b805",
+      "showgames-10453",
+      "showgames-7100"
+    ]
+  },
+  {
+    "gameId": "e5a85e6a-ac4b-11ea-a210-00155d03332b",
+    "game": "Ratchet & Clank: Rift Apart",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "e5a85e6a-ac4b-11ea-a210-00155d03332b",
+      "showgames-9844"
+    ]
+  },
+  {
+    "gameId": "a1429b3d-a5be-11e8-9547-00155d03330d",
+    "game": "Mortal Kombat X",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "c2175683-8cd2-11e4-90cf-00155d03361b",
+      "showgames-2492"
+    ]
+  },
+  {
+    "gameId": "a64c43d4-e766-11ea-a211-00155d03332b",
+    "game": "Far Cry 6",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "a64c43d4-e766-11ea-a211-00155d03332b",
+      "showgames-9656"
+    ]
+  },
+  {
+    "gameId": "a64c43d4-e766-11ea-a211-00155d03332b",
+    "game": "Far Cry 6",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "62595ac4-c4dc-11eb-a272-00155dd2ff2c",
+      "showgames-9426"
+    ]
+  },
+  {
+    "gameId": "a64c43d4-e766-11ea-a211-00155d03332b",
+    "game": "Far Cry 6",
+    "platform": "PS4",
+    "name": "Yara Edition",
+    "productIds": [
+      "ea326cd8-c4dc-11eb-a272-00155dd2ff2c",
+      "showgames-9428"
     ]
   },
   {
@@ -91,13 +821,264 @@
     ]
   },
   {
+    "gameId": "2cb8c0e1-190d-11f0-9314-0050569d5825",
+    "game": "Batman: Arkham Knight",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "c2175685-8cd2-11e4-90cf-00155d03361b",
+      "showgames-2381"
+    ]
+  },
+  {
+    "gameId": "fc3d3393-e765-11ea-a211-00155d03332b",
+    "game": "Assassin's Creed: Valhalla",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "fc3d3393-e765-11ea-a211-00155d03332b",
+      "showgames-9654"
+    ]
+  },
+  {
+    "gameId": "fc3d3393-e765-11ea-a211-00155d03332b",
+    "game": "Assassin's Creed: Valhalla",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "37e4d313-8f31-11ea-a20f-00155d03332b",
+      "showgames-9299"
+    ]
+  },
+  {
+    "gameId": "fc3d3393-e765-11ea-a211-00155d03332b",
+    "game": "Assassin's Creed: Valhalla",
+    "platform": "PS4",
+    "name": "Limited Edition",
+    "productIds": [
+      "6508ee89-8f31-11ea-a20f-00155d03332b",
+      "showgames-9300"
+    ]
+  },
+  {
+    "gameId": "133daf9c-3aba-11f0-9345-0050569d0a4d",
+    "game": "Death Stranding 2: On The Beach",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "133daf9c-3aba-11f0-9345-0050569d0a4d",
+      "showgames-12085"
+    ]
+  },
+  {
     "gameId": "5fda4b88-c44f-11f0-93b5-0050569d9cb8",
     "game": "Shadow of the Tomb Raider",
     "platform": "PS4",
     "name": "Definitive Edition",
     "productIds": [
       "5fda4b88-c44f-11f0-93b5-0050569d9cb8",
-      "7f2c1678-63e7-11ed-9056-00155d8ed209"
+      "7f2c1678-63e7-11ed-9056-00155d8ed209",
+      "showgames-9972"
+    ]
+  },
+  {
+    "gameId": "5fda4b88-c44f-11f0-93b5-0050569d9cb8",
+    "game": "Shadow of the Tomb Raider",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "4e4e3a4e-58a2-11e8-9dc5-00155d03330d",
+      "showgames-7799"
+    ]
+  },
+  {
+    "gameId": "b3d9c45a-58b3-11e8-9dc5-00155d03330d",
+    "game": "Far Cry 3 Classic Edition",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "b3d9c45a-58b3-11e8-9dc5-00155d03330d",
+      "showgames-7831"
+    ]
+  },
+  {
+    "gameId": "d69e2fa4-aaf0-11ef-92a2-0050569d21a3",
+    "game": "Resident Evil 7: Biohazard",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "60172afb-4317-11e6-8544-00155d033307",
+      "showgames-2529"
+    ]
+  },
+  {
+    "gameId": "d69e2fa4-aaf0-11ef-92a2-0050569d21a3",
+    "game": "Resident Evil 7: Biohazard",
+    "platform": "PS4",
+    "name": "Gold Edition",
+    "productIds": [
+      "cae93883-7a94-11ed-906c-00155d8ed209",
+      "showgames-8168"
+    ]
+  },
+  {
+    "gameId": "9f0cac47-4aa2-11f1-944e-0050569d0a4d",
+    "game": "Red Dead Redemption",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "9f0cac47-4aa2-11f1-944e-0050569d0a4d",
+      "showgames-12503"
+    ]
+  },
+  {
+    "gameId": "9f0cac47-4aa2-11f1-944e-0050569d0a4d",
+    "game": "Red Dead Redemption",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "d9e3def8-8516-11ee-9170-00155d8ed20a",
+      "showgames-11047"
+    ]
+  },
+  {
+    "gameId": "221fbb84-f5bf-11ec-8fdc-00155d8ed209",
+    "game": "Call of Duty: Modern Warfare Remastered",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "221fbb84-f5bf-11ec-8fdc-00155d8ed209",
+      "showgames-6970"
+    ]
+  },
+  {
+    "gameId": "279c1e77-097d-11e7-95bd-00155d03330d",
+    "game": "LEGO City Undercover",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "279c1e77-097d-11e7-95bd-00155d03330d",
+      "showgames-6638"
+    ]
+  },
+  {
+    "gameId": "01be245f-df6e-11e9-a20c-00155d03332b",
+    "game": "The Last of Us: Part II",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "01be245f-df6e-11e9-a20c-00155d03332b",
+      "showgames-9002"
+    ]
+  },
+  {
+    "gameId": "01be245f-df6e-11e9-a20c-00155d03332b",
+    "game": "The Last of Us: Part II",
+    "platform": "PS4",
+    "name": "Special Edition",
+    "productIds": [
+      "aa1a83f7-dff6-11e9-a20c-00155d03332b",
+      "showgames-9286"
+    ]
+  },
+  {
+    "gameId": "6631ffb2-20e8-11f0-932b-0050569d0a4d",
+    "game": "DOOM: The Dark Ages",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "6631ffb2-20e8-11f0-932b-0050569d0a4d",
+      "showgames-12019"
+    ]
+  },
+  {
+    "gameId": "ef5f13f7-61ca-11ee-915d-00155d8ed209",
+    "game": "Sonic Superstars",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "ef5f13f7-61ca-11ee-915d-00155d8ed209",
+      "showgames-11021"
+    ]
+  },
+  {
+    "gameId": "ef5f13f7-61ca-11ee-915d-00155d8ed209",
+    "game": "Sonic Superstars",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "ef5f0c04-61ca-11ee-915d-00155d8ed209",
+      "showgames-11020"
+    ]
+  },
+  {
+    "gameId": "364fba94-7f77-11ed-9070-00155d8ed209",
+    "game": "Need for Speed: Unbound",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "364fba94-7f77-11ed-9070-00155d8ed209",
+      "showgames-10632"
+    ]
+  },
+  {
+    "gameId": "686b164f-7e69-11f0-9378-0050569d21a3",
+    "game": "EA Sports NHL 26",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "686b164f-7e69-11f0-9378-0050569d21a3",
+      "showgames-12198"
+    ]
+  },
+  {
+    "gameId": "364fba8e-7f77-11ed-9070-00155d8ed209",
+    "game": "No Man's Sky: Beyond",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "364fba8e-7f77-11ed-9070-00155d8ed209",
+      "showgames-8902"
+    ]
+  },
+  {
+    "gameId": "ade35af6-415d-11e5-b059-00155d03361b",
+    "game": "Assassin's Creed: Unity",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "ade35af6-415d-11e5-b059-00155d03361b",
+      "showgames-2375"
+    ]
+  },
+  {
+    "gameId": "43bc866c-39fd-11f0-9338-0050569d5825",
+    "game": "Assassin's Creed Shadows",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "43bc866c-39fd-11f0-9338-0050569d5825",
+      "showgames-11958"
+    ]
+  },
+  {
+    "gameId": "00f3f35e-eb1d-11ed-90e1-00155d8ed209",
+    "game": "Diablo IV",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "00f3f35e-eb1d-11ed-90e1-00155d8ed209",
+      "showgames-10877"
+    ]
+  },
+  {
+    "gameId": "9f0c91aa-4aa2-11f1-944e-0050569d0a4d",
+    "game": "LEGO Batman Legacy of the Dark Knight",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "9f0c91aa-4aa2-11f1-944e-0050569d0a4d",
+      "showgames-12492"
     ]
   },
   {
@@ -107,7 +1088,508 @@
     "name": "стандартное издание",
     "productIds": [
       "e06619ff-b195-11ed-90a0-00155d8ed209",
-      "e2e10d07-518f-11e7-85c8-00155d03330d"
+      "e2e10d07-518f-11e7-85c8-00155d03330d",
+      "showgames-6973"
+    ]
+  },
+  {
+    "gameId": "62171a7e-cc44-11ec-8fb5-00155d8ed20b",
+    "game": "Elden Ring",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "62171a7e-cc44-11ec-8fb5-00155d8ed20b",
+      "showgames-10244"
+    ]
+  },
+  {
+    "gameId": "62171a7e-cc44-11ec-8fb5-00155d8ed20b",
+    "game": "Elden Ring",
+    "platform": "PS4",
+    "name": "Launch Edition",
+    "productIds": [
+      "249bc46a-cfef-11eb-a27c-00155dd2ff2c",
+      "showgames-10184"
+    ]
+  },
+  {
+    "gameId": "62171a7e-cc44-11ec-8fb5-00155d8ed20b",
+    "game": "Elden Ring",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "f01cafd1-cc44-11ec-8fb5-00155d8ed20b",
+      "showgames-10235"
+    ]
+  },
+  {
+    "gameId": "62171a7e-cc44-11ec-8fb5-00155d8ed20b",
+    "game": "Elden Ring",
+    "platform": "PS5",
+    "name": "Launch Edition",
+    "productIds": [
+      "b1e8c4b7-cfef-11eb-a27c-00155dd2ff2c",
+      "showgames-10183"
+    ]
+  },
+  {
+    "gameId": "0c38893f-7c62-11e9-a207-00155d03332b",
+    "game": "Crash Team Racing Nitro-Fueled",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "0c38893f-7c62-11e9-a207-00155d03332b",
+      "showgames-8610"
+    ]
+  },
+  {
+    "gameId": "03a4fa50-d05c-11e5-9810-00155d033307",
+    "game": "Mortal Kombat XL",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "03a4fa50-d05c-11e5-9810-00155d033307",
+      "showgames-2493"
+    ]
+  },
+  {
+    "gameId": "1ba635cb-be44-11ee-91ba-00155d8ed209",
+    "game": "Tekken 8",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "1ba635cb-be44-11ee-91ba-00155d8ed209",
+      "showgames-11275"
+    ]
+  },
+  {
+    "gameId": "85416421-a01c-11f1-94a4-0050569d21a3",
+    "game": "Onimusha Way Of The Sword",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "85415c73-a01c-11f1-94a4-0050569d21a3",
+      "showgames-12680"
+    ]
+  },
+  {
+    "gameId": "85416421-a01c-11f1-94a4-0050569d21a3",
+    "game": "Onimusha Way Of The Sword",
+    "platform": "PS5",
+    "name": "Lenticular Edition",
+    "productIds": [
+      "854160bf-a01c-11f1-94a4-0050569d21a3",
+      "showgames-12681"
+    ]
+  },
+  {
+    "gameId": "10248f87-8143-11e6-aaca-00155d03330d",
+    "game": "Assassin's Creed: The Ezio Collection",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "10248f87-8143-11e6-aaca-00155d03330d",
+      "showgames-6378"
+    ]
+  },
+  {
+    "gameId": "cf779ea9-c105-11f0-93b8-0050569d5825",
+    "game": "Kingdom Come: Deliverance II",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "cf779ea9-c105-11f0-93b8-0050569d5825",
+      "showgames-12094"
+    ]
+  },
+  {
+    "gameId": "cf779ea9-c105-11f0-93b8-0050569d5825",
+    "game": "Kingdom Come: Deliverance II",
+    "platform": "PS5",
+    "name": "Day One Edition",
+    "productIds": [
+      "c36cfe5d-dde2-11ef-92d0-0050569d21a3",
+      "showgames-11917"
+    ]
+  },
+  {
+    "gameId": "cf779ea9-c105-11f0-93b8-0050569d5825",
+    "game": "Kingdom Come: Deliverance II",
+    "platform": "PS5",
+    "name": "Gold Edition",
+    "productIds": [
+      "c36d1f60-dde2-11ef-92d0-0050569d21a3",
+      "showgames-11936"
+    ]
+  },
+  {
+    "gameId": "cade8d98-a255-11ef-929b-0050569d21a3",
+    "game": "LEGO Horizon Adventures",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "cade8d98-a255-11ef-929b-0050569d21a3",
+      "showgames-11901"
+    ]
+  },
+  {
+    "gameId": "611f0ea7-69c8-11ef-925e-0050569d21a3",
+    "game": "Warhammer 40.000 Space Marine 2",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "611f0ea7-69c8-11ef-925e-0050569d21a3",
+      "showgames-11726"
+    ]
+  },
+  {
+    "gameId": "686b09b5-7e69-11f0-9378-0050569d21a3",
+    "game": "NBA 2K26",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "686b09b5-7e69-11f0-9378-0050569d21a3",
+      "showgames-12168"
+    ]
+  },
+  {
+    "gameId": "686b09b5-7e69-11f0-9378-0050569d21a3",
+    "game": "NBA 2K26",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "5071c52c-7e69-11f0-9378-0050569d21a3",
+      "showgames-12175"
+    ]
+  },
+  {
+    "gameId": "da37cfd3-366c-11e9-a208-00155df1b805",
+    "game": "Dark Souls Trilogy",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "da37cfd3-366c-11e9-a208-00155df1b805",
+      "showgames-8370"
+    ]
+  },
+  {
+    "gameId": "064a34fe-bab6-11f0-93bf-0050569d0a4d",
+    "game": "SpongeBob SquarePants: Titans of the Tide",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "064a34fe-bab6-11f0-93bf-0050569d0a4d",
+      "showgames-12287"
+    ]
+  },
+  {
+    "gameId": "708f322a-74fd-11e8-9547-00155d03330d",
+    "game": "Assassin’s Creed: Odyssey",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "708f322a-74fd-11e8-9547-00155d03330d",
+      "showgames-7918"
+    ]
+  },
+  {
+    "gameId": "c9f4d523-9dc4-11f0-9394-0050569d21a3",
+    "game": "Little Nightmares III",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "c9f4d523-9dc4-11f0-9394-0050569d21a3",
+      "showgames-12230"
+    ]
+  },
+  {
+    "gameId": "c9f4d523-9dc4-11f0-9394-0050569d21a3",
+    "game": "Little Nightmares III",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "c3fc93ca-9dc4-11f0-9394-0050569d21a3",
+      "showgames-12231"
+    ]
+  },
+  {
+    "gameId": "9cd98fc0-78f3-11f1-946c-0050569d21a3",
+    "game": "Mouse P.I. for Hire",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "9cd98fc0-78f3-11f1-946c-0050569d21a3",
+      "showgames-12588"
+    ]
+  },
+  {
+    "gameId": "70086052-747a-11ed-9065-00155d8ed209",
+    "game": "Call of Duty: Black Ops Cold War",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "70086052-747a-11ed-9065-00155d8ed209",
+      "showgames-9827"
+    ]
+  },
+  {
+    "gameId": "70086052-747a-11ed-9065-00155d8ed209",
+    "game": "Call of Duty: Black Ops Cold War",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "6a0b18eb-747a-11ed-9065-00155d8ed209",
+      "showgames-9826"
+    ]
+  },
+  {
+    "gameId": "3c167321-2103-11e8-9dc5-00155d03330d",
+    "game": "Assassin’s Creed: Rogue Remastered",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "3c167321-2103-11e8-9dc5-00155d03330d",
+      "showgames-7593"
+    ]
+  },
+  {
+    "gameId": "7bd854a3-9626-11e9-a20b-00155df1b805",
+    "game": "Horizon Zero Dawn",
+    "platform": "PS4",
+    "name": "Complete Edition",
+    "productIds": [
+      "e1b468f8-d3fd-11e7-a776-00155d03330d",
+      "showgames-7411"
+    ]
+  },
+  {
+    "gameId": "a8cc9a29-78f3-11f1-946c-0050569d21a3",
+    "game": "Halo Campaign Evolved",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "a8cc9a29-78f3-11f1-946c-0050569d21a3",
+      "showgames-12612"
+    ]
+  },
+  {
+    "gameId": "db5033bb-8f9f-11ec-8f77-00155d8ed20b",
+    "game": "LEGO Star Wars: The Skywalker Saga",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "db5033bb-8f9f-11ec-8f77-00155d8ed20b",
+      "showgames-10256"
+    ]
+  },
+  {
+    "gameId": "db5033bb-8f9f-11ec-8f77-00155d8ed20b",
+    "game": "LEGO Star Wars: The Skywalker Saga",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "a12abbc7-8f9f-11ec-8f77-00155d8ed20b",
+      "showgames-10255"
+    ]
+  },
+  {
+    "gameId": "2e58d2b2-a08e-11ea-a210-00155d03332b",
+    "game": "Mafia",
+    "platform": "PS4",
+    "name": "Definitive Edition",
+    "productIds": [
+      "2e58d2b2-a08e-11ea-a210-00155d03332b",
+      "showgames-9279"
+    ]
+  },
+  {
+    "gameId": "631824c7-f525-11ed-90ec-00155d8ed209",
+    "game": "Resident Evil 6",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "f5ac30b3-b7d3-11e6-9c4d-00155d03330d",
+      "showgames-2528"
+    ]
+  },
+  {
+    "gameId": "749684ca-355f-11ec-8f11-00155d8ed20b",
+    "game": "Grand Theft Auto: The Trilogy – The",
+    "platform": "PS4",
+    "name": "Definitive Edition",
+    "productIds": [
+      "749684ca-355f-11ec-8f11-00155d8ed20b",
+      "showgames-10140"
+    ]
+  },
+  {
+    "gameId": "914032cc-a01c-11f1-94a4-0050569d21a3",
+    "game": "EA Sports NHL 27",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "914032cc-a01c-11f1-94a4-0050569d21a3",
+      "showgames-12695"
+    ]
+  },
+  {
+    "gameId": "4233f129-e235-11e6-ab51-00155d03330d",
+    "game": "Tekken 7",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "4233f129-e235-11e6-ab51-00155d03330d",
+      "showgames-6477"
+    ]
+  },
+  {
+    "gameId": "576ffbb5-8df1-11e7-938d-00155d03330d",
+    "game": "The Crew 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "576ffbb5-8df1-11e7-938d-00155d03330d",
+      "showgames-7787"
+    ]
+  },
+  {
+    "gameId": "570638e3-8b0b-11f1-947e-0050569d21a3",
+    "game": "Metal Gear Solid: Master Collection Vol. 2",
+    "platform": "PS5",
+    "name": "Day One Edition",
+    "productIds": [
+      "570638e3-8b0b-11f1-947e-0050569d21a3",
+      "showgames-12666"
+    ]
+  },
+  {
+    "gameId": "a2d46596-78f3-11f1-946c-0050569d21a3",
+    "game": "Gothic Classic",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "a2d46596-78f3-11f1-946c-0050569d21a3",
+      "showgames-12611"
+    ]
+  },
+  {
+    "gameId": "1bbac4d2-f5bf-11ec-8fdc-00155d8ed209",
+    "game": "The Last of Us Remastered",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "showgames-2676",
+      "showgames-8105"
+    ]
+  },
+  {
+    "gameId": "39f9d346-3475-11f1-9438-0050569d0a4d",
+    "game": "Marvel Cosmic Invasion",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "39f9d346-3475-11f1-9438-0050569d0a4d",
+      "showgames-12457"
+    ]
+  },
+  {
+    "gameId": "39f9d346-3475-11f1-9438-0050569d0a4d",
+    "game": "Marvel Cosmic Invasion",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "33ff1b39-3475-11f1-9438-0050569d0a4d",
+      "showgames-12456"
+    ]
+  },
+  {
+    "gameId": "d69e2eb9-aaf0-11ef-92a2-0050569d21a3",
+    "game": "Resident Evil 3",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "d69e2eb9-aaf0-11ef-92a2-0050569d21a3",
+      "showgames-11910"
+    ]
+  },
+  {
+    "gameId": "d69e2eb9-aaf0-11ef-92a2-0050569d21a3",
+    "game": "Resident Evil 3",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "c1e9a842-22f9-11ea-a20c-00155df1b805",
+      "showgames-9078"
+    ]
+  },
+  {
+    "gameId": "28c978af-452e-11e7-8b78-00155d03330d",
+    "game": "Crash Bandicoot N. Sane Trilogy",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "28c978af-452e-11e7-8b78-00155d03330d",
+      "showgames-2560"
+    ]
+  },
+  {
+    "gameId": "cbf559b1-9dc4-11f0-9394-0050569d21a3",
+    "game": "Battlefield 6",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "cbf559b1-9dc4-11f0-9394-0050569d21a3",
+      "showgames-12229"
+    ]
+  },
+  {
+    "gameId": "cbf559b1-9dc4-11f0-9394-0050569d21a3",
+    "game": "Battlefield 6",
+    "platform": "PS5",
+    "name": "Phantom Edition",
+    "productIds": [
+      "cbf568f5-9dc4-11f0-9394-0050569d21a3",
+      "showgames-12247"
+    ]
+  },
+  {
+    "gameId": "7b43d73c-3a7c-11ee-9128-00155d8ed209",
+    "game": "Assassin's Creed: Mirage",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "7b43d73c-3a7c-11ee-9128-00155d8ed209",
+      "showgames-11049"
+    ]
+  },
+  {
+    "gameId": "7b43d73c-3a7c-11ee-9128-00155d8ed209",
+    "game": "Assassin's Creed: Mirage",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "7b43d73a-3a7c-11ee-9128-00155d8ed209",
+      "showgames-11050"
+    ]
+  },
+  {
+    "gameId": "9f0c905d-4aa2-11f1-944e-0050569d0a4d",
+    "game": "Darksiders Warmastered Edition",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "9f0c905d-4aa2-11f1-944e-0050569d0a4d",
+      "showgames-12509"
+    ]
+  },
+  {
+    "gameId": "c5c1822b-9dc4-11f0-9394-0050569d21a3",
+    "game": "Tomb Raider IV-VI Remastered",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "d1e8fa30-9dc4-11f0-9394-0050569d21a3",
+      "showgames-12263"
     ]
   },
   {
@@ -117,7 +1599,489 @@
     "name": "Ultimate Edition",
     "productIds": [
       "152b29fd-5fbb-11f1-9461-0050569d0a4d",
-      "b6e69744-54b1-11eb-a211-00155d03332b"
+      "b6e69744-54b1-11eb-a211-00155d03332b",
+      "showgames-11471"
+    ]
+  },
+  {
+    "gameId": "152b29fd-5fbb-11f1-9461-0050569d0a4d",
+    "game": "Control",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "637a52b7-92fe-11e9-a20b-00155d03332b",
+      "showgames-8616"
+    ]
+  },
+  {
+    "gameId": "f54d200e-3b8d-11e8-9dc5-00155d03330d",
+    "game": "Injustice 2",
+    "platform": "PS4",
+    "name": "Legendary Edition",
+    "productIds": [
+      "f54d200e-3b8d-11e8-9dc5-00155d03330d",
+      "showgames-7611"
+    ]
+  },
+  {
+    "gameId": "e3ef9498-1f6d-11e9-a208-00155df1b805",
+    "game": "Rage 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "e3ef9498-1f6d-11e9-a208-00155df1b805",
+      "showgames-7821"
+    ]
+  },
+  {
+    "gameId": "57062b8b-8b0b-11f1-947e-0050569d21a3",
+    "game": "Resonance: A Plague Tale Legacy",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "57062b8b-8b0b-11f1-947e-0050569d21a3",
+      "showgames-12660"
+    ]
+  },
+  {
+    "gameId": "8b47f393-a01c-11f1-94a4-0050569d21a3",
+    "game": "NBA 2K27",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "8b47f393-a01c-11f1-94a4-0050569d21a3",
+      "showgames-12686"
+    ]
+  },
+  {
+    "gameId": "05165741-5686-11e9-a206-00155d03332b",
+    "game": "Borderlands 3",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "05165741-5686-11e9-a206-00155d03332b",
+      "showgames-8608"
+    ]
+  },
+  {
+    "gameId": "c132497d-a857-11ed-9098-00155d8ed209",
+    "game": "Dead Space Remake",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "c132497d-a857-11ed-9098-00155d8ed209",
+      "showgames-11149"
+    ]
+  },
+  {
+    "gameId": "9cd99ef7-78f3-11f1-946c-0050569d21a3",
+    "game": "Warhammer 40.000 Speed Freeks",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "9cd99ef7-78f3-11f1-946c-0050569d21a3",
+      "showgames-12597"
+    ]
+  },
+  {
+    "gameId": "9e8a6898-bd35-11f1-94c9-0050569d21a3",
+    "game": "Ace Combat 8: Wings Of Theve",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "9e8a6898-bd35-11f1-94c9-0050569d21a3",
+      "showgames-12742"
+    ]
+  },
+  {
+    "gameId": "9e8a6898-bd35-11f1-94c9-0050569d21a3",
+    "game": "Ace Combat 8: Wings Of Theve",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "9e8a7051-bd35-11f1-94c9-0050569d21a3",
+      "showgames-12743"
+    ]
+  },
+  {
+    "gameId": "6cb2b1e9-641d-11ee-9152-00155d8ed20a",
+    "game": "EA Sports FC 24",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "7460e634-3a7c-11ee-9128-00155d8ed209",
+      "showgames-11007"
+    ]
+  },
+  {
+    "gameId": "6cb2b1e9-641d-11ee-9152-00155d8ed20a",
+    "game": "EA Sports FC 24",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "7460e633-3a7c-11ee-9128-00155d8ed209",
+      "showgames-11006"
+    ]
+  },
+  {
+    "gameId": "3f16bbfb-3475-11f1-9438-0050569d0a4d",
+    "game": "Saros",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "3f16bbfb-3475-11f1-9438-0050569d0a4d",
+      "showgames-12478"
+    ]
+  },
+  {
+    "gameId": "923e82b4-21a4-11f1-9414-0050569d21a3",
+    "game": "WWE 2K26",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "923e82b4-21a4-11f1-9414-0050569d21a3",
+      "showgames-12411"
+    ]
+  },
+  {
+    "gameId": "a2d4468d-78f3-11f1-946c-0050569d21a3",
+    "game": "Aphelion",
+    "platform": "PS5",
+    "name": "Pioneer Edition",
+    "productIds": [
+      "a2d4468d-78f3-11f1-946c-0050569d21a3",
+      "showgames-12701"
+    ]
+  },
+  {
+    "gameId": "96e14fcc-78f3-11f1-946c-0050569d21a3",
+    "game": "Nickelodeon Extreme Tennis Next!",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "96e14fcc-78f3-11f1-946c-0050569d21a3",
+      "showgames-12567"
+    ]
+  },
+  {
+    "gameId": "570630f9-8b0b-11f1-947e-0050569d21a3",
+    "game": "Star Wars Zero Company",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "570630f9-8b0b-11f1-947e-0050569d21a3",
+      "showgames-12663"
+    ]
+  },
+  {
+    "gameId": "6abd621f-f758-11f0-93fd-0050569d0a4d",
+    "game": "Nioh 3",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "6abd621f-f758-11f0-93fd-0050569d0a4d",
+      "showgames-12346"
+    ]
+  },
+  {
+    "gameId": "e5abf0e1-82cc-11ee-917a-00155d8ed209",
+    "game": "Robocop: Rogue City",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "e5abf0e1-82cc-11ee-917a-00155d8ed209",
+      "showgames-11076"
+    ]
+  },
+  {
+    "gameId": "78411ffc-75c0-11e8-9547-00155d03330d",
+    "game": "Fallout 76",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "78411ffc-75c0-11e8-9547-00155d03330d",
+      "showgames-7916"
+    ]
+  },
+  {
+    "gameId": "1960b6b8-5fbb-11f1-9461-0050569d0a4d",
+    "game": "Super Meat Boy 3D",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "1960b6b8-5fbb-11f1-9461-0050569d0a4d",
+      "showgames-12562"
+    ]
+  },
+  {
+    "gameId": "4b176a4f-8b0b-11f1-947e-0050569d21a3",
+    "game": "Marvel Tokon: Fighting Souls",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "4b176a4f-8b0b-11f1-947e-0050569d21a3",
+      "showgames-12628"
+    ]
+  },
+  {
+    "gameId": "4b176100-8b0b-11f1-947e-0050569d21a3",
+    "game": "Beast of Reincarnation",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "451f2472-8b0b-11f1-947e-0050569d21a3",
+      "showgames-12624"
+    ]
+  },
+  {
+    "gameId": "39f9f57a-3475-11f1-9438-0050569d0a4d",
+    "game": "Nine Sols",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "39f9f57a-3475-11f1-9438-0050569d0a4d",
+      "showgames-12549"
+    ]
+  },
+  {
+    "gameId": "ae5873d8-bd35-11f1-94c9-0050569d21a3",
+    "game": "Dragon's Dogma 2: Dark Arisen",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "ae5873d8-bd35-11f1-94c9-0050569d21a3",
+      "showgames-12774"
+    ]
+  },
+  {
+    "gameId": "a50c06e8-4aa2-11f1-944e-0050569d0a4d",
+    "game": "System Shock 2: 25th Anniversary Remaster",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "a50c06e8-4aa2-11f1-944e-0050569d0a4d",
+      "showgames-12538"
+    ]
+  },
+  {
+    "gameId": "510dc534-8b0b-11f1-947e-0050569d21a3",
+    "game": "Sudden Strike 5",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "510dc534-8b0b-11f1-947e-0050569d21a3",
+      "showgames-12671"
+    ]
+  },
+  {
+    "gameId": "510dcc78-8b0b-11f1-947e-0050569d21a3",
+    "game": "Scott Pilgrim EX",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "510dcc78-8b0b-11f1-947e-0050569d21a3",
+      "showgames-12547",
+      "showgames-12658"
+    ]
+  },
+  {
+    "gameId": "a2d454a8-78f3-11f1-946c-0050569d21a3",
+    "game": "Achilles Double Pack",
+    "platform": "PS5",
+    "name": "Troy Edition",
+    "productIds": [
+      "a2d454a8-78f3-11f1-946c-0050569d21a3",
+      "showgames-12610"
+    ]
+  },
+  {
+    "gameId": "8fbef01a-4d58-11ee-9133-00155d8ed20a",
+    "game": "Lies of P",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "8fbef01a-4d58-11ee-9133-00155d8ed20a",
+      "showgames-10991"
+    ]
+  },
+  {
+    "gameId": "8fbef01a-4d58-11ee-9133-00155d8ed20a",
+    "game": "Lies of P",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "95c5c425-4d58-11ee-9133-00155d8ed20a",
+      "showgames-10990"
+    ]
+  },
+  {
+    "gameId": "89c9cc5e-7f12-11f0-9375-0050569d9cb8",
+    "game": "Borderlands 4",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "686b13dd-7e69-11f0-9378-0050569d21a3",
+      "showgames-12191"
+    ]
+  },
+  {
+    "gameId": "864e7f03-21a4-11f1-9414-0050569d21a3",
+    "game": "Monster Hunter Stories 3 Twisted Reflection",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "864e7f03-21a4-11f1-9414-0050569d21a3",
+      "showgames-12412"
+    ]
+  },
+  {
+    "gameId": "8b47f72b-a01c-11f1-94a4-0050569d21a3",
+    "game": "Bus Simulator 27",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "8b47f72b-a01c-11f1-94a4-0050569d21a3",
+      "showgames-12728"
+    ]
+  },
+  {
+    "gameId": "8c46e47d-21a4-11f1-9414-0050569d21a3",
+    "game": "Fatal Frame II Crimson Butterfly Remake",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "8c46e47d-21a4-11f1-9414-0050569d21a3",
+      "showgames-12400"
+    ]
+  },
+  {
+    "gameId": "663205e9-20e8-11f0-932b-0050569d0a4d",
+    "game": "Roadcraft",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "663205e9-20e8-11f0-932b-0050569d0a4d",
+      "showgames-12040"
+    ]
+  },
+  {
+    "gameId": "3bcd29eb-3475-11f1-9438-0050569d0a4d",
+    "game": "MotoGP 26",
+    "platform": "PS5",
+    "name": "Day One Edition",
+    "productIds": [
+      "3bcd29eb-3475-11f1-9438-0050569d0a4d",
+      "showgames-12483"
+    ]
+  },
+  {
+    "gameId": "9f0cab0b-4aa2-11f1-944e-0050569d0a4d",
+    "game": "Necrophosis Full Consciousness + The Shore",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "9f0cab0b-4aa2-11f1-944e-0050569d0a4d",
+      "showgames-12551"
+    ]
+  },
+  {
+    "gameId": "a334c1e0-bd35-11f1-94c9-0050569d21a3",
+    "game": "Halloween: The Game",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "a334c1e0-bd35-11f1-94c9-0050569d21a3",
+      "showgames-12797"
+    ]
+  },
+  {
+    "gameId": "39f9e501-3475-11f1-9438-0050569d0a4d",
+    "game": "Outbound",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "39f9e501-3475-11f1-9438-0050569d0a4d",
+      "showgames-12511"
+    ]
+  },
+  {
+    "gameId": "91404c73-a01c-11f1-94a4-0050569d21a3",
+    "game": "The Walking Dead Streets Of Survival",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "91404c73-a01c-11f1-94a4-0050569d21a3",
+      "showgames-12756"
+    ]
+  },
+  {
+    "gameId": "a2d45a6f-78f3-11f1-946c-0050569d21a3",
+    "game": "Dementium The Ward",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "a2d45a6f-78f3-11f1-946c-0050569d21a3",
+      "showgames-12646"
+    ]
+  },
+  {
+    "gameId": "5d00cbae-8b0b-11f1-947e-0050569d21a3",
+    "game": "Luna Abyss",
+    "platform": "PS5",
+    "name": "Adrift Edition",
+    "productIds": [
+      "5d00cbae-8b0b-11f1-947e-0050569d21a3",
+      "showgames-12667"
+    ]
+  },
+  {
+    "gameId": "91403ae7-a01c-11f1-94a4-0050569d21a3",
+    "game": "Grime II",
+    "platform": "PS5",
+    "name": "Definitive Edition",
+    "productIds": [
+      "91403ae7-a01c-11f1-94a4-0050569d21a3",
+      "showgames-12760"
+    ]
+  },
+  {
+    "gameId": "9cc9d3ac-21a4-11f1-9414-0050569d21a3",
+    "game": "Sworn",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "9cc9d3ac-21a4-11f1-9414-0050569d21a3",
+      "showgames-12543"
+    ]
+  },
+  {
+    "gameId": "080acbcb-d236-11eb-a27d-00155dd2ff2c",
+    "game": "Battlefield 2042",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "080acbcb-d236-11eb-a27d-00155dd2ff2c",
+      "showgames-10124"
+    ]
+  },
+  {
+    "gameId": "080acbcb-d236-11eb-a27d-00155dd2ff2c",
+    "game": "Battlefield 2042",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "e9412062-d236-11eb-a27d-00155dd2ff2c",
+      "showgames-10122"
+    ]
+  },
+  {
+    "gameId": "f485ba1a-6667-11ef-925b-0050569d21a3",
+    "game": "NBA 2K25",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "f485ba1a-6667-11ef-925b-0050569d21a3",
+      "showgames-11722"
     ]
   },
   {
@@ -127,7 +2091,208 @@
     "name": "стандартное издание",
     "productIds": [
       "f485ba1a-6667-11ef-925b-0050569d21a3",
-      "f5f5ff31-6667-11ef-925b-0050569d21a3"
+      "f5f5ff31-6667-11ef-925b-0050569d21a3",
+      "showgames-11706"
+    ]
+  },
+  {
+    "gameId": "70d6e0cb-f758-11f0-93fd-0050569d0a4d",
+    "game": "High On Life 2",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "70d6e0cb-f758-11f0-93fd-0050569d0a4d",
+      "showgames-12455"
+    ]
+  },
+  {
+    "gameId": "89b800ab-21a4-11f1-9414-0050569d21a3",
+    "game": "John Carpenter’s Toxic Commando",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "89b800ab-21a4-11f1-9414-0050569d21a3",
+      "showgames-12374"
+    ]
+  },
+  {
+    "gameId": "b0736118-bd35-11f1-94c9-0050569d21a3",
+    "game": "Control Resonant",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "b0736118-bd35-11f1-94c9-0050569d21a3",
+      "showgames-12794"
+    ]
+  },
+  {
+    "gameId": "5d00dab2-8b0b-11f1-947e-0050569d21a3",
+    "game": "Wanderstop",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "5d00dab2-8b0b-11f1-947e-0050569d21a3",
+      "showgames-12668"
+    ]
+  },
+  {
+    "gameId": "973871ac-a01c-11f1-94a4-0050569d21a3",
+    "game": "Moomintroll Winters Warmth",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "973871ac-a01c-11f1-94a4-0050569d21a3",
+      "showgames-12727"
+    ]
+  },
+  {
+    "gameId": "9d30c756-a01c-11f1-94a4-0050569d21a3",
+    "game": "Minecraft Dungeons II",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "9d30c756-a01c-11f1-94a4-0050569d21a3",
+      "showgames-12723"
+    ]
+  },
+  {
+    "gameId": "9f0ca9e1-4aa2-11f1-944e-0050569d0a4d",
+    "game": "Naiad",
+    "platform": "PS5",
+    "name": "Flow Edition",
+    "productIds": [
+      "9f0ca9e1-4aa2-11f1-944e-0050569d0a4d",
+      "showgames-12552"
+    ]
+  },
+  {
+    "gameId": "a2d44f6c-78f3-11f1-946c-0050569d21a3",
+    "game": "Cult of the Lamb",
+    "platform": "PS5",
+    "name": "Definitive Edition",
+    "productIds": [
+      "a2d44f6c-78f3-11f1-946c-0050569d21a3",
+      "showgames-12609"
+    ]
+  },
+  {
+    "gameId": "a2d44f6c-78f3-11f1-946c-0050569d21a3",
+    "game": "Cult of the Lamb",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "588ac0a4-e323-11ed-90d8-00155d8ed209",
+      "showgames-10828"
+    ]
+  },
+  {
+    "gameId": "a50c0810-4aa2-11f1-944e-0050569d0a4d",
+    "game": "Starbites",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "a50c0810-4aa2-11f1-944e-0050569d0a4d",
+      "showgames-12498"
+    ]
+  },
+  {
+    "gameId": "a8566274-bd35-11f1-94c9-0050569d21a3",
+    "game": "Dave The Diver",
+    "platform": "PS5",
+    "name": "Complete Edition",
+    "productIds": [
+      "a8566274-bd35-11f1-94c9-0050569d21a3",
+      "showgames-12778"
+    ]
+  },
+  {
+    "gameId": "b0736e28-bd35-11f1-94c9-0050569d21a3",
+    "game": "Castlevania: Belmont’s Curse",
+    "platform": "PS5",
+    "name": "Midnight Edition",
+    "productIds": [
+      "b0736e28-bd35-11f1-94c9-0050569d21a3",
+      "showgames-12790"
+    ]
+  },
+  {
+    "gameId": "43f1691c-c0da-11ee-91b0-00155d8ed20a",
+    "game": "Suicide Squad: Kill the Justice League",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "43f1691c-c0da-11ee-91b0-00155d8ed20a",
+      "showgames-11295"
+    ]
+  },
+  {
+    "gameId": "62685527-7e69-11f0-9378-0050569d21a3",
+    "game": "Cronos: The New Dawn",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "62685527-7e69-11f0-9378-0050569d21a3",
+      "showgames-12170"
+    ]
+  },
+  {
+    "gameId": "2f805632-5ba6-11f0-9358-0050569d5825",
+    "game": "Gears of War: Reloaded",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "2f805632-5ba6-11f0-9358-0050569d5825",
+      "showgames-12157"
+    ]
+  },
+  {
+    "gameId": "38db61ee-ecd4-11ef-92eb-0050569d21a3",
+    "game": "Dragon Age: The Veilguard",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "38db61ee-ecd4-11ef-92eb-0050569d21a3",
+      "showgames-11834"
+    ]
+  },
+  {
+    "gameId": "e62e0f71-c5eb-11f0-93bc-0050569d21a3",
+    "game": "Yakuza 0",
+    "platform": "PS5",
+    "name": "Director's Cut",
+    "productIds": [
+      "e62e0f71-c5eb-11f0-93bc-0050569d21a3",
+      "showgames-12362"
+    ]
+  },
+  {
+    "gameId": "6230c977-812c-11ef-9287-0050569d0a4d",
+    "game": "Silent Hill 2 Remake",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "6230c977-812c-11ef-9287-0050569d0a4d",
+      "showgames-11784"
+    ]
+  },
+  {
+    "gameId": "e7f7c94b-c5eb-11f0-93bc-0050569d21a3",
+    "game": "Mortal Kombat: Legacy Kollection",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "e7f7c94b-c5eb-11f0-93bc-0050569d21a3",
+      "showgames-12319"
+    ]
+  },
+  {
+    "gameId": "77ed03da-eae9-11ed-90e1-00155d8ed209",
+    "game": "Devil May Cry 5",
+    "platform": "PS5",
+    "name": "Special Edition",
+    "productIds": [
+      "77ed03da-eae9-11ed-90e1-00155d8ed209",
+      "showgames-9717"
     ]
   },
   {
@@ -137,7 +2302,148 @@
     "name": "стандартное издание",
     "productIds": [
       "1e1bcbec-fc35-11e8-a205-00155d03332b",
-      "c7ac1bc9-fabc-11ed-90f2-00155d8ed209"
+      "c7ac1bc9-fabc-11ed-90f2-00155d8ed209",
+      "showgames-8085"
+    ]
+  },
+  {
+    "gameId": "db96aa3e-61c9-11eb-a214-00155d03332b",
+    "game": "Resident Evil Village",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "db96aa3e-61c9-11eb-a214-00155d03332b",
+      "showgames-9749"
+    ]
+  },
+  {
+    "gameId": "db96aa3e-61c9-11eb-a214-00155d03332b",
+    "game": "Resident Evil Village",
+    "platform": "PS5",
+    "name": "Gold Edition",
+    "productIds": [
+      "caacb855-6a0f-11ed-905c-00155d8ed209",
+      "showgames-10593"
+    ]
+  },
+  {
+    "gameId": "db96aa3e-61c9-11eb-a214-00155d03332b",
+    "game": "Resident Evil Village",
+    "platform": "PS4",
+    "name": "Gold Edition",
+    "productIds": [
+      "c7ac1bc4-fabc-11ed-90f2-00155d8ed209",
+      "showgames-10592"
+    ]
+  },
+  {
+    "gameId": "db96aa3e-61c9-11eb-a214-00155d03332b",
+    "game": "Resident Evil Village",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "86de0234-61c9-11eb-a214-00155d03332b",
+      "showgames-9748"
+    ]
+  },
+  {
+    "gameId": "6e64e16c-7e69-11f0-9378-0050569d21a3",
+    "game": "Sonic Racing: Crossworlds",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "6e64e16c-7e69-11f0-9378-0050569d21a3",
+      "showgames-12226"
+    ]
+  },
+  {
+    "gameId": "6e64e16c-7e69-11f0-9378-0050569d21a3",
+    "game": "Sonic Racing: Crossworlds",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "566ed23a-7e69-11f0-9378-0050569d21a3",
+      "showgames-12227"
+    ]
+  },
+  {
+    "gameId": "62de9b96-f58b-11ee-91fa-0050569d0a4d",
+    "game": "Stellar Blade",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "62de9b96-f58b-11ee-91fa-0050569d0a4d",
+      "showgames-11398"
+    ]
+  },
+  {
+    "gameId": "207bc58e-94bb-11ee-9190-00155d8ed209",
+    "game": "Chernobylite",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "207bc58e-94bb-11ee-9190-00155d8ed209",
+      "showgames-10253"
+    ]
+  },
+  {
+    "gameId": "207bc58e-94bb-11ee-9190-00155d8ed209",
+    "game": "Chernobylite",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "5ce57691-c6ef-11ed-90b9-00155d8ed209",
+      "showgames-10110"
+    ]
+  },
+  {
+    "gameId": "7559ba96-1f5d-11f0-931c-0050569d5825",
+    "game": "Indiana Jones and the Great Circle",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "7559ba96-1f5d-11f0-931c-0050569d5825",
+      "showgames-11999"
+    ]
+  },
+  {
+    "gameId": "2ed3e14e-b0c7-11e4-917d-00155d03361b",
+    "game": "Far Cry 4",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "2ed3e14e-b0c7-11e4-917d-00155d03361b",
+      "showgames-6456"
+    ]
+  },
+  {
+    "gameId": "221fbb85-f5bf-11ec-8fdc-00155d8ed209",
+    "game": "Call of Duty: WWII",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "221fbb85-f5bf-11ec-8fdc-00155d8ed209",
+      "showgames-8822"
+    ]
+  },
+  {
+    "gameId": "f4341eb6-70e1-11ef-9273-0050569d0a4d",
+    "game": "EA Sports FC 25",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "f4341eb6-70e1-11ef-9273-0050569d0a4d",
+      "showgames-11737"
+    ]
+  },
+  {
+    "gameId": "f4341eb6-70e1-11ef-9273-0050569d0a4d",
+    "game": "EA Sports FC 25",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "f4341483-70e1-11ef-9273-0050569d0a4d",
+      "showgames-11769"
     ]
   },
   {
@@ -171,13 +2477,316 @@
     ]
   },
   {
+    "gameId": "ae58686e-bd35-11f1-94c9-0050569d21a3",
+    "game": "Clive Barker's Hellraiser: Revival",
+    "platform": "PS5",
+    "name": "Day One Edition",
+    "productIds": [
+      "ae58686e-bd35-11f1-94c9-0050569d21a3",
+      "showgames-12770"
+    ]
+  },
+  {
+    "gameId": "7603917e-747a-11ed-9065-00155d8ed209",
+    "game": "Stray",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "7603917e-747a-11ed-9065-00155d8ed209",
+      "showgames-10513"
+    ]
+  },
+  {
+    "gameId": "7603917e-747a-11ed-9065-00155d8ed209",
+    "game": "Stray",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "4ca7e27d-d752-11ed-90cb-00155d8ed209",
+      "showgames-10608"
+    ]
+  },
+  {
+    "gameId": "6dde7afb-f758-11f0-93fd-0050569d0a4d",
+    "game": "Yakuza Kiwami 3 & Dark Ties",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "6dde7afb-f758-11f0-93fd-0050569d0a4d",
+      "showgames-12373"
+    ]
+  },
+  {
+    "gameId": "73d6870a-f758-11f0-93fd-0050569d0a4d",
+    "game": "Styx Blades of Greed",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "73d6870a-f758-11f0-93fd-0050569d0a4d",
+      "showgames-12378"
+    ]
+  },
+  {
+    "gameId": "9a7e565b-651a-11eb-a216-00155d03332b",
+    "game": "Biomutant",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "9a7e565b-651a-11eb-a216-00155d03332b",
+      "showgames-9006"
+    ]
+  },
+  {
+    "gameId": "cade8ecb-a255-11ef-929b-0050569d21a3",
+    "game": "Farming Simulator 25",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "cade8ecb-a255-11ef-929b-0050569d21a3",
+      "showgames-11849"
+    ]
+  },
+  {
+    "gameId": "fbaccbc1-1163-11ee-9103-00155d8ed209",
+    "game": "Final Fantasy XVI",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "fbaccbc1-1163-11ee-9103-00155d8ed209",
+      "showgames-10889"
+    ]
+  },
+  {
+    "gameId": "7e809ad1-604e-11f0-9357-0050569d9cb8",
+    "game": "RoboCop: Rogue City - Unfinished Business",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "7e809ad1-604e-11f0-9357-0050569d9cb8",
+      "showgames-12102"
+    ]
+  },
+  {
+    "gameId": "e2d56b1e-c448-11e7-938d-00155d03330d",
+    "game": "LEGO Marvel Super Heroes 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "e2d56b1e-c448-11e7-938d-00155d03330d",
+      "showgames-7102"
+    ]
+  },
+  {
+    "gameId": "d80c0854-9dc4-11f0-9394-0050569d21a3",
+    "game": "Terminator 2D: No Fate",
+    "platform": "PS5",
+    "name": "Day One Edition",
+    "productIds": [
+      "d80c0854-9dc4-11f0-9394-0050569d21a3",
+      "showgames-12318"
+    ]
+  },
+  {
+    "gameId": "370174f7-690a-11f0-9363-0050569d21a3",
+    "game": "Metal Gear Solid: Delta Snake Eater",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "370174f7-690a-11f0-9363-0050569d21a3",
+      "showgames-12163"
+    ]
+  },
+  {
+    "gameId": "370174f7-690a-11f0-9363-0050569d21a3",
+    "game": "Metal Gear Solid: Delta Snake Eater",
+    "platform": "PS5",
+    "name": "Day One Edition",
+    "productIds": [
+      "366b3a0d-690a-11f0-9363-0050569d21a3",
+      "showgames-12162"
+    ]
+  },
+  {
+    "gameId": "686b190b-7e69-11f0-9378-0050569d21a3",
+    "game": "Ninja Gaiden: Ragebound",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "686b190b-7e69-11f0-9378-0050569d21a3",
+      "showgames-12182"
+    ]
+  },
+  {
+    "gameId": "60d5522b-39e5-11e6-8027-00155d033307",
+    "game": "Titanfall 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "60d5522b-39e5-11e6-8027-00155d033307",
+      "showgames-2566"
+    ]
+  },
+  {
+    "gameId": "37849201-690a-11f0-9363-0050569d21a3",
+    "game": "Shinobi: Art Of Vengeance",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "37849201-690a-11f0-9363-0050569d21a3",
+      "showgames-12166"
+    ]
+  },
+  {
+    "gameId": "631824bc-f525-11ed-90ec-00155d8ed209",
+    "game": "Dead Island 2",
+    "platform": "PS5",
+    "name": "Day One Edition",
+    "productIds": [
+      "631824bc-f525-11ed-90ec-00155d8ed209",
+      "showgames-10846"
+    ]
+  },
+  {
+    "gameId": "efafad16-4847-11ed-9033-00155d8ed209",
+    "game": "FIFA 23",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "efafad16-4847-11ed-9033-00155d8ed209",
+      "showgames-10520",
+      "showgames-10522"
+    ]
+  },
+  {
     "gameId": "efafad16-4847-11ed-9033-00155d8ed209",
     "game": "FIFA 23",
     "platform": "PS4",
     "name": "стандартное издание",
     "productIds": [
       "7833b88a-f409-4101-a879-2362d6b76537",
-      "efafad0d-4847-11ed-9033-00155d8ed209"
+      "efafad0d-4847-11ed-9033-00155d8ed209",
+      "showgames-10519",
+      "showgames-10523"
+    ]
+  },
+  {
+    "gameId": "c43ecaa7-6a0f-11ed-905c-00155d8ed209",
+    "game": "Sonic Frontiers",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "c43ecaa7-6a0f-11ed-905c-00155d8ed209",
+      "showgames-10586"
+    ]
+  },
+  {
+    "gameId": "c43ecaa7-6a0f-11ed-905c-00155d8ed209",
+    "game": "Sonic Frontiers",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "c43ecaa6-6a0f-11ed-905c-00155d8ed209",
+      "showgames-10587"
+    ]
+  },
+  {
+    "gameId": "170d7cab-0f45-11ee-9103-00155d8ed209",
+    "game": "Middle-earth: Shadow of Mordor",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "6542897a-298e-11e4-9f9e-00155d031202",
+      "showgames-2610"
+    ]
+  },
+  {
+    "gameId": "72730717-f3a8-11ed-90ea-00155d8ed209",
+    "game": "Star Wars Jedi: Survivor",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "72730717-f3a8-11ed-90ea-00155d8ed209",
+      "showgames-10859"
+    ]
+  },
+  {
+    "gameId": "8b9ffc43-21a4-11f1-9414-0050569d21a3",
+    "game": "Star Wars Dark Forces Remaster",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "8b9ffc43-21a4-11f1-9414-0050569d21a3",
+      "showgames-12421"
+    ]
+  },
+  {
+    "gameId": "7235461f-20e8-11f0-932b-0050569d0a4d",
+    "game": "Elden Ring: Nightreign",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "72353de0-20e8-11f0-932b-0050569d0a4d",
+      "showgames-12047"
+    ]
+  },
+  {
+    "gameId": "7235461f-20e8-11f0-932b-0050569d0a4d",
+    "game": "Elden Ring: Nightreign",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "72353b57-20e8-11f0-932b-0050569d0a4d",
+      "showgames-12058"
+    ]
+  },
+  {
+    "gameId": "015378f7-3aba-11f0-9345-0050569d0a4d",
+    "game": "Street Fighter 6",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "4575dc46-0f1f-11ee-9103-00155d8ed209",
+      "showgames-10879"
+    ]
+  },
+  {
+    "gameId": "015378f7-3aba-11f0-9345-0050569d0a4d",
+    "game": "Street Fighter 6",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "4575dc45-0f1f-11ee-9103-00155d8ed209",
+      "showgames-10880"
+    ]
+  },
+  {
+    "gameId": "cde06bb1-9dc4-11f0-9394-0050569d21a3",
+    "game": "Ninja Gaiden 4",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "cde06bb1-9dc4-11f0-9394-0050569d21a3",
+      "showgames-12221"
+    ]
+  },
+  {
+    "gameId": "cdb715e1-a8d3-11f0-939a-0050569d9cb8",
+    "game": "The Elder Scrolls IV: Oblivion Remastered",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "cdb715e1-a8d3-11f0-939a-0050569d9cb8",
+      "showgames-12257"
+    ]
+  },
+  {
+    "gameId": "613ae398-812c-11ef-9287-0050569d0a4d",
+    "game": "Until Dawn",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "613ae398-812c-11ef-9287-0050569d0a4d",
+      "showgames-11785"
     ]
   },
   {
@@ -187,7 +2796,248 @@
     "name": "стандартное издание",
     "productIds": [
       "029c7699-bab6-11f0-93bf-0050569d0a4d",
-      "fd6c73ce-bab5-11f0-93bf-0050569d0a4d"
+      "fd6c73ce-bab5-11f0-93bf-0050569d0a4d",
+      "showgames-12278"
+    ]
+  },
+  {
+    "gameId": "029c7699-bab6-11f0-93bf-0050569d0a4d",
+    "game": "Call of Duty: Black Ops 7",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "fd6c73ce-bab5-11f0-93bf-0050569d0a4d",
+      "showgames-12280"
+    ]
+  },
+  {
+    "gameId": "d80bfac0-9dc4-11f0-9394-0050569d21a3",
+    "game": "The Outer Worlds 2",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "d3f3145a-9dc4-11f0-9394-0050569d21a3",
+      "showgames-12308"
+    ]
+  },
+  {
+    "gameId": "5ef8b9f9-b0d1-11ed-909f-00155d8ed209",
+    "game": "Wild Hearts",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "5ef8b9f9-b0d1-11ed-909f-00155d8ed209",
+      "showgames-10791"
+    ]
+  },
+  {
+    "gameId": "f2e95be7-86bf-11ef-927e-0050569d21a3",
+    "game": "Call Of Duty Black Ops 6",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "f2e95be7-86bf-11ef-927e-0050569d21a3",
+      "showgames-11764"
+    ]
+  },
+  {
+    "gameId": "f2e95be7-86bf-11ef-927e-0050569d21a3",
+    "game": "Call Of Duty Black Ops 6",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "f43eafe4-86bf-11ef-927e-0050569d21a3",
+      "showgames-11747"
+    ]
+  },
+  {
+    "gameId": "f182c303-86bf-11ef-927e-0050569d21a3",
+    "game": "Sonic X Shadow Generations",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "f182c303-86bf-11ef-927e-0050569d21a3",
+      "showgames-11741"
+    ]
+  },
+  {
+    "gameId": "f182c303-86bf-11ef-927e-0050569d21a3",
+    "game": "Sonic X Shadow Generations",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "f0978f95-86bf-11ef-927e-0050569d21a3",
+      "showgames-11763"
+    ]
+  },
+  {
+    "gameId": "fc73f55a-a670-11e8-9547-00155d03330d",
+    "game": "Tom Clancy’s The Division 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "fc73f55a-a670-11e8-9547-00155d03330d",
+      "showgames-8087"
+    ]
+  },
+  {
+    "gameId": "d568b2ae-dde2-11ef-92d0-0050569d21a3",
+    "game": "Monster Hunter Wilds",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "d568b2ae-dde2-11ef-92d0-0050569d21a3",
+      "showgames-11948"
+    ]
+  },
+  {
+    "gameId": "d568b2ae-dde2-11ef-92d0-0050569d21a3",
+    "game": "Monster Hunter Wilds",
+    "platform": "PS5",
+    "name": "SteelBook Edition",
+    "productIds": [
+      "d8804deb-dde2-11ef-92d0-0050569d21a3",
+      "showgames-11949"
+    ]
+  },
+  {
+    "gameId": "43f152a9-c0da-11ee-91b0-00155d8ed20a",
+    "game": "Persona 3 Reload",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "43f152a9-c0da-11ee-91b0-00155d8ed20a",
+      "showgames-11313"
+    ]
+  },
+  {
+    "gameId": "43f152a9-c0da-11ee-91b0-00155d8ed20a",
+    "game": "Persona 3 Reload",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "43f15dd8-c0da-11ee-91b0-00155d8ed20a",
+      "showgames-11312"
+    ]
+  },
+  {
+    "gameId": "e62e0454-c5eb-11f0-93bc-0050569d21a3",
+    "game": "Avatar: Frontiers of Pandora",
+    "platform": "PS5",
+    "name": "From the Ashes Edition",
+    "productIds": [
+      "e62e0454-c5eb-11f0-93bc-0050569d21a3",
+      "showgames-12334"
+    ]
+  },
+  {
+    "gameId": "e62e0454-c5eb-11f0-93bc-0050569d21a3",
+    "game": "Avatar: Frontiers of Pandora",
+    "platform": "PS5",
+    "name": "Special Edition",
+    "productIds": [
+      "bbf2d172-876f-11ee-9172-00155d8ed20a",
+      "showgames-11734"
+    ]
+  },
+  {
+    "gameId": "3c6b698d-7f77-11ed-9070-00155d8ed209",
+    "game": "Teenage Mutant Ninja Turtles: The Cowabunga Collection",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "3c6b698d-7f77-11ed-9070-00155d8ed209",
+      "showgames-10476"
+    ]
+  },
+  {
+    "gameId": "62684f41-7e69-11f0-9378-0050569d21a3",
+    "game": "Hell Is Us",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "62684f41-7e69-11f0-9378-0050569d21a3",
+      "showgames-12172"
+    ]
+  },
+  {
+    "gameId": "ccc46bc3-e050-11ee-91e3-00155d8ed209",
+    "game": "Dragon's Dogma 2",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "ccc46bc3-e050-11ee-91e3-00155d8ed209",
+      "showgames-11331"
+    ]
+  },
+  {
+    "gameId": "745e6215-7e69-11f0-9378-0050569d21a3",
+    "game": "Final Fantasy Tactics: The Ivalice Chronicles",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "745e6215-7e69-11f0-9378-0050569d21a3",
+      "showgames-12248"
+    ]
+  },
+  {
+    "gameId": "6e6c1860-48a5-11ee-912e-00155d8ed20a",
+    "game": "Armored Core VI: Fires of Rubicon",
+    "platform": "PS4",
+    "name": "Launch Edition",
+    "productIds": [
+      "6e6c1860-48a5-11ee-912e-00155d8ed20a",
+      "showgames-10940"
+    ]
+  },
+  {
+    "gameId": "6e6c1860-48a5-11ee-912e-00155d8ed20a",
+    "game": "Armored Core VI: Fires of Rubicon",
+    "platform": "PS5",
+    "name": "Launch Edition",
+    "productIds": [
+      "6e6c1861-48a5-11ee-912e-00155d8ed20a",
+      "showgames-10939"
+    ]
+  },
+  {
+    "gameId": "03ff6099-faac-11ed-90f2-00155d8ed209",
+    "game": "Minecraft Legends",
+    "platform": "PS4",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "03ff6099-faac-11ed-90f2-00155d8ed209",
+      "showgames-10826"
+    ]
+  },
+  {
+    "gameId": "03ff6099-faac-11ed-90f2-00155d8ed209",
+    "game": "Minecraft Legends",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "03ff609a-faac-11ed-90f2-00155d8ed209",
+      "showgames-10825"
+    ]
+  },
+  {
+    "gameId": "c8edbf8c-b37f-11ee-91a1-00155d8ed20b",
+    "game": "Prince of Persia The Lost Crown",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "c8edbf8c-b37f-11ee-91a1-00155d8ed20b",
+      "showgames-11265"
+    ]
+  },
+  {
+    "gameId": "c8edbf8c-b37f-11ee-91a1-00155d8ed20b",
+    "game": "Prince of Persia The Lost Crown",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "72c94f25-b37f-11ee-91a1-00155d8ed20b",
+      "showgames-11267"
     ]
   },
   {
@@ -201,13 +3051,765 @@
     ]
   },
   {
+    "gameId": "9c01c393-b97d-11ed-90ac-00155d8ed209",
+    "game": "Days Gone",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "1b07d962-1b11-11e9-a206-00155d03332b",
+      "showgames-7101"
+    ]
+  },
+  {
+    "gameId": "c851bd76-d7c0-11e6-9084-00155d03330d",
+    "game": "NieR: Automata",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "c851bd76-d7c0-11e6-9084-00155d03330d",
+      "showgames-6421"
+    ]
+  },
+  {
+    "gameId": "c851bd76-d7c0-11e6-9084-00155d03330d",
+    "game": "NieR: Automata",
+    "platform": "PS4",
+    "name": "Game of the YoRHa Edition",
+    "productIds": [
+      "2bc400bd-3e29-11e9-a206-00155d03332b",
+      "showgames-8371"
+    ]
+  },
+  {
+    "gameId": "b6ece836-ba61-11e5-81a8-00155d03361b",
+    "game": "LEGO Marvel’s Avengers",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "b6ece836-ba61-11e5-81a8-00155d03361b",
+      "showgames-2478"
+    ]
+  },
+  {
+    "gameId": "745e6480-7e69-11f0-9378-0050569d21a3",
+    "game": "LEGO Party!",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "745e6480-7e69-11f0-9378-0050569d21a3",
+      "showgames-12239"
+    ]
+  },
+  {
+    "gameId": "33514d3b-690a-11f0-9363-0050569d21a3",
+    "game": "Teenage Mutant Ninja Turtles: Splintered Fate",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "33514d3b-690a-11f0-9363-0050569d21a3",
+      "showgames-12215"
+    ]
+  },
+  {
+    "gameId": "33514d3b-690a-11f0-9363-0050569d21a3",
+    "game": "Teenage Mutant Ninja Turtles: Splintered Fate",
+    "platform": "PS4",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "2f442bab-690a-11f0-9363-0050569d21a3",
+      "showgames-12237"
+    ]
+  },
+  {
+    "gameId": "7f7f8285-c109-11ef-92c5-0050569d0a4d",
+    "game": "Sniper Elite: Resistance",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "7f7f8285-c109-11ef-92c5-0050569d0a4d",
+      "showgames-11912"
+    ]
+  },
+  {
+    "gameId": "7f7f8285-c109-11ef-92c5-0050569d0a4d",
+    "game": "Sniper Elite: Resistance",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "81d6f115-c109-11ef-92c5-0050569d0a4d",
+      "showgames-11905"
+    ]
+  },
+  {
+    "gameId": "663209ca-20e8-11f0-932b-0050569d0a4d",
+    "game": "Commandos: Origins",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "663209ca-20e8-11f0-932b-0050569d0a4d",
+      "showgames-12050"
+    ]
+  },
+  {
+    "gameId": "45ad0009-c650-11ee-91b7-00155d8ed20a",
+    "game": "Final Fantasy VII Rebirth",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "45ad0009-c650-11ee-91b7-00155d8ed20a",
+      "showgames-11311"
+    ]
+  },
+  {
+    "gameId": "eb898766-86bf-11ef-927e-0050569d21a3",
+    "game": "Darkest Dungeon II",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "eb898766-86bf-11ef-927e-0050569d21a3",
+      "showgames-11844"
+    ]
+  },
+  {
+    "gameId": "c2bc0cf0-0ae9-11f0-9315-0050569d0a4d",
+    "game": "Underdogs",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "c2bc0cf0-0ae9-11f0-9315-0050569d0a4d",
+      "showgames-11995"
+    ]
+  },
+  {
+    "gameId": "a10a28c6-4001-11ee-912d-00155d8ed209",
+    "game": "Atlas Fallen",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "a10a28c6-4001-11ee-912d-00155d8ed209",
+      "showgames-10930"
+    ]
+  },
+  {
+    "gameId": "546031db-38ad-11ed-9022-00155d8ed209",
+    "game": "NBA 2K23",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "546031db-38ad-11ed-9022-00155d8ed209",
+      "showgames-10499"
+    ]
+  },
+  {
+    "gameId": "d2bceeb9-e050-11ee-91e3-00155d8ed209",
+    "game": "Rise of the Ronin",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "d2bceeb9-e050-11ee-91e3-00155d8ed209",
+      "showgames-11333"
+    ]
+  },
+  {
+    "gameId": "f606ce44-86bf-11ef-927e-0050569d21a3",
+    "game": "Life is Strange Double Exposure",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "f606ce44-86bf-11ef-927e-0050569d21a3",
+      "showgames-11748"
+    ]
+  },
+  {
+    "gameId": "beb3b795-78cc-11ec-8f62-00155d8ed20b",
+    "game": "ELEX II",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "beb3b795-78cc-11ec-8f62-00155d8ed20b",
+      "showgames-11803"
+    ]
+  },
+  {
+    "gameId": "beb3b795-78cc-11ec-8f62-00155d8ed20b",
+    "game": "ELEX II",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "546e2901-78cd-11ec-8f62-00155d8ed20b",
+      "showgames-12083"
+    ]
+  },
+  {
+    "gameId": "686b1e5e-7e69-11f0-9378-0050569d21a3",
+    "game": "Frostpunk 2",
+    "platform": "PS5",
+    "name": "Icebreaker Edition",
+    "productIds": [
+      "686b1e5e-7e69-11f0-9378-0050569d21a3",
+      "showgames-12303"
+    ]
+  },
+  {
+    "gameId": "6bc30e18-f6da-11e9-a20c-00155df1b805",
+    "game": "Desperados III",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "6bc30e18-f6da-11e9-a20c-00155df1b805",
+      "showgames-9014"
+    ]
+  },
+  {
+    "gameId": "09a96eb0-f4c2-11ef-92f1-0050569d21a3",
+    "game": "Atelier Yumia: The Alchemist Of Memories & The Envisioned Land",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "09a96eb0-f4c2-11ef-92f1-0050569d21a3",
+      "showgames-12054"
+    ]
+  },
+  {
+    "gameId": "01b51f2c-bab6-11f0-93bf-0050569d0a4d",
+    "game": "7 Days to Die",
+    "platform": "PS5",
+    "name": "Console Edition",
+    "productIds": [
+      "00c92313-bab6-11f0-93bf-0050569d0a4d",
+      "showgames-12365"
+    ]
+  },
+  {
+    "gameId": "45b57f4a-8a9e-11ef-9281-0050569d21a3",
+    "game": "Disney Epic Mickey Rebrushed",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "45b57f4a-8a9e-11ef-9281-0050569d21a3",
+      "showgames-11787"
+    ]
+  },
+  {
+    "gameId": "67e41334-f758-11f0-93fd-0050569d0a4d",
+    "game": "Dragon Quest VII Reimagined",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "67e41334-f758-11f0-93fd-0050569d0a4d",
+      "showgames-12350"
+    ]
+  },
+  {
     "gameId": "d451b6a8-dde2-11ef-92d0-0050569d21a3",
     "game": "Metal Slug Tactics",
     "platform": "PS5",
     "name": "стандартное издание",
     "productIds": [
       "d451b6a8-dde2-11ef-92d0-0050569d21a3",
-      "d451cc53-dde2-11ef-92d0-0050569d21a3"
+      "d451cc53-dde2-11ef-92d0-0050569d21a3",
+      "showgames-12138"
+    ]
+  },
+  {
+    "gameId": "2a899567-61ca-11ee-914f-00155d8ed20a",
+    "game": "Lords of the Fallen",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "2a899567-61ca-11ee-914f-00155d8ed20a",
+      "showgames-11152"
+    ]
+  },
+  {
+    "gameId": "c132497c-a857-11ed-9098-00155d8ed209",
+    "game": "Forspoken",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "c132497c-a857-11ed-9098-00155d8ed209",
+      "showgames-10673"
+    ]
+  },
+  {
+    "gameId": "d1e8ed2c-9dc4-11f0-9394-0050569d21a3",
+    "game": "Tormented Souls 2",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "d1e8ed2c-9dc4-11f0-9394-0050569d21a3",
+      "showgames-12236"
+    ]
+  },
+  {
+    "gameId": "6631fb51-20e8-11f0-932b-0050569d0a4d",
+    "game": "The Precinct",
+    "platform": "PS5",
+    "name": "Limited Edition",
+    "productIds": [
+      "6631fb51-20e8-11f0-932b-0050569d0a4d",
+      "showgames-12021"
+    ]
+  },
+  {
+    "gameId": "6578aee2-e323-11ed-90d8-00155d8ed209",
+    "game": "Wo Long: Fallen Dynasty",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "6578aee2-e323-11ed-90d8-00155d8ed209",
+      "showgames-10701"
+    ]
+  },
+  {
+    "gameId": "d24173f9-0ae9-11f0-9315-0050569d0a4d",
+    "game": "Gris",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "d24173f9-0ae9-11f0-9315-0050569d0a4d",
+      "showgames-12104"
+    ]
+  },
+  {
+    "gameId": "852ba269-21a4-11f1-9414-0050569d21a3",
+    "game": "GreedFall The Dying World",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "852ba269-21a4-11f1-9414-0050569d21a3",
+      "showgames-12439"
+    ]
+  },
+  {
+    "gameId": "c9f4c693-9dc4-11f0-9394-0050569d21a3",
+    "game": "Painkiller",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "c9f4c693-9dc4-11f0-9394-0050569d21a3",
+      "showgames-12243"
+    ]
+  },
+  {
+    "gameId": "cfed0abe-9dc4-11f0-9394-0050569d21a3",
+    "game": "Jurassic World Evolution 3",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "cfed0abe-9dc4-11f0-9394-0050569d21a3",
+      "showgames-12253"
+    ]
+  },
+  {
+    "gameId": "164a52cc-f4c2-11ef-92f1-0050569d21a3",
+    "game": "The First Berserker: Khazan",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "164a52cc-f4c2-11ef-92f1-0050569d21a3",
+      "showgames-11986"
+    ]
+  },
+  {
+    "gameId": "b484a57b-683d-11f0-935e-0050569d9cb8",
+    "game": "Truck Driver",
+    "platform": "PS5",
+    "name": "Gold Edition",
+    "productIds": [
+      "b484a57b-683d-11f0-935e-0050569d9cb8",
+      "showgames-12216"
+    ]
+  },
+  {
+    "gameId": "7df82237-0abf-11ec-a2b0-00155dbd7634",
+    "game": "Call of Duty: Vanguard",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "7df82237-0abf-11ec-a2b0-00155dbd7634",
+      "showgames-10100"
+    ]
+  },
+  {
+    "gameId": "7df82237-0abf-11ec-a2b0-00155dbd7634",
+    "game": "Call of Duty: Vanguard",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "da9cb477-0abf-11ec-a2b0-00155dbd7634",
+      "showgames-10101"
+    ]
+  },
+  {
+    "gameId": "d1e8df4f-9dc4-11f0-9394-0050569d21a3",
+    "game": "Double Dragon Revive",
+    "platform": "PS5",
+    "name": "Limited Edition",
+    "productIds": [
+      "d1e8df4f-9dc4-11f0-9394-0050569d21a3",
+      "showgames-12258"
+    ]
+  },
+  {
+    "gameId": "5e623bd7-6659-11ee-9161-00155d8ed209",
+    "game": "NBA 2K24",
+    "platform": "PS5",
+    "name": "Kobe Bryant Edition",
+    "productIds": [
+      "60b2d6af-6659-11ee-9161-00155d8ed209",
+      "showgames-10961"
+    ]
+  },
+  {
+    "gameId": "1318725a-f00b-11ee-91f5-0050569d0a4d",
+    "game": "South Park: Snow Day!",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "1318725a-f00b-11ee-91f5-0050569d0a4d",
+      "showgames-11349"
+    ]
+  },
+  {
+    "gameId": "8cedd6a5-540e-11ed-903f-00155d8ed209",
+    "game": "WWE 2K22",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "8cedd6a5-540e-11ed-903f-00155d8ed209",
+      "showgames-10369"
+    ]
+  },
+  {
+    "gameId": "8cedd6a5-540e-11ed-903f-00155d8ed209",
+    "game": "WWE 2K22",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "e39d2c02-8f9c-11ec-8f77-00155d8ed20b",
+      "showgames-10370"
+    ]
+  },
+  {
+    "gameId": "2db50361-f5b0-11f0-93ec-0050569d5825",
+    "game": "Agatha Christie - Murder on the Orient Express",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "2db50361-f5b0-11f0-93ec-0050569d5825",
+      "showgames-12367"
+    ]
+  },
+  {
+    "gameId": "2db50361-f5b0-11f0-93ec-0050569d5825",
+    "game": "Agatha Christie - Murder on the Orient Express",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "76531050-76ff-11ee-9172-00155d8ed209",
+      "showgames-11070"
+    ]
+  },
+  {
+    "gameId": "5d9451c4-f34c-11ef-92ef-0050569d21a3",
+    "game": "Unknown 9: Awakening",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "5d9451c4-f34c-11ef-92ef-0050569d21a3",
+      "showgames-11826"
+    ]
+  },
+  {
+    "gameId": "5d9451c4-f34c-11ef-92ef-0050569d21a3",
+    "game": "Unknown 9: Awakening",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "5d945309-f34c-11ef-92ef-0050569d21a3",
+      "showgames-11825"
+    ]
+  },
+  {
+    "gameId": "c857f2b2-9fdc-11ee-918f-00155d8ed20a",
+    "game": "Call of Duty: Modern Warfare III",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "15667167-1906-11f0-9314-0050569d5825",
+      "showgames-11090"
+    ]
+  },
+  {
+    "gameId": "0e1d0554-f4c2-11ef-92f1-0050569d21a3",
+    "game": "Alaskan Road Truckers",
+    "platform": "PS5",
+    "name": "Highway Edition",
+    "productIds": [
+      "0e1d0554-f4c2-11ef-92f1-0050569d21a3",
+      "showgames-11985"
+    ]
+  },
+  {
+    "gameId": "4bcb0b9b-8a9e-11ef-9281-0050569d21a3",
+    "game": "Test Drive Unlimited Solar Crown",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "4bcb0b9b-8a9e-11ef-9281-0050569d21a3",
+      "showgames-11758"
+    ]
+  },
+  {
+    "gameId": "8d281b71-ac4b-11ea-a210-00155d03332b",
+    "game": "Sackboy: A Big Adventure",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "8d281b71-ac4b-11ea-a210-00155d03332b",
+      "showgames-9658"
+    ]
+  },
+  {
+    "gameId": "8d281b71-ac4b-11ea-a210-00155d03332b",
+    "game": "Sackboy: A Big Adventure",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "b9c1c713-06da-11eb-a211-00155d03332b",
+      "showgames-12426",
+      "showgames-9659"
+    ]
+  },
+  {
+    "gameId": "d69e2dce-aaf0-11ef-92a2-0050569d21a3",
+    "game": "Resident Evil 2",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "d69e2dce-aaf0-11ef-92a2-0050569d21a3",
+      "showgames-11909"
+    ]
+  },
+  {
+    "gameId": "d69e2dce-aaf0-11ef-92a2-0050569d21a3",
+    "game": "Resident Evil 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "126eb195-01c9-11e9-a205-00155d03332b",
+      "showgames-7847"
+    ]
+  },
+  {
+    "gameId": "132a2392-2158-11ee-9111-00155d8ed209",
+    "game": "Crash Team Rumble",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "193ff1fc-2158-11ee-9111-00155d8ed209",
+      "showgames-10891"
+    ]
+  },
+  {
+    "gameId": "696b3223-bdde-11eb-a269-00155d42eb15",
+    "game": "Dying Light 2: Stay Human",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "696b3223-bdde-11eb-a269-00155d42eb15",
+      "showgames-8660"
+    ]
+  },
+  {
+    "gameId": "696b3223-bdde-11eb-a269-00155d42eb15",
+    "game": "Dying Light 2: Stay Human",
+    "platform": "PS4",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "db4f2dfc-be87-11eb-a26a-00155dd2ff18",
+      "showgames-10176"
+    ]
+  },
+  {
+    "gameId": "696b3223-bdde-11eb-a269-00155d42eb15",
+    "game": "Dying Light 2: Stay Human",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "b1d08f18-bdde-11eb-a269-00155d42eb15",
+      "showgames-10169"
+    ]
+  },
+  {
+    "gameId": "696b3223-bdde-11eb-a269-00155d42eb15",
+    "game": "Dying Light 2: Stay Human",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "34cb753f-be88-11eb-a26a-00155dd2ff18",
+      "showgames-10175"
+    ]
+  },
+  {
+    "gameId": "7a0d03f1-b97d-11ed-90ac-00155d8ed209",
+    "game": "Octopath Traveler II",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "7a0d03f1-b97d-11ed-90ac-00155d8ed209",
+      "showgames-10749"
+    ]
+  },
+  {
+    "gameId": "7a0d03f1-b97d-11ed-90ac-00155d8ed209",
+    "game": "Octopath Traveler II",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "818acd9f-b97d-11ed-90ac-00155d8ed209",
+      "showgames-10748"
+    ]
+  },
+  {
+    "gameId": "d413ff64-cd34-11e9-a20c-00155d03332b",
+    "game": "Final Fantasy VII Remake",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "d413ff64-cd34-11e9-a20c-00155d03332b",
+      "showgames-9176"
+    ]
+  },
+  {
+    "gameId": "d413ff64-cd34-11e9-a20c-00155d03332b",
+    "game": "Final Fantasy VII Remake",
+    "platform": "PS4",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "fcf4bf7c-cd34-11e9-a20c-00155d03332b",
+      "showgames-9177"
+    ]
+  },
+  {
+    "gameId": "dacad9b0-098b-11ea-a20d-00155d03332b",
+    "game": "Nioh 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "dacad9b0-098b-11ea-a20d-00155d03332b",
+      "showgames-9174"
+    ]
+  },
+  {
+    "gameId": "023233e6-6ecb-11ed-9060-00155d8ed209",
+    "game": "SIFU",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "023233e6-6ecb-11ed-9060-00155d8ed209",
+      "showgames-10250"
+    ]
+  },
+  {
+    "gameId": "023233e6-6ecb-11ed-9060-00155d8ed209",
+    "game": "SIFU",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "fc2f8319-6eca-11ed-9060-00155d8ed209",
+      "showgames-10249"
+    ]
+  },
+  {
+    "gameId": "364fbd28-c258-11ea-a211-00155d03332b",
+    "game": "The Dark Pictures: Little Hope",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "364fbd28-c258-11ea-a211-00155d03332b",
+      "showgames-9648"
+    ]
+  },
+  {
+    "gameId": "398ddd3b-c650-11ee-91b7-00155d8ed20a",
+    "game": "Helldivers 2",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "398ddd3b-c650-11ee-91b7-00155d8ed20a",
+      "showgames-11373"
+    ]
+  },
+  {
+    "gameId": "3df88a15-c0da-11ee-91b0-00155d8ed20a",
+    "game": "Like a Dragon Infinite Wealth",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "3df88a15-c0da-11ee-91b0-00155d8ed20a",
+      "showgames-11300"
+    ]
+  },
+  {
+    "gameId": "3df88a15-c0da-11ee-91b0-00155d8ed20a",
+    "game": "Like a Dragon Infinite Wealth",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "3df8a333-c0da-11ee-91b0-00155d8ed20a",
+      "showgames-11298"
+    ]
+  },
+  {
+    "gameId": "546031d9-38ad-11ed-9022-00155d8ed209",
+    "game": "Soul Hackers 2",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "546031d9-38ad-11ed-9022-00155d8ed209",
+      "showgames-10462"
+    ]
+  },
+  {
+    "gameId": "546031d9-38ad-11ed-9022-00155d8ed209",
+    "game": "Soul Hackers 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "5ae1fb34-38ad-11ed-9022-00155d8ed209",
+      "showgames-10463"
+    ]
+  },
+  {
+    "gameId": "6212efa2-ca21-11ed-90bd-00155d8ed209",
+    "game": "WWE 2K23",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "6212efa3-ca21-11ed-90bd-00155d8ed209",
+      "showgames-11735"
+    ]
+  },
+  {
+    "gameId": "9a89acd4-6638-11ed-9059-00155d8ed209",
+    "game": "Persona 5 Royal",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "9a89acd4-6638-11ed-9059-00155d8ed209",
+      "showgames-10600"
+    ]
+  },
+  {
+    "gameId": "9fa72547-b7d3-11e6-9c4d-00155d03330d",
+    "game": "Resident Evil 5",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "9fa72547-b7d3-11e6-9c4d-00155d03330d",
+      "showgames-2527"
     ]
   },
   {
@@ -217,7 +3819,608 @@
     "name": "стандартное издание",
     "productIds": [
       "abccd77a-93bf-11ec-8f7c-00155d8ed20c",
-      "ac1768ae-9e30-11ee-918d-00155d8ed20a"
+      "ac1768ae-9e30-11ee-918d-00155d8ed20a",
+      "showgames-10537"
+    ]
+  },
+  {
+    "gameId": "d89c49aa-326c-11ed-901b-00155d8ed209",
+    "game": "Odin Sphere: Leifthrasir",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "d89c49aa-326c-11ed-901b-00155d8ed209",
+      "showgames-2508"
+    ]
+  },
+  {
+    "gameId": "e0661a04-b195-11ed-90a0-00155d8ed209",
+    "game": "Metal Gear Solid V: Definitive Experience",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "e0661a04-b195-11ed-90a0-00155d8ed209",
+      "showgames-6695"
+    ]
+  },
+  {
+    "gameId": "edfdcae5-86bf-11ef-927e-0050569d21a3",
+    "game": "Alan Wake 2",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "edfdcae5-86bf-11ef-927e-0050569d21a3",
+      "showgames-11740"
+    ]
+  },
+  {
+    "gameId": "129a3dcb-6056-11f0-9369-0050569d0a4d",
+    "game": "Dragon Ball Z: Kakarot",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "c1014c62-40ac-11ea-a20d-00155df1b805",
+      "showgames-9334"
+    ]
+  },
+  {
+    "gameId": "35dc314a-690a-11f0-9363-0050569d21a3",
+    "game": "Ready Or Not",
+    "platform": "PS5",
+    "name": "Day One Edition",
+    "productIds": [
+      "35dc314a-690a-11f0-9363-0050569d21a3",
+      "showgames-12354"
+    ]
+  },
+  {
+    "gameId": "398dde6e-c650-11ee-91b7-00155d8ed20a",
+    "game": "Banishers: Ghosts of New Eden",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "398dde6e-c650-11ee-91b7-00155d8ed20a",
+      "showgames-11293"
+    ]
+  },
+  {
+    "gameId": "70086097-747a-11ed-9065-00155d8ed209",
+    "game": "Call of Duty: Black Ops III",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "70086097-747a-11ed-9065-00155d8ed209",
+      "showgames-10649"
+    ]
+  },
+  {
+    "gameId": "70086097-747a-11ed-9065-00155d8ed209",
+    "game": "Call of Duty: Black Ops III",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "a58db8d5-359a-11e5-bd2e-00155d03361b",
+      "showgames-2395"
+    ]
+  },
+  {
+    "gameId": "c68e30a7-dde2-11ef-92d0-0050569d21a3",
+    "game": "Civilization VII",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "c68e30a7-dde2-11ef-92d0-0050569d21a3",
+      "showgames-11919"
+    ]
+  },
+  {
+    "gameId": "d0eed87c-6a0f-11ed-905c-00155d8ed209",
+    "game": "Steelrising",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "d0eed87c-6a0f-11ed-905c-00155d8ed209",
+      "showgames-10497"
+    ]
+  },
+  {
+    "gameId": "d45a840a-52b0-11ea-a20f-00155d03332b",
+    "game": "Marvel’s Avengers",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "d45a840a-52b0-11ea-a20f-00155d03332b",
+      "showgames-9368"
+    ]
+  },
+  {
+    "gameId": "d45a840a-52b0-11ea-a20f-00155d03332b",
+    "game": "Marvel’s Avengers",
+    "platform": "PS4",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "802b92dd-52b1-11ea-a20f-00155d03332b",
+      "showgames-9370"
+    ]
+  },
+  {
+    "gameId": "d45a840a-52b0-11ea-a20f-00155d03332b",
+    "game": "Marvel’s Avengers",
+    "platform": "PS4",
+    "name": "Величайшее издание Земли",
+    "productIds": [
+      "50a0c063-e059-11ea-a211-00155d03332b",
+      "showgames-9500"
+    ]
+  },
+  {
+    "gameId": "e3dc6040-c5eb-11f0-93bc-0050569d21a3",
+    "game": "Mandragora: Whispers of the Witch Tree",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "e3dc6040-c5eb-11f0-93bc-0050569d21a3",
+      "showgames-12443"
+    ]
+  },
+  {
+    "gameId": "eb001512-70e1-11ef-9273-0050569d0a4d",
+    "game": "Enotria: The Last Song",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "eb001512-70e1-11ef-9273-0050569d0a4d",
+      "showgames-12008"
+    ]
+  },
+  {
+    "gameId": "ff556632-f4c1-11ef-92f1-0050569d21a3",
+    "game": "WWE 2K25",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "ff556632-f4c1-11ef-92f1-0050569d21a3",
+      "showgames-11965"
+    ]
+  },
+  {
+    "gameId": "ff556632-f4c1-11ef-92f1-0050569d21a3",
+    "game": "WWE 2K25",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "fda13096-f4c1-11ef-92f1-0050569d21a3",
+      "showgames-11966"
+    ]
+  },
+  {
+    "gameId": "127d7821-f4c2-11ef-92f1-0050569d21a3",
+    "game": "Goat Simulator Remastered",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "127d7821-f4c2-11ef-92f1-0050569d21a3",
+      "showgames-12632"
+    ]
+  },
+  {
+    "gameId": "3c6b698f-7f77-11ed-9070-00155d8ed209",
+    "game": "Evil West",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "3c6b698f-7f77-11ed-9070-00155d8ed209",
+      "showgames-10626"
+    ]
+  },
+  {
+    "gameId": "44f89c55-1653-11ee-9107-00155d8ed209",
+    "game": "Aliens: Dark Descent",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "44f89c55-1653-11ee-9107-00155d8ed209",
+      "showgames-10894"
+    ]
+  },
+  {
+    "gameId": "44f89c55-1653-11ee-9107-00155d8ed209",
+    "game": "Aliens: Dark Descent",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "6d5b6252-47e7-11ef-9249-0050569d0a4d",
+      "showgames-10895"
+    ]
+  },
+  {
+    "gameId": "4575dc49-0f1f-11ee-9103-00155d8ed209",
+    "game": "LEGO 2K Drive",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "4575dc49-0f1f-11ee-9103-00155d8ed209",
+      "showgames-10874"
+    ]
+  },
+  {
+    "gameId": "4575dc49-0f1f-11ee-9103-00155d8ed209",
+    "game": "LEGO 2K Drive",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "4575dc4a-0f1f-11ee-9103-00155d8ed209",
+      "showgames-10873"
+    ]
+  },
+  {
+    "gameId": "6c33a0a2-20e8-11f0-932b-0050569d0a4d",
+    "game": "Deliver At All Costs",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "6c33a0a2-20e8-11f0-932b-0050569d0a4d",
+      "showgames-12051"
+    ]
+  },
+  {
+    "gameId": "7a7a51e7-c109-11ef-92c5-0050569d0a4d",
+    "game": "Dynasty Warriors: Origins",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "7a7a51e7-c109-11ef-92c5-0050569d0a4d",
+      "showgames-11904"
+    ]
+  },
+  {
+    "gameId": "7f28b41d-f3a8-11ed-90ea-00155d8ed209",
+    "game": "Predator: Hunting Grounds",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "7f28b41d-f3a8-11ed-90ea-00155d8ed209",
+      "showgames-9878"
+    ]
+  },
+  {
+    "gameId": "9c01c392-b97d-11ed-90ac-00155d8ed209",
+    "game": "LEGO Harry Potter: Collection",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "9c01c392-b97d-11ed-90ac-00155d8ed209",
+      "showgames-6386"
+    ]
+  },
+  {
+    "gameId": "a817f719-1323-11ef-9208-0050569d21a3",
+    "game": "Sea of Stars",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "a817f719-1323-11ef-9208-0050569d21a3",
+      "showgames-11445"
+    ]
+  },
+  {
+    "gameId": "a817f719-1323-11ef-9208-0050569d21a3",
+    "game": "Sea of Stars",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "a8180104-1323-11ef-9208-0050569d21a3",
+      "showgames-11431"
+    ]
+  },
+  {
+    "gameId": "b4081751-1323-11ef-9208-0050569d21a3",
+    "game": "EA SPORTS F1 24",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "b4081751-1323-11ef-9208-0050569d21a3",
+      "showgames-11491"
+    ]
+  },
+  {
+    "gameId": "c65153cf-0ae9-11f0-9315-0050569d0a4d",
+    "game": "Steamworld Heist II",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "c65153cf-0ae9-11f0-9315-0050569d0a4d",
+      "showgames-12014"
+    ]
+  },
+  {
+    "gameId": "e73fdb00-eb37-11ee-91ee-00155d8ed209",
+    "game": "Alone in the Dark",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "e73fdb00-eb37-11ee-91ee-00155d8ed209",
+      "showgames-11257"
+    ]
+  },
+  {
+    "gameId": "3b3bf5cb-1c46-11ec-8ef0-00155d8ed20b",
+    "game": "Lost Judgment",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "3b3bf5cb-1c46-11ec-8ef0-00155d8ed20b",
+      "showgames-10018"
+    ]
+  },
+  {
+    "gameId": "3b3bf5cb-1c46-11ec-8ef0-00155d8ed20b",
+    "game": "Lost Judgment",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "9f033b65-1c45-11ec-8ef0-00155d8ed20b",
+      "showgames-10019"
+    ]
+  },
+  {
+    "gameId": "45acfda3-c650-11ee-91b7-00155d8ed20a",
+    "game": "CYGNI: All Guns Blazing",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "45acfda3-c650-11ee-91b7-00155d8ed20a",
+      "showgames-11728"
+    ]
+  },
+  {
+    "gameId": "6c33a789-20e8-11f0-932b-0050569d0a4d",
+    "game": "Lost Soul Aside",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "6c33a789-20e8-11f0-932b-0050569d0a4d",
+      "showgames-12160"
+    ]
+  },
+  {
+    "gameId": "89ecc756-7788-11ee-9173-00155d8ed209",
+    "game": "Skabma: Snowfall",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "89ecc756-7788-11ee-9173-00155d8ed209",
+      "showgames-11411"
+    ]
+  },
+  {
+    "gameId": "c82e19b3-0ae9-11f0-9315-0050569d0a4d",
+    "game": "Pocket Bravery",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "c82e19b3-0ae9-11f0-9315-0050569d0a4d",
+      "showgames-12027"
+    ]
+  },
+  {
+    "gameId": "c82e19b3-0ae9-11f0-9315-0050569d0a4d",
+    "game": "Pocket Bravery",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "c82e2525-0ae9-11f0-9315-0050569d0a4d",
+      "showgames-12026"
+    ]
+  },
+  {
+    "gameId": "652152fa-812c-11ef-9287-0050569d0a4d",
+    "game": "Teenage Mutant Ninja Turtles: Mutants Unleashed",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "652152fa-812c-11ef-9287-0050569d0a4d",
+      "showgames-11762"
+    ]
+  },
+  {
+    "gameId": "6abd7933-f758-11f0-93fd-0050569d0a4d",
+    "game": "My Hero Academia All’s Justice",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "6abd7933-f758-11f0-93fd-0050569d0a4d",
+      "showgames-12345"
+    ]
+  },
+  {
+    "gameId": "c310dae4-8826-11ee-9173-00155d8ed20a",
+    "game": "EA Sports WRC",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "c310dae4-8826-11ee-9173-00155d8ed20a",
+      "showgames-11124"
+    ]
+  },
+  {
+    "gameId": "c6aa72bb-e050-11ee-91e3-00155d8ed209",
+    "game": "Expeditions: A MudRunner Game",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "c6aa72bb-e050-11ee-91e3-00155d8ed209",
+      "showgames-11324"
+    ]
+  },
+  {
+    "gameId": "c6aa72bb-e050-11ee-91e3-00155d8ed209",
+    "game": "Expeditions: A MudRunner Game",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "ccc46819-e050-11ee-91e3-00155d8ed209",
+      "showgames-11323"
+    ]
+  },
+  {
+    "gameId": "cda86f75-dde2-11ef-92d0-0050569d21a3",
+    "game": "Like A Dragon: Pirate Yakuza In Hawaii",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "cda86f75-dde2-11ef-92d0-0050569d21a3",
+      "showgames-11952"
+    ]
+  },
+  {
+    "gameId": "0f1856b2-8d05-11ee-9187-00155d8ed209",
+    "game": "Asterix & Obelix Slap Them All! 2",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "0f1856b2-8d05-11ee-9187-00155d8ed209",
+      "showgames-11437"
+    ]
+  },
+  {
+    "gameId": "0f1856b2-8d05-11ee-9187-00155d8ed209",
+    "game": "Asterix & Obelix Slap Them All! 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "0f185591-8d05-11ee-9187-00155d8ed209",
+      "showgames-11438"
+    ]
+  },
+  {
+    "gameId": "189280fe-6056-11f0-9369-0050569d0a4d",
+    "game": "Badminton Time VR",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "189280fe-6056-11f0-9369-0050569d0a4d",
+      "showgames-12129"
+    ]
+  },
+  {
+    "gameId": "5cc3e2f1-f58b-11ee-91fa-0050569d0a4d",
+    "game": "Pacific Drive",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "5cc3e2f1-f58b-11ee-91fa-0050569d0a4d",
+      "showgames-11374"
+    ]
+  },
+  {
+    "gameId": "73139b97-b97d-11ed-90ac-00155d8ed209",
+    "game": "Wanted: Dead",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "73139b97-b97d-11ed-90ac-00155d8ed209",
+      "showgames-10795"
+    ]
+  },
+  {
+    "gameId": "73139b97-b97d-11ed-90ac-00155d8ed209",
+    "game": "Wanted: Dead",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "73139b96-b97d-11ed-90ac-00155d8ed209",
+      "showgames-10796"
+    ]
+  },
+  {
+    "gameId": "9e2f6068-21a4-11f1-9414-0050569d21a3",
+    "game": "Train Sim World 6",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "9e2f6068-21a4-11f1-9414-0050569d21a3",
+      "showgames-12472"
+    ]
+  },
+  {
+    "gameId": "14f53f18-f4c2-11ef-92f1-0050569d21a3",
+    "game": "Atomfall",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "14f53f18-f4c2-11ef-92f1-0050569d21a3",
+      "showgames-11983"
+    ]
+  },
+  {
+    "gameId": "6cc3ece7-b97d-11ed-90ac-00155d8ed209",
+    "game": "World War Z: Aftermath",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "6cc3ece7-b97d-11ed-90ac-00155d8ed209",
+      "showgames-10865"
+    ]
+  },
+  {
+    "gameId": "6cc3ece7-b97d-11ed-90ac-00155d8ed209",
+    "game": "World War Z: Aftermath",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "6c34aee1-228f-11ed-9009-00155d8ed209",
+      "showgames-10268"
+    ]
+  },
+  {
+    "gameId": "21fff038-cffd-11eb-a27c-00155dd2ff2c",
+    "game": "Marvel’s Guardians of the Galaxy",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "21fff038-cffd-11eb-a27c-00155dd2ff2c",
+      "showgames-10088"
+    ]
+  },
+  {
+    "gameId": "21fff038-cffd-11eb-a27c-00155dd2ff2c",
+    "game": "Marvel’s Guardians of the Galaxy",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "58154bc8-cffc-11eb-a27c-00155dd2ff2c",
+      "showgames-10089"
+    ]
+  },
+  {
+    "gameId": "29e02b9b-84b2-11e3-b4a5-00155d031202",
+    "game": "Tomb Raider",
+    "platform": "PS4",
+    "name": "Definitive Edition",
+    "productIds": [
+      "29e02b9b-84b2-11e3-b4a5-00155d031202",
+      "showgames-2573"
+    ]
+  },
+  {
+    "gameId": "5053700d-06ca-11eb-a211-00155d03332b",
+    "game": "Just Dance 2021",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "5053700d-06ca-11eb-a211-00155d03332b",
+      "showgames-9682"
+    ]
+  },
+  {
+    "gameId": "5053700d-06ca-11eb-a211-00155d03332b",
+    "game": "Just Dance 2021",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "7b34c055-06ca-11eb-a211-00155d03332b",
+      "showgames-9915"
     ]
   },
   {
@@ -227,7 +4430,389 @@
     "name": "стандартное издание",
     "productIds": [
       "5dd51a9a-fe21-11ea-a211-00155d03332b",
-      "efbdd670-ac4c-11ea-a210-00155d03332b"
+      "efbdd670-ac4c-11ea-a210-00155d03332b",
+      "showgames-9653"
+    ]
+  },
+  {
+    "gameId": "877f25e7-d000-11eb-a27c-00155dd2ff2c",
+    "game": "Hades",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "877f25e7-d000-11eb-a27c-00155dd2ff2c",
+      "showgames-9926"
+    ]
+  },
+  {
+    "gameId": "877f25e7-d000-11eb-a27c-00155dd2ff2c",
+    "game": "Hades",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "daff4f87-d000-11eb-a27c-00155dd2ff2c",
+      "showgames-9927"
+    ]
+  },
+  {
+    "gameId": "b4da712f-fa9e-11e4-9188-00155d03361b",
+    "game": "LEGO Jurassic World",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "b4da712f-fa9e-11e4-9188-00155d03361b",
+      "showgames-2480"
+    ]
+  },
+  {
+    "gameId": "030fd654-0ac2-11ec-a2b0-00155dbd7634",
+    "game": "NHL 22",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "030fd654-0ac2-11ec-a2b0-00155dbd7634",
+      "showgames-10067"
+    ]
+  },
+  {
+    "gameId": "08ad5348-c0c1-11ea-a20f-00155df1b805",
+    "game": "Crash Bandicoot 4: It’s About Time",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "08ad5348-c0c1-11ea-a20f-00155df1b805",
+      "showgames-9424"
+    ]
+  },
+  {
+    "gameId": "0b79ae46-315f-11ec-8f0c-00155d8ed20c",
+    "game": "Disco Elysium – The Final Cut",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "0b79ae46-315f-11ec-8f0c-00155d8ed20c",
+      "showgames-10298"
+    ]
+  },
+  {
+    "gameId": "0dc21084-279e-11e6-922e-00155d033307",
+    "game": "LEGO Star Wars: The Force Awakens",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "0dc21084-279e-11e6-922e-00155d033307",
+      "showgames-2479"
+    ]
+  },
+  {
+    "gameId": "0dc21084-279e-11e6-922e-00155d033307",
+    "game": "LEGO Star Wars: The Force Awakens",
+    "platform": "PS3",
+    "name": "стандартное издание",
+    "productIds": [
+      "showgames-1595",
+      "showgames-6626"
+    ]
+  },
+  {
+    "gameId": "1f0bb5a8-7bcd-11eb-a22b-00155d03332b",
+    "game": "NieR Replicant ver.1.22474487139",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "1f0bb5a8-7bcd-11eb-a22b-00155d03332b",
+      "showgames-9810"
+    ]
+  },
+  {
+    "gameId": "4a7766cc-6f2f-11eb-a21f-00155d03332b",
+    "game": "Persona 5 Strikers",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "4a7766cc-6f2f-11eb-a21f-00155d03332b",
+      "showgames-9754"
+    ]
+  },
+  {
+    "gameId": "4bb241c6-e5e2-11eb-a290-00155dd2ff2c",
+    "game": "Just Dance 2022",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "4bb241c6-e5e2-11eb-a290-00155dd2ff2c",
+      "showgames-10217"
+    ]
+  },
+  {
+    "gameId": "5607f561-9c31-11e6-9a79-00155d03330d",
+    "game": "Watch Dogs 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "5607f561-9c31-11e6-9a79-00155d03330d",
+      "showgames-6345"
+    ]
+  },
+  {
+    "gameId": "69c58880-1cb6-11ea-a20c-00155df1b805",
+    "game": "Dreams",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "69c58880-1cb6-11ea-a20c-00155df1b805",
+      "showgames-9178"
+    ]
+  },
+  {
+    "gameId": "6e9355f8-ad53-11eb-a25b-00155d42eb15",
+    "game": "Tales of Arise",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "6e9355f8-ad53-11eb-a25b-00155d42eb15",
+      "showgames-10033"
+    ]
+  },
+  {
+    "gameId": "821e0708-7ac5-11e9-a208-00155df1b805",
+    "game": "Blood & Truth",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "821e0708-7ac5-11e9-a208-00155df1b805",
+      "showgames-8635"
+    ]
+  },
+  {
+    "gameId": "850eae3b-a347-11eb-a252-00155d42eb15",
+    "game": "Final Fantasy VII Remake Intergrade",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "850eae3b-a347-11eb-a252-00155d42eb15",
+      "showgames-9845"
+    ]
+  },
+  {
+    "gameId": "a053623a-966e-11eb-a245-00155dbd7607",
+    "game": "Little Nightmares II",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "a053623a-966e-11eb-a245-00155dbd7607",
+      "showgames-9080"
+    ]
+  },
+  {
+    "gameId": "ba576835-4754-11e7-8019-00155d03330d",
+    "game": "Far Cry 5",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "ba576835-4754-11e7-8019-00155d03330d",
+      "showgames-6859"
+    ]
+  },
+  {
+    "gameId": "bad294cb-22a2-11e9-a208-00155df1b805",
+    "game": "Kingdom Hearts III",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "bad294cb-22a2-11e9-a208-00155df1b805",
+      "showgames-8151"
+    ]
+  },
+  {
+    "gameId": "dac5920d-25a6-11ec-8efb-00155d8ed20b",
+    "game": "A Plague Tale: Innocence HD",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "dac5920d-25a6-11ec-8efb-00155d8ed20b",
+      "showgames-10441"
+    ]
+  },
+  {
+    "gameId": "e64a23ac-d02c-11e8-a206-00155df1b805",
+    "game": "LEGO DC Super-Villains",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "e64a23ac-d02c-11e8-a206-00155df1b805",
+      "showgames-8135"
+    ]
+  },
+  {
+    "gameId": "03e2c447-d98f-11e6-8002-00155d03330d",
+    "game": "Prey",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "03e2c447-d98f-11e6-8002-00155d03330d",
+      "showgames-12526",
+      "showgames-6752"
+    ]
+  },
+  {
+    "gameId": "365512ab-fd17-11e8-a208-00155df1b805",
+    "game": "Far Cry: New Dawn",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "365512ab-fd17-11e8-a208-00155df1b805",
+      "showgames-8375"
+    ]
+  },
+  {
+    "gameId": "4232aeda-91cf-11eb-a23f-00155dd2ff05",
+    "game": "Scarlet Nexus",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "4232aeda-91cf-11eb-a23f-00155dd2ff05",
+      "showgames-9884"
+    ]
+  },
+  {
+    "gameId": "4232aeda-91cf-11eb-a23f-00155dd2ff05",
+    "game": "Scarlet Nexus",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "00f65abb-91d0-11eb-a23f-00155dd2ff05",
+      "showgames-9883"
+    ]
+  },
+  {
+    "gameId": "4a319813-82f1-11eb-a232-00155dbd7607",
+    "game": "Subnautica: Below Zero",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "4a319813-82f1-11eb-a232-00155dbd7607",
+      "showgames-9821"
+    ]
+  },
+  {
+    "gameId": "4a319813-82f1-11eb-a232-00155dbd7607",
+    "game": "Subnautica: Below Zero",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "c0768a14-82f0-11eb-a232-00155dbd7607",
+      "showgames-9822"
+    ]
+  },
+  {
+    "gameId": "4a6d387a-c3d4-11e5-a495-00155d03361b",
+    "game": "Dark Souls III",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "4a6d387a-c3d4-11e5-a495-00155d03361b",
+      "showgames-2404"
+    ]
+  },
+  {
+    "gameId": "4d46336c-ac4d-11ea-a210-00155d03332b",
+    "game": "GhostWire: Tokyo",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "4d46336c-ac4d-11ea-a210-00155d03332b",
+      "showgames-10207"
+    ]
+  },
+  {
+    "gameId": "500c9efc-20dd-11ec-8ef6-00155d8ed20b",
+    "game": "Ghostrunner",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "500c9efc-20dd-11ec-8ef6-00155d8ed20b",
+      "showgames-10046"
+    ]
+  },
+  {
+    "gameId": "58520516-9bd2-11ea-a20e-00155df1b805",
+    "game": "Tony Hawk's Pro Skater 1 + 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "58520516-9bd2-11ea-a20e-00155df1b805",
+      "showgames-9513"
+    ]
+  },
+  {
+    "gameId": "5c8af0db-318e-11e4-9f9e-00155d031202",
+    "game": "Bloodborne: Порождение крови",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "5c8af0db-318e-11e4-9f9e-00155d031202",
+      "showgames-2618"
+    ]
+  },
+  {
+    "gameId": "5d3bbb6e-c83e-11e7-938d-00155d03330d",
+    "game": "EA Sports UFC 3",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "5d3bbb6e-c83e-11e7-938d-00155d03330d",
+      "showgames-7408"
+    ]
+  },
+  {
+    "gameId": "6d844822-02c1-11eb-a211-00155d03332b",
+    "game": "Immortals Fenyx Rising",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "6d844822-02c1-11eb-a211-00155d03332b",
+      "showgames-9711"
+    ]
+  },
+  {
+    "gameId": "6d844822-02c1-11eb-a211-00155d03332b",
+    "game": "Immortals Fenyx Rising",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "f7899845-93bb-11e9-a20b-00155df1b805",
+      "showgames-9712"
+    ]
+  },
+  {
+    "gameId": "6d844822-02c1-11eb-a211-00155d03332b",
+    "game": "Immortals Fenyx Rising",
+    "platform": "PS4",
+    "name": "Limited Edition",
+    "productIds": [
+      "ca787e60-02c3-11eb-a211-00155d03332b",
+      "showgames-9715"
+    ]
+  },
+  {
+    "gameId": "790fe433-63e7-11ed-9056-00155d8ed209",
+    "game": "Kena: Bridge of Spirits",
+    "platform": "PS4",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "790fe433-63e7-11ed-9056-00155d8ed209",
+      "showgames-10173"
+    ]
+  },
+  {
+    "gameId": "7f2a2e14-1467-11ec-8ee8-00155d8ed20c",
+    "game": "Tiny Tina’s Wonderlands",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "7f2a2e14-1467-11ec-8ee8-00155d8ed20c",
+      "showgames-10230"
     ]
   },
   {
@@ -237,7 +4822,1343 @@
     "name": "стандартное издание",
     "productIds": [
       "4dee477b-42fa-11ed-902e-00155d8ed209",
-      "a7d862d0-d995-11e6-8002-00155d03330d"
+      "a7d862d0-d995-11e6-8002-00155d03330d",
+      "showgames-12425",
+      "showgames-6424"
+    ]
+  },
+  {
+    "gameId": "ab5fbaef-2519-11ed-900c-00155d8ed209",
+    "game": "The Quarry",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "ab5fbaef-2519-11ed-900c-00155d8ed209",
+      "showgames-10283"
+    ]
+  },
+  {
+    "gameId": "b46f8175-60aa-11e9-a206-00155d03332b",
+    "game": "Star Wars Jedi: Fallen Order",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "b46f8175-60aa-11e9-a206-00155d03332b",
+      "showgames-8620"
+    ]
+  },
+  {
+    "gameId": "ba29d9c1-2e47-11e8-9dc5-00155d03330d",
+    "game": "Dark Souls Remastered",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "ba29d9c1-2e47-11e8-9dc5-00155d03330d",
+      "showgames-7662"
+    ]
+  },
+  {
+    "gameId": "bb37ee4c-8e83-11e9-a20b-00155df1b805",
+    "game": "DOOM Eternal",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "bb37ee4c-8e83-11e9-a20b-00155df1b805",
+      "showgames-12322",
+      "showgames-8658"
+    ]
+  },
+  {
+    "gameId": "bf6e060f-523a-11e7-85c8-00155d03330d",
+    "game": "Uncharted: The Lost Legacy",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "bf6e060f-523a-11e7-85c8-00155d03330d",
+      "showgames-6967"
+    ]
+  },
+  {
+    "gameId": "cc759246-7614-11e9-a208-00155df1b805",
+    "game": "Tom Clancy’s Ghost Recon Breakpoint",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "cc759246-7614-11e9-a208-00155df1b805",
+      "showgames-8738"
+    ]
+  },
+  {
+    "gameId": "d31e5f6f-e9f4-11eb-a290-00155dd2ff2c",
+    "game": "The Medium",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "d31e5f6f-e9f4-11eb-a290-00155dd2ff2c",
+      "showgames-9979"
+    ]
+  },
+  {
+    "gameId": "d89c49c1-326c-11ed-901b-00155d8ed209",
+    "game": "Destroy All Humans! 2 - Reprobed",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "d89c49c1-326c-11ed-901b-00155d8ed209",
+      "showgames-10485"
+    ]
+  },
+  {
+    "gameId": "db177e43-f6dc-11e9-a20c-00155df1b805",
+    "game": "Destroy All Humans!",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "db177e43-f6dc-11e9-a20c-00155df1b805",
+      "showgames-9019"
+    ]
+  },
+  {
+    "gameId": "f18de359-a3f3-11e7-938d-00155d03330d",
+    "game": "The Sims 4",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "f18de359-a3f3-11e7-938d-00155d03330d",
+      "showgames-7045"
+    ]
+  },
+  {
+    "gameId": "f4235eee-6c45-11e7-a4eb-00155d03330d",
+    "game": "Middle-earth: Shadow of War",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "f4235eee-6c45-11e7-a4eb-00155d03330d",
+      "showgames-6742"
+    ]
+  },
+  {
+    "gameId": "f431e2b8-8b22-11e9-a20b-00155d03332b",
+    "game": "Far Cry 4 + Far Cry 5",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "f431e2b8-8b22-11e9-a20b-00155d03332b",
+      "showgames-8594"
+    ]
+  },
+  {
+    "gameId": "f51879f3-e62c-11e8-a208-00155df1b805",
+    "game": "ASTRO BOT Rescue Mission",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "f51879f3-e62c-11e8-a208-00155df1b805",
+      "showgames-8239"
+    ]
+  },
+  {
+    "gameId": "fa437042-2d29-11e6-88f8-00155d033307",
+    "game": "Final Fantasy XV",
+    "platform": "PS4",
+    "name": "Day One Edition",
+    "productIds": [
+      "fa437042-2d29-11e6-88f8-00155d033307",
+      "showgames-2444"
+    ]
+  },
+  {
+    "gameId": "fb19d369-0ae8-11ec-a2af-00155dfc8232",
+    "game": "Hot Wheels Unleashed",
+    "platform": "PS4",
+    "name": "Challenge Accepted Edition",
+    "productIds": [
+      "ac58d282-0ae3-11ec-a2af-00155dfc8232",
+      "showgames-10058"
+    ]
+  },
+  {
+    "gameId": "fb19d369-0ae8-11ec-a2af-00155dfc8232",
+    "game": "Hot Wheels Unleashed",
+    "platform": "PS5",
+    "name": "Challenge Accepted Edition",
+    "productIds": [
+      "f2d18f4c-0ae3-11ec-a2af-00155dfc8232",
+      "showgames-10057"
+    ]
+  },
+  {
+    "gameId": "fffefe07-ef24-11e9-a20d-00155d03332b",
+    "game": "MediEvil",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "fffefe07-ef24-11e9-a20d-00155d03332b",
+      "showgames-9054"
+    ]
+  },
+  {
+    "gameId": "07993aa8-4921-11e9-a208-00155df1b805",
+    "game": "Assassin’s Creed III Remastered",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "07993aa8-4921-11e9-a208-00155df1b805",
+      "showgames-8869"
+    ]
+  },
+  {
+    "gameId": "0b15dc32-da91-11e9-a20c-00155d03332b",
+    "game": "Plants vs. Zombies: Battle for Neighborville",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "0b15dc32-da91-11e9-a20c-00155d03332b",
+      "showgames-8896"
+    ]
+  },
+  {
+    "gameId": "17a1d88c-e9ed-11eb-a290-00155dd2ff2c",
+    "game": "Riders Republic",
+    "platform": "PS4",
+    "name": "Freeride Edition",
+    "productIds": [
+      "5841aa4d-0388-11eb-a211-00155d03332b",
+      "showgames-10107"
+    ]
+  },
+  {
+    "gameId": "1bc65b48-894c-11e6-8f5b-00155d03330d",
+    "game": "Far Cry: Primal + Far Cry 4",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "1bc65b48-894c-11e6-8f5b-00155d03330d",
+      "showgames-2434"
+    ]
+  },
+  {
+    "gameId": "29e02b9c-84b2-11e3-b4a5-00155d031202",
+    "game": "Rayman Legends",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "29e02b9c-84b2-11e3-b4a5-00155d031202",
+      "showgames-8182"
+    ]
+  },
+  {
+    "gameId": "2e2c3521-78d0-11ec-8f62-00155d8ed20b",
+    "game": "Grid Legends",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "2e2c3521-78d0-11ec-8f62-00155d8ed20b",
+      "showgames-11126"
+    ]
+  },
+  {
+    "gameId": "2e2c3521-78d0-11ec-8f62-00155d8ed20b",
+    "game": "Grid Legends",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "9080e886-78cf-11ec-8f62-00155d8ed20b",
+      "showgames-11127"
+    ]
+  },
+  {
+    "gameId": "337db358-4a0a-11e5-be92-00155d03361b",
+    "game": "Far Cry 3 + Far Cry 4",
+    "platform": "PS3",
+    "name": "стандартное издание",
+    "productIds": [
+      "337db358-4a0a-11e5-be92-00155d03361b",
+      "showgames-6460"
+    ]
+  },
+  {
+    "gameId": "3709aca6-ef24-11e9-a20d-00155d03332b",
+    "game": "Diablo III: Eternal Collection",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "3709aca6-ef24-11e9-a20d-00155d03332b",
+      "showgames-9028"
+    ]
+  },
+  {
+    "gameId": "37baa6e0-96fe-11e9-a20b-00155d03332b",
+    "game": "Kingdom Come Deliverance",
+    "platform": "PS4",
+    "name": "Royal Edition",
+    "productIds": [
+      "37baa6e0-96fe-11e9-a20b-00155d03332b",
+      "showgames-8495"
+    ]
+  },
+  {
+    "gameId": "3ae389ec-8e51-11e9-a20b-00155df1b805",
+    "game": "Watch Dogs: Legion",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "3ae389ec-8e51-11e9-a20b-00155df1b805",
+      "showgames-8739"
+    ]
+  },
+  {
+    "gameId": "3ae389ec-8e51-11e9-a20b-00155df1b805",
+    "game": "Watch Dogs: Legion",
+    "platform": "PS4",
+    "name": "Resistance Edition",
+    "productIds": [
+      "cc2213cb-8e51-11e9-a20b-00155df1b805",
+      "showgames-10444"
+    ]
+  },
+  {
+    "gameId": "3ae389ec-8e51-11e9-a20b-00155df1b805",
+    "game": "Watch Dogs: Legion",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "475e5a1d-e766-11ea-a211-00155d03332b",
+      "showgames-9655"
+    ]
+  },
+  {
+    "gameId": "6c4da810-b3ab-11eb-a261-00155d42eb15",
+    "game": "Life is Strange: True Colors",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "6c4da810-b3ab-11eb-a261-00155d42eb15",
+      "showgames-9982"
+    ]
+  },
+  {
+    "gameId": "6c4da810-b3ab-11eb-a261-00155d42eb15",
+    "game": "Life is Strange: True Colors",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "d2a097b3-b3ab-11eb-a261-00155d42eb15",
+      "showgames-9981"
+    ]
+  },
+  {
+    "gameId": "6d6024d5-9f94-11e8-9547-00155d03330d",
+    "game": "Watch Dogs",
+    "platform": "PS3",
+    "name": "стандартное издание",
+    "productIds": [
+      "d3574dbb-fdc0-11e4-9188-00155d03361b",
+      "showgames-1761",
+      "showgames-8778"
+    ]
+  },
+  {
+    "gameId": "6f462a58-f109-11eb-a296-00155dd2ff2c",
+    "game": "Deathloop",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "6f462a58-f109-11eb-a296-00155dd2ff2c",
+      "showgames-10006"
+    ]
+  },
+  {
+    "gameId": "772b6084-1ca7-11eb-a211-00155d03332b",
+    "game": "Need for Speed: Hot Pursuit Remastered",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "772b6084-1ca7-11eb-a211-00155d03332b",
+      "showgames-9667"
+    ]
+  },
+  {
+    "gameId": "843a1ba6-c4aa-11ea-a20f-00155df1b805",
+    "game": "Outriders",
+    "platform": "PS4",
+    "name": "Day One Edition",
+    "productIds": [
+      "843a1ba6-c4aa-11ea-a20f-00155df1b805",
+      "showgames-9232"
+    ]
+  },
+  {
+    "gameId": "843a1ba6-c4aa-11ea-a20f-00155df1b805",
+    "game": "Outriders",
+    "platform": "PS5",
+    "name": "Day One Edition",
+    "productIds": [
+      "8f01de7d-8b9c-11eb-a238-00155dd2ff05",
+      "showgames-9802"
+    ]
+  },
+  {
+    "gameId": "95bf4b30-76a9-11e9-a206-00155d03332b",
+    "game": "Wolfenstein: Youngblood",
+    "platform": "PS4",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "95bf4b30-76a9-11e9-a206-00155d03332b",
+      "showgames-8596"
+    ]
+  },
+  {
+    "gameId": "98a3ba38-202f-11ec-8ef5-00155d8ed20b",
+    "game": "Back 4 Blood",
+    "platform": "PS4",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "98a3ba38-202f-11ec-8ef5-00155d8ed20b",
+      "showgames-10064"
+    ]
+  },
+  {
+    "gameId": "98a3ba38-202f-11ec-8ef5-00155d8ed20b",
+    "game": "Back 4 Blood",
+    "platform": "PS4",
+    "name": "Special Edition",
+    "productIds": [
+      "96acac1c-45b5-11eb-a211-00155d03332b",
+      "showgames-10050"
+    ]
+  },
+  {
+    "gameId": "98a3ba38-202f-11ec-8ef5-00155d8ed20b",
+    "game": "Back 4 Blood",
+    "platform": "PS5",
+    "name": "Special Edition",
+    "productIds": [
+      "0bf64a80-45b6-11eb-a211-00155d03332b",
+      "showgames-10049"
+    ]
+  },
+  {
+    "gameId": "9e231bf3-85ac-11e9-a20b-00155d03332b",
+    "game": "The Outer Worlds",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "9e231bf3-85ac-11e9-a20b-00155d03332b",
+      "showgames-8786"
+    ]
+  },
+  {
+    "gameId": "b54888e6-ac4b-11ea-a210-00155d03332b",
+    "game": "Returnal",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "b54888e6-ac4b-11ea-a210-00155d03332b",
+      "showgames-9738"
+    ]
+  },
+  {
+    "gameId": "d49aacd9-ac4d-11ea-a210-00155d03332b",
+    "game": "Hitman 3",
+    "platform": "PS4",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "39097719-554f-11eb-a211-00155d03332b",
+      "showgames-10076"
+    ]
+  },
+  {
+    "gameId": "d49aacd9-ac4d-11ea-a210-00155d03332b",
+    "game": "Hitman 3",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "96361cd2-3a7e-11eb-a211-00155d03332b",
+      "showgames-9735"
+    ]
+  },
+  {
+    "gameId": "d6d0be37-5faa-11e7-9028-00155d03330d",
+    "game": "Wolfenstein II: The New Colossus",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "d6d0be37-5faa-11e7-9028-00155d03330d",
+      "showgames-6982"
+    ]
+  },
+  {
+    "gameId": "d89c4948-326c-11ed-901b-00155d8ed209",
+    "game": "Saints Row",
+    "platform": "PS4",
+    "name": "Day One Edition",
+    "productIds": [
+      "d89c4948-326c-11ed-901b-00155d8ed209",
+      "showgames-10451"
+    ]
+  },
+  {
+    "gameId": "d89c4948-326c-11ed-901b-00155d8ed209",
+    "game": "Saints Row",
+    "platform": "PS5",
+    "name": "Day One Edition",
+    "productIds": [
+      "d89c495f-326c-11ed-901b-00155d8ed209",
+      "showgames-10450"
+    ]
+  },
+  {
+    "gameId": "e1154e01-7710-11eb-a225-00155d42eb06",
+    "game": "Tom Clancy's Rainbow Six Siege",
+    "platform": "PS5",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "e1154e01-7710-11eb-a225-00155d42eb06",
+      "showgames-9780"
+    ]
+  },
+  {
+    "gameId": "06421153-8032-11e9-a20a-00155d03332b",
+    "game": "Team Sonic Racing",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "06421153-8032-11e9-a20a-00155d03332b",
+      "showgames-7927"
+    ]
+  },
+  {
+    "gameId": "087c29fe-6dcf-11e7-9078-00155d03330d",
+    "game": "Knack 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "087c29fe-6dcf-11e7-9078-00155d03330d",
+      "showgames-6997"
+    ]
+  },
+  {
+    "gameId": "099ff661-9bac-11e8-9547-00155d03330d",
+    "game": "Spyro Reignited Trilogy",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "099ff661-9bac-11e8-9547-00155d03330d",
+      "showgames-7816"
+    ]
+  },
+  {
+    "gameId": "0e205a59-fee3-11e6-981f-00155d03330d",
+    "game": "Vampyr",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "0e205a59-fee3-11e6-981f-00155d03330d",
+      "showgames-8018"
+    ]
+  },
+  {
+    "gameId": "18f5a3c5-7dbc-11e9-a20a-00155df1b805",
+    "game": "The Dark Pictures: Man of Medan",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "18f5a3c5-7dbc-11e9-a20a-00155df1b805",
+      "showgames-8599"
+    ]
+  },
+  {
+    "gameId": "3eea8853-6cca-11ee-915c-00155d8ed20a",
+    "game": "Crime Boss: Rockay City",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "3eea8853-6cca-11ee-915c-00155d8ed20a",
+      "showgames-10960"
+    ]
+  },
+  {
+    "gameId": "545f3d6c-b90a-11eb-a265-00155d42eb15",
+    "game": "GreedFall",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "df86403d-ce1a-11e9-a20c-00155d03332b",
+      "showgames-8903"
+    ]
+  },
+  {
+    "gameId": "7653142f-76ff-11ee-9172-00155d8ed209",
+    "game": "Ghostrunner 2",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "7653142f-76ff-11ee-9172-00155d8ed209",
+      "showgames-11353"
+    ]
+  },
+  {
+    "gameId": "8e31875a-b97d-11ed-90ac-00155d8ed209",
+    "game": "Like a Dragon: Ishin!",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "8e31875a-b97d-11ed-90ac-00155d8ed209",
+      "showgames-10793"
+    ]
+  },
+  {
+    "gameId": "8e31875a-b97d-11ed-90ac-00155d8ed209",
+    "game": "Like a Dragon: Ishin!",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "8e31875b-b97d-11ed-90ac-00155d8ed209",
+      "showgames-10792"
+    ]
+  },
+  {
+    "gameId": "96e97691-6b85-11e8-9547-00155d03330d",
+    "game": "Code Vein",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "96e97691-6b85-11e8-9547-00155d03330d",
+      "showgames-7791"
+    ]
+  },
+  {
+    "gameId": "970fe36f-ff18-11e7-80a7-00155d03330d",
+    "game": "Monster Hunter: World",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "970fe36f-ff18-11e7-80a7-00155d03330d",
+      "showgames-7500"
+    ]
+  },
+  {
+    "gameId": "ad86e3cf-e29c-11e6-ab51-00155d03330d",
+    "game": "For Honor",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "ad86e3cf-e29c-11e6-ab51-00155d03330d",
+      "showgames-6546"
+    ]
+  },
+  {
+    "gameId": "ad8707fc-88bb-11e9-a20b-00155df1b805",
+    "game": "The Surge 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "ad8707fc-88bb-11e9-a20b-00155df1b805",
+      "showgames-8652"
+    ]
+  },
+  {
+    "gameId": "b4a87cdc-7030-11e7-85ff-00155d03330d",
+    "game": "Call of Duty: Modern Warfare",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "b4a87cdc-7030-11e7-85ff-00155d03330d",
+      "showgames-8663"
+    ]
+  },
+  {
+    "gameId": "c43ecaa1-6a0f-11ed-905c-00155d8ed209",
+    "game": "Arkanoid: Eternal Battle",
+    "platform": "PS4",
+    "name": "Limited Edition",
+    "productIds": [
+      "c43ecaa1-6a0f-11ed-905c-00155d8ed209",
+      "showgames-10595"
+    ]
+  },
+  {
+    "gameId": "cbf799a9-0175-11e8-80a7-00155d03330d",
+    "game": "Sword Art Online: Fatal Bullet",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "cbf799a9-0175-11e8-80a7-00155d03330d",
+      "showgames-7595"
+    ]
+  },
+  {
+    "gameId": "cc04fe7a-5f2a-11ed-904f-00155d8ed209",
+    "game": "LEGO Brawls",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "cc04fe7a-5f2a-11ed-904f-00155d8ed209",
+      "showgames-10483"
+    ]
+  },
+  {
+    "gameId": "e7c74d2e-58d7-11e4-ba56-00155d031202",
+    "game": "Sleeping Dogs",
+    "platform": "PS4",
+    "name": "Definitive Edition",
+    "productIds": [
+      "e7c74d2e-58d7-11e4-ba56-00155d031202",
+      "showgames-7434"
+    ]
+  },
+  {
+    "gameId": "ea07b010-d991-11e6-8002-00155d03330d",
+    "game": "The Surge",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "ea07b010-d991-11e6-8002-00155d03330d",
+      "showgames-6426"
+    ]
+  },
+  {
+    "gameId": "eb7225da-77d0-11e6-b41e-00155d033307",
+    "game": "The Last Guardian",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "eb7225da-77d0-11e6-b41e-00155d033307",
+      "showgames-6350"
+    ]
+  },
+  {
+    "gameId": "fd17c0a2-cac1-11e9-a20c-00155d03332b",
+    "game": "Need for Speed: Heat",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "fd17c0a2-cac1-11e9-a20c-00155d03332b",
+      "showgames-8863"
+    ]
+  },
+  {
+    "gameId": "1415ddf7-3aba-11f0-9345-0050569d0a4d",
+    "game": "Karma: The Dark World",
+    "platform": "PS5",
+    "name": "Limited Edition",
+    "productIds": [
+      "1415ddf7-3aba-11f0-9345-0050569d0a4d",
+      "showgames-12077"
+    ]
+  },
+  {
+    "gameId": "4ffb0b85-77c8-11e6-b41e-00155d033307",
+    "game": "The Elder Scrolls V: Skyrim",
+    "platform": "PS4",
+    "name": "Special Edition",
+    "productIds": [
+      "4ffb0b85-77c8-11e6-b41e-00155d033307",
+      "showgames-2428"
+    ]
+  },
+  {
+    "gameId": "503f57b0-27a9-11eb-a211-00155d03332b",
+    "game": "XIII",
+    "platform": "PS4",
+    "name": "Limited Edition",
+    "productIds": [
+      "503f57b0-27a9-11eb-a211-00155d03332b",
+      "showgames-9688"
+    ]
+  },
+  {
+    "gameId": "60161208-af26-11e8-9547-00155d03330d",
+    "game": "Naruto to Boruto: Shinobi Striker",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "60161208-af26-11e8-9547-00155d03330d",
+      "showgames-7833"
+    ]
+  },
+  {
+    "gameId": "6c339d07-20e8-11f0-932b-0050569d0a4d",
+    "game": "Blades Of Fire",
+    "platform": "PS5",
+    "name": "Day One Edition",
+    "productIds": [
+      "6c339d07-20e8-11f0-932b-0050569d0a4d",
+      "showgames-12041"
+    ]
+  },
+  {
+    "gameId": "8a7beb30-831d-11e7-9287-00155d03330d",
+    "game": "Marvel vs. Capcom: Infinite",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "8a7beb30-831d-11e7-9287-00155d03330d",
+      "showgames-7074"
+    ]
+  },
+  {
+    "gameId": "9000cee2-f61e-11e9-a20c-00155df1b805",
+    "game": "Sid Meier's Civilization VI",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "9000cee2-f61e-11e9-a20c-00155df1b805",
+      "showgames-9023"
+    ]
+  },
+  {
+    "gameId": "c49bb17c-cc60-11e8-a206-00155df1b805",
+    "game": "Darksiders III",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "c49bb17c-cc60-11e8-a206-00155df1b805",
+      "showgames-7930"
+    ]
+  },
+  {
+    "gameId": "d426a8aa-40a1-11e5-b059-00155d03361b",
+    "game": "Mirror's Edge Catalyst",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "d426a8aa-40a1-11e5-b059-00155d03361b",
+      "showgames-2491"
+    ]
+  },
+  {
+    "gameId": "d836d110-b103-11ea-a210-00155d03332b",
+    "game": "Star Wars: Squadrons",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "d836d110-b103-11ea-a210-00155d03332b",
+      "showgames-9312"
+    ]
+  },
+  {
+    "gameId": "dcd73288-8125-11e6-aaca-00155d03330d",
+    "game": "Battlezone",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "dcd73288-8125-11e6-aaca-00155d03330d",
+      "showgames-6351"
+    ]
+  },
+  {
+    "gameId": "dd2d1b62-5fa6-11e7-9028-00155d03330d",
+    "game": "The Evil Within 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "dd2d1b62-5fa6-11e7-9028-00155d03330d",
+      "showgames-10512"
+    ]
+  },
+  {
+    "gameId": "1d5501e7-1b70-11e7-aa5d-00155d03330d",
+    "game": "Final Fantasy XII: the Zodiac Age",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "1d5501e7-1b70-11e7-aa5d-00155d03330d",
+      "showgames-7003"
+    ]
+  },
+  {
+    "gameId": "202c6e46-5ce2-11e5-8123-00155d03361b",
+    "game": "Journey",
+    "platform": "PS4",
+    "name": "Коллекционное издание",
+    "productIds": [
+      "202c6e46-5ce2-11e5-8123-00155d03361b",
+      "showgames-2608"
+    ]
+  },
+  {
+    "gameId": "2d428251-f47c-11e8-a208-00155df1b805",
+    "game": "Jagged Alliance: Rage",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "2d428251-f47c-11e8-a208-00155df1b805",
+      "showgames-8149"
+    ]
+  },
+  {
+    "gameId": "369731e4-8ba1-11eb-a238-00155dd2ff05",
+    "game": "Balan Wonderworld",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "369731e4-8ba1-11eb-a238-00155dd2ff05",
+      "showgames-9788"
+    ]
+  },
+  {
+    "gameId": "369731e4-8ba1-11eb-a238-00155dd2ff05",
+    "game": "Balan Wonderworld",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "77bfe7cd-8ba1-11eb-a238-00155dd2ff05",
+      "showgames-9789"
+    ]
+  },
+  {
+    "gameId": "3df14442-c235-11e4-a8b6-00155d03361b",
+    "game": "Resident Evil: Revelations 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "3df14442-c235-11e4-a8b6-00155d03361b",
+      "showgames-2531"
+    ]
+  },
+  {
+    "gameId": "4459bcb5-c5f3-11e8-a206-00155df1b805",
+    "game": "Call of Duty: Black Ops 4",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "3b5d8573-272a-11e8-9dc5-00155d03330d",
+      "showgames-10648",
+      "showgames-7796"
+    ]
+  },
+  {
+    "gameId": "481e51f9-359d-11e5-bd2e-00155d03361b",
+    "game": "Destiny: The Taken King",
+    "platform": "PS4",
+    "name": "Legendary Edition",
+    "productIds": [
+      "481e51f9-359d-11e5-bd2e-00155d03361b",
+      "showgames-2412"
+    ]
+  },
+  {
+    "gameId": "4edf8601-4cfd-11ec-8f36-00155d8ed20c",
+    "game": "Jurassic World Evolution 2",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "4edf8601-4cfd-11ec-8f36-00155d8ed20c",
+      "showgames-10540"
+    ]
+  },
+  {
+    "gameId": "6298764b-0556-11e8-80a7-00155d03330d",
+    "game": "Lost Sphear",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "6298764b-0556-11e8-80a7-00155d03330d",
+      "showgames-7513"
+    ]
+  },
+  {
+    "gameId": "671e9aa7-1b86-11e7-aa5d-00155d03330d",
+    "game": "Dragon Quest Heroes 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "671e9aa7-1b86-11e7-aa5d-00155d03330d",
+      "showgames-2421"
+    ]
+  },
+  {
+    "gameId": "780adef9-ef48-11e6-8b3e-00155d03330d",
+    "game": "The Elder Scrolls Online: Morrowind",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "780adef9-ef48-11e6-8b3e-00155d03330d",
+      "showgames-6751"
+    ]
+  },
+  {
+    "gameId": "80af5866-bd35-11f1-94c9-0050569d21a3",
+    "game": "Call Of Duty: Modern Warfare 4",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "80af5866-bd35-11f1-94c9-0050569d21a3",
+      "showgames-12779"
+    ]
+  },
+  {
+    "gameId": "8434937e-225a-11e8-9dc5-00155d03330d",
+    "game": "A Way Out",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "8434937e-225a-11e8-9dc5-00155d03330d",
+      "showgames-7604"
+    ]
+  },
+  {
+    "gameId": "88abf420-62f5-11e7-91f6-00155d03330d",
+    "game": "Aven Colony",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "88abf420-62f5-11e7-91f6-00155d03330d",
+      "showgames-7011"
+    ]
+  },
+  {
+    "gameId": "91403773-a01c-11f1-94a4-0050569d21a3",
+    "game": "Marvels Wolverine",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "91403773-a01c-11f1-94a4-0050569d21a3",
+      "showgames-12577"
+    ]
+  },
+  {
+    "gameId": "91621159-cd2a-11e8-a206-00155df1b805",
+    "game": "Just Cause 4",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "91621159-cd2a-11e8-a206-00155df1b805",
+      "showgames-7972"
+    ]
+  },
+  {
+    "gameId": "943e8951-1af7-11ea-a20d-00155d03332b",
+    "game": "Life is Strange 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "943e8951-1af7-11ea-a20d-00155d03332b",
+      "showgames-9021"
+    ]
+  },
+  {
+    "gameId": "a4a1d0cb-6b82-11e8-9547-00155d03330d",
+    "game": "Hitman 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "a4a1d0cb-6b82-11e8-9547-00155d03330d",
+      "showgames-7845"
+    ]
+  },
+  {
+    "gameId": "a98204e3-1a73-11e7-bd69-00155d03330d",
+    "game": "StarBlood Arena",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "a98204e3-1a73-11e7-bd69-00155d03330d",
+      "showgames-6670"
+    ]
+  },
+  {
+    "gameId": "b4da712a-fa9e-11e4-9188-00155d03361b",
+    "game": "The Elder Scrolls Online: Tamriel Unlimited",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "b4da712a-fa9e-11e4-9188-00155d03361b",
+      "showgames-2427"
+    ]
+  },
+  {
+    "gameId": "b6d8b6fa-526b-11ec-8f3d-00155d8ed20b",
+    "game": "Chorus",
+    "platform": "PS4",
+    "name": "Day One Edition",
+    "productIds": [
+      "b6d8b6fa-526b-11ec-8f3d-00155d8ed20b",
+      "showgames-10134"
+    ]
+  },
+  {
+    "gameId": "b6d8b6fa-526b-11ec-8f3d-00155d8ed20b",
+    "game": "Chorus",
+    "platform": "PS5",
+    "name": "Day One Edition",
+    "productIds": [
+      "fdb9b603-526b-11ec-8f3d-00155d8ed20b",
+      "showgames-10135"
+    ]
+  },
+  {
+    "gameId": "b9799358-a3f8-11eb-a253-00155d42eb15",
+    "game": "Necromunda: Hired Gun",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "e6f260de-a3f6-11eb-a253-00155d42eb15",
+      "showgames-9888"
+    ]
+  },
+  {
+    "gameId": "bbced55f-ffe8-11e7-80a7-00155d03330d",
+    "game": "Dissidia Final Fantasy NT",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "bbced55f-ffe8-11e7-80a7-00155d03330d",
+      "showgames-7509"
+    ]
+  },
+  {
+    "gameId": "bf52a52c-a499-11e5-9dc3-001e6728a5a4",
+    "game": "Alien: Isolation",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "bf52a52c-a499-11e5-9dc3-001e6728a5a4",
+      "showgames-2370"
+    ]
+  },
+  {
+    "gameId": "c099a8f9-f164-11e5-b454-00155d033307",
+    "game": "Far Cry Primal",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "c099a8f9-f164-11e5-b454-00155d033307",
+      "showgames-2436"
+    ]
+  },
+  {
+    "gameId": "c4ad56be-5fba-11e8-9547-00155d03330d",
+    "game": "Battlefield V",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "c4ad56be-5fba-11e8-9547-00155d03330d",
+      "showgames-12288",
+      "showgames-7835"
+    ]
+  },
+  {
+    "gameId": "cb5797bc-1813-11eb-a211-00155d03332b",
+    "game": "Transformers: Battlegrounds",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "cb5797bc-1813-11eb-a211-00155d03332b",
+      "showgames-9650"
+    ]
+  },
+  {
+    "gameId": "d4da1ea8-ed7e-11e4-94b2-00155d03361b",
+    "game": "Final Fantasy X/X-2 HD Remaster",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "d4da1ea8-ed7e-11e4-94b2-00155d03361b",
+      "showgames-2442"
+    ]
+  },
+  {
+    "gameId": "e34b07b7-5999-11ed-9045-00155d8ed209",
+    "game": "Ghostbusters: Spirits Unleashed",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "e34b07b7-5999-11ed-9045-00155d8ed209",
+      "showgames-10546"
+    ]
+  },
+  {
+    "gameId": "eaaf3b5c-5999-11ed-9045-00155d8ed209",
+    "game": "Goat Simulator: The Bundle",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "eaaf3b5c-5999-11ed-9045-00155d8ed209",
+      "showgames-7967"
+    ]
+  },
+  {
+    "gameId": "eb7225d1-77d0-11e6-b41e-00155d033307",
+    "game": "The Elder Scrolls Online",
+    "platform": "PS4",
+    "name": "Gold Edition",
+    "productIds": [
+      "eb7225d1-77d0-11e6-b41e-00155d033307",
+      "showgames-7273"
+    ]
+  },
+  {
+    "gameId": "f3f3ad22-bc49-11ef-92c1-0050569d0a4d",
+    "game": "The Smurfs: Dreams",
+    "platform": "PS4",
+    "name": "Reverie Edition",
+    "productIds": [
+      "f3f3ad22-bc49-11ef-92c1-0050569d0a4d",
+      "showgames-11775"
+    ]
+  },
+  {
+    "gameId": "5733968a-3be5-11e5-96b1-00155d03361b",
+    "game": "Just Cause 3",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "5733968a-3be5-11e5-96b1-00155d03361b",
+      "showgames-2639"
+    ]
+  },
+  {
+    "gameId": "85e84add-fcb5-11e7-80a7-00155d03330d",
+    "game": "Shadow of the Colossus",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "85e84add-fcb5-11e7-80a7-00155d03330d",
+      "showgames-9145"
+    ]
+  },
+  {
+    "gameId": "ec8ed59f-1ac8-11e8-80a7-00155d03330d",
+    "game": "Titan Quest",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "ec8ed59f-1ac8-11e8-80a7-00155d03330d",
+      "showgames-7645"
+    ]
+  },
+  {
+    "gameId": "232b48c5-8184-11e3-b4a5-00155d031202",
+    "game": "Thief",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "232b48c5-8184-11e3-b4a5-00155d031202",
+      "showgames-7286"
+    ]
+  },
+  {
+    "gameId": "25c86531-3f70-11e3-8900-00155d031202",
+    "game": "Injustice: Gods Among Us",
+    "platform": "PS4",
+    "name": "Ultimate Edition",
+    "productIds": [
+      "25c86531-3f70-11e3-8900-00155d031202",
+      "showgames-2466"
+    ]
+  },
+  {
+    "gameId": "3de1470b-b7d3-11e6-9c4d-00155d03330d",
+    "game": "Resident Evil 4",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "3de1470b-b7d3-11e6-9c4d-00155d03330d",
+      "showgames-2526"
+    ]
+  },
+  {
+    "gameId": "41c4ad29-292b-11ef-921b-0050569d21a3",
+    "game": "Five Nights at Freddy's: Help Wanted 2",
+    "platform": "PS5",
+    "name": "стандартное издание",
+    "productIds": [
+      "41c4ad29-292b-11ef-921b-0050569d21a3",
+      "showgames-11526"
+    ]
+  },
+  {
+    "gameId": "48676b9a-e62d-11e8-a208-00155df1b805",
+    "game": "Carnival Games",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "48676b9a-e62d-11e8-a208-00155df1b805",
+      "showgames-8175"
+    ]
+  },
+  {
+    "gameId": "745f2fbc-59e6-11e6-b717-00155d033307",
+    "game": "XCOM 2",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "745f2fbc-59e6-11e6-b717-00155d033307",
+      "showgames-2601"
+    ]
+  },
+  {
+    "gameId": "edbd4b18-783f-11e8-9547-00155d03330d",
+    "game": "Anthem",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "edbd4b18-783f-11e8-9547-00155d03330d",
+      "showgames-7911"
+    ]
+  },
+  {
+    "gameId": "fe133395-da79-11e3-844d-00155d031202",
+    "game": "Wolfenstein: The New Order",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "fe133395-da79-11e3-844d-00155d031202",
+      "showgames-2593"
+    ]
+  },
+  {
+    "gameId": "778908a5-d7be-11e6-9084-00155d03330d",
+    "game": "Mass Effect: Andromeda",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "778908a5-d7be-11e6-9084-00155d03330d",
+      "showgames-2486"
+    ]
+  },
+  {
+    "gameId": "showgames-10015",
+    "game": "Rocksmith All-New 2014 Edition",
+    "platform": "PS3",
+    "name": "стандартное издание",
+    "productIds": [
+      "showgames-10015",
+      "showgames-2261"
+    ]
+  },
+  {
+    "gameId": "showgames-10015",
+    "game": "Rocksmith All-New 2014 Edition",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "showgames-8953",
+      "showgames-9315"
+    ]
+  },
+  {
+    "gameId": "showgames-8107",
+    "game": "Killzone: Shadow Fall",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "showgames-2470",
+      "showgames-8107"
+    ]
+  },
+  {
+    "gameId": "showgames-8110",
+    "game": "Uncharted 4: A Thief's End",
+    "platform": "PS4",
+    "name": "стандартное издание",
+    "productIds": [
+      "showgames-2583",
+      "showgames-8110"
     ]
   }
 ]

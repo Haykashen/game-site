@@ -8,6 +8,7 @@ import {
   Trash2,
   Wallet,
 } from 'lucide-react';
+import { FallbackImage } from '../FallbackImage';
 import { formatPurchaseDetails } from '../../lib/collection';
 import { MAX_COLLECTION_QUANTITY } from '../../lib/constants';
 import { editionContentsLabel, editionLabel, formatEditionDate } from '../../lib/editions';
@@ -45,7 +46,7 @@ export function CopyCard({
     <article className="copy-card">
       <div className="copy-card__cover">
         {cover ? (
-          <img src={cover} alt="" loading="lazy" />
+          <FallbackImage images={edition.coverImages} alt="" loading="lazy" />
         ) : (
           <div className="copy-card__placeholder">
             <ImageIcon size={28} aria-hidden="true" />

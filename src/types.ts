@@ -74,6 +74,7 @@ export type CopyDetails = Pick<
 
 /** Precomputed per-game numbers and badges used by catalogue cards. */
 export interface GameStats {
+  coverImages?: string[];
   platforms: string[];
   editionCount: number;
   ownedCount: number;

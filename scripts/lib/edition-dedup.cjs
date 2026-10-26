@@ -1,3 +1,4 @@
+const {prioritizeImages}=require('./cover-images.cjs');
 const normalize = value => String(value??'').normalize('NFKC').toLowerCase().replace(/[’‘]/g,"'").replace(/\s+/g,' ').trim();
 const unknown = value => ['не указан','не указано','unknown',''].includes(normalize(value)) ? '' : normalize(value);
 const editionName = value => ['standard','стандартное издание'].includes(normalize(value)) ? 'standard' : normalize(value);
@@ -14,11 +15,11 @@ function planEditionDedup(editions) {
   const merges=[];
   for(const group of groups.values()) {
     if(group.length<2)continue;
-    const rank=e=>(referenced.has(e.id)?'0':/^[0-9a-f]{8}-/i.test(e.id)?'2':'1')+e.id;
+    const rank=e=>(referenced.has(e.id)?'0':e.id.startsWith('showgames-')?'3':/^[0-9a-f]{8}-/i.test(e.id)?'2':'1')+e.id;
     group.sort((a,b)=>rank(a).localeCompare(rank(b)));
     const canonical=group[0], replaced=new Set(group.slice(1).map(e=>e.id));
     for(const e of editions)if(replaced.has(e.canonicalId))replaced.add(e.id);
-    merges.push({canonicalId:canonical.id,variantIds:[...replaced].sort(),coverImages:[...new Set(group.flatMap(e=>e.coverImages??[]))]});
+    merges.push({canonicalId:canonical.id,variantIds:[...replaced].sort(),coverImages:prioritizeImages([...group,...editions.filter(e=>replaced.has(e.canonicalId)||e.canonicalId===canonical.id)].flatMap(e=>e.coverImages??[]))});
   }
   return merges.sort((a,b)=>a.canonicalId.localeCompare(b.canonicalId));
 }
@@ -43,14 +44,15 @@ function deduplicateDocument(document) {
   for(const game of result.games)for(const platform of game.platforms) {
     const groups=new Map();
     for(const product of platform.editions){
-      const k=editionKey({gameId:game.id,platform:platform.name,name:product.name,region:product.region,
-        lang:product.interfaceLanguages?.join(', '),media:product.editionType==='цифровое издание'?'Цифровое издание':''});
+      const identity=product.catalogueIdentity??product;
+      const k=editionKey({gameId:game.id,platform:platform.name,name:identity.name,region:identity.region,
+        lang:identity.interfaceLanguages?.join(', '),media:product.editionType==='цифровое издание'?'Цифровое издание':''});
       groups.set(k,[...(groups.get(k)??[]),product]);
     }
     platform.editions=[...groups.values()].map(products=>{
       if(products.length===1)return products[0];
       products.sort((a,b)=>a.id.localeCompare(b.id));
-      const canonical=products[0],images=[...new Set(products.flatMap(p=>p.images??[]))];
+      const canonical=products[0],images=prioritizeImages(products.flatMap(p=>p.images??[]));
       report.push({gameId:game.id,game:game.title,platform:platform.name,name:canonical.name,productIds:products.map(p=>p.id)});
       return {...canonical,products,productIds:products.map(p=>p.id),image:images[0]??null,images,
         imageVariants:[...new Map(products.flatMap(p=>p.imageVariants??[]).map(v=>[v.url,v])).values()]};

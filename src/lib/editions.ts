@@ -28,16 +28,12 @@ export function editionContentsLabel(edition: Edition, limit = 4): string {
   return hidden > 0 ? `${visible.join(', ')} и ещё ${hidden}` : visible.join(', ');
 }
 
-/** Representative artwork: game cover first, then the first edition cover. */
+export function gameCoverImages(game: Game, editions: readonly Edition[]): string[] {
+  return [...new Set([game.coverImage, ...editions.flatMap(edition => edition.coverImages)].filter(Boolean))]
+    .sort((a,b) => Number(b.startsWith('https://showgames.ru/')) - Number(a.startsWith('https://showgames.ru/')));
+}
 export function gameCoverImage(game: Game, editions: readonly Edition[]): string {
-  if (game.coverImage) return game.coverImage;
-
-  for (const edition of editions) {
-    const cover = edition.coverImages[0];
-    if (cover) return cover;
-  }
-
-  return '';
+  return gameCoverImages(game, editions)[0] ?? '';
 }
 
 /** An edition selection must never show another edition's artwork. */

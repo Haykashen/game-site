@@ -10,6 +10,7 @@ import {
 import type { KeyboardEvent } from 'react';
 import { marketItemLabel } from '@discvault/shared';
 import { ProfileLink } from '../ProfileLink';
+import { FallbackImage } from '../FallbackImage';
 import { formatPrice } from '../../lib/formatPrice';
 import {
   bidsLabel,
@@ -103,7 +104,7 @@ export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: Ma
         )}
       >
         {previewImage ? (
-          <img src={previewImage} alt="" loading="lazy" decoding="async" />
+          <FallbackImage images={[...entry.photos, ...(edition?.coverImages ?? []), game?.coverImage ?? '']} alt="" loading="lazy" decoding="async" />
         ) : (
           <div className={cx('card-cover', 'market-card__cover', game && `game-${game.id}`)}>
             <div className="cover-art" aria-hidden="true">

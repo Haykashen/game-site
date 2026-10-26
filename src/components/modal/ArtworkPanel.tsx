@@ -21,7 +21,12 @@ export function ArtworkPanel({ game, editions, selectedEdition }: ArtworkPanelPr
 
   return (
     <div className={cx('carousel-container', `art-${game.id}`, hasCover && 'has-cover')}>
-      {hasCover && <img className="carousel-cover" src={cover} alt={`Обложка ${game.title}${selectedEdition ? ` — ${selectedEdition.name}, ${selectedEdition.platform}` : ''}`} referrerPolicy="no-referrer" onError={() => setFailed(previous => [...previous, cover!])} />}
+      {hasCover && <img className="carousel-cover" src={cover} alt={`Обложка ${game.title}${selectedEdition ? ` — ${selectedEdition.name}, ${selectedEdition.platform}` : ''}`} referrerPolicy="no-referrer" onError={() => {
+        const unavailable = [...failed, cover!];
+        setFailed(unavailable);
+        const next = images.findIndex(image => !unavailable.includes(image));
+        if (next >= 0) setIndex(next);
+      }} />}
       <div className="artwork-scanlines" />
       {!hasCover && <ImageIcon size={52} style={{ opacity: 0.6, marginBottom: '0.75rem' }} />}
       <span className="gallery-kicker">COLLECTOR ARCHIVE</span>
