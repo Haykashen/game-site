@@ -43,7 +43,7 @@ const STATUS_LABELS: Record<MarketModerationStatus, string> = {
   removed: 'Снят',
 };
 
-/** Pre-publication review queue for new lots and listings. */
+/** Moderation queue for new lots and listings. */
 export function AdminMarketPage() {
   const { user, isModerator, status: apiStatus } = useAuth();
   const { games, editions } = useCollection();
@@ -131,9 +131,9 @@ export function AdminMarketPage() {
     return (
       <>
         <PageHeading
-          eyebrow="ADMIN / MARKET REVIEW"
-          title="Проверка лотов"
-          description="Проверяем доступ к разделу проверки лотов."
+          eyebrow="ADMIN / MODERATION"
+          title="Модерация"
+          description="Проверяем доступ к разделу модерации."
         />
         <div className="panel account-notice">
           <div>
@@ -151,11 +151,11 @@ export function AdminMarketPage() {
     return (
       <>
         <PageHeading
-          eyebrow="ADMIN / MARKET REVIEW"
-          title="Проверка лотов"
+          eyebrow="ADMIN / MODERATION"
+          title="Модерация"
           description={
             isOffline
-              ? 'Проверка новых лотов доступна в сетевом режиме, когда подключены API и база данных.'
+              ? 'Модерация новых лотов доступна в сетевом режиме, когда подключены API и база данных.'
               : 'Раздел доступен администраторам и модераторам.'
           }
         />
@@ -186,8 +186,8 @@ export function AdminMarketPage() {
   return (
     <>
       <PageHeading
-        eyebrow="ADMIN / MARKET REVIEW"
-        title="Проверка лотов"
+        eyebrow="ADMIN / MODERATION"
+        title="Модерация"
         description="Новые объявления и аукционы попадают сюда до публикации. Одобрите лот или отклоните его с комментарием для автора."
         action={
           <button

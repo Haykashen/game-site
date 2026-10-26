@@ -32,6 +32,8 @@ export interface AuthContextValue {
   isAuthenticated: boolean;
   /** Admin or moderator: the account can open the moderation queue. */
   isModerator: boolean;
+  /** Administrator: the account can manage users and block accounts. */
+  isAdmin: boolean;
   login: (input: LoginInput) => Promise<void>;
   register: (input: RegisterInput) => Promise<void>;
   logout: () => Promise<void>;
@@ -109,6 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isAuthenticated: Boolean(user),
       isModerator:
         user?.role === 'admin' || user?.role === 'moderator',
+      isAdmin: user?.role === 'admin',
       login,
       register,
       logout,

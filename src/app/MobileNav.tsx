@@ -11,7 +11,7 @@ import { MOBILE_ITEMS, MOBILE_MORE_ITEMS, NAV_ITEMS } from './navigation';
 export function MobileNav() {
   const [isMoreOpen, setIsMoreOpen] = useState(false);
   const { pathname } = useLocation();
-  const { isModerator } = useAuth();
+  const { isModerator, isAdmin } = useAuth();
 
   useEffect(() => {
     setIsMoreOpen(false);
@@ -20,14 +20,13 @@ export function MobileNav() {
   useEscapeKey(() => setIsMoreOpen(false), isMoreOpen);
   useBodyScrollLock(isMoreOpen);
 
-  const moreItems = isModerator
-    ? [
-        ...MOBILE_MORE_ITEMS,
-        NAV_ITEMS.analytics,
-        NAV_ITEMS.marketReview,
-        NAV_ITEMS.admin,
-      ]
-    : MOBILE_MORE_ITEMS;
+  const moreItems = [
+    ...MOBILE_MORE_ITEMS,
+    ...(isModerator
+      ? [NAV_ITEMS.analytics, NAV_ITEMS.marketReview, NAV_ITEMS.admin]
+      : []),
+    ...(isAdmin ? [NAV_ITEMS.adminUsers] : []),
+  ];
   const isMoreActive = moreItems.some((item) => pathname === item.path);
 
   return (

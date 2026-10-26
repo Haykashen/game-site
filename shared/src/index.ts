@@ -10,3 +10,4 @@ export * from './community.js';
 export * from './gameRatings.js';
 export * from './marketItems.js';
 export * from './analytics.js';
+export * from './users.js';

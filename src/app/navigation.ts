@@ -14,6 +14,7 @@ import {
   ShoppingBag,
   Tag,
   UserRound,
+  Users,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -33,7 +34,8 @@ export type NavSectionId =
   | 'settings'
   | 'analytics'
   | 'marketReview'
-  | 'admin';
+  | 'admin'
+  | 'adminUsers';
 
 export interface NavItem {
   readonly id: NavSectionId;
@@ -160,19 +162,27 @@ export const NAV_ITEMS = {
   },
   marketReview: {
     id: 'marketReview',
-    label: 'Проверка лотов',
-    pageTitle: 'Проверка лотов',
-    shortLabel: 'Проверка',
+    label: 'Модерация',
+    pageTitle: 'Модерация',
+    shortLabel: 'Модерация',
     path: '/admin/market',
     icon: ClipboardCheck,
   },
   admin: {
     id: 'admin',
-    label: 'Модерация',
-    pageTitle: 'Очередь жалоб',
-    shortLabel: 'Модерация',
+    label: 'Жалобы',
+    pageTitle: 'Жалобы',
+    shortLabel: 'Жалобы',
     path: '/admin/reports',
     icon: ShieldCheck,
+  },
+  adminUsers: {
+    id: 'adminUsers',
+    label: 'Пользователи',
+    pageTitle: 'Пользователи',
+    shortLabel: 'Люди',
+    path: '/admin/users',
+    icon: Users,
   },
 } as const satisfies Record<NavSectionId, NavItem>;
 

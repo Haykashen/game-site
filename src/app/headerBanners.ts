@@ -29,8 +29,9 @@ export const HEADER_BANNERS: Record<NavSectionId, HeaderBannerMeta> = {
   account: { kicker: 'PROFILE / ACCOUNT', tone: 'violet' },
   settings: { kicker: 'SYSTEM / SETTINGS', tone: 'muted' },
   analytics: { kicker: 'ADMIN / ANALYTICS', tone: 'lime' },
-  marketReview: { kicker: 'ADMIN / MARKET REVIEW', tone: 'amber' },
-  admin: { kicker: 'SYSTEM / MODERATION', tone: 'pink' },
+  marketReview: { kicker: 'ADMIN / MODERATION', tone: 'amber' },
+  admin: { kicker: 'ADMIN / REPORTS', tone: 'pink' },
+  adminUsers: { kicker: 'ADMIN / USERS', tone: 'violet' },
 };
 
 export const PROFILE_BANNER: HeaderBannerMeta = {

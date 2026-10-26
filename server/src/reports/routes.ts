@@ -2,7 +2,6 @@ import type { Prisma } from '@prisma/client';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import {
   adminReportsQuerySchema,
-  adminUserStatusSchema,
   myReportsQuerySchema,
   paginated,
   reportCreateSchema,
@@ -13,11 +12,7 @@ import { requireRoles } from '../auth/authorization.js';
 import { badRequest, conflict, forbidden, notFound, unauthorized } from '../errors.js';
 import { isPrismaError } from '../lib/prismaErrors.js';
 import { parse } from '../lib/validation.js';
-import {
-  getUserProfile,
-  reportInclude,
-  serializeReport,
-} from '../lib/serializers.js';
+import { reportInclude, serializeReport } from '../lib/serializers.js';
 
 const REPORT_RATE_LIMIT = {
   max: 10,
@@ -295,51 +290,6 @@ export function registerReportRoutes(app: FastifyInstance): void {
       const input = parse(reportUpdateSchema, request.body);
       const report = await applyReportAction(app, request, id, input);
       return reply.send(report);
-    },
-  );
-
-  app.patch(
-    '/api/v1/admin/users/:id/status',
-    { preHandler: app.authenticate },
-    async (request, reply) => {
-      const admin = requireRoles(request, ['admin']);
-      const { id } = request.params as { id: string };
-      const input = parse(adminUserStatusSchema, request.body);
-
-      if (id === admin.id && input.status === 'suspended') {
-        throw badRequest('Нельзя заблокировать собственный аккаунт.');
-      }
-
-      const target = await app.prisma.user.findUnique({
-        where: { id },
-        select: { id: true, role: true },
-      });
-
-      if (!target) throw notFound('Пользователь не найден.');
-
-      if (target.role === 'admin' && input.status === 'suspended') {
-        throw forbidden('Нельзя заблокировать администратора.');
-      }
-
-      const user = await app.prisma.$transaction(async (tx) => {
-        const updated = await tx.user.update({
-          where: { id },
-          data: {
-            status: input.status,
-            suspendedAt: input.status === 'suspended' ? new Date() : null,
-            suspensionReason:
-              input.status === 'suspended' ? (input.reason ?? null) : null,
-          },
-        });
-
-        if (input.status === 'suspended') {
-          await tx.session.deleteMany({ where: { userId: id } });
-        }
-
-        return updated;
-      });
-
-      return reply.send({ user: await getUserProfile(app.prisma, user) });
     },
   );
 }

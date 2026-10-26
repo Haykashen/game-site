@@ -3,6 +3,8 @@ import type {
   AdminMarketModerationInput,
   AdminMarketQueueQuery,
   AdminReportsQuery,
+  AdminUserDto,
+  AdminUsersQuery,
   AdminUserStatusInput,
   MyReportsQuery,
   Paginated,
@@ -86,6 +88,25 @@ export function updateMarketModeration(
   return apiRequest<AdminMarketEntryDto>(
     `/api/v1/admin/market/${encodeURIComponent(id)}/moderation`,
     { method: 'PATCH', body: input },
+  );
+}
+
+export function listAdminUsers(
+  params: Partial<AdminUsersQuery> = {},
+): Promise<Paginated<AdminUserDto>> {
+  const query = new URLSearchParams();
+
+  if (params.search) query.set('search', params.search);
+  if (params.role && params.role !== 'all') query.set('role', params.role);
+  if (params.status && params.status !== 'all') {
+    query.set('status', params.status);
+  }
+  if (params.page) query.set('page', String(params.page));
+  if (params.pageSize) query.set('pageSize', String(params.pageSize));
+
+  const suffix = query.toString();
+  return apiRequest<Paginated<AdminUserDto>>(
+    `/api/v1/admin/users${suffix ? `?${suffix}` : ''}`,
   );
 }
 

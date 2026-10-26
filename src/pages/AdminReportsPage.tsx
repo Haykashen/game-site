@@ -84,9 +84,9 @@ function targetLabel(report: ReportDto): string {
   return report.targetUser?.displayName ?? 'Запись удалена';
 }
 
-/** Moderation queue for reports against lots and users. */
+/** Complaints queue for reports against lots and users. */
 export function AdminReportsPage() {
-  const { user, isModerator, status: apiStatus } = useAuth();
+  const { user, isModerator, isAdmin, status: apiStatus } = useAuth();
   const [status, setStatus] = useState<StatusFilter>('pending');
   const [targetType, setTargetType] = useState<TargetTypeFilter>('all');
   const [reports, setReports] = useState<ReportDto[]>([]);
@@ -184,9 +184,9 @@ export function AdminReportsPage() {
     return (
       <>
         <PageHeading
-          eyebrow="ADMIN / MODERATION"
-          title="Очередь жалоб"
-          description="Проверяем доступ к разделу модерации."
+          eyebrow="ADMIN / REPORTS"
+          title="Жалобы"
+          description="Проверяем доступ к разделу жалоб."
         />
         <div className="panel account-notice">
           <div>
@@ -202,8 +202,8 @@ export function AdminReportsPage() {
     return (
       <>
         <PageHeading
-          eyebrow="ADMIN / MODERATION"
-          title="Очередь жалоб"
+          eyebrow="ADMIN / REPORTS"
+          title="Жалобы"
           description="Раздел доступен администраторам и модераторам."
         />
         <div className="panel account-notice">
@@ -229,8 +229,8 @@ export function AdminReportsPage() {
   return (
     <>
       <PageHeading
-        eyebrow="ADMIN / MODERATION"
-        title="Очередь жалоб"
+        eyebrow="ADMIN / REPORTS"
+        title="Жалобы"
         description="Проверяйте жалобы на лоты и пользователей, скрывайте объявления и блокируйте нарушителей."
         action={
           <button
@@ -446,20 +446,19 @@ export function AdminReportsPage() {
                     </button>
                   )}
 
-                  {(report.targetUser || report.marketEntry) &&
-                    user?.role === 'admin' && (
-                      <button
-                        type="button"
-                        className="btn-secondary admin-report__danger"
-                        disabled={isBusy}
-                        onClick={() =>
-                          void handleAction(report, 'resolved', 'suspend_user')
-                        }
-                      >
-                        <ShieldBan size={15} aria-hidden="true" />
-                        Заблокировать
-                      </button>
-                    )}
+                  {(report.targetUser || report.marketEntry) && isAdmin && (
+                    <button
+                      type="button"
+                      className="btn-secondary admin-report__danger"
+                      disabled={isBusy}
+                      onClick={() =>
+                        void handleAction(report, 'resolved', 'suspend_user')
+                      }
+                    >
+                      <ShieldBan size={15} aria-hidden="true" />
+                      Заблокировать
+                    </button>
+                  )}
                 </div>
               </article>
             );

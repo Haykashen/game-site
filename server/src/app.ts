@@ -27,6 +27,7 @@ import { registerNewsRoutes } from './news/routes.js';
 import { registerNotificationRoutes } from './notifications/routes.js';
 import { registerReportRoutes } from './reports/routes.js';
 import { registerUploadRoutes } from './uploads/routes.js';
+import { registerUserAdminRoutes } from './users/adminRoutes.js';
 import { registerUserRoutes } from './users/routes.js';
 import './types.js';
 
@@ -240,6 +241,7 @@ export async function buildApp() {
   registerAuthRoutes(app);
   registerAnalyticsRoutes(app);
   registerUserRoutes(app);
+  registerUserAdminRoutes(app);
   registerCatalogRoutes(app);
   registerGameRatingRoutes(app);
   registerCollectionRoutes(app);

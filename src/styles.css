@@ -2732,6 +2732,90 @@
             font: 600 .68rem/1.4 'IBM Plex Mono', monospace;
             letter-spacing: .04em;
         }
+        .admin-users__filters { align-items: flex-end; }
+        .admin-users__search { flex: 1 1 320px; min-width: 260px; }
+        .admin-users__search label { min-width: 0; }
+        .admin-users__search-row { display: flex; gap: .45rem; }
+        .admin-users__search-row .form-control { min-width: 0; }
+        .admin-users__search-row .btn-secondary { flex: none; }
+        .admin-users__table { min-width: 980px; }
+        .admin-users__identity {
+            display: flex; align-items: center; gap: .55rem;
+            min-width: 220px;
+        }
+        .admin-users__identity-copy { min-width: 0; display: grid; gap: .1rem; }
+        .admin-users__avatar {
+            width: 32px; height: 32px; flex: none;
+            display: grid; place-items: center;
+            object-fit: cover;
+            border-radius: 50%;
+            background: var(--brand-light);
+            color: var(--brand);
+            font: 700 .72rem/1 'IBM Plex Mono', monospace;
+        }
+        .admin-users__name {
+            display: block;
+            overflow: hidden;
+            max-width: 240px;
+            color: var(--text-main);
+            font-size: .83rem;
+            font-weight: 700;
+            text-decoration: none;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        a.admin-users__name:hover { color: var(--brand); }
+        .admin-users__identity-copy .admin-users__demo {
+            color: var(--brand);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: .58rem;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+        .admin-users__role,
+        .admin-users__status {
+            display: inline-flex; align-items: center;
+            padding: .24rem .48rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font: 600 .62rem/1.3 'IBM Plex Mono', monospace;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+        .admin-users__role--admin { border-color: var(--brand); color: var(--brand); }
+        .admin-users__role--moderator { border-color: #f59e0b; color: #b45309; }
+        .admin-users__role--user { color: var(--text-muted); }
+        .admin-users__status--active { border-color: #16a34a; color: #15803d; }
+        .admin-users__status--suspended { border-color: #dc2626; color: #b91c1c; }
+        .admin-users__status--deleted { opacity: .65; }
+        html.dark .admin-users__role--moderator { color: #fbbf24; }
+        html.dark .admin-users__status--active { color: #86efac; }
+        html.dark .admin-users__status--suspended { color: #fca5a5; }
+        .admin-users__reason {
+            overflow: hidden;
+            max-width: 220px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .admin-users__muted { color: var(--text-muted); }
+        .admin-users__state {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 1rem; flex-wrap: wrap;
+            padding: 1.2rem;
+            color: var(--text-muted);
+        }
+        .admin-users__state p { margin: 0; }
+        .admin-users__pagination {
+            display: flex; align-items: center; justify-content: center;
+            gap: .8rem; margin-top: 1.25rem;
+            color: var(--text-muted); font-size: .8rem;
+        }
+        @media (max-width: 640px) {
+            .admin-users__search { flex-basis: 100%; min-width: 0; }
+            .admin-users__search-row { flex-direction: column; }
+            .admin-users__search-row .btn-secondary { justify-content: center; }
+            .admin-users__pagination { flex-wrap: wrap; }
+        }
         .admin-report--market .admin-report__reason { line-height: 1.4; }
         .admin-market__photos {
             display: flex; align-items: center; flex-wrap: wrap; gap: .4rem;

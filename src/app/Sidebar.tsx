@@ -46,7 +46,7 @@ function NavRow({ item, count, iconCount, iconCountLabel }: NavRowProps) {
 
 /** Desktop navigation: brand, grouped sections and a compact account block. */
 export function Sidebar() {
-  const { user, isModerator } = useAuth();
+  const { user, isModerator, isAdmin } = useAuth();
   const { ownedCount } = useCollection();
   const { unreadCount } = useNotifications();
   const badges: Partial<Record<NavSectionId, number>> = {
@@ -87,6 +87,7 @@ export function Sidebar() {
             <NavRow item={NAV_ITEMS.analytics} count={undefined} />
             <NavRow item={NAV_ITEMS.marketReview} count={undefined} />
             <NavRow item={NAV_ITEMS.admin} count={undefined} />
+            {isAdmin && <NavRow item={NAV_ITEMS.adminUsers} count={undefined} />}
           </div>
         )}
       </div>

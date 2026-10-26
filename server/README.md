@@ -179,7 +179,7 @@ Seed импортирует игры, издания, объявления, об
 лентах, детальной странице, ставках и сделках. Владелец видит их в
 `GET /api/v1/market/mine`, модераторы — в очереди проверки.
 
-### Market review
+### Lot moderation
 
 - `GET /api/v1/admin/market?status=pending|visible|hidden|removed|all&kind=listing|auction` — очередь новых лотов (`admin` / `moderator`)
 - `PATCH /api/v1/admin/market/:id/moderation` — `visible` для публикации, `hidden` для отклонения, `removed` для снятия, `pending` для возврата на проверку; необязательный `note` сохраняется и отправляется автору
@@ -210,13 +210,17 @@ Seed импортирует игры, издания, объявления, об
 
 - `GET /api/v1/admin/analytics?period=7d|30d|90d|365d` — KPI по играм и пользователям, динамика, топ игр, продавцов, покупателей и коллекционеров (`admin` / `moderator`)
 
-### Reports and moderation
+### Reports
 
 - `POST /api/v1/reports` — жалоба на `market_entry` или `user` (только авторизованные)
 - `GET /api/v1/reports/mine` — свои жалобы
-- `GET /api/v1/admin/reports` — очередь модерации (`admin` / `moderator`)
+- `GET /api/v1/admin/reports` — очередь жалоб (`admin` / `moderator`)
 - `PATCH /api/v1/admin/reports/:id` — взять в работу, завершить или отклонить; действия `hide_entry` и `suspend_user`
 - `PATCH /api/v1/admin/market/:id/moderation` — скрыть, удалить, вернуть или отправить объявление на повторную проверку
+
+### Users
+
+- `GET /api/v1/admin/users?search=&role=all|user|moderator|admin&status=all|active|suspended|deleted&page=1&pageSize=20` — список всех пользователей с ролями, статусами, числом лотов, завершённых сделок и экземпляров в коллекции (только `admin`)
 - `PATCH /api/v1/admin/users/:id/status` — заблокировать или разблокировать пользователя (только `admin`)
 
 Один пользователь может иметь только одну открытую жалобу на конкретный лот или профиль. При блокировке пользователя его сессии удаляются, публичные лоты и профиль перестают отдаваться API. Скрытые и ожидающие проверки лоты остаются доступны владельцу и модераторам.
