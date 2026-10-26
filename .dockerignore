@@ -6,6 +6,8 @@ dist
 .gitignore
 .env
 **/.env
+.env.*
+**/.env.*
 server/uploads
 server/dist
 *.log
@@ -14,4 +16,5 @@ retrokeep_stage3.html
 dns-ps-games.json
 sites
 coverage
+.deploy
 .vite

@@ -1,0 +1,139 @@
+name: Check and deploy DiscVault
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      apply_migrations:
+        description: 'Apply reviewed database migrations after a backup (may require manual recovery)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: discvault
+          POSTGRES_PASSWORD: ci-only-password
+          POSTGRES_DB: discvault_ci
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd="pg_isready -U discvault -d discvault_ci"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    env:
+      DATABASE_URL: postgresql://discvault:ci-only-password@localhost:5432/discvault_ci?schema=public
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run db:generate
+      - run: npm run db:validate
+      - run: npm run db:migrate
+      - run: npm run typecheck:server
+      - run: node --import tsx --test scripts/market-items.test.ts
+      - run: node --test scripts/deployment*.test.mjs
+      - run: bash -n deploy/auto-deploy.sh
+      - run: npm run build:all
+
+  deploy:
+    needs: check
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    environment: production
+    concurrency:
+      group: discvault-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Skip commits superseded on main
+        id: latest
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          latest=$(gh api "repos/$GH_REPO/commits/main" --jq .sha)
+          if [[ "$latest" == "$GITHUB_SHA" ]]; then
+            echo 'proceed=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'proceed=false' >> "$GITHUB_OUTPUT"
+            echo 'A newer commit exists on main. This deployment is skipped.'
+          fi
+      - name: Validate deployment configuration
+        if: steps.latest.outputs.proceed == 'true'
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$DEPLOY_HOST" =~ ^[A-Za-z0-9][A-Za-z0-9.-]*$ ]]
+          [[ "$DEPLOY_USER" =~ ^[A-Za-z_][A-Za-z0-9_-]*$ ]]
+          [[ "${DEPLOY_PORT:-22}" =~ ^[0-9]+$ ]]
+          (( ${DEPLOY_PORT:-22} >= 1 && ${DEPLOY_PORT:-22} <= 65535 ))
+          [[ "$DEPLOY_PATH" =~ ^/[A-Za-z0-9_/-]+$ && "$DEPLOY_PATH" != / ]]
+          [[ -n "$DEPLOY_SSH_KEY" && -n "$DEPLOY_KNOWN_HOSTS" ]]
+          echo 'Deployment configuration is present.'
+      - name: Build immutable release images
+        if: steps.latest.outputs.proceed == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker build --label "org.opencontainers.image.revision=$GITHUB_SHA" -f Dockerfile.api -t "discvault-api:$GITHUB_SHA" .
+          docker build --label "org.opencontainers.image.revision=$GITHUB_SHA" -f Dockerfile.web -t "discvault-web:$GITHUB_SHA" .
+          mkdir bundle
+          docker save "discvault-api:$GITHUB_SHA" "discvault-web:$GITHUB_SHA" | gzip > bundle/images.tar.gz
+          cp deploy/auto-deploy.sh bundle/deploy.sh
+          cp deploy/check-migrations.mjs deploy/migration-state.mjs bundle/
+          printf '%s\n' "$GITHUB_SHA" > bundle/revision
+          tar -czf release.tar.gz -C bundle .
+          sha256sum release.tar.gz > release.tar.gz.sha256
+      - name: Transfer and deploy
+        if: steps.latest.outputs.proceed == 'true'
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          APPLY_MIGRATIONS: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_migrations && 'true' || 'false' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          key_dir=$(mktemp -d)
+          trap 'rm -rf -- "$key_dir"' EXIT
+          chmod 700 "$key_dir"
+          printf '%s\n' "$DEPLOY_SSH_KEY" > "$key_dir/key"
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$key_dir/known_hosts"
+          chmod 600 "$key_dir/key" "$key_dir/known_hosts"
+          port=${DEPLOY_PORT:-22}
+          remote="$DEPLOY_USER@$DEPLOY_HOST"
+          incoming="$DEPLOY_PATH/.deploy/incoming/$GITHUB_SHA-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          ssh_options=(-i "$key_dir/key" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o "UserKnownHostsFile=$key_dir/known_hosts" -o ConnectTimeout=15 -o ServerAliveInterval=15 -o ServerAliveCountMax=8)
+          ssh -p "$port" "${ssh_options[@]}" "$remote" "umask 077; mkdir -p '$incoming'"
+          scp -P "$port" "${ssh_options[@]}" release.tar.gz release.tar.gz.sha256 "$remote:$incoming/"
+          ssh -p "$port" "${ssh_options[@]}" "$remote" "cd '$incoming' && sha256sum -c release.tar.gz.sha256 && tar -xzf release.tar.gz && bash deploy.sh '$DEPLOY_PATH' '$GITHUB_SHA' '$APPLY_MIGRATIONS'"

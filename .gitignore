@@ -38,3 +38,6 @@ Desktop.ini
 
 # Local Sites publishing checkouts and generated deployment artifacts
 /sites/
+
+# Deployment releases and private server backups
+/.deploy/

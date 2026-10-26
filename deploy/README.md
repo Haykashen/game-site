@@ -197,6 +197,10 @@ https://<APP_DOMAIN>
 
 ## Обновление стенда
 
+Для автоматического обновления после push в `main` см. [AUTO_DEPLOY.md](AUTO_DEPLOY.md).
+Workflow проверяет сборку и миграции, сохраняет БД и фотографии и заменяет
+только образы приложения. Новые миграции требуют отдельного ручного запуска.
+
 ```bash
 git pull
 docker compose -f docker-compose.prod.yml up -d --build
