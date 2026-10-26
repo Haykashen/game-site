@@ -20,6 +20,11 @@ const explicitAliases=new Map(Object.entries({
   'Tokyo 2020 Olympic Games Official Videogame':'Tokyo 2020 Olympic Games',
   'Комплект игр Far Cry 4 + Far Cry 5':'Far Cry 4 + Far Cry 5',
   'Комплект игр Far Cry 4 + Far Cry Primal':'Far Cry: Primal + Far Cry 4',
+  'Starlink Battle for Atlas':'Starlink Battle for Atlas - Starter Pack',
+  'Disney / Pixar Валл-И':'Disney / Pixar Валл-И (Wall E)',
+  'История Игрушек: Парк развлечений (Toy Story Mania!)':'История Игрушек Парк развлечений',
+  'Destroy All Humans! 2 - Reprobed: Single Player':'Destroy All Humans! 2 Single Player',
+  'Assassin’s Creed Chronicles: Трилогия':"Assassin's Creed Chronicles Trilogy",
 }).map(([a,b])=>[titleKey(a),b]));
 // Orthographic equality only. No substring/fuzzy matches between sequels.
 function matchKey(title){

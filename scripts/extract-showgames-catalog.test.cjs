@@ -16,3 +16,14 @@ test('extracts only pic-1 with filename platform, source IDs and metadata',()=>{
   assert.deepEqual(p.platforms,['PS4']);assert.equal(p.region,'EU');
   assert.deepEqual(p.images,['https://showgames.ru/image/front.jpg']);
 });
+test('Xbox filename generations and malformed source brackets do not leak into game titles',()=>{
+  assert.equal(parseTitle('Need for Speed Rivals [Xbox 360, русская версия)','Xbox 360').gameTitle,'Need for Speed Rivals');
+  assert.equal(parseTitle('Farming Simulator 19 Ambassador Edition (Xbox One/Series X, английская версия]','Xbox One').gameTitle,'Farming Simulator 19');
+  const witcher=parseTitle('Ведьмак 3 / Witcher: Дикая Охота Полное Издание 10 Years of Killing Monsters (Xbox Series X, русские субтитры)','Xbox Series X');
+  assert.equal(witcher.gameTitle,'The Witcher 3: Wild Hunt');
+  assert.equal(witcher.editionName,'Complete Edition / 10 Years of Killing Monsters');
+  for(const [filename,platform] of [['xbox-one','Xbox One'],['xbox-360','Xbox 360'],['xbox-series-x','Xbox Series X']]){
+    const d=extract(`<div class="product-thumb"><div class="image"><a href="https://showgames.ru/game"><img class="pic-1" title="Example (${platform}, русские субтитры)" src="https://showgames.ru/image/front.jpg"></a><button onclick="cart.add('42');"></button></div></div>`,`showgames-${filename}.html`);
+    assert.deepEqual(d.games[0].platforms.map(p=>p.name),[platform]);
+  }
+});

@@ -22,6 +22,17 @@
     ]
   },
   {
+    "gameId": "6cc3ece6-b97d-11ed-90ac-00155d8ed209",
+    "game": "The Witcher 3: Wild Hunt",
+    "platform": "Xbox One",
+    "name": "Game of the Year Edition",
+    "productIds": [
+      "966071cf-6379-11e6-9bdd-00155d033307",
+      "showgames-1013",
+      "showgames-9285"
+    ]
+  },
+  {
     "gameId": "b1b000af-2519-11ed-900c-00155d8ed209",
     "game": "Grand Theft Auto V",
     "platform": "PS5",
@@ -39,6 +50,16 @@
     "productIds": [
       "d821c47b-d828-11e9-a20c-00155d03332b",
       "showgames-9026"
+    ]
+  },
+  {
+    "gameId": "b1b000af-2519-11ed-900c-00155d8ed209",
+    "game": "Grand Theft Auto V",
+    "platform": "Xbox One",
+    "name": "Premium Edition",
+    "productIds": [
+      "5781c939-d829-11e9-a20c-00155d03332b",
+      "showgames-9027"
     ]
   },
   {
@@ -74,6 +95,16 @@
     ]
   },
   {
+    "gameId": "6e64e646-7e69-11f0-9378-0050569d21a3",
+    "game": "EA Sports FC 26",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "5071c353-7e69-11f0-9378-0050569d21a3",
+      "showgames-12200"
+    ]
+  },
+  {
     "gameId": "0132a22a-8b9e-11eb-a238-00155dd2ff05",
     "game": "It Takes Two",
     "platform": "PS4",
@@ -101,6 +132,16 @@
     "productIds": [
       "7f46b17a-a01c-11f1-94a4-0050569d21a3",
       "showgames-12706"
+    ]
+  },
+  {
+    "gameId": "9d30c33d-a01c-11f1-94a4-0050569d21a3",
+    "game": "EA Sports FC 27",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "6163b217-a01c-11f1-94a4-0050569d21a3",
+      "showgames-12703"
     ]
   },
   {
@@ -155,6 +196,26 @@
     ]
   },
   {
+    "gameId": "ee0dd243-0d17-11eb-a20f-00155df1b805",
+    "game": "Mortal Kombat 11",
+    "platform": "Xbox One",
+    "name": "Ultimate",
+    "productIds": [
+      "bf420560-0d18-11eb-a20f-00155df1b805",
+      "showgames-9666"
+    ]
+  },
+  {
+    "gameId": "ee0dd243-0d17-11eb-a20f-00155df1b805",
+    "game": "Mortal Kombat 11",
+    "platform": "Xbox Series X",
+    "name": "Ultimate",
+    "productIds": [
+      "bf420560-0d18-11eb-a20f-00155df1b805",
+      "showgames-9666"
+    ]
+  },
+  {
     "gameId": "31378855-07d4-11e8-80a7-00155d03330d",
     "game": "Red Dead Redemption 2",
     "platform": "PS4",
@@ -162,6 +223,16 @@
     "productIds": [
       "31378855-07d4-11e8-80a7-00155d03330d",
       "showgames-6391"
+    ]
+  },
+  {
+    "gameId": "31378855-07d4-11e8-80a7-00155d03330d",
+    "game": "Red Dead Redemption 2",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "7bbf8264-07d4-11e8-80a7-00155d03330d",
+      "showgames-6392"
     ]
   },
   {
@@ -265,6 +336,16 @@
     ]
   },
   {
+    "gameId": "96e15d3e-78f3-11f1-946c-0050569d21a3",
+    "game": "Assassin's Creed Black Flag Resynced",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "7ef667dd-78f3-11f1-946c-0050569d21a3",
+      "showgames-12583"
+    ]
+  },
+  {
     "gameId": "de9b186d-326c-11ed-901b-00155d8ed209",
     "game": "The Last of Us: Part I (Remake)",
     "platform": "PS5",
@@ -295,6 +376,26 @@
     ]
   },
   {
+    "gameId": "6bbec5ae-b0d1-11ed-909f-00155d8ed209",
+    "game": "Hogwarts Legacy",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "6bbec5af-b0d1-11ed-909f-00155d8ed209",
+      "showgames-10690"
+    ]
+  },
+  {
+    "gameId": "6bbec5ae-b0d1-11ed-909f-00155d8ed209",
+    "game": "Hogwarts Legacy",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "b9be09ce-26c9-11ee-9113-00155d8ed20b",
+      "showgames-10858"
+    ]
+  },
+  {
     "gameId": "2d51dffd-9fdc-11ee-919d-00155d8ed209",
     "game": "Cyberpunk 2077",
     "platform": "PS5",
@@ -315,6 +416,16 @@
     ]
   },
   {
+    "gameId": "f661df1e-6c00-11ee-915b-00155d8ed20a",
+    "game": "EA Sports UFC 5",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "fc7a2a45-6c00-11ee-915b-00155d8ed20a",
+      "showgames-11056"
+    ]
+  },
+  {
     "gameId": "1017a03e-5fbb-11f1-9461-0050569d0a4d",
     "game": "EA Sports UFC 6",
     "platform": "PS5",
@@ -322,6 +433,16 @@
     "productIds": [
       "1017a03e-5fbb-11f1-9461-0050569d0a4d",
       "showgames-12514"
+    ]
+  },
+  {
+    "gameId": "1017a03e-5fbb-11f1-9461-0050569d0a4d",
+    "game": "EA Sports UFC 6",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "1960bf81-5fbb-11f1-9461-0050569d0a4d",
+      "showgames-12515"
     ]
   },
   {
@@ -385,6 +506,16 @@
     ]
   },
   {
+    "gameId": "9f0c9d13-4aa2-11f1-944e-0050569d0a4d",
+    "game": "007 First Light",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "87189685-4aa2-11f1-944e-0050569d0a4d",
+      "showgames-12489"
+    ]
+  },
+  {
     "gameId": "7460e630-3a7c-11ee-9128-00155d8ed209",
     "game": "Mortal Kombat 1",
     "platform": "PS5",
@@ -392,6 +523,16 @@
     "productIds": [
       "7460e630-3a7c-11ee-9128-00155d8ed209",
       "showgames-10979"
+    ]
+  },
+  {
+    "gameId": "7460e630-3a7c-11ee-9128-00155d8ed209",
+    "game": "Mortal Kombat 1",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "7460e631-3a7c-11ee-9128-00155d8ed209",
+      "showgames-10980"
     ]
   },
   {
@@ -435,6 +576,16 @@
     ]
   },
   {
+    "gameId": "2e9705a0-b3a8-11eb-a261-00155d42eb15",
+    "game": "Metro Exodus",
+    "platform": "Xbox One",
+    "name": "Полное издание",
+    "productIds": [
+      "showgames-12153",
+      "showgames-9858"
+    ]
+  },
+  {
     "gameId": "c6c73a65-58a6-11ec-8f44-00155d8ed20b",
     "game": "Uncharted: Legacy of Thieves Collection",
     "platform": "PS5",
@@ -455,6 +606,16 @@
     ]
   },
   {
+    "gameId": "f00f6df0-f4c1-11ef-92f1-0050569d21a3",
+    "game": "Split Fiction",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "f38b0102-f4c1-11ef-92f1-0050569d21a3",
+      "showgames-11961"
+    ]
+  },
+  {
     "gameId": "33ff14b7-3475-11f1-9438-0050569d0a4d",
     "game": "Pragmata",
     "platform": "PS5",
@@ -462,6 +623,16 @@
     "productIds": [
       "33ff14b7-3475-11f1-9438-0050569d0a4d",
       "showgames-12328"
+    ]
+  },
+  {
+    "gameId": "33ff14b7-3475-11f1-9438-0050569d0a4d",
+    "game": "Pragmata",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "220c8d59-3475-11f1-9438-0050569d0a4d",
+      "showgames-12330"
     ]
   },
   {
@@ -556,6 +727,16 @@
     ]
   },
   {
+    "gameId": "6cc51a94-f758-11f0-93fd-0050569d0a4d",
+    "game": "Reanimal",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "85c5c913-f758-11f0-93fd-0050569d0a4d",
+      "showgames-12422"
+    ]
+  },
+  {
     "gameId": "d839853e-0ae9-11f0-9315-0050569d0a4d",
     "game": "Clair Obscur Expedition 33",
     "platform": "PS5",
@@ -583,6 +764,26 @@
     "productIds": [
       "5be6796b-c415-11ef-92c9-0050569d0a4d",
       "showgames-9152"
+    ]
+  },
+  {
+    "gameId": "5be691a0-c415-11ef-92c9-0050569d0a4d",
+    "game": "SnowRunner",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "showgames-10299",
+      "showgames-9154"
+    ]
+  },
+  {
+    "gameId": "5be691a0-c415-11ef-92c9-0050569d0a4d",
+    "game": "SnowRunner",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "showgames-10299",
+      "showgames-9154"
     ]
   },
   {
@@ -625,6 +826,16 @@
     "productIds": [
       "3109a01b-014d-11ef-9205-0050569d0a4d",
       "showgames-11346"
+    ]
+  },
+  {
+    "gameId": "32bc041f-014d-11ef-9205-0050569d0a4d",
+    "game": "Resident Evil 4 Remake",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "0acec8ad-c6ed-11ed-90b9-00155d8ed209",
+      "showgames-10742"
     ]
   },
   {
@@ -728,6 +939,16 @@
     ]
   },
   {
+    "gameId": "75cfedea-a08d-11ea-a210-00155d03332b",
+    "game": "Mafia Trilogy",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "afe16abd-a08d-11ea-a210-00155d03332b",
+      "showgames-9282"
+    ]
+  },
+  {
     "gameId": "570622de-8b0b-11f1-947e-0050569d21a3",
     "game": "Mortal Shell II",
     "platform": "PS5",
@@ -811,6 +1032,26 @@
     ]
   },
   {
+    "gameId": "a64c43d4-e766-11ea-a211-00155d03332b",
+    "game": "Far Cry 6",
+    "platform": "Xbox One",
+    "name": "Yara Edition",
+    "productIds": [
+      "b6deffea-c4dd-11eb-a272-00155dd2ff2c",
+      "showgames-9429"
+    ]
+  },
+  {
+    "gameId": "a64c43d4-e766-11ea-a211-00155d03332b",
+    "game": "Far Cry 6",
+    "platform": "Xbox Series X",
+    "name": "Yara Edition",
+    "productIds": [
+      "b6deffea-c4dd-11eb-a272-00155dd2ff2c",
+      "showgames-9429"
+    ]
+  },
+  {
     "gameId": "1bbac4cf-f5bf-11ec-8fdc-00155d8ed209",
     "game": "God of War",
     "platform": "PS4",
@@ -861,6 +1102,26 @@
     ]
   },
   {
+    "gameId": "fc3d3393-e765-11ea-a211-00155d03332b",
+    "game": "Assassin's Creed: Valhalla",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "9df8ce79-8f31-11ea-a20f-00155d03332b",
+      "showgames-9301"
+    ]
+  },
+  {
+    "gameId": "fc3d3393-e765-11ea-a211-00155d03332b",
+    "game": "Assassin's Creed: Valhalla",
+    "platform": "Xbox One",
+    "name": "Limited Edition",
+    "productIds": [
+      "cdc316e5-8f31-11ea-a20f-00155d03332b",
+      "showgames-9302"
+    ]
+  },
+  {
     "gameId": "133daf9c-3aba-11f0-9345-0050569d0a4d",
     "game": "Death Stranding 2: On The Beach",
     "platform": "PS5",
@@ -892,6 +1153,16 @@
     ]
   },
   {
+    "gameId": "5fda4b88-c44f-11f0-93b5-0050569d9cb8",
+    "game": "Shadow of the Tomb Raider",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "3c1e06ae-58a3-11e8-9dc5-00155d03330d",
+      "showgames-7800"
+    ]
+  },
+  {
     "gameId": "b3d9c45a-58b3-11e8-9dc5-00155d03330d",
     "game": "Far Cry 3 Classic Edition",
     "platform": "PS4",
@@ -899,6 +1170,16 @@
     "productIds": [
       "b3d9c45a-58b3-11e8-9dc5-00155d03330d",
       "showgames-7831"
+    ]
+  },
+  {
+    "gameId": "b3d9c45a-58b3-11e8-9dc5-00155d03330d",
+    "game": "Far Cry 3 Classic Edition",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "dd6d2cea-58b3-11e8-9dc5-00155d03330d",
+      "showgames-7832"
     ]
   },
   {
@@ -919,6 +1200,16 @@
     "productIds": [
       "cae93883-7a94-11ed-906c-00155d8ed209",
       "showgames-8168"
+    ]
+  },
+  {
+    "gameId": "d69e2fa4-aaf0-11ef-92a2-0050569d21a3",
+    "game": "Resident Evil 7: Biohazard",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "60172afc-4317-11e6-8544-00155d033307",
+      "showgames-966"
     ]
   },
   {
@@ -1022,6 +1313,16 @@
     ]
   },
   {
+    "gameId": "364fba94-7f77-11ed-9070-00155d8ed209",
+    "game": "Need for Speed: Unbound",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "364fba96-7f77-11ed-9070-00155d8ed209",
+      "showgames-10654"
+    ]
+  },
+  {
     "gameId": "686b164f-7e69-11f0-9378-0050569d21a3",
     "game": "EA Sports NHL 26",
     "platform": "PS5",
@@ -1082,6 +1383,16 @@
     ]
   },
   {
+    "gameId": "427837b2-7f77-11ed-9070-00155d8ed209",
+    "game": "Mad Max",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "ed0f476d-2b56-11e5-bee0-00155d03361b",
+      "showgames-1030"
+    ]
+  },
+  {
     "gameId": "e2e10d07-518f-11e7-85c8-00155d03330d",
     "game": "Assassin's Creed: Origins",
     "platform": "PS4",
@@ -1090,6 +1401,16 @@
       "e06619ff-b195-11ed-90a0-00155d8ed209",
       "e2e10d07-518f-11e7-85c8-00155d03330d",
       "showgames-6973"
+    ]
+  },
+  {
+    "gameId": "e2e10d07-518f-11e7-85c8-00155d03330d",
+    "game": "Assassin's Creed: Origins",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "3244727c-5191-11e7-85c8-00155d03330d",
+      "showgames-6974"
     ]
   },
   {
@@ -1133,6 +1454,26 @@
     ]
   },
   {
+    "gameId": "62171a7e-cc44-11ec-8fb5-00155d8ed20b",
+    "game": "Elden Ring",
+    "platform": "Xbox One",
+    "name": "Launch Edition",
+    "productIds": [
+      "1650c90c-cff0-11eb-a27c-00155dd2ff2c",
+      "showgames-10185"
+    ]
+  },
+  {
+    "gameId": "62171a7e-cc44-11ec-8fb5-00155d8ed20b",
+    "game": "Elden Ring",
+    "platform": "Xbox Series X",
+    "name": "Launch Edition",
+    "productIds": [
+      "1650c90c-cff0-11eb-a27c-00155dd2ff2c",
+      "showgames-10185"
+    ]
+  },
+  {
     "gameId": "0c38893f-7c62-11e9-a207-00155d03332b",
     "game": "Crash Team Racing Nitro-Fueled",
     "platform": "PS4",
@@ -1163,6 +1504,16 @@
     ]
   },
   {
+    "gameId": "1ba635cb-be44-11ee-91ba-00155d8ed209",
+    "game": "Tekken 8",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "1db9ba8d-be44-11ee-91ba-00155d8ed209",
+      "showgames-11276"
+    ]
+  },
+  {
     "gameId": "85416421-a01c-11f1-94a4-0050569d21a3",
     "game": "Onimusha Way Of The Sword",
     "platform": "PS5",
@@ -1183,6 +1534,16 @@
     ]
   },
   {
+    "gameId": "85416421-a01c-11f1-94a4-0050569d21a3",
+    "game": "Onimusha Way Of The Sword",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "5b6b8a8a-a01c-11f1-94a4-0050569d21a3",
+      "showgames-12698"
+    ]
+  },
+  {
     "gameId": "10248f87-8143-11e6-aaca-00155d03330d",
     "game": "Assassin's Creed: The Ezio Collection",
     "platform": "PS4",
@@ -1190,6 +1551,16 @@
     "productIds": [
       "10248f87-8143-11e6-aaca-00155d03330d",
       "showgames-6378"
+    ]
+  },
+  {
+    "gameId": "10248f87-8143-11e6-aaca-00155d03330d",
+    "game": "Assassin's Creed: The Ezio Collection",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "10248f88-8143-11e6-aaca-00155d03330d",
+      "showgames-6379"
     ]
   },
   {
@@ -1263,6 +1634,16 @@
     ]
   },
   {
+    "gameId": "686b09b5-7e69-11f0-9378-0050569d21a3",
+    "game": "NBA 2K26",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "4a72570e-7e69-11f0-9378-0050569d21a3",
+      "showgames-12171"
+    ]
+  },
+  {
     "gameId": "da37cfd3-366c-11e9-a208-00155df1b805",
     "game": "Dark Souls Trilogy",
     "platform": "PS4",
@@ -1283,6 +1664,16 @@
     ]
   },
   {
+    "gameId": "064a34fe-bab6-11f0-93bf-0050569d0a4d",
+    "game": "SpongeBob SquarePants: Titans of the Tide",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "f20d5232-bab5-11f0-93bf-0050569d0a4d",
+      "showgames-12293"
+    ]
+  },
+  {
     "gameId": "708f322a-74fd-11e8-9547-00155d03330d",
     "game": "Assassin’s Creed: Odyssey",
     "platform": "PS4",
@@ -1290,6 +1681,26 @@
     "productIds": [
       "708f322a-74fd-11e8-9547-00155d03330d",
       "showgames-7918"
+    ]
+  },
+  {
+    "gameId": "708f322a-74fd-11e8-9547-00155d03330d",
+    "game": "Assassin’s Creed: Odyssey",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "bdaf34d8-74fd-11e8-9547-00155d03330d",
+      "showgames-7919"
+    ]
+  },
+  {
+    "gameId": "708f322a-74fd-11e8-9547-00155d03330d",
+    "game": "Assassin’s Creed: Odyssey",
+    "platform": "Xbox One",
+    "name": "Omega Edition",
+    "productIds": [
+      "95294c13-74fe-11e8-9547-00155d03330d",
+      "showgames-8166"
     ]
   },
   {
@@ -1353,6 +1764,16 @@
     ]
   },
   {
+    "gameId": "3c167321-2103-11e8-9dc5-00155d03330d",
+    "game": "Assassin’s Creed: Rogue Remastered",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "9723089f-2103-11e8-9dc5-00155d03330d",
+      "showgames-7594"
+    ]
+  },
+  {
     "gameId": "7bd854a3-9626-11e9-a20b-00155df1b805",
     "game": "Horizon Zero Dawn",
     "platform": "PS4",
@@ -1370,6 +1791,16 @@
     "productIds": [
       "a8cc9a29-78f3-11f1-946c-0050569d21a3",
       "showgames-12612"
+    ]
+  },
+  {
+    "gameId": "a8cc9a29-78f3-11f1-946c-0050569d21a3",
+    "game": "Halo Campaign Evolved",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "84f369b9-78f3-11f1-946c-0050569d21a3",
+      "showgames-12613"
     ]
   },
   {
@@ -1393,6 +1824,26 @@
     ]
   },
   {
+    "gameId": "db5033bb-8f9f-11ec-8f77-00155d8ed20b",
+    "game": "LEGO Star Wars: The Skywalker Saga",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "49d91586-8fa0-11ec-8f77-00155d8ed20b",
+      "showgames-10260"
+    ]
+  },
+  {
+    "gameId": "db5033bb-8f9f-11ec-8f77-00155d8ed20b",
+    "game": "LEGO Star Wars: The Skywalker Saga",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "49d91586-8fa0-11ec-8f77-00155d8ed20b",
+      "showgames-10260"
+    ]
+  },
+  {
     "gameId": "2e58d2b2-a08e-11ea-a210-00155d03332b",
     "game": "Mafia",
     "platform": "PS4",
@@ -1400,6 +1851,16 @@
     "productIds": [
       "2e58d2b2-a08e-11ea-a210-00155d03332b",
       "showgames-9279"
+    ]
+  },
+  {
+    "gameId": "2e58d2b2-a08e-11ea-a210-00155d03332b",
+    "game": "Mafia",
+    "platform": "Xbox One",
+    "name": "Definitive Edition",
+    "productIds": [
+      "f7612750-a08d-11ea-a210-00155d03332b",
+      "showgames-9280"
     ]
   },
   {
@@ -1420,6 +1881,26 @@
     "productIds": [
       "749684ca-355f-11ec-8f11-00155d8ed20b",
       "showgames-10140"
+    ]
+  },
+  {
+    "gameId": "749684ca-355f-11ec-8f11-00155d8ed20b",
+    "game": "Grand Theft Auto: The Trilogy – The",
+    "platform": "Xbox One",
+    "name": "Definitive Edition",
+    "productIds": [
+      "b56a8eb5-355f-11ec-8f11-00155d8ed20b",
+      "showgames-10141"
+    ]
+  },
+  {
+    "gameId": "749684ca-355f-11ec-8f11-00155d8ed20b",
+    "game": "Grand Theft Auto: The Trilogy – The",
+    "platform": "Xbox Series X",
+    "name": "Definitive Edition",
+    "productIds": [
+      "b56a8eb5-355f-11ec-8f11-00155d8ed20b",
+      "showgames-10141"
     ]
   },
   {
@@ -1523,6 +2004,16 @@
     ]
   },
   {
+    "gameId": "d69e2eb9-aaf0-11ef-92a2-0050569d21a3",
+    "game": "Resident Evil 3",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "7f4a2ba3-22fa-11ea-a20c-00155df1b805",
+      "showgames-9079"
+    ]
+  },
+  {
     "gameId": "28c978af-452e-11e7-8b78-00155d03330d",
     "game": "Crash Bandicoot N. Sane Trilogy",
     "platform": "PS4",
@@ -1553,6 +2044,16 @@
     ]
   },
   {
+    "gameId": "cbf559b1-9dc4-11f0-9394-0050569d21a3",
+    "game": "Battlefield 6",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "b3bef9db-9dc4-11f0-9394-0050569d21a3",
+      "showgames-12235"
+    ]
+  },
+  {
     "gameId": "7b43d73c-3a7c-11ee-9128-00155d8ed209",
     "game": "Assassin's Creed: Mirage",
     "platform": "PS4",
@@ -1570,6 +2071,16 @@
     "productIds": [
       "7b43d73a-3a7c-11ee-9128-00155d8ed209",
       "showgames-11050"
+    ]
+  },
+  {
+    "gameId": "7b43d73c-3a7c-11ee-9128-00155d8ed209",
+    "game": "Assassin's Creed: Mirage",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "7b43d756-3a7c-11ee-9128-00155d8ed209",
+      "showgames-12152"
     ]
   },
   {
@@ -1614,6 +2125,16 @@
     ]
   },
   {
+    "gameId": "152b29fd-5fbb-11f1-9461-0050569d0a4d",
+    "game": "Control",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "a56cf2c0-92fe-11e9-a20b-00155d03332b",
+      "showgames-8617"
+    ]
+  },
+  {
     "gameId": "f54d200e-3b8d-11e8-9dc5-00155d03330d",
     "game": "Injustice 2",
     "platform": "PS4",
@@ -1631,6 +2152,16 @@
     "productIds": [
       "e3ef9498-1f6d-11e9-a208-00155df1b805",
       "showgames-7821"
+    ]
+  },
+  {
+    "gameId": "e3ef9498-1f6d-11e9-a208-00155df1b805",
+    "game": "Rage 2",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "0c040268-1f6e-11e9-a208-00155df1b805",
+      "showgames-7822"
     ]
   },
   {
@@ -1704,6 +2235,16 @@
     ]
   },
   {
+    "gameId": "9e8a6898-bd35-11f1-94c9-0050569d21a3",
+    "game": "Ace Combat 8: Wings Of Theve",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "0483149c-bd36-11f1-94c9-0050569d21a3",
+      "showgames-12745"
+    ]
+  },
+  {
     "gameId": "6cb2b1e9-641d-11ee-9152-00155d8ed20a",
     "game": "EA Sports FC 24",
     "platform": "PS5",
@@ -1721,6 +2262,16 @@
     "productIds": [
       "7460e633-3a7c-11ee-9128-00155d8ed209",
       "showgames-11006"
+    ]
+  },
+  {
+    "gameId": "6cb2b1e9-641d-11ee-9152-00155d8ed20a",
+    "game": "EA Sports FC 24",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "7460e635-3a7c-11ee-9128-00155d8ed209",
+      "showgames-11008"
     ]
   },
   {
@@ -1791,6 +2342,16 @@
     "productIds": [
       "e5abf0e1-82cc-11ee-917a-00155d8ed209",
       "showgames-11076"
+    ]
+  },
+  {
+    "gameId": "e5abf0e1-82cc-11ee-917a-00155d8ed209",
+    "game": "Robocop: Rogue City",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "e66c773a-82cc-11ee-917a-00155d8ed209",
+      "showgames-11115"
     ]
   },
   {
@@ -1922,6 +2483,16 @@
     "productIds": [
       "686b13dd-7e69-11f0-9378-0050569d21a3",
       "showgames-12191"
+    ]
+  },
+  {
+    "gameId": "89c9cc5e-7f12-11f0-9375-0050569d9cb8",
+    "game": "Borderlands 4",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "5071bdad-7e69-11f0-9378-0050569d21a3",
+      "showgames-12192"
     ]
   },
   {
@@ -2075,6 +2646,26 @@
     ]
   },
   {
+    "gameId": "080acbcb-d236-11eb-a27d-00155dd2ff2c",
+    "game": "Battlefield 2042",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "2d5d91a4-d238-11eb-a27d-00155dd2ff2c",
+      "showgames-10123"
+    ]
+  },
+  {
+    "gameId": "080acbcb-d236-11eb-a27d-00155dd2ff2c",
+    "game": "Battlefield 2042",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "e88664ad-d237-11eb-a27d-00155dd2ff2c",
+      "showgames-10125"
+    ]
+  },
+  {
     "gameId": "f485ba1a-6667-11ef-925b-0050569d21a3",
     "game": "NBA 2K25",
     "platform": "PS4",
@@ -2093,6 +2684,16 @@
       "f485ba1a-6667-11ef-925b-0050569d21a3",
       "f5f5ff31-6667-11ef-925b-0050569d21a3",
       "showgames-11706"
+    ]
+  },
+  {
+    "gameId": "f485ba1a-6667-11ef-925b-0050569d21a3",
+    "game": "NBA 2K25",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "611f0cae-69c8-11ef-925e-0050569d21a3",
+      "showgames-11723"
     ]
   },
   {
@@ -2216,6 +2817,16 @@
     ]
   },
   {
+    "gameId": "b0736e28-bd35-11f1-94c9-0050569d21a3",
+    "game": "Castlevania: Belmont’s Curse",
+    "platform": "Xbox Series X",
+    "name": "Midnight Edition",
+    "productIds": [
+      "90cde959-bd35-11f1-94c9-0050569d21a3",
+      "showgames-12792"
+    ]
+  },
+  {
     "gameId": "43f1691c-c0da-11ee-91b0-00155d8ed20a",
     "game": "Suicide Squad: Kill the Justice League",
     "platform": "PS5",
@@ -2307,6 +2918,16 @@
     ]
   },
   {
+    "gameId": "77ed03da-eae9-11ed-90e1-00155d8ed209",
+    "game": "Devil May Cry 5",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "4ea34b38-fc35-11e8-a205-00155d03332b",
+      "showgames-8086"
+    ]
+  },
+  {
     "gameId": "db96aa3e-61c9-11eb-a214-00155d03332b",
     "game": "Resident Evil Village",
     "platform": "PS5",
@@ -2344,6 +2965,26 @@
     "productIds": [
       "86de0234-61c9-11eb-a214-00155d03332b",
       "showgames-9748"
+    ]
+  },
+  {
+    "gameId": "db96aa3e-61c9-11eb-a214-00155d03332b",
+    "game": "Resident Evil Village",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "20a910cf-61ca-11eb-a214-00155d03332b",
+      "showgames-9750"
+    ]
+  },
+  {
+    "gameId": "db96aa3e-61c9-11eb-a214-00155d03332b",
+    "game": "Resident Evil Village",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "20a910cf-61ca-11eb-a214-00155d03332b",
+      "showgames-9750"
     ]
   },
   {
@@ -2427,6 +3068,17 @@
     ]
   },
   {
+    "gameId": "221fbb85-f5bf-11ec-8fdc-00155d8ed209",
+    "game": "Call of Duty: WWII",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "8ea7ef1c-2bc8-11e7-ac91-00155d03330d",
+      "showgames-10651",
+      "showgames-6737"
+    ]
+  },
+  {
     "gameId": "f4341eb6-70e1-11ef-9273-0050569d0a4d",
     "game": "EA Sports FC 25",
     "platform": "PS5",
@@ -2453,7 +3105,8 @@
     "name": "стандартное издание",
     "productIds": [
       "d121bbc2-ecda-11ef-92eb-0050569d21a3",
-      "f43427df-70e1-11ef-9273-0050569d0a4d"
+      "f43427df-70e1-11ef-9273-0050569d0a4d",
+      "showgames-11770"
     ]
   },
   {
@@ -2473,7 +3126,8 @@
     "name": "стандартное издание",
     "productIds": [
       "d121bbc2-ecda-11ef-92eb-0050569d21a3",
-      "f43427df-70e1-11ef-9273-0050569d0a4d"
+      "f43427df-70e1-11ef-9273-0050569d0a4d",
+      "showgames-11770"
     ]
   },
   {
@@ -2537,6 +3191,16 @@
     ]
   },
   {
+    "gameId": "9a7e565b-651a-11eb-a216-00155d03332b",
+    "game": "Biomutant",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "74eeebf1-651b-11eb-a216-00155d03332b",
+      "showgames-9007"
+    ]
+  },
+  {
     "gameId": "cade8ecb-a255-11ef-929b-0050569d21a3",
     "game": "Farming Simulator 25",
     "platform": "PS5",
@@ -2564,6 +3228,16 @@
     "productIds": [
       "7e809ad1-604e-11f0-9357-0050569d9cb8",
       "showgames-12102"
+    ]
+  },
+  {
+    "gameId": "7e809ad1-604e-11f0-9357-0050569d9cb8",
+    "game": "RoboCop: Rogue City - Unfinished Business",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "1acc51ba-6056-11f0-9369-0050569d0a4d",
+      "showgames-12473"
     ]
   },
   {
@@ -2710,6 +3384,16 @@
     ]
   },
   {
+    "gameId": "72730717-f3a8-11ed-90ea-00155d8ed209",
+    "game": "Star Wars Jedi: Survivor",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "787a3ffc-f3a8-11ed-90ea-00155d8ed209",
+      "showgames-10860"
+    ]
+  },
+  {
     "gameId": "8b9ffc43-21a4-11f1-9414-0050569d21a3",
     "game": "Star Wars Dark Forces Remaster",
     "platform": "PS5",
@@ -2851,6 +3535,16 @@
     ]
   },
   {
+    "gameId": "f2e95be7-86bf-11ef-927e-0050569d21a3",
+    "game": "Call Of Duty Black Ops 6",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "f43ec480-86bf-11ef-927e-0050569d21a3",
+      "showgames-11765"
+    ]
+  },
+  {
     "gameId": "f182c303-86bf-11ef-927e-0050569d21a3",
     "game": "Sonic X Shadow Generations",
     "platform": "PS5",
@@ -2878,6 +3572,16 @@
     "productIds": [
       "fc73f55a-a670-11e8-9547-00155d03330d",
       "showgames-8087"
+    ]
+  },
+  {
+    "gameId": "fc73f55a-a670-11e8-9547-00155d03330d",
+    "game": "Tom Clancy’s The Division 2",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "36a4a322-a671-11e8-9547-00155d03330d",
+      "showgames-8088"
     ]
   },
   {
@@ -2971,6 +3675,16 @@
     ]
   },
   {
+    "gameId": "ccc46bc3-e050-11ee-91e3-00155d8ed209",
+    "game": "Dragon's Dogma 2",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "ccc46d72-e050-11ee-91e3-00155d8ed209",
+      "showgames-11332"
+    ]
+  },
+  {
     "gameId": "745e6215-7e69-11f0-9378-0050569d21a3",
     "game": "Final Fantasy Tactics: The Ivalice Chronicles",
     "platform": "PS5",
@@ -3038,6 +3752,16 @@
     "productIds": [
       "72c94f25-b37f-11ee-91a1-00155d8ed20b",
       "showgames-11267"
+    ]
+  },
+  {
+    "gameId": "c8edbf8c-b37f-11ee-91a1-00155d8ed20b",
+    "game": "Prince of Persia The Lost Crown",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "34d8e053-b384-11ee-91a1-00155d8ed20b",
+      "showgames-11266"
     ]
   },
   {
@@ -3261,6 +3985,16 @@
     ]
   },
   {
+    "gameId": "6bc30e18-f6da-11e9-a20c-00155df1b805",
+    "game": "Desperados III",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "a775a949-f6db-11e9-a20c-00155df1b805",
+      "showgames-9015"
+    ]
+  },
+  {
     "gameId": "09a96eb0-f4c2-11ef-92f1-0050569d21a3",
     "game": "Atelier Yumia: The Alchemist Of Memories & The Envisioned Land",
     "platform": "PS5",
@@ -3322,6 +4056,16 @@
     ]
   },
   {
+    "gameId": "2a899567-61ca-11ee-914f-00155d8ed20a",
+    "game": "Lords of the Fallen",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "2b93161d-61ca-11ee-914f-00155d8ed20a",
+      "showgames-11151"
+    ]
+  },
+  {
     "gameId": "c132497c-a857-11ed-9098-00155d8ed209",
     "game": "Forspoken",
     "platform": "PS5",
@@ -3359,6 +4103,26 @@
     "productIds": [
       "6578aee2-e323-11ed-90d8-00155d8ed209",
       "showgames-10701"
+    ]
+  },
+  {
+    "gameId": "6578aee2-e323-11ed-90d8-00155d8ed209",
+    "game": "Wo Long: Fallen Dynasty",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "2535e231-d75a-11ed-90cb-00155d8ed209",
+      "showgames-10702"
+    ]
+  },
+  {
+    "gameId": "6578aee2-e323-11ed-90d8-00155d8ed209",
+    "game": "Wo Long: Fallen Dynasty",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "2535e231-d75a-11ed-90cb-00155d8ed209",
+      "showgames-10702"
     ]
   },
   {
@@ -3439,6 +4203,28 @@
     "productIds": [
       "da9cb477-0abf-11ec-a2b0-00155dbd7634",
       "showgames-10101"
+    ]
+  },
+  {
+    "gameId": "7df82237-0abf-11ec-a2b0-00155dbd7634",
+    "game": "Call of Duty: Vanguard",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "64e70777-0ac0-11ec-a2b0-00155dbd7634",
+      "showgames-10102",
+      "showgames-10103"
+    ]
+  },
+  {
+    "gameId": "7df82237-0abf-11ec-a2b0-00155dbd7634",
+    "game": "Call of Duty: Vanguard",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "1f96d3a1-0ac0-11ec-a2b0-00155dbd7634",
+      "showgames-10102",
+      "showgames-10103"
     ]
   },
   {
@@ -3603,6 +4389,16 @@
     ]
   },
   {
+    "gameId": "d69e2dce-aaf0-11ef-92a2-0050569d21a3",
+    "game": "Resident Evil 2",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "6f76776c-01c9-11e9-a205-00155d03332b",
+      "showgames-7848"
+    ]
+  },
+  {
     "gameId": "132a2392-2158-11ee-9111-00155d8ed209",
     "game": "Crash Team Rumble",
     "platform": "PS5",
@@ -3650,6 +4446,46 @@
     "productIds": [
       "34cb753f-be88-11eb-a26a-00155dd2ff18",
       "showgames-10175"
+    ]
+  },
+  {
+    "gameId": "696b3223-bdde-11eb-a269-00155d42eb15",
+    "game": "Dying Light 2: Stay Human",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "f3f0b9c7-bdde-11eb-a269-00155d42eb15",
+      "showgames-8661"
+    ]
+  },
+  {
+    "gameId": "696b3223-bdde-11eb-a269-00155d42eb15",
+    "game": "Dying Light 2: Stay Human",
+    "platform": "Xbox One",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "680cfdc9-be88-11eb-a26a-00155dd2ff18",
+      "showgames-10177"
+    ]
+  },
+  {
+    "gameId": "696b3223-bdde-11eb-a269-00155d42eb15",
+    "game": "Dying Light 2: Stay Human",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "f3f0b9c7-bdde-11eb-a269-00155d42eb15",
+      "showgames-8661"
+    ]
+  },
+  {
+    "gameId": "696b3223-bdde-11eb-a269-00155d42eb15",
+    "game": "Dying Light 2: Stay Human",
+    "platform": "Xbox Series X",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "680cfdc9-be88-11eb-a26a-00155dd2ff18",
+      "showgames-10177"
     ]
   },
   {
@@ -3730,6 +4566,16 @@
     "productIds": [
       "364fbd28-c258-11ea-a211-00155d03332b",
       "showgames-9648"
+    ]
+  },
+  {
+    "gameId": "364fbd28-c258-11ea-a211-00155d03332b",
+    "game": "The Dark Pictures: Little Hope",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "74542ec0-c258-11ea-a211-00155d03332b",
+      "showgames-9649"
     ]
   },
   {
@@ -3824,6 +4670,16 @@
     ]
   },
   {
+    "gameId": "ac1768ae-9e30-11ee-918d-00155d8ed20a",
+    "game": "A Plague Tale: Requiem",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "b85fa94c-93c0-11ec-8f7c-00155d8ed20c",
+      "showgames-10538"
+    ]
+  },
+  {
     "gameId": "d89c49aa-326c-11ed-901b-00155d8ed209",
     "game": "Odin Sphere: Leifthrasir",
     "platform": "PS4",
@@ -3884,6 +4740,16 @@
     ]
   },
   {
+    "gameId": "398dde6e-c650-11ee-91b7-00155d8ed20a",
+    "game": "Banishers: Ghosts of New Eden",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "3faa961f-c650-11ee-91b7-00155d8ed20a",
+      "showgames-11294"
+    ]
+  },
+  {
     "gameId": "70086097-747a-11ed-9065-00155d8ed209",
     "game": "Call of Duty: Black Ops III",
     "platform": "PS4",
@@ -3914,6 +4780,16 @@
     ]
   },
   {
+    "gameId": "c68e30a7-dde2-11ef-92d0-0050569d21a3",
+    "game": "Civilization VII",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "c68e3db0-dde2-11ef-92d0-0050569d21a3",
+      "showgames-11920"
+    ]
+  },
+  {
     "gameId": "d0eed87c-6a0f-11ed-905c-00155d8ed209",
     "game": "Steelrising",
     "platform": "PS5",
@@ -3921,6 +4797,16 @@
     "productIds": [
       "d0eed87c-6a0f-11ed-905c-00155d8ed209",
       "showgames-10497"
+    ]
+  },
+  {
+    "gameId": "d0eed87c-6a0f-11ed-905c-00155d8ed209",
+    "game": "Steelrising",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "d0eed87d-6a0f-11ed-905c-00155d8ed209",
+      "showgames-10498"
     ]
   },
   {
@@ -3951,6 +4837,16 @@
     "productIds": [
       "50a0c063-e059-11ea-a211-00155d03332b",
       "showgames-9500"
+    ]
+  },
+  {
+    "gameId": "d45a840a-52b0-11ea-a20f-00155d03332b",
+    "game": "Marvel’s Avengers",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "1dbe0246-52b1-11ea-a20f-00155d03332b",
+      "showgames-9369"
     ]
   },
   {
@@ -3991,6 +4887,16 @@
     "productIds": [
       "fda13096-f4c1-11ef-92f1-0050569d21a3",
       "showgames-11966"
+    ]
+  },
+  {
+    "gameId": "ff556632-f4c1-11ef-92f1-0050569d21a3",
+    "game": "WWE 2K25",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "ff5574d3-f4c1-11ef-92f1-0050569d21a3",
+      "showgames-11968"
     ]
   },
   {
@@ -4051,6 +4957,26 @@
     "productIds": [
       "4575dc4a-0f1f-11ee-9103-00155d8ed209",
       "showgames-10873"
+    ]
+  },
+  {
+    "gameId": "4575dc49-0f1f-11ee-9103-00155d8ed209",
+    "game": "LEGO 2K Drive",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "4575dc4c-0f1f-11ee-9103-00155d8ed209",
+      "showgames-10875"
+    ]
+  },
+  {
+    "gameId": "4575dc49-0f1f-11ee-9103-00155d8ed209",
+    "game": "LEGO 2K Drive",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "4575dc4c-0f1f-11ee-9103-00155d8ed209",
+      "showgames-10875"
     ]
   },
   {
@@ -4121,6 +5047,26 @@
     "productIds": [
       "b4081751-1323-11ef-9208-0050569d21a3",
       "showgames-11491"
+    ]
+  },
+  {
+    "gameId": "b4081751-1323-11ef-9208-0050569d21a3",
+    "game": "EA SPORTS F1 24",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "b4081d5e-1323-11ef-9208-0050569d21a3",
+      "showgames-11492"
+    ]
+  },
+  {
+    "gameId": "b4081751-1323-11ef-9208-0050569d21a3",
+    "game": "EA SPORTS F1 24",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "b4081d5e-1323-11ef-9208-0050569d21a3",
+      "showgames-11492"
     ]
   },
   {
@@ -4221,6 +5167,16 @@
     "productIds": [
       "652152fa-812c-11ef-9287-0050569d0a4d",
       "showgames-11762"
+    ]
+  },
+  {
+    "gameId": "652152fa-812c-11ef-9287-0050569d0a4d",
+    "game": "Teenage Mutant Ninja Turtles: Mutants Unleashed",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "661a6561-812c-11ef-9287-0050569d0a4d",
+      "showgames-11772"
     ]
   },
   {
@@ -4394,6 +5350,26 @@
     ]
   },
   {
+    "gameId": "21fff038-cffd-11eb-a27c-00155dd2ff2c",
+    "game": "Marvel’s Guardians of the Galaxy",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "e808e43f-cffd-11eb-a27c-00155dd2ff2c",
+      "showgames-10091"
+    ]
+  },
+  {
+    "gameId": "21fff038-cffd-11eb-a27c-00155dd2ff2c",
+    "game": "Marvel’s Guardians of the Galaxy",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "e808e43f-cffd-11eb-a27c-00155dd2ff2c",
+      "showgames-10091"
+    ]
+  },
+  {
     "gameId": "29e02b9b-84b2-11e3-b4a5-00155d031202",
     "game": "Tomb Raider",
     "platform": "PS4",
@@ -4421,6 +5397,26 @@
     "productIds": [
       "7b34c055-06ca-11eb-a211-00155d03332b",
       "showgames-9915"
+    ]
+  },
+  {
+    "gameId": "5053700d-06ca-11eb-a211-00155d03332b",
+    "game": "Just Dance 2021",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "e3f8d399-06ca-11eb-a211-00155d03332b",
+      "showgames-9683"
+    ]
+  },
+  {
+    "gameId": "58a6dc02-cd2f-11e9-a20c-00155d03332b",
+    "game": "Just Dance 2020",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "cb763c5b-cd2f-11e9-a20c-00155d03332b",
+      "showgames-9009"
     ]
   },
   {
@@ -4465,6 +5461,16 @@
     ]
   },
   {
+    "gameId": "b4da712f-fa9e-11e4-9188-00155d03361b",
+    "game": "LEGO Jurassic World",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "8009b4a4-178c-11ed-8ffd-00155d8ed209",
+      "showgames-927"
+    ]
+  },
+  {
     "gameId": "030fd654-0ac2-11ec-a2b0-00155dbd7634",
     "game": "NHL 22",
     "platform": "PS4",
@@ -4482,6 +5488,16 @@
     "productIds": [
       "08ad5348-c0c1-11ea-a20f-00155df1b805",
       "showgames-9424"
+    ]
+  },
+  {
+    "gameId": "08ad5348-c0c1-11ea-a20f-00155df1b805",
+    "game": "Crash Bandicoot 4: It’s About Time",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "334ad317-c0c1-11ea-a20f-00155df1b805",
+      "showgames-9425"
     ]
   },
   {
@@ -4525,6 +5541,16 @@
     ]
   },
   {
+    "gameId": "1f0bb5a8-7bcd-11eb-a22b-00155d03332b",
+    "game": "NieR Replicant ver.1.22474487139",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "bb24cd5a-7bcd-11eb-a22b-00155d03332b",
+      "showgames-9811"
+    ]
+  },
+  {
     "gameId": "4a7766cc-6f2f-11eb-a21f-00155d03332b",
     "game": "Persona 5 Strikers",
     "platform": "PS4",
@@ -4555,6 +5581,16 @@
     ]
   },
   {
+    "gameId": "5607f561-9c31-11e6-9a79-00155d03330d",
+    "game": "Watch Dogs 2",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "5607f562-9c31-11e6-9a79-00155d03330d",
+      "showgames-6347"
+    ]
+  },
+  {
     "gameId": "69c58880-1cb6-11ea-a20c-00155df1b805",
     "game": "Dreams",
     "platform": "PS4",
@@ -4572,6 +5608,26 @@
     "productIds": [
       "6e9355f8-ad53-11eb-a25b-00155d42eb15",
       "showgames-10033"
+    ]
+  },
+  {
+    "gameId": "6e9355f8-ad53-11eb-a25b-00155d42eb15",
+    "game": "Tales of Arise",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "6bfabf59-ad54-11eb-a25b-00155d42eb15",
+      "showgames-10034"
+    ]
+  },
+  {
+    "gameId": "6e9355f8-ad53-11eb-a25b-00155d42eb15",
+    "game": "Tales of Arise",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "6bfabf59-ad54-11eb-a25b-00155d42eb15",
+      "showgames-10034"
     ]
   },
   {
@@ -4615,6 +5671,16 @@
     ]
   },
   {
+    "gameId": "ba576835-4754-11e7-8019-00155d03330d",
+    "game": "Far Cry 5",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "7e2d1532-4755-11e7-8019-00155d03330d",
+      "showgames-6861"
+    ]
+  },
+  {
     "gameId": "bad294cb-22a2-11e9-a208-00155df1b805",
     "game": "Kingdom Hearts III",
     "platform": "PS4",
@@ -4645,6 +5711,16 @@
     ]
   },
   {
+    "gameId": "e8b5f319-e381-11eb-a28f-00155dbd7634",
+    "game": "FIFA 22",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "66117729-e382-11eb-a28f-00155dbd7634",
+      "showgames-10026"
+    ]
+  },
+  {
     "gameId": "03e2c447-d98f-11e6-8002-00155d03330d",
     "game": "Prey",
     "platform": "PS4",
@@ -4656,6 +5732,16 @@
     ]
   },
   {
+    "gameId": "03e2c447-d98f-11e6-8002-00155d03330d",
+    "game": "Prey",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "79e0bbe8-d98f-11e6-8002-00155d03330d",
+      "showgames-6429"
+    ]
+  },
+  {
     "gameId": "365512ab-fd17-11e8-a208-00155df1b805",
     "game": "Far Cry: New Dawn",
     "platform": "PS4",
@@ -4663,6 +5749,16 @@
     "productIds": [
       "365512ab-fd17-11e8-a208-00155df1b805",
       "showgames-8375"
+    ]
+  },
+  {
+    "gameId": "365512ab-fd17-11e8-a208-00155df1b805",
+    "game": "Far Cry: New Dawn",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "7113b33d-fd17-11e8-a205-00155d03332b",
+      "showgames-8377"
     ]
   },
   {
@@ -4686,6 +5782,26 @@
     ]
   },
   {
+    "gameId": "4232aeda-91cf-11eb-a23f-00155dd2ff05",
+    "game": "Scarlet Nexus",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "ac99eb4a-91d0-11eb-a23f-00155dd2ff05",
+      "showgames-9885"
+    ]
+  },
+  {
+    "gameId": "4232aeda-91cf-11eb-a23f-00155dd2ff05",
+    "game": "Scarlet Nexus",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "ac99eb4a-91d0-11eb-a23f-00155dd2ff05",
+      "showgames-9885"
+    ]
+  },
+  {
     "gameId": "4a319813-82f1-11eb-a232-00155dbd7607",
     "game": "Subnautica: Below Zero",
     "platform": "PS5",
@@ -4703,6 +5819,16 @@
     "productIds": [
       "c0768a14-82f0-11eb-a232-00155dbd7607",
       "showgames-9822"
+    ]
+  },
+  {
+    "gameId": "4a319813-82f1-11eb-a232-00155dbd7607",
+    "game": "Subnautica: Below Zero",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "eeacea47-82f2-11eb-a232-00155dbd7607",
+      "showgames-9820"
     ]
   },
   {
@@ -4796,6 +5922,46 @@
     ]
   },
   {
+    "gameId": "6d844822-02c1-11eb-a211-00155d03332b",
+    "game": "Immortals Fenyx Rising",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "1bfa1d65-02c3-11eb-a211-00155d03332b",
+      "showgames-9713"
+    ]
+  },
+  {
+    "gameId": "6d844822-02c1-11eb-a211-00155d03332b",
+    "game": "Immortals Fenyx Rising",
+    "platform": "Xbox One",
+    "name": "Limited Edition",
+    "productIds": [
+      "9ab71015-02c3-11eb-a211-00155d03332b",
+      "showgames-9716"
+    ]
+  },
+  {
+    "gameId": "6d844822-02c1-11eb-a211-00155d03332b",
+    "game": "Immortals Fenyx Rising",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "1bfa1d65-02c3-11eb-a211-00155d03332b",
+      "showgames-9713"
+    ]
+  },
+  {
+    "gameId": "6d844822-02c1-11eb-a211-00155d03332b",
+    "game": "Immortals Fenyx Rising",
+    "platform": "Xbox Series X",
+    "name": "Limited Edition",
+    "productIds": [
+      "9ab71015-02c3-11eb-a211-00155d03332b",
+      "showgames-9716"
+    ]
+  },
+  {
     "gameId": "790fe433-63e7-11ed-9056-00155d8ed209",
     "game": "Kena: Bridge of Spirits",
     "platform": "PS4",
@@ -4813,6 +5979,16 @@
     "productIds": [
       "7f2a2e14-1467-11ec-8ee8-00155d8ed20c",
       "showgames-10230"
+    ]
+  },
+  {
+    "gameId": "7f2a2e14-1467-11ec-8ee8-00155d8ed20c",
+    "game": "Tiny Tina’s Wonderlands",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "1dda6b03-1468-11ec-8ee8-00155d8ed20c",
+      "showgames-10301"
     ]
   },
   {
@@ -4838,6 +6014,16 @@
     ]
   },
   {
+    "gameId": "add58935-738f-11e8-9547-00155d03330d",
+    "game": "Sekiro: Shadows Die Twice",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "094d395a-7390-11e8-9547-00155d03330d",
+      "showgames-7915"
+    ]
+  },
+  {
     "gameId": "b46f8175-60aa-11e9-a206-00155d03332b",
     "game": "Star Wars Jedi: Fallen Order",
     "platform": "PS4",
@@ -4858,6 +6044,16 @@
     ]
   },
   {
+    "gameId": "ba29d9c1-2e47-11e8-9dc5-00155d03330d",
+    "game": "Dark Souls Remastered",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "1c4c6809-2e48-11e8-9dc5-00155d03330d",
+      "showgames-7663"
+    ]
+  },
+  {
     "gameId": "bb37ee4c-8e83-11e9-a20b-00155df1b805",
     "game": "DOOM Eternal",
     "platform": "PS4",
@@ -4866,6 +6062,26 @@
       "bb37ee4c-8e83-11e9-a20b-00155df1b805",
       "showgames-12322",
       "showgames-8658"
+    ]
+  },
+  {
+    "gameId": "bb37ee4c-8e83-11e9-a20b-00155df1b805",
+    "game": "DOOM Eternal",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "0a54a7a4-8e84-11e9-a20b-00155df1b805",
+      "showgames-8659"
+    ]
+  },
+  {
+    "gameId": "bb738167-b90c-11eb-a265-00155d42eb15",
+    "game": "Sniper: Ghost Warrior Contracts 2",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "284b4006-b90d-11eb-a265-00155d42eb15",
+      "showgames-9842"
     ]
   },
   {
@@ -4879,6 +6095,16 @@
     ]
   },
   {
+    "gameId": "c741a04e-1c45-11ec-8ef0-00155d8ed20b",
+    "game": "Insurgency: Sandstorm",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "86d60781-1c46-11ec-8ef0-00155d8ed20b",
+      "showgames-7811"
+    ]
+  },
+  {
     "gameId": "cc759246-7614-11e9-a208-00155df1b805",
     "game": "Tom Clancy’s Ghost Recon Breakpoint",
     "platform": "PS4",
@@ -4886,6 +6112,16 @@
     "productIds": [
       "cc759246-7614-11e9-a208-00155df1b805",
       "showgames-8738"
+    ]
+  },
+  {
+    "gameId": "cc759246-7614-11e9-a208-00155df1b805",
+    "game": "Tom Clancy’s Ghost Recon Breakpoint",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "026d58e0-7615-11e9-a208-00155df1b805",
+      "showgames-8634"
     ]
   },
   {
@@ -4919,6 +6155,26 @@
     ]
   },
   {
+    "gameId": "e388d027-d002-11eb-a27c-00155dd2ff2c",
+    "game": "The Dark Pictures: House of Ashes",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "0cd27890-d005-11eb-a27c-00155dd2ff2c",
+      "showgames-10096"
+    ]
+  },
+  {
+    "gameId": "e388d027-d002-11eb-a27c-00155dd2ff2c",
+    "game": "The Dark Pictures: House of Ashes",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "0cd27890-d005-11eb-a27c-00155dd2ff2c",
+      "showgames-10096"
+    ]
+  },
+  {
     "gameId": "f18de359-a3f3-11e7-938d-00155d03330d",
     "game": "The Sims 4",
     "platform": "PS4",
@@ -4926,6 +6182,16 @@
     "productIds": [
       "f18de359-a3f3-11e7-938d-00155d03330d",
       "showgames-7045"
+    ]
+  },
+  {
+    "gameId": "f18de359-a3f3-11e7-938d-00155d03330d",
+    "game": "The Sims 4",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "08053a47-a3f5-11e7-938d-00155d03330d",
+      "showgames-7046"
     ]
   },
   {
@@ -4939,6 +6205,16 @@
     ]
   },
   {
+    "gameId": "f4235eee-6c45-11e7-a4eb-00155d03330d",
+    "game": "Middle-earth: Shadow of War",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "30fe1919-6c46-11e7-a4eb-00155d03330d",
+      "showgames-6743"
+    ]
+  },
+  {
     "gameId": "f431e2b8-8b22-11e9-a20b-00155d03332b",
     "game": "Far Cry 4 + Far Cry 5",
     "platform": "PS4",
@@ -4946,6 +6222,16 @@
     "productIds": [
       "f431e2b8-8b22-11e9-a20b-00155d03332b",
       "showgames-8594"
+    ]
+  },
+  {
+    "gameId": "f431e2b8-8b22-11e9-a20b-00155d03332b",
+    "game": "Far Cry 4 + Far Cry 5",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "63e4838f-8b23-11e9-a20b-00155d03332b",
+      "showgames-8595"
     ]
   },
   {
@@ -4969,6 +6255,16 @@
     ]
   },
   {
+    "gameId": "fa437042-2d29-11e6-88f8-00155d033307",
+    "game": "Final Fantasy XV",
+    "platform": "Xbox One",
+    "name": "Day One Edition",
+    "productIds": [
+      "fa437043-2d29-11e6-88f8-00155d033307",
+      "showgames-899"
+    ]
+  },
+  {
     "gameId": "fb19d369-0ae8-11ec-a2af-00155dfc8232",
     "game": "Hot Wheels Unleashed",
     "platform": "PS4",
@@ -4986,6 +6282,46 @@
     "productIds": [
       "f2d18f4c-0ae3-11ec-a2af-00155dfc8232",
       "showgames-10057"
+    ]
+  },
+  {
+    "gameId": "fb19d369-0ae8-11ec-a2af-00155dfc8232",
+    "game": "Hot Wheels Unleashed",
+    "platform": "Xbox One",
+    "name": "Day One Edition",
+    "productIds": [
+      "8c513abb-0ae9-11ec-a2af-00155dfc8232",
+      "showgames-10043"
+    ]
+  },
+  {
+    "gameId": "fb19d369-0ae8-11ec-a2af-00155dfc8232",
+    "game": "Hot Wheels Unleashed",
+    "platform": "Xbox One",
+    "name": "Challenge Accepted Edition",
+    "productIds": [
+      "45d44b2b-0ae2-11ec-a2af-00155dfc8232",
+      "showgames-10060"
+    ]
+  },
+  {
+    "gameId": "fb19d369-0ae8-11ec-a2af-00155dfc8232",
+    "game": "Hot Wheels Unleashed",
+    "platform": "Xbox Series X",
+    "name": "Day One Edition",
+    "productIds": [
+      "8c513abb-0ae9-11ec-a2af-00155dfc8232",
+      "showgames-10043"
+    ]
+  },
+  {
+    "gameId": "fb19d369-0ae8-11ec-a2af-00155dfc8232",
+    "game": "Hot Wheels Unleashed",
+    "platform": "Xbox Series X",
+    "name": "Challenge Accepted Edition",
+    "productIds": [
+      "45d44b2b-0ae2-11ec-a2af-00155dfc8232",
+      "showgames-10060"
     ]
   },
   {
@@ -5009,6 +6345,16 @@
     ]
   },
   {
+    "gameId": "07993aa8-4921-11e9-a208-00155df1b805",
+    "game": "Assassin’s Creed III Remastered",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "74b501a7-4921-11e9-a208-00155df1b805",
+      "showgames-8870"
+    ]
+  },
+  {
     "gameId": "0b15dc32-da91-11e9-a20c-00155d03332b",
     "game": "Plants vs. Zombies: Battle for Neighborville",
     "platform": "PS4",
@@ -5026,6 +6372,26 @@
     "productIds": [
       "5841aa4d-0388-11eb-a211-00155d03332b",
       "showgames-10107"
+    ]
+  },
+  {
+    "gameId": "17a1d88c-e9ed-11eb-a290-00155dd2ff2c",
+    "game": "Riders Republic",
+    "platform": "Xbox One",
+    "name": "Freeride Edition",
+    "productIds": [
+      "7aeaa5f1-e9ed-11eb-a290-00155dd2ff2c",
+      "showgames-10108"
+    ]
+  },
+  {
+    "gameId": "17a1d88c-e9ed-11eb-a290-00155dd2ff2c",
+    "game": "Riders Republic",
+    "platform": "Xbox Series X",
+    "name": "Freeride Edition",
+    "productIds": [
+      "7aeaa5f1-e9ed-11eb-a290-00155dd2ff2c",
+      "showgames-10108"
     ]
   },
   {
@@ -5129,6 +6495,16 @@
     ]
   },
   {
+    "gameId": "3ae389ec-8e51-11e9-a20b-00155df1b805",
+    "game": "Watch Dogs: Legion",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "650f6b77-8e51-11e9-a20b-00155df1b805",
+      "showgames-8740"
+    ]
+  },
+  {
     "gameId": "6c4da810-b3ab-11eb-a261-00155d42eb15",
     "game": "Life is Strange: True Colors",
     "platform": "PS5",
@@ -5149,6 +6525,26 @@
     ]
   },
   {
+    "gameId": "6c4da810-b3ab-11eb-a261-00155d42eb15",
+    "game": "Life is Strange: True Colors",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "49540551-b3ac-11eb-a261-00155d42eb15",
+      "showgames-9983"
+    ]
+  },
+  {
+    "gameId": "6c4da810-b3ab-11eb-a261-00155d42eb15",
+    "game": "Life is Strange: True Colors",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "49540551-b3ac-11eb-a261-00155d42eb15",
+      "showgames-9983"
+    ]
+  },
+  {
     "gameId": "6d6024d5-9f94-11e8-9547-00155d03330d",
     "game": "Watch Dogs",
     "platform": "PS3",
@@ -5160,6 +6556,16 @@
     ]
   },
   {
+    "gameId": "6d6024d5-9f94-11e8-9547-00155d03330d",
+    "game": "Watch Dogs",
+    "platform": "Xbox One",
+    "name": "Полное издание",
+    "productIds": [
+      "decff95d-d53e-11e5-9810-00155d033307",
+      "showgames-1006"
+    ]
+  },
+  {
     "gameId": "6f462a58-f109-11eb-a296-00155dd2ff2c",
     "game": "Deathloop",
     "platform": "PS5",
@@ -5167,6 +6573,17 @@
     "productIds": [
       "6f462a58-f109-11eb-a296-00155dd2ff2c",
       "showgames-10006"
+    ]
+  },
+  {
+    "gameId": "7008611c-747a-11ed-9065-00155d8ed209",
+    "game": "Call of Duty: Infinite Warfare",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "6808d36b-4e16-11e6-81db-00155d033307",
+      "showgames-860",
+      "showgames-8871"
     ]
   },
   {
@@ -5210,6 +6627,16 @@
     ]
   },
   {
+    "gameId": "95bf4b30-76a9-11e9-a206-00155d03332b",
+    "game": "Wolfenstein: Youngblood",
+    "platform": "Xbox One",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "c689ba2f-76a9-11e9-a206-00155d03332b",
+      "showgames-8597"
+    ]
+  },
+  {
     "gameId": "98a3ba38-202f-11ec-8ef5-00155d8ed20b",
     "game": "Back 4 Blood",
     "platform": "PS4",
@@ -5240,6 +6667,26 @@
     ]
   },
   {
+    "gameId": "98a3ba38-202f-11ec-8ef5-00155d8ed20b",
+    "game": "Back 4 Blood",
+    "platform": "Xbox One",
+    "name": "Special Edition",
+    "productIds": [
+      "b295d978-45b8-11eb-a211-00155d03332b",
+      "showgames-10066"
+    ]
+  },
+  {
+    "gameId": "98a3ba38-202f-11ec-8ef5-00155d8ed20b",
+    "game": "Back 4 Blood",
+    "platform": "Xbox Series X",
+    "name": "Special Edition",
+    "productIds": [
+      "b295d978-45b8-11eb-a211-00155d03332b",
+      "showgames-10066"
+    ]
+  },
+  {
     "gameId": "9e231bf3-85ac-11e9-a20b-00155d03332b",
     "game": "The Outer Worlds",
     "platform": "PS4",
@@ -5247,6 +6694,16 @@
     "productIds": [
       "9e231bf3-85ac-11e9-a20b-00155d03332b",
       "showgames-8786"
+    ]
+  },
+  {
+    "gameId": "9e231bf3-85ac-11e9-a20b-00155d03332b",
+    "game": "The Outer Worlds",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "e0e114f8-85ac-11e9-a20b-00155d03332b",
+      "showgames-8787"
     ]
   },
   {
@@ -5280,6 +6737,26 @@
     ]
   },
   {
+    "gameId": "d49aacd9-ac4d-11ea-a210-00155d03332b",
+    "game": "Hitman 3",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "27930e41-3a7e-11eb-a211-00155d03332b",
+      "showgames-9736"
+    ]
+  },
+  {
+    "gameId": "d49aacd9-ac4d-11ea-a210-00155d03332b",
+    "game": "Hitman 3",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "27930e41-3a7e-11eb-a211-00155d03332b",
+      "showgames-9736"
+    ]
+  },
+  {
     "gameId": "d6d0be37-5faa-11e7-9028-00155d03330d",
     "game": "Wolfenstein II: The New Colossus",
     "platform": "PS4",
@@ -5287,6 +6764,16 @@
     "productIds": [
       "d6d0be37-5faa-11e7-9028-00155d03330d",
       "showgames-6982"
+    ]
+  },
+  {
+    "gameId": "d6d0be37-5faa-11e7-9028-00155d03330d",
+    "game": "Wolfenstein II: The New Colossus",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "9b23792e-62df-11e7-91f6-00155d03330d",
+      "showgames-6983"
     ]
   },
   {
@@ -5320,6 +6807,26 @@
     ]
   },
   {
+    "gameId": "e1154e01-7710-11eb-a225-00155d42eb06",
+    "game": "Tom Clancy's Rainbow Six Siege",
+    "platform": "Xbox One",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "1e725a04-7711-11eb-a225-00155d42eb06",
+      "showgames-9781"
+    ]
+  },
+  {
+    "gameId": "e1154e01-7710-11eb-a225-00155d42eb06",
+    "game": "Tom Clancy's Rainbow Six Siege",
+    "platform": "Xbox Series X",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "1e725a04-7711-11eb-a225-00155d42eb06",
+      "showgames-9781"
+    ]
+  },
+  {
     "gameId": "06421153-8032-11e9-a20a-00155d03332b",
     "game": "Team Sonic Racing",
     "platform": "PS4",
@@ -5327,6 +6834,16 @@
     "productIds": [
       "06421153-8032-11e9-a20a-00155d03332b",
       "showgames-7927"
+    ]
+  },
+  {
+    "gameId": "069be3ab-721d-11e5-9610-00155d03361b",
+    "game": "The Crew",
+    "platform": "Xbox One",
+    "name": "Wild Run Edition",
+    "productIds": [
+      "069be3ad-721d-11e5-9610-00155d03361b",
+      "showgames-863"
     ]
   },
   {
@@ -5347,6 +6864,16 @@
     "productIds": [
       "099ff661-9bac-11e8-9547-00155d03330d",
       "showgames-7816"
+    ]
+  },
+  {
+    "gameId": "099ff661-9bac-11e8-9547-00155d03330d",
+    "game": "Spyro Reignited Trilogy",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "5cdde89f-9bac-11e8-9547-00155d03330d",
+      "showgames-7817"
     ]
   },
   {
@@ -5420,6 +6947,16 @@
     ]
   },
   {
+    "gameId": "8ec1ef09-35b4-11e5-bd2e-00155d03361b",
+    "game": "Dishonored",
+    "platform": "Xbox One",
+    "name": "Definitive Edition",
+    "productIds": [
+      "8ec1ef0a-35b4-11e5-bd2e-00155d03361b",
+      "showgames-879"
+    ]
+  },
+  {
     "gameId": "96e97691-6b85-11e8-9547-00155d03330d",
     "game": "Code Vein",
     "platform": "PS4",
@@ -5427,6 +6964,16 @@
     "productIds": [
       "96e97691-6b85-11e8-9547-00155d03330d",
       "showgames-7791"
+    ]
+  },
+  {
+    "gameId": "96e97691-6b85-11e8-9547-00155d03330d",
+    "game": "Code Vein",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "55db4aa5-6b86-11e8-9547-00155d03330d",
+      "showgames-7792"
     ]
   },
   {
@@ -5447,6 +6994,16 @@
     "productIds": [
       "ad86e3cf-e29c-11e6-ab51-00155d03330d",
       "showgames-6546"
+    ]
+  },
+  {
+    "gameId": "ad86e3cf-e29c-11e6-ab51-00155d03330d",
+    "game": "For Honor",
+    "platform": "Xbox One",
+    "name": "Gold Edition",
+    "productIds": [
+      "6cc1eade-391b-11e6-8027-00155d033307",
+      "showgames-900"
     ]
   },
   {
@@ -5620,6 +7177,16 @@
     ]
   },
   {
+    "gameId": "c49bb17c-cc60-11e8-a206-00155df1b805",
+    "game": "Darksiders III",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "87dc1371-cd2c-11e8-a206-00155df1b805",
+      "showgames-7931"
+    ]
+  },
+  {
     "gameId": "d426a8aa-40a1-11e5-b059-00155d03361b",
     "game": "Mirror's Edge Catalyst",
     "platform": "PS4",
@@ -5657,6 +7224,16 @@
     "productIds": [
       "dd2d1b62-5fa6-11e7-9028-00155d03330d",
       "showgames-10512"
+    ]
+  },
+  {
+    "gameId": "dd2d1b62-5fa6-11e7-9028-00155d03330d",
+    "game": "The Evil Within 2",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "97617a9f-5fa8-11e7-9028-00155d03330d",
+      "showgames-6986"
     ]
   },
   {
@@ -5731,6 +7308,16 @@
     ]
   },
   {
+    "gameId": "4459bcb5-c5f3-11e8-a206-00155df1b805",
+    "game": "Call of Duty: Black Ops 4",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "e5ec9bac-2729-11e8-9dc5-00155d03330d",
+      "showgames-7797"
+    ]
+  },
+  {
     "gameId": "481e51f9-359d-11e5-bd2e-00155d03361b",
     "game": "Destiny: The Taken King",
     "platform": "PS4",
@@ -5738,6 +7325,16 @@
     "productIds": [
       "481e51f9-359d-11e5-bd2e-00155d03361b",
       "showgames-2412"
+    ]
+  },
+  {
+    "gameId": "481e51f9-359d-11e5-bd2e-00155d03361b",
+    "game": "Destiny: The Taken King",
+    "platform": "Xbox One",
+    "name": "Legendary Edition",
+    "productIds": [
+      "481e51fb-359d-11e5-bd2e-00155d03361b",
+      "showgames-874"
     ]
   },
   {
@@ -5788,6 +7385,16 @@
     "productIds": [
       "80af5866-bd35-11f1-94c9-0050569d21a3",
       "showgames-12779"
+    ]
+  },
+  {
+    "gameId": "80af5866-bd35-11f1-94c9-0050569d21a3",
+    "game": "Call Of Duty: Modern Warfare 4",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "96321669-bd35-11f1-94c9-0050569d21a3",
+      "showgames-12789"
     ]
   },
   {
@@ -5871,6 +7478,16 @@
     ]
   },
   {
+    "gameId": "b4da712a-fa9e-11e4-9188-00155d03361b",
+    "game": "The Elder Scrolls Online: Tamriel Unlimited",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "b4da712b-fa9e-11e4-9188-00155d03361b",
+      "showgames-885"
+    ]
+  },
+  {
     "gameId": "b6d8b6fa-526b-11ec-8f3d-00155d8ed20b",
     "game": "Chorus",
     "platform": "PS4",
@@ -5901,6 +7518,26 @@
     ]
   },
   {
+    "gameId": "b9799358-a3f8-11eb-a253-00155d42eb15",
+    "game": "Necromunda: Hired Gun",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "ab77e7a1-a3f9-11eb-a253-00155d42eb15",
+      "showgames-9890"
+    ]
+  },
+  {
+    "gameId": "b9799358-a3f8-11eb-a253-00155d42eb15",
+    "game": "Necromunda: Hired Gun",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "ab77e7a1-a3f9-11eb-a253-00155d42eb15",
+      "showgames-9890"
+    ]
+  },
+  {
     "gameId": "bbced55f-ffe8-11e7-80a7-00155d03330d",
     "game": "Dissidia Final Fantasy NT",
     "platform": "PS4",
@@ -5918,6 +7555,16 @@
     "productIds": [
       "bf52a52c-a499-11e5-9dc3-001e6728a5a4",
       "showgames-2370"
+    ]
+  },
+  {
+    "gameId": "bf52a52c-a499-11e5-9dc3-001e6728a5a4",
+    "game": "Alien: Isolation",
+    "platform": "Xbox One",
+    "name": "Nostromo Edition",
+    "productIds": [
+      "b9e37cda-28c9-11e4-9f9e-00155d031202",
+      "showgames-840"
     ]
   },
   {
@@ -5939,6 +7586,16 @@
       "c4ad56be-5fba-11e8-9547-00155d03330d",
       "showgames-12288",
       "showgames-7835"
+    ]
+  },
+  {
+    "gameId": "c4ad56be-5fba-11e8-9547-00155d03330d",
+    "game": "Battlefield V",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "35e6a0a5-5fbb-11e8-9547-00155d03330d",
+      "showgames-7836"
     ]
   },
   {
@@ -5969,6 +7626,16 @@
     "productIds": [
       "e34b07b7-5999-11ed-9045-00155d8ed209",
       "showgames-10546"
+    ]
+  },
+  {
+    "gameId": "e5b3ce6f-742f-11e8-9547-00155d03330d",
+    "game": "FIFA 19",
+    "platform": "Xbox 360",
+    "name": "LEGACY EDITION",
+    "productIds": [
+      "d146c3cd-c18d-11e8-a200-00155df1b806",
+      "showgames-8158"
     ]
   },
   {
@@ -6022,6 +7689,16 @@
     ]
   },
   {
+    "gameId": "b9e37cd8-28c9-11e4-9f9e-00155d031202",
+    "game": "Evolve",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "b9e37cd9-28c9-11e4-9f9e-00155d031202",
+      "showgames-888"
+    ]
+  },
+  {
     "gameId": "ec8ed59f-1ac8-11e8-80a7-00155d03330d",
     "game": "Titan Quest",
     "platform": "PS4",
@@ -6049,6 +7726,16 @@
     "productIds": [
       "25c86531-3f70-11e3-8900-00155d031202",
       "showgames-2466"
+    ]
+  },
+  {
+    "gameId": "25c86531-3f70-11e3-8900-00155d031202",
+    "game": "Injustice: Gods Among Us",
+    "platform": "Xbox 360",
+    "name": "Ultimate Edition",
+    "productIds": [
+      "showgames-199",
+      "showgames-8380"
     ]
   },
   {
@@ -6102,6 +7789,16 @@
     ]
   },
   {
+    "gameId": "edbd4b18-783f-11e8-9547-00155d03330d",
+    "game": "Anthem",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "37f03f0e-7840-11e8-9547-00155d03330d",
+      "showgames-7913"
+    ]
+  },
+  {
     "gameId": "fe133395-da79-11e3-844d-00155d031202",
     "game": "Wolfenstein: The New Order",
     "platform": "PS4",
@@ -6112,6 +7809,16 @@
     ]
   },
   {
+    "gameId": "fe133395-da79-11e3-844d-00155d031202",
+    "game": "Wolfenstein: The New Order",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "7d714cf3-743e-11e4-b22d-00155d031202",
+      "showgames-1007"
+    ]
+  },
+  {
     "gameId": "778908a5-d7be-11e6-9084-00155d03330d",
     "game": "Mass Effect: Andromeda",
     "platform": "PS4",
@@ -6119,6 +7826,226 @@
     "productIds": [
       "778908a5-d7be-11e6-9084-00155d03330d",
       "showgames-2486"
+    ]
+  },
+  {
+    "gameId": "811e072c-4aa2-11f1-944e-0050569d0a4d",
+    "game": "Forza Horizon 6",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "811e072c-4aa2-11f1-944e-0050569d0a4d",
+      "showgames-12491"
+    ]
+  },
+  {
+    "gameId": "86a7643e-bd35-11f1-94c9-0050569d21a3",
+    "game": "Gears of War E-Day",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "86a7643e-bd35-11f1-94c9-0050569d21a3",
+      "showgames-12766"
+    ]
+  },
+  {
+    "gameId": "ca657ff3-b059-11ef-92a7-0050569d21a3",
+    "game": "Sea of Thieves",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "cd588db3-06f0-11e8-80a7-00155d03330d",
+      "showgames-7600"
+    ]
+  },
+  {
+    "gameId": "4dee4785-42fa-11ed-902e-00155d8ed209",
+    "game": "Forza Horizon 3",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "4dee4785-42fa-11ed-902e-00155d8ed209",
+      "showgames-7932"
+    ]
+  },
+  {
+    "gameId": "8009b4ae-178c-11ed-8ffd-00155d8ed209",
+    "game": "Mafia III",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "8009b4ae-178c-11ed-8ffd-00155d8ed209",
+      "showgames-931"
+    ]
+  },
+  {
+    "gameId": "6642d198-b97d-11ed-90ac-00155d8ed209",
+    "game": "One Piece Odyssey",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "6642d198-b97d-11ed-90ac-00155d8ed209",
+      "showgames-10668"
+    ]
+  },
+  {
+    "gameId": "c52fe405-79b7-11e8-9547-00155d03330d",
+    "game": "Forza Horizon 4",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "c52fe405-79b7-11e8-9547-00155d03330d",
+      "showgames-7934"
+    ]
+  },
+  {
+    "gameId": "89454039-299d-11e4-9f9e-00155d031202",
+    "game": "The Evil Within",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "89454039-299d-11e4-9f9e-00155d031202",
+      "showgames-887"
+    ]
+  },
+  {
+    "gameId": "fe5e93e0-5de0-11ea-a20f-00155d03332b",
+    "game": "Bleeding Edge",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "fe5e93e0-5de0-11ea-a20f-00155d03332b",
+      "showgames-9230"
+    ]
+  },
+  {
+    "gameId": "310bc781-0ad0-11ec-a2b0-00155dbd7634",
+    "game": "Halo Infinite",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "310bc781-0ad0-11ec-a2b0-00155dbd7634",
+      "showgames-9473"
+    ]
+  },
+  {
+    "gameId": "310bc781-0ad0-11ec-a2b0-00155dbd7634",
+    "game": "Halo Infinite",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "310bc781-0ad0-11ec-a2b0-00155dbd7634",
+      "showgames-9473"
+    ]
+  },
+  {
+    "gameId": "35f6adec-a726-11e7-938d-00155d03330d",
+    "game": "South Park: The Fractured But Whole",
+    "platform": "Xbox One",
+    "name": "Deluxe Edition",
+    "productIds": [
+      "6cc1eae0-391b-11e6-8027-00155d033307",
+      "showgames-7253"
+    ]
+  },
+  {
+    "gameId": "ee5c94d3-9caa-11e6-9a79-00155d03330d",
+    "game": "Dead Rising 4",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "ee5c94d3-9caa-11e6-9a79-00155d03330d",
+      "showgames-871"
+    ]
+  },
+  {
+    "gameId": "4204adaa-dd16-11e6-a45c-00155d03330d",
+    "game": "Halo Wars 2",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "4204adaa-dd16-11e6-a45c-00155d03330d",
+      "showgames-913"
+    ]
+  },
+  {
+    "gameId": "b4646821-4e4a-11e6-81db-00155d033307",
+    "game": "Killer Instinct",
+    "platform": "Xbox One",
+    "name": "Definitive Edition",
+    "productIds": [
+      "b4646821-4e4a-11e6-81db-00155d033307",
+      "showgames-6811"
+    ]
+  },
+  {
+    "gameId": "d074c2c9-b059-11ef-92a7-0050569d21a3",
+    "game": "Gears of War 4",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "b464681f-4e4a-11e6-81db-00155d033307",
+      "showgames-906"
+    ]
+  },
+  {
+    "gameId": "5befa2c5-00a8-11e8-80a7-00155d03330d",
+    "game": "Life is Strange: Before the Storm",
+    "platform": "Xbox One",
+    "name": "Особое издание",
+    "productIds": [
+      "5befa2c5-00a8-11e8-80a7-00155d03330d",
+      "showgames-7643"
+    ]
+  },
+  {
+    "gameId": "c3bc1d0b-1ca5-11eb-a211-00155d03332b",
+    "game": "Gears Tactics",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "c3bc1d0b-1ca5-11eb-a211-00155d03332b",
+      "showgames-9606"
+    ]
+  },
+  {
+    "gameId": "8b18cf6e-2129-11e5-83d8-00155d03361b",
+    "game": "Gears of War",
+    "platform": "Xbox One",
+    "name": "Ultimate Edition",
+    "productIds": [
+      "8b18cf6e-2129-11e5-83d8-00155d03361b",
+      "showgames-905"
+    ]
+  },
+  {
+    "gameId": "6d81dc10-414f-11e8-9dc5-00155d03330d",
+    "game": "Hitman",
+    "platform": "Xbox One",
+    "name": "Definitive Edition",
+    "productIds": [
+      "6d81dc10-414f-11e8-9dc5-00155d03330d",
+      "showgames-9904"
+    ]
+  },
+  {
+    "gameId": "showgames-7659",
+    "game": "Call of Duty: Advanced Warfare",
+    "platform": "Xbox One",
+    "name": "стандартное издание",
+    "productIds": [
+      "showgames-856",
+      "showgames-95"
+    ]
+  },
+  {
+    "gameId": "showgames-1510",
+    "game": "Fallout 3",
+    "platform": "Xbox 360",
+    "name": "Game of the Year Edition",
+    "productIds": [
+      "showgames-441",
+      "showgames-9321"
     ]
   },
   {
@@ -6142,6 +8069,16 @@
     ]
   },
   {
+    "gameId": "showgames-1734",
+    "game": "Tekken 6",
+    "platform": "Xbox 360",
+    "name": "стандартное издание",
+    "productIds": [
+      "showgames-325",
+      "showgames-9595"
+    ]
+  },
+  {
     "gameId": "showgames-8107",
     "game": "Killzone: Shadow Fall",
     "platform": "PS4",
@@ -6152,6 +8089,16 @@
     ]
   },
   {
+    "gameId": "showgames-11529",
+    "game": "RiMS Racing",
+    "platform": "Xbox Series X",
+    "name": "стандартное издание",
+    "productIds": [
+      "showgames-10746",
+      "showgames-11537"
+    ]
+  },
+  {
     "gameId": "showgames-8110",
     "game": "Uncharted 4: A Thief's End",
     "platform": "PS4",
@@ -6159,6 +8106,16 @@
     "productIds": [
       "showgames-2583",
       "showgames-8110"
+    ]
+  },
+  {
+    "gameId": "showgames-207",
+    "game": "Kinect Sports",
+    "platform": "Xbox 360",
+    "name": "стандартное издание",
+    "productIds": [
+      "showgames-207",
+      "showgames-208"
     ]
   }
 ]

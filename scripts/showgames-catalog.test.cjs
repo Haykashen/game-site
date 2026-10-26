@@ -5,6 +5,14 @@ const {deduplicateDocument,expandProducts}=require('./lib/edition-dedup.cjs');
 const {mergeShowgames}=require('./merge-showgames-catalog.cjs');
 const dns='https://c.dns-shop.ru/thumb/st1/fit/500/500/a/front.jpg.webp';
 const scan='https://showgames.ru/image/cache/catalog/covers/ps5/front-855x1000.jpg';
+test('shared Xbox SKUs receive stable edition IDs for each generation',()=>{
+  const product={id:'showgames-42',sourceProvider:'showgames',name:'Standard',images:[scan],interfaceLanguages:['русский']};
+  const doc={warnings:[],games:[{id:'source',title:'Example',productIds:[product.id],platforms:['Xbox 360','Xbox One','Xbox Series X'].map(name=>({name,editions:[{...product,platforms:[name]}]}))}]};
+  const plan=planCatalog(doc,[],[]);
+  assert.deepEqual(plan.createEditions.map(e=>e.id),['showgames-42-xbox-360','showgames-42-xbox-one','showgames-42-xbox-series-x']);
+  assert.equal(new Set(plan.createEditions.map(e=>e.gameId)).size,1);
+  assert.ok(plan.createEditions.every(e=>e.dnsProductId===''));
+});
 const document={warnings:[],games:[{id:'source',title:'Example',productIds:['sku','showgames-10'],platforms:[{name:'PS5',editions:[
   {id:'sku',name:'Standard',platforms:['PS5'],images:[dns],interfaceLanguages:['русский']},
   {id:'showgames-10',sourceProvider:'showgames',sourceProductId:'10',name:'Standard',platforms:['PS5'],images:[scan],interfaceLanguages:['русский']},
