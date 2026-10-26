@@ -13,6 +13,7 @@ import type {
 } from '@prisma/client';
 import {
   fromMinorUnits,
+  type AdminMarketEntryDto,
   type BidDto,
   type CopyDto,
   type DealDto,
@@ -182,6 +183,26 @@ export function serializeMarketEntry(entry: MarketEntryWithRelations): MarketEnt
     soldAt: entry.soldAt?.toISOString() ?? null,
     createdAt: entry.createdAt.toISOString(),
     updatedAt: entry.updatedAt.toISOString(),
+  };
+}
+
+export const adminMarketEntryInclude = {
+  ...marketEntryInclude,
+  moderator: { select: userSelect },
+} satisfies Prisma.MarketEntryInclude;
+
+export type AdminMarketEntryWithRelations = Prisma.MarketEntryGetPayload<{
+  include: typeof adminMarketEntryInclude;
+}>;
+
+export function serializeAdminMarketEntry(
+  entry: AdminMarketEntryWithRelations,
+): AdminMarketEntryDto {
+  return {
+    ...serializeMarketEntry(entry),
+    moderationNote: entry.moderationNote,
+    moderatedAt: entry.moderatedAt?.toISOString() ?? null,
+    moderator: entry.moderator ? serializePublicUser(entry.moderator) : null,
   };
 }
 

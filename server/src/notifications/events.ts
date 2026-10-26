@@ -93,6 +93,40 @@ export async function notifyNewEntry(
   await createNotifications(db, rows);
 }
 
+/** Tells the author whether a new lot passed pre-publication review. */
+export async function notifyEntryModerated(
+  db: Db,
+  params: {
+    entry: EntryNotificationTarget;
+    status: 'visible' | 'hidden' | 'removed';
+    note: string | null;
+  },
+): Promise<void> {
+  const approved = params.status === 'visible';
+  const removed = params.status === 'removed';
+  const reason = params.note ? ` Причина: ${params.note}` : '';
+
+  await createNotifications(db, [
+    {
+      userId: params.entry.authorId,
+      type: approved ? 'entry_approved' : 'entry_rejected',
+      title: approved
+        ? 'Лот прошёл проверку'
+        : removed
+          ? 'Лот снят с публикации'
+          : 'Лот не прошёл проверку',
+      message: approved
+        ? `Лот «${params.entry.title}» одобрен и опубликован на маркете.`
+        : removed
+          ? `Лот «${params.entry.title}» снят с публикации.${reason}`
+          : `Лот «${params.entry.title}» не опубликован.${reason}`,
+      marketEntryId: params.entry.id,
+      gameId: params.entry.gameId,
+      dedupeKey: `entry-moderation:${params.entry.id}:${params.entry.version}:${params.status}`,
+    },
+  ]);
+}
+
 /** Notifies the seller, the previous leader and everyone following the lot. */
 export async function notifyNewBid(
   db: Db,

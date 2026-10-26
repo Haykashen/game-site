@@ -40,7 +40,12 @@ export function GameMarketSection({
   onOpenDiscussions,
 }: GameMarketSectionProps) {
   const editionById = new Map(editions.map((edition) => [edition.id, edition]));
-  const gameEntries = entries.filter((entry) => entry.gameId === game.id);
+  const gameEntries = entries.filter(
+    (entry) =>
+      entry.gameId === game.id &&
+      (entry.moderationStatus === undefined ||
+        entry.moderationStatus === 'visible'),
+  );
   const scopedEntries = selectedEditionId
     ? gameEntries.filter((entry) => entry.editionId === selectedEditionId || (entry.itemType !== 'game' && entry.editionId === null))
     : gameEntries;

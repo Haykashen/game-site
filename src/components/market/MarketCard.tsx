@@ -35,8 +35,19 @@ export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: Ma
   const isUpcoming = isAuction && isAuctionUpcoming(entry.startsAt);
   const listingType = isAuction ? null : entry.listingType;
   const kindLabel = isAuction ? 'Аукцион' : listingTypeLabel(listingType);
+  const moderationLabel =
+    entry.moderationStatus === 'pending'
+      ? 'На проверке'
+      : entry.moderationStatus === 'hidden' ||
+          entry.moderationStatus === 'removed'
+        ? 'Скрыто'
+        : '';
   const statusLabel =
     entry.status === 'sold' ? 'Продано' : entry.status === 'closed' ? 'Снято' : '';
+  const badgeLabel = moderationLabel || statusLabel;
+  const badgeClass = moderationLabel
+    ? `is-${entry.moderationStatus}`
+    : `is-${entry.status}`;
   const KindIcon = isAuction
     ? Gavel
     : listingType === 'purchase'
@@ -74,7 +85,10 @@ export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: Ma
       className={cx(
         'market-card',
         isAuction && 'market-card--auction',
-        entry.status !== 'active' && 'market-card--inactive',
+        (entry.status !== 'active' ||
+          entry.moderationStatus === 'hidden' ||
+          entry.moderationStatus === 'removed') &&
+          'market-card--inactive',
       )}
       role="button"
       tabIndex={0}
@@ -127,9 +141,9 @@ export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: Ma
         </span>
         <span className="market-card__top-right">
           {isOwn && <span className="market-card__own">Моё</span>}
-          {statusLabel && (
-            <span className={cx('market-card__status', `is-${entry.status}`)}>
-              {statusLabel}
+          {badgeLabel && (
+            <span className={cx('market-card__status', badgeClass)}>
+              {badgeLabel}
             </span>
           )}
           <ArrowUpRight className="market-card__arrow" size={17} aria-hidden="true" />

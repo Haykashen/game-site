@@ -21,6 +21,7 @@ import { registerGameRatingRoutes } from './catalog/ratings.js';
 import { registerCollectionRoutes } from './collection/routes.js';
 import { registerDealRoutes } from './deals/routes.js';
 import { registerDiscussionRoutes } from './discussions/routes.js';
+import { registerMarketAdminRoutes } from './market/adminRoutes.js';
 import { registerMarketRoutes } from './market/routes.js';
 import { registerNewsRoutes } from './news/routes.js';
 import { registerNotificationRoutes } from './notifications/routes.js';
@@ -243,6 +244,7 @@ export async function buildApp() {
   registerGameRatingRoutes(app);
   registerCollectionRoutes(app);
   registerMarketRoutes(app);
+  registerMarketAdminRoutes(app);
   registerBidRoutes(app);
   registerDealRoutes(app);
   registerDiscussionRoutes(app);

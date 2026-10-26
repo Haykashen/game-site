@@ -1,7 +1,6 @@
 import type { Prisma } from '@prisma/client';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import {
-  adminMarketModerationSchema,
   adminReportsQuerySchema,
   adminUserStatusSchema,
   myReportsQuerySchema,
@@ -16,9 +15,7 @@ import { isPrismaError } from '../lib/prismaErrors.js';
 import { parse } from '../lib/validation.js';
 import {
   getUserProfile,
-  marketEntryInclude,
   reportInclude,
-  serializeMarketEntry,
   serializeReport,
 } from '../lib/serializers.js';
 
@@ -298,36 +295,6 @@ export function registerReportRoutes(app: FastifyInstance): void {
       const input = parse(reportUpdateSchema, request.body);
       const report = await applyReportAction(app, request, id, input);
       return reply.send(report);
-    },
-  );
-
-  app.patch(
-    '/api/v1/admin/market/:id/moderation',
-    { preHandler: app.authenticate },
-    async (request, reply) => {
-      const moderator = requireRoles(request);
-      const { id } = request.params as { id: string };
-      const input = parse(adminMarketModerationSchema, request.body);
-
-      const entry = await app.prisma.marketEntry
-        .update({
-          where: { id },
-          data: {
-            moderationStatus: input.moderationStatus,
-            moderationNote: input.note ?? null,
-            moderatedAt: new Date(),
-            moderatorId: moderator.id,
-          },
-          include: marketEntryInclude,
-        })
-        .catch((error: unknown) => {
-          if (isPrismaError(error, 'P2025')) return null;
-          throw error;
-        });
-
-      if (!entry) throw notFound('Объявление не найдено.');
-
-      return reply.send(serializeMarketEntry(entry));
     },
   );
 

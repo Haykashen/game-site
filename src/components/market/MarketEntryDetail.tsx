@@ -77,6 +77,11 @@ export function MarketEntryDetail({
   const [tradeMessage, setTradeMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isAuction = entry.kind === 'auction';
+  const isPending = entry.moderationStatus === 'pending';
+  const isHiddenByModeration =
+    entry.moderationStatus === 'hidden' || entry.moderationStatus === 'removed';
+  const isPubliclyVisible =
+    entry.moderationStatus === undefined || entry.moderationStatus === 'visible';
   const isOver = isAuction && isAuctionOver(entry.endsAt);
   const isUpcoming = isAuction && isAuctionUpcoming(entry.startsAt);
   const listingType = isAuction ? null : entry.listingType;
@@ -84,10 +89,12 @@ export function MarketEntryDetail({
   const canBid =
     isAuction &&
     !isOwn &&
+    isPubliclyVisible &&
     entry.status === 'active' &&
     !isOver &&
     !isUpcoming;
-  const canBuy = !isAuction && !isOwn && entry.status === 'active';
+  const canBuy =
+    !isAuction && !isOwn && isPubliclyVisible && entry.status === 'active';
   const buyLabel =
     listingType === 'purchase'
       ? 'Предложить экземпляр'
@@ -116,22 +123,25 @@ export function MarketEntryDetail({
       : listingType === 'exchange'
         ? 'Оценка'
         : 'Цена';
-  const status =
-    entry.status === 'sold'
-      ? 'Продано'
-      : entry.status === 'closed'
-        ? 'Снято с продажи'
-        : isAuction
-          ? isOver
-            ? 'Торги завершены'
-            : isUpcoming
-              ? 'Скоро откроется'
-              : 'Идут торги'
-          : listingType === 'purchase'
-            ? 'Куплю'
-            : listingType === 'exchange'
-              ? 'Обмен'
-              : 'В продаже';
+  const status = isPending
+    ? 'На проверке'
+    : isHiddenByModeration
+      ? 'Скрыто модератором'
+      : entry.status === 'sold'
+        ? 'Продано'
+        : entry.status === 'closed'
+          ? 'Снято с продажи'
+          : isAuction
+            ? isOver
+              ? 'Торги завершены'
+              : isUpcoming
+                ? 'Скоро откроется'
+                : 'Идут торги'
+            : listingType === 'purchase'
+              ? 'Куплю'
+              : listingType === 'exchange'
+                ? 'Обмен'
+                : 'В продаже';
   const auctionTimerLabel = isUpcoming
     ? formatAuctionStart(entry.startsAt)
     : formatAuctionEnd(entry.endsAt);
@@ -209,8 +219,16 @@ export function MarketEntryDetail({
             <span
               className={cx(
                 'meta-chip',
-                entry.status !== 'active' &&
-                  `market-status-chip market-status-chip--${entry.status}`,
+                (isPending ||
+                  isHiddenByModeration ||
+                  entry.status !== 'active') &&
+                  `market-status-chip market-status-chip--${
+                    isPending
+                      ? 'pending'
+                      : isHiddenByModeration
+                        ? entry.moderationStatus
+                        : entry.status
+                  }`,
               )}
             >
               {status}
@@ -225,7 +243,7 @@ export function MarketEntryDetail({
         </IconButton>
       </div>
 
-      {!isOwn && (
+      {!isOwn && isPubliclyVisible && (
         <div className="market-subscribe-row">
           <EntrySubscriptionButton entryId={entry.id} />
         </div>
@@ -237,22 +255,42 @@ export function MarketEntryDetail({
             <div>
               <span className="market-owner__kicker">Ваше объявление</span>
               <p className="market-owner__hint">
-                {entry.status === 'active'
-                  ? 'Видно всем в разделе. Можно отредактировать, снять или отметить проданным.'
-                  : 'Скрыто из общей ленты. Верните в продажу или удалите.'}
+                {isPending
+                  ? 'Лот отправлен на проверку. После одобрения администрацией он появится в общей ленте.'
+                  : isHiddenByModeration
+                    ? 'Объявление скрыто модератором и не показывается другим пользователям.'
+                    : entry.status === 'active'
+                      ? 'Видно всем в разделе. Можно отредактировать, снять или отметить проданным.'
+                      : 'Скрыто из общей ленты. Верните в продажу или удалите.'}
               </p>
-              {entry.moderationStatus && entry.moderationStatus !== 'visible' && (
-                <p className="market-form__error">
-                  Объявление скрыто модератором и не показывается другим пользователям.
+              {isPending && (
+                <p className="market-form__hint">
+                  Пока лот на проверке, другие пользователи не видят его и не
+                  могут делать ставки или открывать сделки.
                 </p>
               )}
             </div>
-            <span className={cx('market-owner__status', `is-${entry.status}`)}>
-              {entry.status === 'active'
-                ? 'Активно'
-                : entry.status === 'sold'
-                  ? 'Продано'
-                  : 'Снято'}
+            <span
+              className={cx(
+                'market-owner__status',
+                `is-${
+                  isPending
+                    ? 'pending'
+                    : isHiddenByModeration
+                      ? entry.moderationStatus
+                      : entry.status
+                }`,
+              )}
+            >
+              {isPending
+                ? 'На проверке'
+                : isHiddenByModeration
+                  ? 'Скрыто'
+                  : entry.status === 'active'
+                    ? 'Активно'
+                    : entry.status === 'sold'
+                      ? 'Продано'
+                      : 'Снято'}
             </span>
           </div>
 
@@ -262,37 +300,40 @@ export function MarketEntryDetail({
               Редактировать
             </button>
 
-            {entry.status === 'active' ? (
-              <>
-                {entry.kind === 'listing' ? (
+            {!isPending &&
+              (entry.status === 'active' ? (
+                <>
+                  {entry.kind === 'listing' ? (
+                    <button
+                      type="button"
+                      className="btn-secondary market-owner__btn"
+                      onClick={() => onSetStatus('sold')}
+                    >
+                      <CheckCircle2 size={15} aria-hidden="true" />
+                      Отметить проданным
+                    </button>
+                  ) : null}
                   <button
                     type="button"
                     className="btn-secondary market-owner__btn"
-                    onClick={() => onSetStatus('sold')}
+                    onClick={() => onSetStatus('closed')}
                   >
-                    <CheckCircle2 size={15} aria-hidden="true" />
-                    Отметить проданным
+                    <EyeOff size={15} aria-hidden="true" />
+                    {entry.kind === 'auction'
+                      ? 'Закрыть аукцион'
+                      : 'Снять с продажи'}
                   </button>
-                ) : null}
+                </>
+              ) : (
                 <button
                   type="button"
                   className="btn-secondary market-owner__btn"
-                  onClick={() => onSetStatus('closed')}
+                  onClick={() => onSetStatus('active')}
                 >
-                  <EyeOff size={15} aria-hidden="true" />
-                  {entry.kind === 'auction' ? 'Закрыть аукцион' : 'Снять с продажи'}
+                  <RotateCcw size={15} aria-hidden="true" />
+                  Вернуть в продажу
                 </button>
-              </>
-            ) : (
-              <button
-                type="button"
-                className="btn-secondary market-owner__btn"
-                onClick={() => onSetStatus('active')}
-              >
-                <RotateCcw size={15} aria-hidden="true" />
-                Вернуть в продажу
-              </button>
-            )}
+              ))}
 
             {isConfirmingDelete ? (
               <span className="market-owner__confirm">
@@ -341,7 +382,7 @@ export function MarketEntryDetail({
         )}
       </div>
 
-      {!isOwn && (isAuction || canBuy) && (
+      {!isOwn && isPubliclyVisible && (isAuction || canBuy) && (
         <section className="market-trade" aria-label="Сделка">
           <div className="market-trade__head">
             <div>

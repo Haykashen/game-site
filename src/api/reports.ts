@@ -1,8 +1,9 @@
 import type {
+  AdminMarketEntryDto,
   AdminMarketModerationInput,
+  AdminMarketQueueQuery,
   AdminReportsQuery,
   AdminUserStatusInput,
-  MarketEntryDto,
   MyReportsQuery,
   Paginated,
   ReportCreateInput,
@@ -62,11 +63,27 @@ export function updateAdminReport(
   );
 }
 
+export function listAdminMarketEntries(
+  params: Partial<AdminMarketQueueQuery> = {},
+): Promise<Paginated<AdminMarketEntryDto>> {
+  const query = new URLSearchParams();
+
+  if (params.status) query.set('status', params.status);
+  if (params.kind) query.set('kind', params.kind);
+  if (params.page) query.set('page', String(params.page));
+  if (params.pageSize) query.set('pageSize', String(params.pageSize));
+
+  const suffix = query.toString();
+  return apiRequest<Paginated<AdminMarketEntryDto>>(
+    `/api/v1/admin/market${suffix ? `?${suffix}` : ''}`,
+  );
+}
+
 export function updateMarketModeration(
   id: string,
   input: AdminMarketModerationInput,
-): Promise<MarketEntryDto> {
-  return apiRequest<MarketEntryDto>(
+): Promise<AdminMarketEntryDto> {
+  return apiRequest<AdminMarketEntryDto>(
     `/api/v1/admin/market/${encodeURIComponent(id)}/moderation`,
     { method: 'PATCH', body: input },
   );

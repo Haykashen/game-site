@@ -42,6 +42,8 @@ const NOTIFICATION_ICONS: Record<NotificationType, LucideIcon> = {
   entry_closed: EyeOff,
   entry_reopened: RotateCcw,
   entry_price_changed: Tag,
+  entry_approved: BadgeCheck,
+  entry_rejected: CircleX,
   deal_created: Handshake,
 };
 

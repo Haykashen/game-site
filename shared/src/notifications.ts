@@ -15,6 +15,8 @@ export const notificationTypeSchema = z.enum([
   'entry_closed',
   'entry_reopened',
   'entry_price_changed',
+  'entry_approved',
+  'entry_rejected',
   'deal_created',
 ]);
 

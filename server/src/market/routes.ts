@@ -23,7 +23,6 @@ import { parse } from '../lib/validation.js';
 import {
   notifyEntryPriceChanged,
   notifyEntryStatusChange,
-  notifyNewEntry,
 } from '../notifications/events.js';
 import { closeAuctionById, closeExpiredAuctions } from './auctionCloser.js';
 import { buildMarketOrderBy, buildMarketWhere } from './query.js';
@@ -175,7 +174,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
       if (!user) throw unauthorized();
 
       const input = parse(marketCreateSchema, request.body);
-      const game = await assertMarketTarget(app, input.gameId, input.editionId);
+      await assertMarketTarget(app, input.gameId, input.editionId);
 
       const photos = await storePhotoReferences(input.photos, 'market');
       const priceMinor = toMinorUnits(input.price);
@@ -202,6 +201,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
             priceMinor,
             description: input.description,
             status: 'active',
+            moderationStatus: 'pending',
             deliveryServices: deliveryServicesFromApi(input.deliveryServices),
             internationalShipping: input.internationalShipping ?? null,
             packagingPriceMinor:
@@ -219,16 +219,6 @@ export function registerMarketRoutes(app: FastifyInstance): void {
             ...(photos.length > 0 ? { photos: { create: photoCreateData(photos) } } : {}),
           },
           include: marketEntryInclude,
-        });
-
-        await notifyNewEntry(tx, {
-          id: created.id,
-          title: created.title,
-          kind: created.kind,
-          gameId: created.gameId,
-          authorId: created.authorId,
-          version: created.version,
-          gameTitle: game.title,
         });
 
         return created;

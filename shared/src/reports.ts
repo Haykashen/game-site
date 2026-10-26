@@ -1,6 +1,12 @@
 import { z } from 'zod';
 import type { PublicUser } from './auth.js';
-import type { MarketKind, MarketModerationStatus, MarketStatus } from './market.js';
+import {
+  marketModerationStatusSchema,
+  type MarketEntryDto,
+  type MarketKind,
+  type MarketModerationStatus,
+  type MarketStatus,
+} from './market.js';
 import { idSchema, paginationSchema } from './common.js';
 
 export const reportTargetTypeSchema = z.enum(['market_entry', 'user']);
@@ -62,8 +68,15 @@ export const adminReportsQuerySchema = paginationSchema.extend({
   reason: reportReasonSchema.optional(),
 });
 
+export const adminMarketQueueQuerySchema = paginationSchema.extend({
+  status: z
+    .enum(['all', 'pending', 'visible', 'hidden', 'removed'])
+    .default('pending'),
+  kind: z.enum(['listing', 'auction']).optional(),
+});
+
 export const adminMarketModerationSchema = z.object({
-  moderationStatus: z.enum(['visible', 'hidden', 'removed']),
+  moderationStatus: marketModerationStatusSchema,
   note: z.string().trim().max(2000).nullable().optional(),
 });
 
@@ -76,8 +89,15 @@ export type ReportCreateInput = z.infer<typeof reportCreateSchema>;
 export type ReportUpdateInput = z.infer<typeof reportUpdateSchema>;
 export type MyReportsQuery = z.infer<typeof myReportsQuerySchema>;
 export type AdminReportsQuery = z.infer<typeof adminReportsQuerySchema>;
+export type AdminMarketQueueQuery = z.infer<typeof adminMarketQueueQuerySchema>;
 export type AdminMarketModerationInput = z.infer<typeof adminMarketModerationSchema>;
 export type AdminUserStatusInput = z.infer<typeof adminUserStatusSchema>;
+
+export interface AdminMarketEntryDto extends MarketEntryDto {
+  moderationNote: string | null;
+  moderatedAt: string | null;
+  moderator: PublicUser | null;
+}
 
 export interface ReportMarketEntryTarget {
   id: string;

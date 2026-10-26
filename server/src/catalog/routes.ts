@@ -108,6 +108,8 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
           where: {
             gameId: { in: gameIds },
             status: 'active',
+            moderationStatus: 'visible',
+            author: { status: 'active' },
             deletedAt: null,
           },
           _count: { _all: true },

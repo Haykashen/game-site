@@ -63,6 +63,7 @@ enum UserStatus {
 }
 
 enum ModerationStatus {
+  pending
   visible
   hidden
   removed
@@ -107,6 +108,8 @@ enum NotificationType {
   entry_closed
   entry_reopened
   entry_price_changed
+  entry_approved
+  entry_rejected
   deal_created
 }
 
@@ -312,7 +315,7 @@ model MarketEntry {
   isSeeded          Boolean          @default(false) @map("is_seeded")
   soldAt            DateTime?        @map("sold_at")
   deletedAt         DateTime?        @map("deleted_at")
-  moderationStatus  ModerationStatus @default(visible) @map("moderation_status")
+  moderationStatus  ModerationStatus @default(pending) @map("moderation_status")
   moderationNote    String?          @map("moderation_note") @db.Text
   moderatedAt       DateTime?        @map("moderated_at")
   moderatorId       String?          @map("moderator_id") @db.Uuid

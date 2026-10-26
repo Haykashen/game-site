@@ -167,8 +167,8 @@ export type MarketListingType = 'sale' | 'purchase' | 'exchange';
 /** Owner-controlled lifecycle of a local listing or auction. */
 export type MarketStatus = 'active' | 'sold' | 'closed';
 
-/** Moderation visibility controlled by an administrator or moderator. */
-export type MarketModerationStatus = 'visible' | 'hidden' | 'removed';
+/** Publication state: new lots wait in `pending` until an administrator approves them. */
+export type MarketModerationStatus = 'pending' | 'visible' | 'hidden' | 'removed';
 
 /** Courier service ids are stable so saved entries survive label edits. */
 export type MarketDeliveryService = 'russian-post' | 'cdek' | 'yandex' | 'other';

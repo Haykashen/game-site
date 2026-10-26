@@ -41,6 +41,7 @@ export interface AnalyticsMarketOverviewDto {
 
 export interface AnalyticsModerationOverviewDto {
   pendingReports: number;
+  pendingMarketEntries: number;
 }
 
 export interface AnalyticsOverviewDto {

@@ -2,6 +2,7 @@ import {
   Activity,
   ChartNoAxesCombined,
   CircleDollarSign,
+  ClipboardCheck,
   Gamepad2,
   Gavel,
   RefreshCw,
@@ -444,6 +445,14 @@ export function AdminAnalyticsPage() {
               )} объявлений · ${formatCount(
                 data.overview.market.activeAuctions,
               )} аукционов`}
+            />
+            <KpiCard
+              icon={ClipboardCheck}
+              label="На проверке"
+              value={formatCount(
+                data.overview.moderation.pendingMarketEntries,
+              )}
+              hint="Новые лоты ждут публикации"
             />
             <KpiCard
               icon={CircleDollarSign}

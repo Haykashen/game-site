@@ -85,6 +85,7 @@ export function Sidebar() {
           <div className="nav-group" key="administration">
             <p className="nav-group__label">Администрирование</p>
             <NavRow item={NAV_ITEMS.analytics} count={undefined} />
+            <NavRow item={NAV_ITEMS.marketReview} count={undefined} />
             <NavRow item={NAV_ITEMS.admin} count={undefined} />
           </div>
         )}

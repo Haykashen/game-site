@@ -3,6 +3,7 @@ import {
   BarChart3,
   Bell,
   ChartNoAxesCombined,
+  ClipboardCheck,
   Gamepad2,
   Gavel,
   Library,
@@ -31,6 +32,7 @@ export type NavSectionId =
   | 'account'
   | 'settings'
   | 'analytics'
+  | 'marketReview'
   | 'admin';
 
 export interface NavItem {
@@ -155,6 +157,14 @@ export const NAV_ITEMS = {
     shortLabel: 'Аналитика',
     path: '/admin/analytics',
     icon: ChartNoAxesCombined,
+  },
+  marketReview: {
+    id: 'marketReview',
+    label: 'Проверка лотов',
+    pageTitle: 'Проверка лотов',
+    shortLabel: 'Проверка',
+    path: '/admin/market',
+    icon: ClipboardCheck,
   },
   admin: {
     id: 'admin',

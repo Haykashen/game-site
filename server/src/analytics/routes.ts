@@ -170,6 +170,7 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
         gmvAggregate,
         totalBids,
         pendingReports,
+        pendingMarketEntries,
         entriesInPeriod,
         completedDealsInPeriod,
         gmvInPeriodAggregate,
@@ -192,10 +193,22 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
           where: { deletedAt: null },
         }),
         prisma.marketEntry.count({
-          where: { kind: 'listing', status: 'active', deletedAt: null },
+          where: {
+            kind: 'listing',
+            status: 'active',
+            moderationStatus: 'visible',
+            author: { status: 'active' },
+            deletedAt: null,
+          },
         }),
         prisma.marketEntry.count({
-          where: { kind: 'auction', status: 'active', deletedAt: null },
+          where: {
+            kind: 'auction',
+            status: 'active',
+            moderationStatus: 'visible',
+            author: { status: 'active' },
+            deletedAt: null,
+          },
         }),
         prisma.deal.count({ where: { status: 'completed' } }),
         prisma.deal.aggregate({
@@ -204,6 +217,9 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
         }),
         prisma.bid.count(),
         prisma.report.count({ where: { status: 'pending' } }),
+        prisma.marketEntry.count({
+          where: { moderationStatus: 'pending', deletedAt: null },
+        }),
         prisma.marketEntry.count({
           where: { createdAt: { gte: start }, deletedAt: null },
         }),
@@ -277,6 +293,8 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
                 gameId: { in: gameIds },
                 deletedAt: null,
                 createdAt: { gte: start },
+                moderationStatus: 'visible',
+                author: { status: 'active' },
               },
               _count: { _all: true },
             }),
@@ -547,6 +565,7 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
           },
           moderation: {
             pendingReports,
+            pendingMarketEntries,
           },
         },
         trend: buildTrend(
