@@ -185,11 +185,11 @@ model Session {
 
 model Game {
   id          String   @id
-  title       String
+  title       String   @unique
   publisher   String
   developer   String   @default("")
   series      String   @default("")
-  year        Int
+  year        Int?
   genres      String[]
   description String   @db.Text
   coverImage  String   @default("") @map("cover_image") @db.Text
@@ -204,7 +204,6 @@ model Game {
   newsPosts     NewsPost[]
   ratings       GameRating[]
 
-  @@index([title])
   @@index([year])
   @@map("games")
 }

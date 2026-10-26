@@ -15,12 +15,12 @@ export function SpecBox({ game, platforms, editionCount }: SpecBoxProps) {
   return (
     <div className="spec-box">
       <h4>Спецификация</h4>
-      <SpecRow label="Издатель" value={game.publisher} />
+      <SpecRow label="Издатель" value={game.publisher || EMPTY_VALUE} />
       <SpecRow label="Разработчик" value={game.developer || EMPTY_VALUE} />
       <SpecRow label="Серия" value={game.series || EMPTY_VALUE} />
       <SpecRow label="Платформы" value={platforms.join(', ') || EMPTY_VALUE} />
       <SpecRow label="Жанры" value={game.genres.join(', ') || EMPTY_VALUE} />
-      <SpecRow label="Первый выпуск" value={String(game.year)} />
+      <SpecRow label="Первый выпуск" value={game.year === null ? EMPTY_VALUE : String(game.year)} />
       <SpecRow label="Изданий" value={editionsCountLabel(editionCount)} />
     </div>
   );

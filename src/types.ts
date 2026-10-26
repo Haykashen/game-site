@@ -7,7 +7,7 @@ export interface Game {
   publisher: string;
   developer: string;
   series: string;
-  year: number;
+  year: number | null;
   genres: string[];
   description: string;
   /** Representative artwork for the catalogue card; empty when there is none. */

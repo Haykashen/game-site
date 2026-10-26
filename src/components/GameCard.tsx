@@ -45,7 +45,7 @@ function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
     >
       <div className="card-cover">
         {stats.coverImage && (
-          <img className="card-cover__image" src={stats.coverImage} alt="" loading="lazy" />
+          <img className="card-cover__image" src={stats.coverImage} alt="" loading="lazy" referrerPolicy="no-referrer" onError={event => { event.currentTarget.style.visibility = 'hidden'; }} />
         )}
 
         <div className="cover-art" aria-hidden="true">
@@ -84,13 +84,13 @@ function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
             {'DISCVAULT '}
             <span className="cover-slash">/</span>
             {' ARCHIVE NO. '}
-            <span className="cover-number">{String(game.year).slice(-2)}</span>
+            <span className="cover-number">{game.year === null ? '—' : String(game.year).slice(-2)}</span>
           </span>
           <Disc size={40} />
           <span className="cover-title">{game.title}</span>
           <span className="cover-edition">
             {stats.platforms.length > 0 ? stats.platforms.join(' / ') : 'Платформа не указана'} •{' '}
-            {game.year}
+            {game.year ?? 'Год не указан'}
           </span>
         </div>
 
@@ -106,7 +106,7 @@ function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
         <div>
           <h3>{game.title}</h3>
           <p className="card-meta">
-            {game.publisher} • {game.year}
+            {[game.publisher, game.year].filter(value => value !== null && value !== '').join(' • ') || 'Сведения об игре уточняются'}
           </p>
           {game.genres.length > 0 && (
             <p className="card-genres">{game.genres.slice(0, 2).join(' · ')}</p>

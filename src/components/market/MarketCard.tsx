@@ -119,7 +119,7 @@ export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: Ma
                 {edition
                   ? `${edition.platform} • ${edition.region}`
                   : game
-                    ? `${game.publisher} • ${game.year}`
+                    ? [game.publisher, game.year].filter(value => value !== null && value !== '').join(' • ')
                     : entry.condition}
               </span>
             </div>

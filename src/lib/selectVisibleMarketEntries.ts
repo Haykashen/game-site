@@ -98,7 +98,7 @@ export function selectVisibleMarketEntries(
 
     if (yearRange) {
       const year = game?.year;
-      if (year === undefined || year < yearRange.min || year > yearRange.max) return false;
+      if (year == null || year < yearRange.min || year > yearRange.max) return false;
     }
 
     return true;

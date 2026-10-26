@@ -2280,10 +2280,12 @@
         .carousel-cover {
             position: absolute; inset: 0;
             width: 100%; height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             z-index: 0;
             opacity: .72;
         }
+        .artwork-controls { position: relative; z-index: 2; display: flex; align-items: center; gap: .75rem; margin-top: .75rem; color: var(--text); }
+        .artwork-controls button { min-width: 40px; min-height: 40px; padding: .4rem; }
         .carousel-container.has-cover::after {
             content: "";
             position: absolute; inset: 0;

@@ -61,7 +61,7 @@ export function selectVisibleGames(
       return false;
     }
 
-    if (yearRange && (game.year < yearRange.min || game.year > yearRange.max)) return false;
+    if (yearRange && (game.year === null || game.year < yearRange.min || game.year > yearRange.max)) return false;
 
     return true;
   });

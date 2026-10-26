@@ -7,7 +7,7 @@ export interface GameDto {
   publisher: string;
   developer: string;
   series: string;
-  year: number;
+  year: number | null;
   genres: string[];
   description: string;
   coverImage: string;

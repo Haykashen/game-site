@@ -579,7 +579,7 @@ export function MarketEntryDetail({
             <span className="market-game-strip__kicker">Игра в каталоге</span>
             <p className="market-game-strip__title">{game.title}</p>
             <p className="market-game-strip__meta">
-              {game.publisher} • {game.year}
+              {[game.publisher, game.year].filter(value => value !== null && value !== '').join(' • ')}
             </p>
           </div>
           <button

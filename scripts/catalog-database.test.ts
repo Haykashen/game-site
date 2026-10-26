@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { randomUUID } from 'node:crypto';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 
 const isTestDatabase = process.env.CI === 'true' && (process.env.DATABASE_URL ?? '').includes('/discvault_ci');
 test('public catalogue and filter endpoints expose rows created in PostgreSQL, without seed', {
@@ -18,7 +19,7 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
   const id = 'ci-catalog-' + randomUUID();
   try {
     await app.prisma.game.create({ data: {
-      id, title: 'PostgreSQL catalogue fixture', publisher: 'Test', year: 2026,
+      id, title: 'PostgreSQL catalogue fixture', publisher: 'Test', year: null,
       genres: ['Test'], description: 'Database-only fixture, never deployed to production.',
       editions: { create: { id: id + '-edition', name: 'Database edition', platform: 'CI Platform',
         region: 'CI Region', lang: 'CI Language', media: 'Disc', contents: [], coverImages: [] } },
@@ -26,6 +27,12 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
     const games = await app.inject({ method: 'GET', url: '/api/v1/catalog/games?q=' + encodeURIComponent('PostgreSQL catalogue fixture') });
     assert.equal(games.statusCode, 200);
     assert.equal(games.json().items[0].id, id);
+    assert.equal(games.json().items[0].year, null);
+    for (const title of ['PostgreSQL catalogue fixture', ' POSTGRESQL   catalogue fixture ']) {
+      await assert.rejects(app.prisma.game.create({data: {
+        id: id + '-duplicate', title, publisher: '', year: null, genres: [], description: '',
+      }}), (error: unknown) => (error as {code?: string}).code === 'P2002');
+    }
     const editions = await app.inject({ method: 'GET', url: '/api/v1/catalog/editions?gameId=' + id });
     assert.equal(editions.statusCode, 200);
     assert.equal(editions.json().items[0].platform, 'CI Platform');
@@ -33,8 +40,31 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
     assert.equal(filters.statusCode, 200);
     assert.ok(filters.json().platforms.some((platform: { name: string }) => platform.name === 'CI Platform'));
     assert.ok(filters.json().editions.includes('Database edition'));
+    const importedId = id + '-dns';
+    const input = join(uploads, 'catalog.json');
+    await writeFile(input, JSON.stringify({warnings: [], games: [{
+      id: importedId, title: 'DNS fixture ' + id, genres: ['Test'], productIds: [importedId + '-sku'],
+      platforms: [{name: 'PS5', editions: [{id: importedId + '-sku', name: 'Standard', platforms: ['PS5'],
+        images: ['https://c.dns-shop.ru/thumb/st1/fit/500/500/test/cover.jpg.webp'], interfaceLanguages: ['русский'],
+        voiceLanguages: [], releaseDate: '2024-01-02'}]}],
+    }]}));
+    const runImport = (...args: string[]) => JSON.parse(execFileSync(process.execPath,
+      [resolve('scripts/import-dns-catalog.cjs'), input, ...args],
+      {cwd: resolve('server'), encoding: 'utf8', timeout: 30000}));
+    const preview = runImport();
+    assert.equal(preview.createGames, 1);
+    assert.equal(preview.createEditions, 1);
+    assert.equal(await app.prisma.game.count({where: {id: importedId}}), 0);
+    const applied = runImport('--apply', '--expect=' + preview.hash);
+    assert.equal(applied.mode, 'applied');
+    const imported = await app.prisma.game.findUniqueOrThrow({where: {id: importedId}, include: {editions: true}});
+    assert.equal(imported.year, null);
+    assert.equal(imported.editions[0]?.dnsProductId, importedId + '-sku');
+    assert.equal(imported.editions[0]?.coverImages.length, 1);
+    assert.equal(runImport().createGames, 0);
+    assert.equal(runImport().createEditions, 0);
   } finally {
-    await app.prisma.game.deleteMany({ where: { id } });
+    await app.prisma.game.deleteMany({ where: { id: {in: [id, id + '-dns']} } });
     await app.close();
     await rm(uploads, { recursive: true, force: true });
   }

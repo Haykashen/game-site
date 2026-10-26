@@ -90,7 +90,7 @@ function EditionCard({
     >
       <div className="edition-card__cover">
         {cover ? (
-          <img src={cover} alt="" loading="lazy" />
+          <img src={cover} alt="" loading="lazy" referrerPolicy="no-referrer" />
         ) : (
           <div className="edition-card__placeholder">
             <ImageIcon size={28} aria-hidden="true" />

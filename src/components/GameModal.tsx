@@ -55,7 +55,7 @@ export function GameModal({
   const { syncError } = useCollection();
   const [activeMarketTab, setActiveMarketTab] = useState<GameMarketTab>('lots');
   const [selectedEditionId, setSelectedEditionId] = useState(() =>
-    editions.some((edition) => edition.id === initialEditionId) ? initialEditionId : '',
+    editions.some((edition) => edition.id === initialEditionId) ? initialEditionId : (editions[0]?.id ?? ''),
   );
 
   const platforms = useMemo(
@@ -89,7 +89,7 @@ export function GameModal({
                 </span>
               ))}
             </div>
-            <span className="year">{game.year}</span>
+            {game.year !== null && <span className="year">{game.year}</span>}
             <span className="meta-chip">{editionsCountLabel(editions.length)}</span>
             {game.genres.slice(0, 2).map((genre) => (
               <span className="meta-chip" key={genre}>
@@ -106,13 +106,13 @@ export function GameModal({
         </IconButton>
       </div>
 
-      <ArtworkPanel game={game} editions={editions} />
+      <ArtworkPanel key={selectedEditionId} game={game} editions={editions} selectedEdition={selectedEdition} />
       <GameRatings gameId={game.id} />
 
       <div className="desc-grid">
         <div className="desc-text">
           <h4>Описание</h4>
-          <p>{game.description}</p>
+          <p>{game.description || 'Описание игры пока не добавлено.'}</p>
         </div>
         <SpecBox game={game} platforms={platforms} editionCount={editions.length} />
       </div>

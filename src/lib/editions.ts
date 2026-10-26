@@ -39,3 +39,10 @@ export function gameCoverImage(game: Game, editions: readonly Edition[]): string
 
   return '';
 }
+
+/** An edition selection must never show another edition's artwork. */
+export function artworkImages(game: Game, editions: readonly Edition[], selectedEdition?: Edition): string[] {
+  if (selectedEdition) return [...new Set(selectedEdition.coverImages.filter(Boolean))];
+  const cover = gameCoverImage(game, editions);
+  return cover ? [cover] : [];
+}

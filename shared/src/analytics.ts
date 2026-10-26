@@ -69,7 +69,7 @@ export interface AnalyticsGameDto {
   id: string;
   title: string;
   coverImage: string;
-  year: number;
+  year: number | null;
   publisher: string;
   editions: number;
   copies: number;
