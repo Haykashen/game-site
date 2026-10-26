@@ -165,7 +165,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
         editions: {
           where: {canonicalId:null},
           include: {variants:true},
-          orderBy: [{ platform: 'asc' }, { name: 'asc' }],
+          orderBy: [{ platform: 'asc' }, { name: 'asc' }, { id: 'asc' }],
         },
       },
     });
@@ -211,7 +211,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
       app.prisma.edition.findMany({
         where,
         include: {variants:true},
-        orderBy: [{ gameId: 'asc' }, { platform: 'asc' }, { name: 'asc' }],
+        orderBy: [{ gameId: 'asc' }, { platform: 'asc' }, { name: 'asc' }, { id: 'asc' }],
         skip,
         take: query.pageSize,
       }),

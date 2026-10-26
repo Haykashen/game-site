@@ -41,6 +41,18 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
     assert.equal(filters.statusCode, 200);
     assert.ok(filters.json().platforms.some((platform: { name: string }) => platform.name === 'CI Platform'));
     assert.ok(filters.json().editions.includes('Database edition'));
+    // Several localisations share all previous sort keys. Offset pagination
+    // needs a unique tie-breaker to avoid repeating/omitting boundary rows.
+    const pageIds=Array.from({length:7},(_,i)=>id+'-page-'+i);
+    await app.prisma.edition.createMany({data:[...pageIds].reverse().map(editionId=>({id:editionId,gameId:id,name:'Pagination fixture',platform:'CI Platform',region:'CI Region',lang:editionId,media:'Disc',contents:[],coverImages:[]}))});
+    const received:string[]=[];
+    for(let page=1;page<=4;page++){
+      const result=await app.inject({method:'GET',url:`/api/v1/catalog/editions?gameId=${id}&pageSize=2&page=${page}`});
+      assert.equal(result.statusCode,200);
+      received.push(...result.json().items.map((edition:{id:string})=>edition.id));
+    }
+    assert.deepEqual(received,[id+'-edition',...pageIds]);
+    assert.equal(new Set(received).size,8);
     const importedId = id + '-dns';
     const input = join(uploads, 'catalog.json');
     await writeFile(input, JSON.stringify({warnings: [], games: [{
