@@ -11,6 +11,7 @@ export const adminUserSortFieldSchema = z.enum([
   'user',
   'role',
   'status',
+  'comment',
   'listings',
   'deals',
   'copies',
@@ -26,6 +27,7 @@ export const adminUsersQuerySchema = paginationSchema.extend({
   status: z.union([z.literal('all'), userStatusSchema]).default('all'),
   sortBy: adminUserSortFieldSchema.default('createdAt'),
   sortDir: adminUserSortDirSchema.default('desc'),
+  comment: z.string().trim().max(2000).optional(),
   listings: z.coerce.number().int().min(0).optional(),
   deals: z.coerce.number().int().min(0).optional(),
   copies: z.coerce.number().int().min(0).optional(),
@@ -52,5 +54,5 @@ export interface AdminUserDto {
   copies: number;
   createdAt: string;
   suspendedAt: string | null;
-  suspensionReason: string | null;
+  comment: string | null;
 }

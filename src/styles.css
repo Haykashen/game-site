@@ -2752,7 +2752,7 @@
         }
         .admin-users__table-toolbar .admin-reports__count { margin-left: 0; }
         .admin-users__reset { min-height: 34px; padding: .38rem .68rem; font-size: .72rem; }
-        .admin-users__table { min-width: 1120px; }
+        .admin-users__table { min-width: 1240px; }
         .admin-users__sort {
             display: inline-flex; align-items: center; gap: .32rem;
             padding: 0; border: 0; background: transparent;
@@ -2845,7 +2845,8 @@
         html.dark .admin-users__role--moderator { color: #fbbf24; }
         html.dark .admin-users__status--active { color: #86efac; }
         html.dark .admin-users__status--suspended { color: #fca5a5; }
-        .admin-users__reason {
+        .admin-users__comment {
+            display: block;
             overflow: hidden;
             max-width: 220px;
             text-overflow: ellipsis;

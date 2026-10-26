@@ -103,6 +103,7 @@ export function listAdminUsers(
   }
   if (params.sortBy) query.set('sortBy', params.sortBy);
   if (params.sortDir) query.set('sortDir', params.sortDir);
+  if (params.comment) query.set('comment', params.comment);
   if (params.listings !== undefined) {
     query.set('listings', String(params.listings));
   }

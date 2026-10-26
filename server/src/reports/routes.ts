@@ -173,7 +173,7 @@ async function applyReportAction(
         data: {
           status: 'suspended',
           suspendedAt: new Date(),
-          suspensionReason: input.moderatorNote ?? null,
+          comment: input.moderatorNote ?? null,
         },
       });
       await tx.session.deleteMany({ where: { userId: suspendedUserId } });

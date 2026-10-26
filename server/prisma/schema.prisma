@@ -132,7 +132,7 @@ model User {
   role             UserRole   @default(user)
   status           UserStatus @default(active)
   suspendedAt      DateTime?  @map("suspended_at")
-  suspensionReason String?    @map("suspension_reason") @db.Text
+  comment          String?    @db.Text
 
   ratingSum   Int @default(0) @map("rating_sum")
   ratingCount Int @default(0) @map("rating_count")

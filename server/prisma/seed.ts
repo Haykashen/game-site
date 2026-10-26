@@ -152,7 +152,7 @@ async function seedUsers(): Promise<Map<string, string>> {
       role: env.seedDemoRole,
       status: 'active',
       suspendedAt: null,
-      suspensionReason: null,
+      comment: null,
       ratingSum: 0,
       ratingCount: 0,
       passwordHash,

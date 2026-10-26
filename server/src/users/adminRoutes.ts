@@ -22,7 +22,7 @@ const adminUserSelect = {
   role: true,
   status: true,
   suspendedAt: true,
-  suspensionReason: true,
+  comment: true,
   createdAt: true,
   ratingSum: true,
   ratingCount: true,
@@ -55,7 +55,7 @@ function serializeAdminUser(
     copies: user._count.copies,
     createdAt: user.createdAt.toISOString(),
     suspendedAt: user.suspendedAt?.toISOString() ?? null,
-    suspensionReason: user.suspensionReason,
+    comment: user.comment,
   };
 }
 
@@ -72,6 +72,7 @@ const statusOrder: Record<AdminUserDto['status'], number> = {
 };
 
 const userCollator = new Intl.Collator('ru', { sensitivity: 'base' });
+const commentCollator = new Intl.Collator('ru', { sensitivity: 'base' });
 
 function compareAdminUsers(
   left: AdminUserDto,
@@ -88,6 +89,11 @@ function compareAdminUsers(
       return roleOrder[left.role] - roleOrder[right.role];
     case 'status':
       return statusOrder[left.status] - statusOrder[right.status];
+    case 'comment':
+      if (left.comment === null && right.comment === null) return 0;
+      if (left.comment === null) return 1;
+      if (right.comment === null) return -1;
+      return commentCollator.compare(left.comment, right.comment);
     case 'listings':
       return left.listings - right.listings;
     case 'deals':
@@ -114,6 +120,20 @@ function sortAdminUsers(
   const direction = sortDir === 'asc' ? 1 : -1;
 
   return [...users].sort((left, right) => {
+    if (
+      sortBy === 'comment' &&
+      (left.comment === null || right.comment === null)
+    ) {
+      if (left.comment === null && right.comment === null) {
+        return (
+          userCollator.compare(left.displayName, right.displayName) ||
+          userCollator.compare(left.email, right.email)
+        );
+      }
+
+      return left.comment === null ? 1 : -1;
+    }
+
     if (sortBy === 'rating' && (left.rating === null || right.rating === null)) {
       if (left.rating === null && right.rating === null) {
         return (
@@ -140,6 +160,13 @@ function matchesColumnFilters(
   user: AdminUserDto,
   query: AdminUsersQuery,
 ): boolean {
+  if (
+    query.comment &&
+    !user.comment?.toLowerCase().includes(query.comment.toLowerCase())
+  ) {
+    return false;
+  }
+
   if (query.listings !== undefined && user.listings !== query.listings) {
     return false;
   }
@@ -314,7 +341,7 @@ export function registerUserAdminRoutes(app: FastifyInstance): void {
           data: {
             status: input.status,
             suspendedAt: input.status === 'suspended' ? new Date() : null,
-            suspensionReason:
+            comment:
               input.status === 'suspended' ? (input.reason ?? null) : null,
           },
         });

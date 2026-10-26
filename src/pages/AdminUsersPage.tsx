@@ -27,6 +27,7 @@ interface ColumnFilters {
   search: string;
   role: RoleFilter;
   status: StatusFilter;
+  comment: string;
   listings: string;
   deals: string;
   copies: string;
@@ -40,6 +41,7 @@ const INITIAL_FILTERS: ColumnFilters = {
   search: '',
   role: 'all',
   status: 'all',
+  comment: '',
   listings: '',
   deals: '',
   copies: '',
@@ -79,6 +81,7 @@ function filtersEqual(left: ColumnFilters, right: ColumnFilters): boolean {
     left.search.trim() === right.search.trim() &&
     left.role === right.role &&
     left.status === right.status &&
+    left.comment.trim() === right.comment.trim() &&
     left.listings === right.listings &&
     left.deals === right.deals &&
     left.copies === right.copies &&
@@ -246,6 +249,7 @@ export function AdminUsersPage() {
         search: filters.search.trim() || undefined,
         role: filters.role,
         status: filters.status,
+        comment: filters.comment.trim() || undefined,
         sortBy,
         sortDir,
         listings: optionalInteger(filters.listings),
@@ -362,7 +366,7 @@ export function AdminUsersPage() {
       <PageHeading
         eyebrow="ADMIN / USERS"
         title="Пользователи"
-        description="Все зарегистрированные аккаунты с ролями, статусами, активностью на маркете и датой регистрации. Сортируйте по заголовкам и фильтруйте по столбцам."
+        description="Все зарегистрированные аккаунты с ролями, статусами, комментариями, активностью на маркете и датой регистрации. Сортируйте по заголовкам и фильтруйте по столбцам."
         action={
           <button
             type="button"
@@ -431,6 +435,13 @@ export function AdminUsersPage() {
                     <SortableHeader
                       field="status"
                       label="Статус"
+                      sortBy={sortBy}
+                      sortDir={sortDir}
+                      onSort={handleSort}
+                    />
+                    <SortableHeader
+                      field="comment"
+                      label="Комментарий"
                       sortBy={sortBy}
                       sortDir={sortDir}
                       onSort={handleSort}
@@ -520,6 +531,19 @@ export function AdminUsersPage() {
                     </th>
                     <th>
                       <input
+                        className="form-control admin-users__column-input"
+                        type="search"
+                        value={filterDrafts.comment}
+                        placeholder="Текст комментария"
+                        maxLength={2000}
+                        aria-label="Поиск по комментарию"
+                        onChange={(event) =>
+                          updateFilter('comment', event.target.value)
+                        }
+                      />
+                    </th>
+                    <th>
+                      <input
                         className="form-control admin-users__column-input admin-users__column-input--number"
                         type="number"
                         min="0"
@@ -595,7 +619,7 @@ export function AdminUsersPage() {
                 <tbody>
                   {isLoading && users.length === 0 ? (
                     <tr>
-                      <td colSpan={8}>
+                      <td colSpan={9}>
                         <div className="admin-users__empty-row">
                           <RefreshCw
                             className="market-photo-spin"
@@ -608,7 +632,7 @@ export function AdminUsersPage() {
                     </tr>
                   ) : users.length === 0 ? (
                     <tr>
-                      <td colSpan={8}>
+                      <td colSpan={9}>
                         <div className="admin-users__empty-row">
                           <Users size={20} aria-hidden="true" />
                           <span>
@@ -636,12 +660,18 @@ export function AdminUsersPage() {
                           >
                             {STATUS_LABELS[item.status]}
                           </span>
-                          {item.status === 'suspended' &&
-                            item.suspensionReason && (
-                              <small className="admin-users__reason">
-                                {item.suspensionReason}
-                              </small>
-                            )}
+                        </td>
+                        <td>
+                          {item.comment ? (
+                            <span
+                              className="admin-users__comment"
+                              title={item.comment}
+                            >
+                              {item.comment}
+                            </span>
+                          ) : (
+                            <span className="admin-users__muted">—</span>
+                          )}
                         </td>
                         <td>
                           <strong>{formatCount(item.listings)}</strong>
