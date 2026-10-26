@@ -5,7 +5,7 @@ import {
   PLATFORM_GROUPS,
   REGIONS,
   YEAR_RANGES,
-} from '../data';
+} from '../data/reference';
 
 export interface FilterOption {
   readonly value: string;

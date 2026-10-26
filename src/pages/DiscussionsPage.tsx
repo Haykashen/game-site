@@ -6,7 +6,8 @@ import { FeedEmpty } from '../components/feed/FeedEmpty';
 import { PageHeading } from '../components/PageHeading';
 import { SearchToolbar } from '../components/SearchToolbar';
 import { useAuth } from '../context/AuthContext';
-import { INITIAL_GAMES } from '../data';
+import { useCollection } from '../context/CollectionContext';
+import { ApiState } from '../components/ApiState';
 import { useDiscussions } from '../hooks/useDiscussions';
 import { useItemPanelParam } from '../hooks/useItemPanelParam';
 import { useUrlFilters } from '../hooks/useUrlFilters';
@@ -20,20 +21,14 @@ const DISCUSSION_FILTER_PARAMS: readonly UrlFilterField<DiscussionFilterKey>[] =
   { key: 'game', param: 'game' },
 ];
 
-const DISCUSSION_FILTER_FIELDS: readonly SearchFilterField<DiscussionFilterKey>[] = [
-  {
-    id: 'discussionGameFilter',
-    key: 'game',
-    label: 'Игра',
-    placeholder: 'Все игры',
-    options: INITIAL_GAMES.map((game) => ({ value: game.id, label: game.title })),
-  },
-];
-
-const GAME_BY_ID = new Map(INITIAL_GAMES.map((game) => [game.id, game]));
-
 /** Community feed with URL-backed search, game filter and a discussion drawer. */
 export function DiscussionsPage() {
+  const { games } = useCollection();
+  const gameById = useMemo(() => new Map(games.map((game) => [game.id, game])), [games]);
+  const fields: readonly SearchFilterField<DiscussionFilterKey>[] = useMemo(() => [{
+    id: 'discussionGameFilter', key: 'game', label: 'Игра', placeholder: 'Все игры',
+    options: games.map((game) => ({ value: game.id, label: game.title })),
+  }], [games]);
   const { values, setValue, reset } = useUrlFilters(DISCUSSION_FILTER_PARAMS);
   const { itemId, openItem, closeItem } = useItemPanelParam();
   const { user, isApiMode } = useAuth();
@@ -45,6 +40,7 @@ export function DiscussionsPage() {
     detailError,
     loadDiscussion,
     reply,
+    refresh,
   } = useDiscussions();
 
   useEffect(() => {
@@ -59,7 +55,7 @@ export function DiscussionsPage() {
         if (values.game && discussion.gameId !== values.game) return false;
         if (!query) return true;
 
-        const game = GAME_BY_ID.get(discussion.gameId);
+        const game = gameById.get(discussion.gameId);
 
         return [
           discussion.title,
@@ -78,13 +74,13 @@ export function DiscussionsPage() {
           Number(right.pinned) - Number(left.pinned) ||
           Date.parse(right.updatedAt) - Date.parse(left.updatedAt),
       );
-  }, [allDiscussions, values.game, values.query]);
+  }, [allDiscussions, gameById, values.game, values.query]);
 
   const selectedDiscussion = itemId
     ? allDiscussions.find((discussion) => discussion.id === itemId) ?? null
     : null;
   const selectedGame = selectedDiscussion
-    ? GAME_BY_ID.get(selectedDiscussion.gameId)
+    ? gameById.get(selectedDiscussion.gameId)
     : undefined;
 
   const handleReset = () => {
@@ -106,20 +102,16 @@ export function DiscussionsPage() {
         searchPlaceholder="Найти тему, игру или автора"
         query={values.query}
         filterValues={values}
-        fields={DISCUSSION_FILTER_FIELDS}
+        fields={fields}
         resultCountLabel={topicsCountLabel(discussions.length)}
         onQueryChange={(query) => setValue('query', query)}
         onFilterChange={(key, value) => setValue(key, value)}
         onReset={handleReset}
       />
 
-      {error && (
-        <p className="feed-sync-note" role="status">
-          Сервер обсуждений недоступен — показаны демонстрационные темы.
-        </p>
-      )}
+      <ApiState loading={isLoading} error={error} onRetry={refresh} />
 
-      {discussions.length === 0 ? (
+      {isLoading || error ? null : discussions.length === 0 ? (
         <FeedEmpty
           icon={MessagesSquare}
           title="Обсуждения не найдены"
@@ -136,7 +128,7 @@ export function DiscussionsPage() {
             <DiscussionCard
               key={discussion.id}
               discussion={discussion}
-              game={GAME_BY_ID.get(discussion.gameId)}
+              game={gameById.get(discussion.gameId)}
               onSelect={openItem}
             />
           ))}

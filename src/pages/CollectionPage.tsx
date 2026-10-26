@@ -6,6 +6,8 @@ import { PageHeading } from '../components/PageHeading';
 import { CopyCard } from '../components/collection/CopyCard';
 import { CopyEditDrawer } from '../components/collection/CopyEditDrawer';
 import { useCollection } from '../context/CollectionContext';
+import { useAuth } from '../context/AuthContext';
+import { ApiState } from '../components/ApiState';
 import type { Copy, Edition, Game } from '../types';
 
 interface CopyItem {
@@ -32,6 +34,7 @@ function copiesOnShelf(count: number): string {
 
 /** Owned copies: every row is a concrete edition, not an abstract game. */
 export function CollectionPage() {
+  const { user, status } = useAuth();
   const {
     copies,
     editionById,
@@ -42,6 +45,9 @@ export function CollectionPage() {
     isRemote,
     isSyncing,
     syncError,
+    isCatalogLoading,
+    catalogError,
+    refresh,
   } = useCollection();
   const navigate = useNavigate();
   const [editingEditionId, setEditingEditionId] = useState<string | null>(null);
@@ -102,11 +108,8 @@ export function CollectionPage() {
         }
       />
 
-      {syncError && (
-        <div className="market-sync-banner" role="alert">
-          {syncError}
-        </div>
-      )}
+      <ApiState loading={isSyncing || isCatalogLoading} error={syncError ?? catalogError} onRetry={refresh} />
+      {status === 'api' && !user && <div className="panel account-notice"><p>Войдите, чтобы увидеть свою коллекцию.</p><Link to="/account" className="btn-secondary">Войти</Link></div>}
 
       {isRemote && isSyncing && (
         <p className="market-form__hint">Синхронизируем коллекцию с сервером…</p>
@@ -170,9 +173,8 @@ export function CollectionPage() {
         game={editingItem?.game ?? null}
         quantity={editingItem?.quantity ?? 1}
         onClose={() => setEditingEditionId(null)}
-        onSave={(details) => {
-          if (editingItem) updateEdition(editingItem.edition.id, details);
-          setEditingEditionId(null);
+        onSave={async (details) => {
+          if (editingItem && await updateEdition(editingItem.edition.id, details)) setEditingEditionId(null);
         }}
       />
     </>

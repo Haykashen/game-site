@@ -5,8 +5,8 @@ import type {
 } from '@discvault/shared';
 import { apiRequest } from './client';
 
-export function listCopies(): Promise<CopyDto[]> {
-  return apiRequest<CopyDto[]>('/api/v1/collection/copies');
+export function listCopies(signal?: AbortSignal): Promise<CopyDto[]> {
+  return apiRequest<CopyDto[]>('/api/v1/collection/copies', { ...(signal ? { signal } : {}) });
 }
 
 export function createCopyRequest(editionId: string): Promise<CopyDto> {

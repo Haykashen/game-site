@@ -6,13 +6,15 @@ import { SearchToolbar } from '../components/SearchToolbar';
 import { MarketCard } from '../components/market/MarketCard';
 import { MarketDrawer } from '../components/market/MarketDrawer';
 import { useAuth } from '../context/AuthContext';
+import { ApiState } from '../components/ApiState';
 import { useCollection } from '../context/CollectionContext';
 import { useMarketEntries } from '../hooks/useMarketEntries';
 import { useMarketPanelParam } from '../hooks/useMarketPanelParam';
 import { useUrlFilters } from '../hooks/useUrlFilters';
 import { cx } from '../lib/cx';
 import { marketCountLabel } from '../lib/market';
-import { MARKET_FILTER_FIELDS, SEARCH_FILTER_PARAMS } from '../lib/searchFilterConfig';
+import { SEARCH_FILTER_PARAMS } from '../lib/searchFilterConfig';
+import { useSearchFields } from '../hooks/useSearchFields';
 import { selectVisibleMarketEntries } from '../lib/selectVisibleMarketEntries';
 import type {
   MarketDraft,
@@ -99,6 +101,7 @@ const COPY: Record<MarketKind | MarketListingType, MarketCopy> = {
 
 /** Shared marketplace page: search/filters, entity grid, CTA and URL drawer. */
 export function MarketPage({ kind, listingType }: MarketPageProps) {
+  const fields = useSearchFields('market');
   const selectedListingType = kind === 'listing' ? listingType : undefined;
   const copyKey: MarketKind | MarketListingType =
     kind === 'listing' ? (selectedListingType ?? 'listing') : kind;
@@ -116,7 +119,8 @@ export function MarketPage({ kind, listingType }: MarketPageProps) {
     placeBid,
     purchase,
     error: marketError,
-    isRemote,
+    isLoading,
+    refresh,
   } = useMarketEntries();
   const [showOwn, setShowOwn] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -243,11 +247,7 @@ export function MarketPage({ kind, listingType }: MarketPageProps) {
         description={copy.description}
       />
 
-      {marketError && (
-        <div className="market-sync-banner" role="alert">
-          {marketError}
-        </div>
-      )}
+      <ApiState loading={isLoading} error={marketError} onRetry={refresh} />
 
       <SearchToolbar
         key={copyKey}
@@ -256,7 +256,7 @@ export function MarketPage({ kind, listingType }: MarketPageProps) {
         searchPlaceholder={copy.searchPlaceholder}
         query={filters.query}
         filterValues={filters}
-        fields={MARKET_FILTER_FIELDS}
+        fields={fields}
         resultCountLabel={marketCountLabel(
           visibleItems.length,
           kind,
@@ -302,7 +302,7 @@ export function MarketPage({ kind, listingType }: MarketPageProps) {
         }
       />
 
-      {baseItems.length === 0 ? (
+      {isLoading || marketError ? null : baseItems.length === 0 ? (
         <div className="market-empty">
           <p>{showOwn ? 'У вас пока нет объявлений в этом разделе.' : copy.empty}</p>
           <button
@@ -342,11 +342,12 @@ export function MarketPage({ kind, listingType }: MarketPageProps) {
       )}
 
       <MarketDrawer
+        error={marketError}
         isOpen={isComposing || selectedEntry !== null}
         isComposing={isComposing}
         isEditing={isEditing}
         isOwn={selectedIsOwn}
-        isAuthenticated={Boolean(user) || !isRemote}
+        isAuthenticated={Boolean(user)}
         kind={kind}
         initialListingType={selectedListingType}
         entry={selectedEntry}

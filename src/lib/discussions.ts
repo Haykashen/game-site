@@ -1,4 +1,3 @@
-import { DISCUSSIONS } from '../data/discussions';
 import type { Discussion, DiscussionComment } from '../types';
 
 /**
@@ -7,7 +6,7 @@ import type { Discussion, DiscussionComment } from '../types';
  */
 export function primaryDiscussionForGame(
   gameId: string,
-  discussions: readonly Discussion[] = DISCUSSIONS,
+  discussions: readonly Discussion[] = [],
 ): Discussion | undefined {
   return (
     discussions.find((discussion) => discussion.gameId === gameId && discussion.pinned) ??

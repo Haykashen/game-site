@@ -1,6 +1,7 @@
 import { Minus, Plus, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { getPlatformBadgeStyle } from '../data';
+import { useCollection } from '../context/CollectionContext';
+import { getPlatformBadgeStyle } from '../data/reference';
 import { MAX_COLLECTION_QUANTITY } from '../lib/constants';
 import { editionsCountLabel } from '../lib/market';
 import type { Copy, Edition, Game, MarketEntry } from '../types';
@@ -25,7 +26,7 @@ interface GameModalProps {
   onClose: () => void;
   onOpenMarketEntry: (entry: MarketEntry) => void;
   onOpenDiscussions: (gameId: string) => void;
-  onAddCopy: (editionId: string) => void;
+  onAddCopy: (editionId: string) => Promise<boolean>;
   onSetEditionQuantity: (editionId: string, quantity: number) => void;
   onRemoveEdition: (editionId: string) => void;
   onPlaceListing: (editionId?: string) => void;
@@ -51,6 +52,7 @@ export function GameModal({
   onPlaceListing,
   onPlaceAuction,
 }: GameModalProps) {
+  const { syncError } = useCollection();
   const [activeMarketTab, setActiveMarketTab] = useState<GameMarketTab>('lots');
   const [selectedEditionId, setSelectedEditionId] = useState(() =>
     editions.some((edition) => edition.id === initialEditionId) ? initialEditionId : '',
@@ -115,6 +117,7 @@ export function GameModal({
         <SpecBox game={game} platforms={platforms} editionCount={editions.length} />
       </div>
 
+      {syncError && <p className="market-form__error" role="alert">{syncError}</p>}
       <EditionsSection
         game={game}
         editions={editions}

@@ -5,13 +5,7 @@ import type { GameRatingSummary } from '@discvault/shared';
 import { apiRequest, errorMessage } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { CRITIC_RATINGS } from '../data/criticRatings';
-import { usePersistentState } from '../hooks/usePersistentState';
 
-function parseLocalRatings(value: unknown): Record<string, number> | null {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
-  return Object.fromEntries(Object.entries(value).filter(([, score]) =>
-    typeof score === 'number' && Number.isInteger(score) && score >= 1 && score <= 10));
-}
 
 export function GameRatings({ gameId }: { gameId: string }) {
   const { status, user } = useAuth();
@@ -20,19 +14,18 @@ export function GameRatings({ gameId }: { gameId: string }) {
 
 function RatingsContent({ gameId }: { gameId: string }) {
   const { status, user } = useAuth();
-  const isLocal = status === 'offline';
-  const [localRatings, setLocalRatings] = usePersistentState<Record<string, number>>('discvault_game_ratings', {}, parseLocalRatings);
   const [remote, setRemote] = useState<GameRatingSummary | null>(null);
-  const [isLoading, setIsLoading] = useState(status !== 'offline');
+  const [isLoading, setIsLoading] = useState(status === 'checking');
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const path = `/api/v1/catalog/games/${encodeURIComponent(gameId)}/ratings`;
-  const myScore = isLocal ? localRatings[gameId] ?? null : remote?.myScore ?? null;
+  const myScore = remote?.myScore ?? null;
   const critic = CRITIC_RATINGS[gameId];
 
   useEffect(() => {
-    if (status !== 'api') return;
+    if (status !== 'api') { setIsLoading(false); setError(status === 'offline' ? 'Сервер оценок недоступен.' : ''); return; }
+    setIsLoading(true);
     const controller = new AbortController();
     void apiRequest<GameRatingSummary>(path, { signal: controller.signal })
       .then((data) => { if (!controller.signal.aborted) setRemote(data); })
@@ -45,16 +38,6 @@ function RatingsContent({ gameId }: { gameId: string }) {
     if (isSaving) return;
     setError('');
     setMessage('');
-    if (isLocal) {
-      setLocalRatings((previous) => {
-        const next = { ...previous };
-        if (score === null) delete next[gameId];
-        else next[gameId] = score;
-        return next;
-      });
-      setMessage(score === null ? 'Оценка удалена.' : 'Сохранено на устройстве.');
-      return;
-    }
     if (!user || status !== 'api') return;
     setIsSaving(true);
     try {
@@ -73,14 +56,13 @@ function RatingsContent({ gameId }: { gameId: string }) {
     <section className="game-ratings" aria-label="Оценки игры">
       <div className="game-rating-box">
         <div className="game-rating-head">
-        <h4><Star size={15} aria-hidden="true" /> {isLocal ? 'Ваша оценка' : 'Оценка DiscVault'}</h4>
+        <h4><Star size={15} aria-hidden="true" /> Оценка DiscVault</h4>
         <div className="game-rating-value">
-          <strong>{isLocal ? myScore ?? '—' : remote?.average?.toFixed(1) ?? '—'}</strong><span>/ 10</span>
+          <strong>{remote?.average?.toFixed(1) ?? '—'}</strong><span>/ 10</span>
         </div>
         </div>
-        <p className="panel-hint">{isLocal ? 'На этом устройстве'
-          : isLoading ? 'Загружаем оценки…' : remote ? `Голосов: ${remote.count}` : 'Оценки пока недоступны'}</p>
-        {(isLocal || user) && (
+        <p className="panel-hint">{isLoading ? 'Загружаем оценки…' : remote ? `Голосов: ${remote.count}` : 'Оценки пока недоступны'}</p>
+        {user && (
           <>
             <div className="game-rating-options" role="group" aria-label="Ваша оценка от 1 до 10">
               {Array.from({ length: 10 }, (_, index) => index + 1).map((score) => (

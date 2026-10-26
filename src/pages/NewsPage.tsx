@@ -5,7 +5,8 @@ import { NewsCard } from '../components/news/NewsCard';
 import { NewsDrawer } from '../components/news/NewsDrawer';
 import { PageHeading } from '../components/PageHeading';
 import { SearchToolbar } from '../components/SearchToolbar';
-import { INITIAL_GAMES } from '../data';
+import { useCollection } from '../context/CollectionContext';
+import { ApiState } from '../components/ApiState';
 import { useNewsFeed } from '../hooks/useNewsFeed';
 import { useItemPanelParam } from '../hooks/useItemPanelParam';
 import { useUrlFilters } from '../hooks/useUrlFilters';
@@ -30,13 +31,14 @@ const NEWS_FILTER_FIELDS: readonly SearchFilterField<NewsFilterKey>[] = [
   },
 ];
 
-const GAME_BY_ID = new Map(INITIAL_GAMES.map((game) => [game.id, game]));
 
 /** Editorial feed with URL-backed search, category filter and a news drawer. */
 export function NewsPage() {
+  const { games } = useCollection();
+  const gameById = useMemo(() => new Map(games.map((game) => [game.id, game])), [games]);
   const { values, setValue, reset } = useUrlFilters(NEWS_FILTER_PARAMS);
   const { itemId, openItem, closeItem } = useItemPanelParam();
-  const { posts: allPosts, isLoading, error } = useNewsFeed();
+  const { posts: allPosts, isLoading, error, refresh } = useNewsFeed();
 
   const news = useMemo(() => {
     const query = values.query.trim().toLocaleLowerCase('ru-RU');
@@ -45,7 +47,7 @@ export function NewsPage() {
       if (values.category && post.category !== values.category) return false;
       if (!query) return true;
 
-      const game = post.gameId ? GAME_BY_ID.get(post.gameId) : undefined;
+      const game = post.gameId ? gameById.get(post.gameId) : undefined;
 
       return [post.title, post.excerpt, post.body, post.author, ...post.tags, game?.title ?? '']
         .join(' ')
@@ -54,13 +56,13 @@ export function NewsPage() {
     }).sort(
       (left, right) => Date.parse(right.publishedAt) - Date.parse(left.publishedAt),
     );
-  }, [allPosts, values.category, values.query]);
+  }, [allPosts, gameById, values.category, values.query]);
 
   const selectedNews = itemId
     ? allPosts.find((post) => post.id === itemId) ?? null
     : null;
   const selectedGame = selectedNews?.gameId
-    ? GAME_BY_ID.get(selectedNews.gameId)
+    ? gameById.get(selectedNews.gameId)
     : undefined;
 
   const handleReset = () => {
@@ -89,13 +91,9 @@ export function NewsPage() {
         onReset={handleReset}
       />
 
-      {error && (
-        <p className="feed-sync-note" role="status">
-          Сервер новостей недоступен — показаны демонстрационные материалы.
-        </p>
-      )}
+      <ApiState loading={isLoading} error={error} onRetry={refresh} />
 
-      {news.length === 0 ? (
+      {isLoading || error ? null : news.length === 0 ? (
         <FeedEmpty
           icon={Newspaper}
           title="Новости не найдены"

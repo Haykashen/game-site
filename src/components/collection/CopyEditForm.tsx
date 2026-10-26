@@ -1,7 +1,7 @@
 import { Package, X } from 'lucide-react';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { COMPLETENESS } from '../../data';
+import { COMPLETENESS } from '../../data/reference';
 import { editionLabel } from '../../lib/editions';
 import type { Copy, CopyDetails, Edition, Game } from '../../types';
 import { FormField } from '../ui/FormField';

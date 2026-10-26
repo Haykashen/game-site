@@ -1,4 +1,4 @@
-import { YEAR_RANGES } from '../data';
+import { YEAR_RANGES } from '../data/reference';
 import type { CatalogFilters, Edition, Game } from '../types';
 
 /**

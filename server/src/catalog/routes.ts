@@ -237,11 +237,14 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
   });
 
   app.get('/api/v1/catalog/filters', async (_request, reply) => {
+    const releases = await app.prisma.edition.findMany({ select: { platform: true, lang: true, region: true, name: true } });
+    const unique = (key: 'platform' | 'lang' | 'region' | 'name') => [...new Set(releases.map((edition) => edition[key]))].filter(Boolean).sort();
     const body: CatalogFiltersDto = {
-      platforms: seedPlatforms,
-      languages: seedFilters.languages,
-      regions: seedFilters.regions,
-      editions: seedFilters.editions,
+      platforms: unique('platform').map((name) => seedPlatforms.find((platform) => platform.name === name)
+        ?? { name, group: 'Другие', color: '#64748b', textColor: '#ffffff' }),
+      languages: unique('lang'),
+      regions: unique('region'),
+      editions: unique('name'),
       completeness: seedFilters.completeness,
       yearRanges: seedFilters.yearRanges,
     };

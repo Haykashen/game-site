@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { demoProfileId, getDemoProfile } from '../lib/publicProfiles';
 
 interface ProfileLinkProps {
   name: string;
@@ -8,8 +7,8 @@ interface ProfileLinkProps {
 }
 
 export function ProfileLink({ name, userId, className = 'spec-link' }: ProfileLinkProps) {
-  const id = userId ?? demoProfileId(name);
-  if (!userId && !getDemoProfile(id)) return <span>{name}</span>;
+  if (!userId) return <span>{name}</span>;
+  const id = userId;
   return (
     <Link
       className={className}

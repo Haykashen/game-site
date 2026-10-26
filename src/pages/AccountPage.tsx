@@ -296,40 +296,6 @@ export function AccountPage() {
     }
   };
 
-  const guestPanel = (
-    <div className="panel profile-panel">
-      <div className="profile-head">
-        <div className="profile-avatar">
-          <UserRound size={28} aria-hidden="true" />
-        </div>
-        <div className="profile-meta">
-          <p className="profile-name">Гость</p>
-          <p className="profile-sub">
-            Локальный профиль · данные коллекции хранятся в браузере
-          </p>
-        </div>
-        <span className="profile-rating">
-          <Star size={14} aria-hidden="true" />
-          Нет рейтинга
-        </span>
-      </div>
-
-      <div className="profile-columns">
-        <div className="spec-box">
-          <h4>Профиль</h4>
-          <SpecRow label="Имя" value="—" />
-          <SpecRow label="Город" value="—" />
-          <SpecRow label="Телефон" value="—" />
-        </div>
-        <div className="spec-box">
-          <h4>Статистика</h4>
-          <SpecRow label="Рейтинг" value="—" />
-          <SpecRow label="Отзывы" value="0" />
-          <SpecRow label="Сделки" value="0" />
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <>
@@ -354,9 +320,7 @@ export function AccountPage() {
             <div>
               <strong>API недоступен</strong>
               <p>
-                Приложение работает в локальном демо-режиме. Коллекция и объявления
-                сохраняются в браузере. Запустите PostgreSQL и API, чтобы включить
-                аккаунты и сделки.
+                Не удалось подключиться к серверу. Коллекция, объявления и аккаунты доступны после восстановления соединения.
               </p>
             </div>
             <button
@@ -368,7 +332,6 @@ export function AccountPage() {
               Проверить снова
             </button>
           </div>
-          {guestPanel}
         </>
       )}
 
@@ -466,10 +429,6 @@ export function AccountPage() {
               </button>
             </div>
           </form>
-
-          <p className="market-form__hint">
-            Демо-аккаунт: demo@discvault.local / demo12345
-          </p>
         </div>
       )}
 

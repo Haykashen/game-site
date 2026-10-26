@@ -9,8 +9,6 @@ import {
   listMarketEntries,
   mapMarketEntry,
 } from '../api';
-import { INITIAL_MARKET_ENTRIES } from '../data';
-import { getDemoProfile } from '../lib/publicProfiles';
 import { useCollection } from '../context/CollectionContext';
 import type { MarketEntry } from '../types';
 import { MarketCard } from '../components/market/MarketCard';
@@ -76,16 +74,6 @@ function PublicProfileContent({ id }: { id: string | undefined }) {
     setError('');
 
     try {
-      const demoProfile = getDemoProfile(id);
-      if (demoProfile) {
-        const demoEntries = INITIAL_MARKET_ENTRIES.filter((entry) => entry.seller === demoProfile.displayName && entry.status === 'active');
-        setProfile(demoProfile);
-        setReviews([]);
-        setReviewTotal(0);
-        setEntries(demoEntries.slice((marketPage - 1) * 12, marketPage * 12));
-        setMarketTotal(demoEntries.length);
-        return;
-      }
       const [nextProfile, nextReviews, market] = await Promise.all([
         fetchPublicProfile(id),
         listUserReviews(id, { page: reviewPage, pageSize: 12 }),
@@ -158,7 +146,7 @@ function PublicProfileContent({ id }: { id: string | undefined }) {
               <div className="profile-meta">
                 <p className="profile-name">{profile.displayName}</p>
                 <p className="profile-sub">
-                  {profile.city ?? 'Город не указан'} · {profile.memberSince ? `на сайте с ${formatMemberSince(profile.memberSince)}` : 'Демонстрационный профиль'}
+                  {profile.city ?? 'Город не указан'}{profile.memberSince ? ` · на сайте с ${formatMemberSince(profile.memberSince)}` : ''}
                 </p>
               </div>
               <span className="profile-rating">
@@ -193,9 +181,6 @@ function PublicProfileContent({ id }: { id: string | undefined }) {
             {isOwnProfile && <Link className="btn-secondary" to="/account">Редактировать профиль</Link>}
           </div>
 
-          {getDemoProfile(profile.id) && (
-            <p className="panel-hint">Демонстрационный профиль. Рейтинг и отзывы доступны для пользователей в сетевом режиме.</p>
-          )}
 
           <section className="panel account-deals-panel" aria-label="Объявления пользователя">
             <div className="account-deals-panel__head">
@@ -220,7 +205,7 @@ function PublicProfileContent({ id }: { id: string | undefined }) {
             targetType="user"
             targetId={profile.id}
             targetLabel={profile.displayName}
-            disabled={isOwnProfile || Boolean(getDemoProfile(profile.id))}
+            disabled={isOwnProfile}
           />
 
           <div className="panel account-deals-panel">

@@ -1,4 +1,4 @@
-import { YEAR_RANGES } from '../data';
+import { YEAR_RANGES } from '../data/reference';
 import { listingTypeLabel } from './market';
 import { marketItemLabel } from '@discvault/shared';
 import type { CatalogFilters, Edition, Game, MarketEntry } from '../types';

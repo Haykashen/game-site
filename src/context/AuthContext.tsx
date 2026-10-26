@@ -45,7 +45,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 /**
  * Detects whether the API is usable and restores the cookie session. When the
- * API is down the rest of the app keeps working in the original offline mode.
+ * API failure is explicit; business data is never replaced by browser demo data.
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<ApiStatus>('checking');

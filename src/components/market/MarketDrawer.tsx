@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import type {
   Edition,
   Game,
@@ -29,8 +30,9 @@ interface MarketDrawerProps {
   initialGameId: string;
   initialEditionId: string;
   onClose: () => void;
-  onCreate: (draft: MarketDraft) => void;
-  onUpdate: (draft: MarketDraft) => void;
+  onCreate: (draft: MarketDraft) => Promise<void>;
+  onUpdate: (draft: MarketDraft) => Promise<void>;
+  error?: string | null;
   onStartEdit: () => void;
   onCancelEdit: () => void;
   onDelete: () => void;
@@ -76,6 +78,7 @@ export function MarketDrawer({
   onPlaceBid,
   onBuy,
   onOpenGame,
+  error,
 }: MarketDrawerProps) {
   const [lastView, setLastView] = useState<DrawerView | null>(null);
 
@@ -117,7 +120,10 @@ export function MarketDrawer({
       labelledBy={TITLE_ID}
       focusKey={focusKey}
     >
-      {view?.type === 'compose' ? (
+      {error && <p className="market-form__error" role="alert">{error}</p>}
+      {(view?.type === 'compose' || view?.type === 'edit') && !isAuthenticated ? (
+        <div className="panel account-notice"><h2 id={TITLE_ID}>Войдите в аккаунт</h2><p>Для размещения и изменения объявления нужна авторизация.</p><Link className="btn-secondary" to="/account" onClick={onClose}>Войти</Link></div>
+      ) : view?.type === 'compose' ? (
         <ComposeEntryForm
           key={composeKey}
           kind={kind}

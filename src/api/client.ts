@@ -67,7 +67,7 @@ export async function apiRequest<T>(
     headers,
     credentials: 'include',
     ...(body !== undefined ? { body } : {}),
-    ...(options.signal ? { signal: options.signal } : {}),
+    signal: options.signal ? AbortSignal.any([options.signal, AbortSignal.timeout(20000)]) : AbortSignal.timeout(20000),
   });
 
   if (response.status === 204) {
@@ -99,7 +99,7 @@ export async function checkApiHealth(signal?: AbortSignal): Promise<boolean> {
   try {
     const response = await fetch('/api/health', {
       credentials: 'include',
-      ...(signal ? { signal } : {}),
+      signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(8000)]) : AbortSignal.timeout(8000),
     });
 
     if (!response.ok) return false;

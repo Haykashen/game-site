@@ -119,7 +119,7 @@ export function DiscussionDrawer({
     [discussion],
   );
   const totalReplies = discussion ? discussionReplyCount(discussion) : 0;
-  const canReply = !isApiMode || isAuthenticated;
+  const canReply = isApiMode && isAuthenticated;
 
   const handleReplyClick = (comment: DiscussionComment) => {
     setReplyTarget(comment);

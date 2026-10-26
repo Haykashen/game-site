@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { Check, Image as ImageIcon, Layers, Package, Plus } from 'lucide-react';
-import { getPlatformBadgeStyle } from '../../data';
+import { getPlatformBadgeStyle } from '../../data/reference';
 import { cx } from '../../lib/cx';
 import { MAX_COLLECTION_QUANTITY } from '../../lib/constants';
 import { editionContentsLabel, formatEditionDate } from '../../lib/editions';
@@ -13,7 +15,7 @@ interface EditionsSectionProps {
   copies: readonly Copy[];
   selectedEditionId: string;
   onSelectEdition: (editionId: string) => void;
-  onAddCopy: (editionId: string) => void;
+  onAddCopy: (editionId: string) => Promise<boolean>;
 }
 
 interface EditionCardProps {
@@ -21,7 +23,7 @@ interface EditionCardProps {
   ownedCount: number;
   isSelected: boolean;
   onSelect: () => void;
-  onAddCopy: () => void;
+  onAddCopy: () => Promise<boolean>;
 }
 
 function EditionCard({
@@ -31,6 +33,9 @@ function EditionCard({
   onSelect,
   onAddCopy,
 }: EditionCardProps) {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [isAdding, setIsAdding] = useState(false);
   const cover = edition.coverImages[0];
   const [justAdded, setJustAdded] = useState(false);
   const resetTimer = useRef<number | null>(null);
@@ -44,11 +49,16 @@ function EditionCard({
     [],
   );
 
-  const handleAddCopy = () => {
+  const handleAddCopy = async () => {
+    if (!user) { navigate('/account'); return; }
+    if (isAdding) return;
     if (ownedCount >= MAX_COLLECTION_QUANTITY) return;
 
     onSelect();
-    onAddCopy();
+    setIsAdding(true);
+    const saved = await onAddCopy();
+    setIsAdding(false);
+    if (!saved) return;
     setJustAdded(true);
 
     if (resetTimer.current !== null) {
@@ -144,7 +154,7 @@ function EditionCard({
               'edition-card__btn--primary',
               justAdded && 'is-added',
             )}
-            disabled={ownedCount >= MAX_COLLECTION_QUANTITY}
+            disabled={isAdding || ownedCount >= MAX_COLLECTION_QUANTITY}
             onClick={(event) => {
               event.stopPropagation();
               handleAddCopy();

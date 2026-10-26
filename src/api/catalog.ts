@@ -1,0 +1,25 @@
+import type { EditionDto, GameDto, GameWithStatsDto, Paginated } from '@discvault/shared';
+import { apiRequest } from './client';
+
+/** Load every page, rather than silently truncating the catalogue at 100 rows. */
+export async function collectPages<T>(load: (page: number) => Promise<Paginated<T>>): Promise<T[]> {
+  const items: T[] = [];
+  for (let page = 1; ; page += 1) {
+    const result = await load(page);
+    if (result.page !== page || !Array.isArray(result.items) || typeof result.hasMore !== 'boolean' || (result.hasMore && result.items.length === 0)) {
+      throw new Error('Сервер вернул некорректную страницу данных.');
+    }
+    items.push(...result.items);
+    if (!result.hasMore) return items;
+  }
+}
+
+export async function fetchCatalog(signal?: AbortSignal): Promise<{ games: GameDto[]; editions: EditionDto[] }> {
+  const [games, editions] = await Promise.all([
+    collectPages((page) => apiRequest<Paginated<GameWithStatsDto>>(
+      '/api/v1/catalog/games?pageSize=100&page=' + page, { ...(signal ? { signal } : {}) })),
+    collectPages((page) => apiRequest<Paginated<EditionDto>>(
+      '/api/v1/catalog/editions?pageSize=100&page=' + page, { ...(signal ? { signal } : {}) })),
+  ]);
+  return { games, editions };
+}

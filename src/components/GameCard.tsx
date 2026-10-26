@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import type { KeyboardEvent } from 'react';
 import { Check, Disc, Eye, Layers } from 'lucide-react';
-import { getPlatformBadgeStyle } from '../data';
+import { getPlatformBadgeStyle } from '../data/reference';
 import { NAV_ITEMS } from '../app/navigation';
 import { cx } from '../lib/cx';
 import { editionsCountLabel } from '../lib/market';

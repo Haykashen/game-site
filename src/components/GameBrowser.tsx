@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCollection } from '../context/CollectionContext';
+import { ApiState } from './ApiState';
 import { useMarketEntries } from '../hooks/useMarketEntries';
 import { discussionRoutePath } from '../lib/discussions';
 import { gameCoverImage } from '../lib/editions';
@@ -40,7 +41,7 @@ export function GameBrowser({
     setEditionQuantity,
     removeEdition,
   } = useCollection();
-  const { entries: marketEntries } = useMarketEntries();
+  const { entries: marketEntries, error: marketError, isLoading: marketLoading, refresh: refreshMarket } = useMarketEntries();
   const navigate = useNavigate();
   const [selectedGameId, setSelectedGameId] = useState<string | null>(gameId || null);
   const [isModalOpen, setIsModalOpen] = useState(Boolean(gameId));
@@ -171,6 +172,7 @@ export function GameBrowser({
 
   return (
     <>
+      <ApiState loading={marketLoading} error={marketError} onRetry={refreshMarket} />
       <GameGrid
         games={games}
         statsByGame={statsByGame}

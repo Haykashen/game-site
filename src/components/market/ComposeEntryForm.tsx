@@ -35,7 +35,7 @@ interface ComposeEntryFormProps {
   /** When present, the form edits this entry instead of creating a new one. */
   entry?: MarketEntry;
   titleId: string;
-  onSubmit: (draft: MarketDraft) => void;
+  onSubmit: (draft: MarketDraft) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -123,6 +123,7 @@ export function ComposeEntryForm({
   const [description, setDescription] = useState(entry?.description ?? '');
   const [photos, setPhotos] = useState<string[]>(entry ? [...entry.photos] : []);
   const [isProcessingPhotos, setIsProcessingPhotos] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [deliveryServices, setDeliveryServices] = useState<MarketDeliveryService[]>(
     entry ? [...entry.deliveryServices] : [],
   );
@@ -169,10 +170,10 @@ export function ComposeEntryForm({
     setDeliveryError('');
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (isProcessingPhotos) return;
+    if (isProcessingPhotos || isSubmitting) return;
 
     const trimmedTitle = title.trim();
     const trimmedEditionId = editionId.trim();
@@ -224,7 +225,8 @@ export function ComposeEntryForm({
       return;
     }
 
-    onSubmit({
+    setIsSubmitting(true);
+    try { await onSubmit({
       kind: formKind,
       itemType,
       listingType: isAuction ? null : listingType,
@@ -243,7 +245,7 @@ export function ComposeEntryForm({
       bidStep: isAuction ? numericBidStep : null,
       startsAt: isAuction ? new Date(startTimestamp).toISOString() : null,
       endsAt: isAuction ? new Date(endTimestamp).toISOString() : null,
-    });
+    }); } finally { setIsSubmitting(false); }
   };
 
   return (
@@ -595,8 +597,8 @@ export function ComposeEntryForm({
           <button type="button" className="btn-secondary" onClick={onCancel}>
             Отмена
           </button>
-          <button type="submit" className="market-form__submit" disabled={isProcessingPhotos}>
-            {isProcessingPhotos
+          <button type="submit" className="market-form__submit" disabled={isProcessingPhotos || isSubmitting}>
+            {isSubmitting ? 'Сохраняем…' : isProcessingPhotos
               ? 'Обработка фото…'
               : isEditing
                 ? 'Сохранить изменения'
