@@ -101,6 +101,19 @@ export function listAdminUsers(
   if (params.status && params.status !== 'all') {
     query.set('status', params.status);
   }
+  if (params.sortBy) query.set('sortBy', params.sortBy);
+  if (params.sortDir) query.set('sortDir', params.sortDir);
+  if (params.listings !== undefined) {
+    query.set('listings', String(params.listings));
+  }
+  if (params.deals !== undefined) query.set('deals', String(params.deals));
+  if (params.copies !== undefined) {
+    query.set('copies', String(params.copies));
+  }
+  if (params.rating !== undefined) {
+    query.set('rating', String(params.rating));
+  }
+  if (params.createdAt) query.set('createdAt', params.createdAt);
   if (params.page) query.set('page', String(params.page));
   if (params.pageSize) query.set('pageSize', String(params.pageSize));
 

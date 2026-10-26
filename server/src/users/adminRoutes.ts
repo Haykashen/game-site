@@ -5,6 +5,7 @@ import {
   adminUsersQuerySchema,
   paginated,
   type AdminUserDto,
+  type AdminUsersQuery,
 } from '@discvault/shared';
 import { requireRoles } from '../auth/authorization.js';
 import { badRequest, forbidden, notFound } from '../errors.js';
@@ -58,6 +59,127 @@ function serializeAdminUser(
   };
 }
 
+const roleOrder: Record<AdminUserDto['role'], number> = {
+  admin: 0,
+  moderator: 1,
+  user: 2,
+};
+
+const statusOrder: Record<AdminUserDto['status'], number> = {
+  active: 0,
+  suspended: 1,
+  deleted: 2,
+};
+
+const userCollator = new Intl.Collator('ru', { sensitivity: 'base' });
+
+function compareAdminUsers(
+  left: AdminUserDto,
+  right: AdminUserDto,
+  sortBy: AdminUsersQuery['sortBy'],
+): number {
+  switch (sortBy) {
+    case 'user':
+      return (
+        userCollator.compare(left.displayName, right.displayName) ||
+        userCollator.compare(left.email, right.email)
+      );
+    case 'role':
+      return roleOrder[left.role] - roleOrder[right.role];
+    case 'status':
+      return statusOrder[left.status] - statusOrder[right.status];
+    case 'listings':
+      return left.listings - right.listings;
+    case 'deals':
+      return left.deals - right.deals;
+    case 'copies':
+      return left.copies - right.copies;
+    case 'rating':
+      if (left.rating === null && right.rating === null) return 0;
+      if (left.rating === null) return 1;
+      if (right.rating === null) return -1;
+      return left.rating - right.rating;
+    case 'createdAt':
+      return Date.parse(left.createdAt) - Date.parse(right.createdAt);
+    default:
+      return 0;
+  }
+}
+
+function sortAdminUsers(
+  users: AdminUserDto[],
+  sortBy: AdminUsersQuery['sortBy'],
+  sortDir: AdminUsersQuery['sortDir'],
+): AdminUserDto[] {
+  const direction = sortDir === 'asc' ? 1 : -1;
+
+  return [...users].sort((left, right) => {
+    if (sortBy === 'rating' && (left.rating === null || right.rating === null)) {
+      if (left.rating === null && right.rating === null) {
+        return (
+          userCollator.compare(left.displayName, right.displayName) ||
+          userCollator.compare(left.email, right.email)
+        );
+      }
+
+      return left.rating === null ? 1 : -1;
+    }
+
+    const primary = compareAdminUsers(left, right, sortBy);
+
+    if (primary !== 0) return primary * direction;
+
+    return (
+      userCollator.compare(left.displayName, right.displayName) ||
+      userCollator.compare(left.email, right.email)
+    );
+  });
+}
+
+function matchesColumnFilters(
+  user: AdminUserDto,
+  query: AdminUsersQuery,
+): boolean {
+  if (query.listings !== undefined && user.listings !== query.listings) {
+    return false;
+  }
+
+  if (query.deals !== undefined && user.deals !== query.deals) {
+    return false;
+  }
+
+  if (query.copies !== undefined && user.copies !== query.copies) {
+    return false;
+  }
+
+  if (query.rating !== undefined) {
+    if (user.rating === null) return false;
+
+    const userRating = Math.round(user.rating * 10) / 10;
+    const queryRating = Math.round(query.rating * 10) / 10;
+
+    if (userRating !== queryRating) return false;
+  }
+
+  if (query.createdAt) {
+    const date = new Date(user.createdAt);
+    const localDate = [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, '0'),
+      String(date.getDate()).padStart(2, '0'),
+    ].join('-');
+
+    if (
+      localDate !== query.createdAt &&
+      user.createdAt.slice(0, 10) !== query.createdAt
+    ) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 /** Administrator-only user directory and account status controls. */
 export function registerUserAdminRoutes(app: FastifyInstance): void {
   app.get(
@@ -81,16 +203,10 @@ export function registerUserAdminRoutes(app: FastifyInstance): void {
           : {}),
       };
 
-      const [total, users] = await app.prisma.$transaction([
-        app.prisma.user.count({ where }),
-        app.prisma.user.findMany({
-          where,
-          select: adminUserSelect,
-          orderBy: [{ createdAt: 'desc' }, { displayName: 'asc' }],
-          skip: (query.page - 1) * query.pageSize,
-          take: query.pageSize,
-        }),
-      ]);
+      const users = await app.prisma.user.findMany({
+        where,
+        select: adminUserSelect,
+      });
 
       const userIds = users.map((user) => user.id);
       const [listingGroups, buyerGroups, sellerGroups] = await Promise.all([
@@ -145,16 +261,23 @@ export function registerUserAdminRoutes(app: FastifyInstance): void {
         );
       }
 
+      const items = users
+        .map((user) =>
+          serializeAdminUser(
+            user,
+            listingsByUser.get(user.id) ?? 0,
+            dealsByUser.get(user.id) ?? 0,
+          ),
+        )
+        .filter((user) => matchesColumnFilters(user, query));
+
+      const sortedItems = sortAdminUsers(items, query.sortBy, query.sortDir);
+      const start = (query.page - 1) * query.pageSize;
+
       return reply.send(
         paginated(
-          users.map((user) =>
-            serializeAdminUser(
-              user,
-              listingsByUser.get(user.id) ?? 0,
-              dealsByUser.get(user.id) ?? 0,
-            ),
-          ),
-          total,
+          sortedItems.slice(start, start + query.pageSize),
+          sortedItems.length,
           query.page,
           query.pageSize,
         ),

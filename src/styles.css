@@ -2746,13 +2746,53 @@
             font: 600 .68rem/1.4 'IBM Plex Mono', monospace;
             letter-spacing: .04em;
         }
-        .admin-users__filters { align-items: flex-end; }
-        .admin-users__search { flex: 1 1 320px; min-width: 260px; }
-        .admin-users__search label { min-width: 0; }
-        .admin-users__search-row { display: flex; gap: .45rem; }
-        .admin-users__search-row .form-control { min-width: 0; }
-        .admin-users__search-row .btn-secondary { flex: none; }
-        .admin-users__table { min-width: 980px; }
+        .admin-users__table-toolbar {
+            display: flex; align-items: center; justify-content: flex-end;
+            gap: .75rem; margin-bottom: .65rem;
+        }
+        .admin-users__table-toolbar .admin-reports__count { margin-left: 0; }
+        .admin-users__reset { min-height: 34px; padding: .38rem .68rem; font-size: .72rem; }
+        .admin-users__table { min-width: 1120px; }
+        .admin-users__sort {
+            display: inline-flex; align-items: center; gap: .32rem;
+            padding: 0; border: 0; background: transparent;
+            color: inherit; font: inherit; letter-spacing: inherit;
+            text-transform: inherit; white-space: nowrap;
+        }
+        .admin-users__sort:hover { color: var(--text-main); }
+        .admin-users__sort svg { opacity: .45; }
+        .admin-users__sort.is-active { color: var(--text-main); }
+        .admin-users__sort.is-active svg { color: var(--brand); opacity: 1; }
+        .admin-users__column-filters th {
+            padding-top: .1rem; padding-bottom: .65rem;
+            white-space: normal;
+        }
+        .admin-users__column-input {
+            width: 100%; min-height: 34px;
+            padding: .35rem .5rem;
+            border-radius: 6px;
+            font-size: .72rem;
+        }
+        .admin-users__column-input--number {
+            text-align: right;
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        .admin-users__column-input--number::-webkit-inner-spin-button,
+        .admin-users__column-input--number::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .admin-users__column-filters select.form-control {
+            padding-right: 1.9rem;
+            background-position: right .5rem center;
+            background-size: 12px 12px;
+        }
+        .admin-users__empty-row {
+            display: flex; align-items: center; justify-content: center;
+            gap: .55rem; padding: 1.6rem 1rem;
+            color: var(--text-muted); font-size: .82rem;
+        }
         .admin-users__identity {
             display: flex; align-items: center; gap: .55rem;
             min-width: 220px;
@@ -2825,9 +2865,7 @@
             color: var(--text-muted); font-size: .8rem;
         }
         @media (max-width: 640px) {
-            .admin-users__search { flex-basis: 100%; min-width: 0; }
-            .admin-users__search-row { flex-direction: column; }
-            .admin-users__search-row .btn-secondary { justify-content: center; }
+            .admin-users__table-toolbar { justify-content: space-between; }
             .admin-users__pagination { flex-wrap: wrap; }
         }
         .admin-report--market .admin-report__reason { line-height: 1.4; }
