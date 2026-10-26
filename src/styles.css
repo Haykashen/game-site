@@ -1873,12 +1873,14 @@
         }
         .btn-secondary {
             min-height: 44px;
+            display: inline-flex; align-items: center; justify-content: center; gap: .45rem;
             padding: .7rem 1rem;
             border: 1px solid var(--border-color); border-radius: 8px;
             background: var(--bg-card); color: var(--text-main);
             font-size: .86rem; font-weight: 600;
             transition: border-color .18s ease, background .18s ease;
         }
+        .btn-secondary > svg { flex: none; }
         .btn-secondary:hover { border-color: var(--brand); background: var(--brand-light); }
 
         @media (max-width: 980px) {
