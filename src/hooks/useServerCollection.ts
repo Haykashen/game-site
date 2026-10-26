@@ -41,7 +41,11 @@ export function useGameCollection(): GameCollection {
   const [mutationError, setMutationError] = useState<{ owner: string | undefined; message: string } | null>(null);
   const { games, editions } = catalog.data;
   const copies = shelf.data;
-  const editionById = useMemo(() => new Map(editions.map((edition) => [edition.id, edition])), [editions]);
+  const editionById = useMemo(() => {
+    const map = new Map(editions.map((edition) => [edition.id, edition]));
+    for (const edition of editions) for (const variant of edition.variants ?? []) map.set(variant.id, edition);
+    return map;
+  }, [editions]);
   const editionsByGame = useMemo(() => {
     const map = new Map<string, Edition[]>();
     for (const edition of editions) map.set(edition.gameId, [...(map.get(edition.gameId) ?? []), edition]);

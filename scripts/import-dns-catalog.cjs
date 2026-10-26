@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const { createRequire } = require('node:module');
 const { resolve } = require('node:path');
 const { planCatalog } = require('./lib/dns-catalog.cjs');
+const {applyEditionDedup}=require('./lib/edition-dedup.cjs');
 const { PrismaClient } = createRequire(resolve(process.cwd(),'package.json'))('@prisma/client');
 const input = process.argv[2];
 const apply = process.argv.includes('--apply');
@@ -20,6 +21,7 @@ async function main() {
       if (apply && plan.hash !== expected) throw Error('Plan changed; run preview again. Nothing written.');
       const counts = async()=>({users:await tx.user.count(),copies:await tx.copy.count(),market:await tx.marketEntry.count(),bids:await tx.bid.count(),deals:await tx.deal.count(),ratings:await tx.gameRating.count(),discussions:await tx.discussion.count(),news:await tx.newsPost.count()});
       const before = await counts();
+      let reassigned={copies:0,marketEntries:0};
       if (apply) {
         for (let i=0;i<plan.createGames.length;i+=200) await tx.game.createMany({data:plan.createGames.slice(i,i+200)});
         for (const update of plan.updateGames) await tx.game.update({where:{id:update.id},data:update.data});
@@ -32,10 +34,11 @@ async function main() {
           const mutable = new Set(['coverImages','dnsProductId','dnsProductCode','updatedAt']);
           for(const field of Object.keys(old)) if (!mutable.has(field) && JSON.stringify(old[field])!==JSON.stringify(current[field])) throw Error('Existing edition metadata changed; rollback');
         }
+        reassigned=await applyEditionDedup(tx,plan.dedup);
       }
       const after = await counts();
       if (JSON.stringify(before)!==JSON.stringify(after)) throw Error('Related data changed during import; rollback');
-      return {mode:apply?'applied':'preview',hash:plan.hash,...plan.summary,relatedTables:after,existingMetadataPreserved:true,mappings:plan.mappings};
+      return {mode:apply?'applied':'preview',hash:plan.hash,...plan.summary,relatedTables:after,existingMetadataPreserved:true,reassigned,duplicates:plan.dedup,mappings:plan.mappings};
     }, {timeout:120000,isolationLevel:'Serializable'});
     console.log(JSON.stringify(result,null,2));
   } finally {await prisma.$disconnect();}

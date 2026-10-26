@@ -61,20 +61,22 @@ const extraEditionNames = [
   "Earth's Mightiest Edition", 'Расширенное Издание',
   'Premium Deluxe Edition', 'Special Day One Edition', 'Полное издание',
   'Cosmic Deluxe', 'Особое издание', 'Издание Deluxe', 'Издание Croft', 'Deluxe издание',
+  'Tarnished Edition',
 ].sort((a,b) => b.length-a.length);
 
 function parseName(title) {
-  const platformPattern = /\b(?:PS[1-5]|PSP|PS\s*Vita|Xbox\s+(?:Series\s+[XS](?:\s*[|/\\]\s*[XS])?|One(?:\s*[/\\]\s*(?:Xbox\s+)?Series\s+[XS])?|360)|Nintendo\s+Switch(?:\s*2)?|PC)\b/gi;
+  const platformPattern = /\b(?:PS[1-5]|PSP|PS\s*Vita|Xbox\s+(?:Series\s+[XS](?:\s*[|/\\]\s*[XS])?|One(?:\s*[/\\]\s*(?:Xbox\s+)?Series\s+[XS])?|360)|(?:Nintendo\s+)?Switch(?:\s*2)?|PC)\b/gi;
   const platforms = [...new Set([...title.matchAll(platformPattern)].flatMap(m => {
     const token = clean(m[0]);
     if (/^ps[1-5]$/i.test(token)) return [token.toUpperCase()];
     if (/^Xbox One/i.test(token)) return ['Xbox One', ...(/Series\s*X/i.test(token) ? ['Xbox Series X'] : /Series\s*S/i.test(token) ? ['Xbox Series S'] : [])];
     if (/^Xbox Series/i.test(token)) return [...new Set([...token.matchAll(/\b[XS]\b/gi)].map(part=>'Xbox Series '+part[0].toUpperCase()))];
     if (/^Xbox 360$/i.test(token)) return ['Xbox 360'];
+    if (/^(?:Nintendo\s+)?Switch/i.test(token)) return [/2$/.test(token)?'Nintendo Switch 2':'Nintendo Switch'];
     return [token];
   }))];
   let name = clean(title.replace(/\[[^\]]*\]/g, '').replace(/^Дополнение\s+для\s+игры\s+/iu, '').replace(/^Игра\s+(?:для\s+(?:PS[1-5]|PSP|Xbox\s+(?:Series\s+[XS](?:\s*[|/\\]\s*[XS])?|One(?:\s*[/\\]\s*(?:Xbox\s+)?Series\s+[XS])?|360))\s*)?/iu, ''));
-  name = clean(name.replace(/\(([^()]*)\)/g, (whole, inner) => /\bPS[1-5]\b|\bXbox\b|^\d+\+$|только для VR|^(?:Экш[еэ]н|Экшн|Шутер|Файтинг|Файтиг|Приключение|Ролевая игра|Прочее|Гонки|Аркада|Хоррор|Хоррор с элементами выживания|Спорт|Стратегия|русская документация|WW)$/i.test(inner) ? '' : whole));
+  name = clean(name.replace(/\(([^()]*)\)/g, (whole, inner) => /\bPS[1-5]\b|\bXbox\b|\bSwitch\b|^\d+\+$|только для VR|^(?:Экш[еэ]н|Экшн|Шутер|Файтинг|Файтиг|Приключение|Ролевая игра|Прочее|Гонки|Аркада|Хоррор|Хоррор с элементами выживания|Спорт|Стратегия|русская документация|WW)$/i.test(inner) ? '' : whole));
   // Old DNS titles enclose the game (sometimes including its edition) in quotes.
   name = clean(name.replace(/"([^\"]+)"/g, '$1 '));
   name = clean(name.replace(/^2-в-1\s+/iu,''));
@@ -145,6 +147,17 @@ function extract(html, sourceFile) {
     if (!id || !sourceTitle) throw Error('Missing data-product or title in card ' + index);
     const title = clean(sourceTitle.replace(/\[[^\]]*\]/g, ''));
     const parsed = parseName(sourceTitle);
+    const switch2Sources = {
+      'cyberpunk 2077':'https://www.nintendo.com/us/store/products/cyberpunk-2077-ultimate-edition-switch-2/',
+      'splatoon raiders':'https://my.nintendo.com/news/a2cf82f43a6eb14d',
+      'yoshi and the mysterious book':'https://www.nintendo.com/us/store/products/yoshi-and-the-mysterious-book-switch-2/',
+      'mario kart world':'https://www.nintendo.com/us/whatsnew/nintendo-switch-2-choose-your-game-bundle-launches-this-summer/',
+      'donkey kong bananza':'https://www.nintendo.com/us/whatsnew/nintendo-switch-2-choose-your-game-bundle-launches-this-summer/',
+      'pokemon pokopia':'https://www.nintendo.com/us/whatsnew/nintendo-switch-2-choose-your-game-bundle-launches-this-summer/',
+      'elden ring':'https://www.fromsoftware.jp/ww/detail.html?csm=109',
+    };
+    const platformReference = parsed.platforms.includes('Nintendo Switch') ? switch2Sources[key(parsed.gameTitle)] : null;
+    if (platformReference) parsed.platforms = ['Nintendo Switch 2'];
     const isAddon = /^Дополнение для игры /iu.test(sourceTitle);
     if (isAddon) {
       const addonBases = ['The Elder Scrolls IV: Oblivion Remastered','The Elder Scrolls Online',
@@ -177,6 +190,7 @@ function extract(html, sourceFile) {
     const product = {
       id, code: card.attr('data-code') ?? null, title, sourceTitle,
       ...(isAddon ? {contentType:'addon'} : {}),
+      ...(platformReference ? {platformAnnotation:{sourceLabel:'Switch',resolved:'Nintendo Switch 2',source:platformReference}} : {}),
       gameTitle: parsed.gameTitle, parsedGameTitle: parsed.parsedGameTitle, platforms: parsed.platforms,
       editionName: parsed.editionName ?? (editionType ?? 'Не указано'), editionTags: parsed.editionTags,
       editionType, editionNameSource: parsed.editionName ? 'title' : editionType ? 'title-specifications' : 'unspecified',

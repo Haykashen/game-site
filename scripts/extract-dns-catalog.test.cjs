@@ -3,6 +3,13 @@ const assert = require('node:assert/strict');
 const { extract, parseName } = require('./extract-dns-catalog.cjs');
 const card = (id, title, body = '') => `<div class="catalog-product" data-product="${id}" data-code="001"><a class="catalog-product__name" title="${title}" href="/product/${id}/">WRONG visible title</a>${body}</div>`;
 const editions = result => result.games.flatMap(g => g.platforms.flatMap(p => p.editions));
+test('Nintendo platform labels are removed from names and Switch 2 corrections retain the source label',()=>{
+  assert.equal(parseName('Игра Super Mario Odyssey (Switch)').gameTitle,'Super Mario Odyssey');
+  assert.deepEqual(parseName('Игра Example (Switch 2)').platforms,['Nintendo Switch 2']);
+  const result=extract(card('switch2','Игра Mario Kart World (Switch)'),'nintendo.html');
+  assert.equal(result.games[0].platforms[0].name,'Nintendo Switch 2');
+  assert.equal(editions(result)[0].platformAnnotation.sourceLabel,'Switch');
+});
 
 test('Xbox generations, shorthand and legacy quoted titles normalize without leaking platforms into titles',()=>{
   for(const delimiter of ['/','\\','/Xbox ']){

@@ -1,5 +1,6 @@
 import type { Prisma } from '@prisma/client';
 import type { FastifyInstance } from 'fastify';
+import { resolveEditionId } from '../lib/editionIdentity.js';
 import {
   createCopySchema,
   editionQuantitySchema,
@@ -93,6 +94,7 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
       if (!user) throw unauthorized();
 
       const input = parse(createCopySchema, request.body);
+      input.editionId = await resolveEditionId(app.prisma,input.editionId);
 
       const edition = await app.prisma.edition.findUnique({
         where: { id: input.editionId },
@@ -215,7 +217,7 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
       const user = request.user;
       if (!user) throw unauthorized();
 
-      const { editionId } = request.params as { editionId: string };
+      const editionId = await resolveEditionId(app.prisma,(request.params as {editionId:string}).editionId);
       const { quantity } = parse(editionQuantitySchema, request.body);
 
       const edition = await app.prisma.edition.findUnique({
@@ -280,7 +282,7 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
       const user = request.user;
       if (!user) throw unauthorized();
 
-      const { editionId } = request.params as { editionId: string };
+      const editionId = await resolveEditionId(app.prisma,(request.params as {editionId:string}).editionId);
       const input = parse(updateCopySchema, request.body);
 
       const copies = await app.prisma.copy.findMany({
@@ -335,7 +337,7 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
       const user = request.user;
       if (!user) throw unauthorized();
 
-      const { editionId } = request.params as { editionId: string };
+      const editionId = await resolveEditionId(app.prisma,(request.params as {editionId:string}).editionId);
 
       const result = await app.prisma.copy.deleteMany({
         where: { userId: user.id, editionId },

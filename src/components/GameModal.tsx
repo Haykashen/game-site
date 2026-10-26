@@ -55,7 +55,7 @@ export function GameModal({
   const { syncError } = useCollection();
   const [activeMarketTab, setActiveMarketTab] = useState<GameMarketTab>('lots');
   const [selectedEditionId, setSelectedEditionId] = useState(() =>
-    editions.some((edition) => edition.id === initialEditionId) ? initialEditionId : (editions[0]?.id ?? ''),
+    editions.find((edition) => edition.id === initialEditionId || edition.variants?.some(variant=>variant.id===initialEditionId))?.id ?? editions[0]?.id ?? '',
   );
 
   const platforms = useMemo(

@@ -1,21 +1,28 @@
-# Объединённый каталог DNS: PlayStation и Xbox
+# Объединённый каталог DNS: PlayStation, Xbox и Nintendo
 
 Файл: `games-dns.json` (UTF-8). Структура: `games[] → platforms[] → editions[] → images[]`.
 
 Проверено по исходному HTML:
 
-- 1 714 уникальных `data-product`: 1 192 PlayStation и 522 Xbox — все сохранены.
-- 906 групп игр; 1 501 группа платформ; 1 888 вложенных записей товаров.
+- 1 738 уникальных `data-product`: 1 192 PlayStation, 522 Xbox и 24 Nintendo — все сохранены.
+- 924 группы игр; 1 525 групп платформ; 1 887 логических изданий.
+- Исходных записей «товар + платформа» — 1 912; повторения сведены в `products[]` внутри издания.
+- Аудит: 24 группы совпавших изданий, 25 повторяющихся карточек. Отчёт — `games-dns-duplicates.json`.
 - Товар с несколькими платформами присутствует под каждой с одним исходным ID.
 - Изображения есть у всех товаров. Все ссылки взяты из `<picture>` соответствующих карточек.
-- Даты выпуска указаны для 1 597 товаров; отсутствующие или явно ошибочные даты — `null`.
+- Даты выпуска указаны для 1 621 товара; отсутствующие или явно ошибочные даты — `null`.
 - Xbox-выгрузка отдельно сохранена в `games-dns-xbox.json`: 401 группа игр,
   522 товара, 692 записи платформ/изданий. Среди товаров 81 цифровой и 14 дополнений.
-- Метаданные обоих исходных HTML, SHA-256 и даты извлечения — в `source.files`.
+- Nintendo-выгрузка отдельно — `games-dns-nintendo.json`: 24 товара. У 7 товаров
+  Switch уточнён до Switch 2 по официальным страницам; ссылки — в `platformAnnotation`.
+- Метаданные трёх исходных HTML, SHA-256 и даты извлечения — в `source.files`.
 
 ## Поля и идентификаторы
 
-У издания `id` строго равен `data-product`; `code` — `data-code`.
+В `schemaVersion: 2` издание — одна логическая карточка. При нескольких товарах
+внутри есть `products[]` с полными исходными записями и `productIds[]`.
+`id` каждого товара строго равен `data-product`, `code` — `data-code`;
+у общей карточки `id` — ID выбранного товара группы.
 У общей игры `id` равен `data-product` первого встретившегося товара группы,
 а `productIds` перечисляет все её товарные ID. Это идентификатор группы данной
 выгрузки, а не ID игры в production-каталоге DiscVault.
@@ -71,13 +78,19 @@ Gone Fission — с Fallout 76 по
 
 ```powershell
 npm install --prefix .deploy/tools --no-save --package-lock=false cheerio
-node scripts/extract-dns-catalog.cjs "C:/Users/Hayka/Downloads/game-dns-xbox.html" exports/games-dns-xbox.json
-node scripts/merge-dns-catalog.cjs exports/games-dns.json exports/games-dns-xbox.json exports/games-dns.json
+node scripts/extract-dns-catalog.cjs "C:/Users/Hayka/Downloads/game-dns-Nintendo.html" exports/games-dns-nintendo.json
+node scripts/merge-dns-catalog.cjs exports/games-dns.json exports/games-dns-nintendo.json exports/games-dns.json
 node --test scripts/extract-dns-catalog.test.cjs
 ```
 
 Объединение сохраняет существующие группы и товарные записи, добавляя платформы
 и товары. Конфликт назначения одного ID разным играм останавливает обработку.
+
+Повторы группируются по игре, платформе, названию издания, региону, языкам
+интерфейса и носителю. Различия озвучки, артикулов, дат и изображений сохраняются
+в вариантах поставки. Данные не удаляются: в БД варианты указывают на основное
+издание через `canonical_id`. Копии и объявления ссылаются на основную карточку,
+старые ID разрешаются в неё. На сайте можно раскрыть «Варианты поставки».
 
 В JSON записаны SHA-256 исходников, время извлечения, статистика и правила полей.
 Проверены все товарные ID, соответствие `sourceTitle` атрибутам HTML и точное

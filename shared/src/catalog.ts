@@ -29,7 +29,10 @@ export interface EditionDto {
   barcode: string;
   dnsProductId: string;
   dnsProductCode: string;
+  variants?: EditionVariantDto[];
 }
+
+export type EditionVariantDto = Omit<EditionDto,'variants'>;
 
 export interface GameStatsDto {
   platforms: string[];

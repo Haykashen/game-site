@@ -1,4 +1,5 @@
 const { createHash } = require('node:crypto');
+const {expandProducts,planEditionDedup}=require('./edition-dedup.cjs');
 const titleKey = title => title.normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase().replace(/[’‘`']/g, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 const existingAliases = new Map(Object.entries({
   'God of War': 'God of War (2018)',
@@ -22,6 +23,8 @@ function coverImages(urls) {
 function same(a,b) { return JSON.stringify(a) === JSON.stringify(b); }
 
 function planCatalog(document, games, editions) {
+  document=expandProducts(document);
+  editions=[...new Map(editions.flatMap(e=>[e,...(e.variants??[]).map(v=>({...v,canonicalId:e.id}))]).map(e=>[e.id,e])).values()];
   if (!Array.isArray(document.games) || !document.games.length || document.warnings?.length) throw Error('Invalid or unresolved source catalogue');
   const gamesByKey = new Map(), gamesById = new Map(games.map(g=>[g.id,g]));
   for (const game of games) {
@@ -49,7 +52,7 @@ function planCatalog(document, games, editions) {
     else if (!existing.coverImage && coverImage) updateGames.push({ id: gameId, data: { coverImage } });
     mappings.push({ sourceId: source.id, gameId, sourceTitle: source.title, title: existing?.title ?? source.title, matched: Boolean(existing) });
     for (const platform of source.platforms) {
-      if (!['PS3','PS4','PS5','Xbox One','Xbox 360','Xbox Series X','Xbox Series S'].includes(platform.name)) throw Error('Unresolved platform: ' + platform.name);
+      if (!['PS3','PS4','PS5','Xbox One','Xbox 360','Xbox Series X','Xbox Series S','Nintendo Switch','Nintendo Switch 2'].includes(platform.name)) throw Error('Unresolved platform: ' + platform.name);
       for (const product of platform.editions) {
         if (!source.productIds.includes(product.id) || !product.platforms.includes(platform.name)) throw Error('Product/platform mismatch: ' + product.id);
         const covers = coverImages(product.images ?? []);
@@ -64,7 +67,8 @@ function planCatalog(document, games, editions) {
         if (prior) {
           const data = {};
           // Preserve non-DNS artwork supplied by users or the existing catalogue.
-          if ((!prior.coverImages.length || prior.coverImages.every(url=>url.startsWith('https://c.dns-shop.ru/'))) && !same(prior.coverImages,covers)) data.coverImages = covers;
+          const combined=[...new Set([...prior.coverImages,...covers])];
+          if ((!prior.coverImages.length || prior.coverImages.every(url=>url.startsWith('https://c.dns-shop.ru/'))) && !same(prior.coverImages,combined)) data.coverImages = combined;
           if (!prior.dnsProductId) data.dnsProductId = product.id;
           if (!prior.dnsProductCode && product.code) data.dnsProductCode = product.code;
           if (Object.keys(data).length) updateEditions.push({ id: prior.id, data });
@@ -78,11 +82,15 @@ function planCatalog(document, games, editions) {
       }
     }
   }
-  const plan = { createGames, updateGames, createEditions, updateEditions, mappings };
+  const updates=new Map(updateEditions.map(u=>[u.id,u.data]));
+  const dedup=planEditionDedup([...editions.map(e=>({...e,...(updates.get(e.id)??{})})),...createEditions]);
+  const plan = { createGames, updateGames, createEditions, updateEditions, mappings, dedup };
   const hash = createHash('sha256').update(JSON.stringify(plan)).digest('hex');
   return { ...plan, hash, summary: { sourceGames: document.games.length, matchedGames: mappings.filter(m=>m.matched).length,
     createGames: createGames.length, updateGameCovers: updateGames.length, createEditions: createEditions.length, updateEditions: updateEditions.length,
     beforeGames: games.length, afterGames: games.length + createGames.length, beforeEditions: editions.length, afterEditions: editions.length + createEditions.length,
-    sourceProducts: new Set(document.games.flatMap(g=>g.productIds)).size } };
+    sourceProducts: new Set(document.games.flatMap(g=>g.productIds)).size,
+    duplicateGroups:dedup.length,mergeVariants:dedup.reduce((n,g)=>n+g.variantIds.length,0),
+    afterActiveEditions:editions.filter(e=>!e.canonicalId).length+createEditions.length-dedup.reduce((n,g)=>n+g.variantIds.filter(id=>!editions.find(e=>e.id===id)?.canonicalId).length,0) } };
 }
 module.exports = { titleKey, coverImages, planCatalog };

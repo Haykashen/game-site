@@ -238,14 +238,18 @@ model Edition {
   barcode        String    @default("")
   dnsProductId   String    @default("") @map("dns_product_id")
   dnsProductCode String    @default("") @map("dns_product_code")
+  canonicalId    String?   @map("canonical_id")
   createdAt      DateTime  @default(now()) @map("created_at")
   updatedAt      DateTime  @updatedAt @map("updated_at")
 
   game          Game          @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  canonical     Edition?      @relation("EditionVariants", fields: [canonicalId], references: [id], onDelete: Restrict)
+  variants      Edition[]     @relation("EditionVariants")
   copies        Copy[]
   marketEntries MarketEntry[]
 
   @@index([gameId])
+  @@index([canonicalId])
   @@index([platform])
   @@index([region])
   @@index([lang])

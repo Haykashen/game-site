@@ -1,5 +1,7 @@
 const { titleKey } = require('./dns-catalog.cjs');
+const {expandProducts}=require('./edition-dedup.cjs');
 function mergeCatalog(base, addition) {
+  base=expandProducts(base);addition=expandProducts(addition);
   if (base.warnings?.length || addition.warnings?.length) throw Error('Resolve source warnings before merging');
   const result = structuredClone(base);
   const byTitle = new Map(result.games.map(g=>[titleKey(g.title),g]));

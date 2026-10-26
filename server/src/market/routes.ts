@@ -1,4 +1,5 @@
 import type { FastifyInstance, FastifyRequest } from 'fastify';
+import { resolveEditionId } from '../lib/editionIdentity.js';
 import {
   fromMinorUnits,
   marketCreateSchema,
@@ -79,6 +80,7 @@ async function listMarketEntries(
     ...rawQuery,
     status: rawQuery.status ?? statusDefault,
   });
+  if (query.editionId) query.editionId = await resolveEditionId(app.prisma,query.editionId);
 
   const user = request.user;
 
@@ -174,6 +176,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
       if (!user) throw unauthorized();
 
       const input = parse(marketCreateSchema, request.body);
+      if (input.editionId) input.editionId = await resolveEditionId(app.prisma,input.editionId);
       await assertMarketTarget(app, input.gameId, input.editionId);
 
       const photos = await storePhotoReferences(input.photos, 'market');
@@ -291,6 +294,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
       };
 
       const validated = parse(marketCreateSchema, merged);
+      if (validated.editionId) validated.editionId = await resolveEditionId(app.prisma,validated.editionId);
 
       if (existing.bidCount > 0) {
         const sameDate = (next: string | null | undefined, current: Date | null) => {

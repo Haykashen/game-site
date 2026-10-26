@@ -95,7 +95,7 @@ export function serializeGame(game: Game): GameDto {
   };
 }
 
-export function serializeEdition(edition: Edition): EditionDto {
+export function serializeEdition(edition: Edition & {variants?: Edition[]}): EditionDto {
   return {
     id: edition.id,
     gameId: edition.gameId,
@@ -113,6 +113,10 @@ export function serializeEdition(edition: Edition): EditionDto {
     barcode: edition.barcode,
     dnsProductId: edition.dnsProductId,
     dnsProductCode: edition.dnsProductCode,
+    variants: (edition.variants ?? []).map(variant=>{
+      const {variants:_ignored,...record}=serializeEdition(variant);
+      return record;
+    }),
   };
 }
 

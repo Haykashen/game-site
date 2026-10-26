@@ -181,7 +181,7 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
       ] = await Promise.all([
         prisma.game.count(),
         prisma.game.count({ where: { createdAt: { gte: start } } }),
-        prisma.edition.count(),
+        prisma.edition.count({where:{canonicalId:null}}),
         prisma.copy.count(),
         prisma.user.count(),
         prisma.user.count({ where: { status: 'active' } }),
@@ -263,7 +263,7 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
               coverImage: true,
               year: true,
               publisher: true,
-              editions: { select: { id: true } },
+              editions: { where: {canonicalId:null}, select: { id: true } },
               _count: { select: { subscriptions: true } },
             },
           })

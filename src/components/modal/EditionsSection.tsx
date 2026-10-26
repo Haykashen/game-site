@@ -129,6 +129,12 @@ function EditionCard({
         {edition.description && (
           <p className="edition-card__description">{edition.description}</p>
         )}
+        {!!edition.variants?.length && <details className="edition-variants" onClick={event=>event.stopPropagation()} onKeyDown={event=>event.stopPropagation()}>
+          <summary>Варианты поставки: {edition.variants.length + 1}</summary>
+          {[edition,...edition.variants].map(variant=><p key={variant.id}>
+            {variant.dnsProductCode ? `Артикул ${variant.dnsProductCode}. ` : ''}{variant.description || variant.lang}
+          </p>)}
+        </details>}
 
         <p className="edition-card__contents">
           <Package size={13} aria-hidden="true" />

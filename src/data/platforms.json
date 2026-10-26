@@ -58,5 +58,17 @@
     "group": "Xbox",
     "color": "#1f2937",
     "textColor": "#bef264"
+  },
+  {
+    "name": "Nintendo Switch",
+    "group": "Nintendo",
+    "color": "#e60012",
+    "textColor": "#ffffff"
+  },
+  {
+    "name": "Nintendo Switch 2",
+    "group": "Nintendo",
+    "color": "#b80010",
+    "textColor": "#ffffff"
   }
 ]

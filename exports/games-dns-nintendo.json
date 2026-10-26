@@ -1,0 +1,3346 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "game-dns-Nintendo.html",
+    "sha256": "9c2141e77065a5e1de4d0e49eea3e4d7583d012ecb54a4d11620768345ae0edc",
+    "baseUrl": "https://www.dns-shop.ru",
+    "extractedAt": "2026-10-26T19:38:44.155Z"
+  },
+  "conventions": {
+    "gameId": "data-product первого товара группы; все товарные ID перечислены в productIds",
+    "editionId": "data-product конкретного товара, без изменений",
+    "grouping": "Нормализация регистра, пунктуации, апострофов и диакритики; явные названия изданий отделены от названия игры. Ремейки, ремастеры и сборники остаются отдельными названиями.",
+    "multiPlatform": "Товар с несколькими платформами присутствует у каждой; одинаковый id означает один и тот же товар, не дубликат источника.",
+    "releaseDate": "Дата конкретного товара из HTML, не год первого выпуска игры.",
+    "images": "Только фактические URL из source/img внутри picture. Размеры — из URL thumbnail. Разные размеры/форматы сохранены; точные дубликаты URL удалены.",
+    "missing": "null / пустой массив / «Не указано» означают отсутствие данных. Цены, рейтинги и наличие — снимок HTML, не актуальные значения."
+  },
+  "stats": {
+    "sourceCards": 24,
+    "uniqueProducts": 24,
+    "games": 24,
+    "platformGroups": 24,
+    "editionEntries": 24,
+    "productsWithImages": 24,
+    "productsWithReleaseDate": 24,
+    "multiPlatformProducts": 0
+  },
+  "games": [
+    {
+      "id": "303cde3d-77c9-11ee-9166-00155d8ed20a",
+      "title": "Super Mario Bros. Wonder",
+      "productIds": [
+        "303cde3d-77c9-11ee-9166-00155d8ed20a"
+      ],
+      "sourceGameTitles": [
+        "Super Mario Bros. Wonder"
+      ],
+      "genres": [
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "303cde3d-77c9-11ee-9166-00155d8ed20a",
+              "code": "5437284",
+              "title": "Игра Super Mario Bros. Wonder (Switch)",
+              "sourceTitle": "Игра Super Mario Bros. Wonder (Switch) [0+, экшн, дата выхода: 20.10.2023, язык озвучки: английский, русский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/303cde3d77c9ed20/igra-super-mario-bros-wonder-switch/",
+              "releaseDate": "2023-10-20",
+              "releaseDateText": "20.10.2023",
+              "ageRating": "0+",
+              "genres": [
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "specifications": {
+                "Жанр": "экшн",
+                "Возрастное ограничение": "0+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский, русский",
+                "Дата выхода": "20.10.2023"
+              },
+              "price": 3599,
+              "currency": "RUB",
+              "priceText": "3 599 ₽",
+              "rating": 4.98,
+              "ratingScale": 5,
+              "reviewCount": 108,
+              "ratingText": "4.98 |108 отзывов",
+              "questionCount": 2,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": "При заказе"
+              },
+              "advertisedImageCount": 6,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/baf07d32bb4c40180011681c86158ed3/dc620ca6d8b917f05d6f216b4cd2f99172f4e9a9382189d1c43a4900bf3fd2c7.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/baf07d32bb4c40180011681c86158ed3/dc620ca6d8b917f05d6f216b4cd2f99172f4e9a9382189d1c43a4900bf3fd2c7.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/273f8d35dfe23c2e9a1bda06e9d2860c/dc620ca6d8b917f05d6f216b4cd2f99172f4e9a9382189d1c43a4900bf3fd2c7.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/7668d3cffc395badaa0d416f9f8c1e89/dc620ca6d8b917f05d6f216b4cd2f99172f4e9a9382189d1c43a4900bf3fd2c7.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/7668d3cffc395badaa0d416f9f8c1e89/dc620ca6d8b917f05d6f216b4cd2f99172f4e9a9382189d1c43a4900bf3fd2c7.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/baf07d32bb4c40180011681c86158ed3/dc620ca6d8b917f05d6f216b4cd2f99172f4e9a9382189d1c43a4900bf3fd2c7.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/273f8d35dfe23c2e9a1bda06e9d2860c/dc620ca6d8b917f05d6f216b4cd2f99172f4e9a9382189d1c43a4900bf3fd2c7.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/7668d3cffc395badaa0d416f9f8c1e89/dc620ca6d8b917f05d6f216b4cd2f99172f4e9a9382189d1c43a4900bf3fd2c7.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/7668d3cffc395badaa0d416f9f8c1e89/dc620ca6d8b917f05d6f216b4cd2f99172f4e9a9382189d1c43a4900bf3fd2c7.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 1,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "87cc616f-3e1c-11e9-a208-00155df1b805",
+      "title": "The Legend of Zelda: Breath of the Wild",
+      "productIds": [
+        "87cc616f-3e1c-11e9-a208-00155df1b805"
+      ],
+      "sourceGameTitles": [
+        "The Legend of Zelda: Breath of the Wild"
+      ],
+      "genres": [
+        "ролевая",
+        "ролевой экшн",
+        "экшн",
+        "экшн с открытым миром"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "87cc616f-3e1c-11e9-a208-00155df1b805",
+              "code": "1345792",
+              "title": "Игра The Legend of Zelda: Breath of the Wild (Switch)",
+              "sourceTitle": "Игра The Legend of Zelda: Breath of the Wild (Switch) [12+, ролевая, ролевой экшн, экшн, экшн с открытым миром, дата выхода: 03.03.2017, язык озвучки: английский, русский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/87cc616f3e1c1b80/igra-the-legend-of-zelda-breath-of-the-wild-switch/",
+              "releaseDate": "2017-03-03",
+              "releaseDateText": "03.03.2017",
+              "ageRating": "12+",
+              "genres": [
+                "ролевая",
+                "ролевой экшн",
+                "экшн",
+                "экшн с открытым миром"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "specifications": {
+                "Жанр": "ролевая, ролевой экшн, экшн, экшн с открытым миром",
+                "Возрастное ограничение": "12+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский, русский",
+                "Дата выхода": "03.03.2017"
+              },
+              "price": 5499,
+              "currency": "RUB",
+              "priceText": "5 499 ₽",
+              "rating": 4.95,
+              "ratingScale": 5,
+              "reviewCount": 896,
+              "ratingText": "4.95 |896 отзывов",
+              "questionCount": 6,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": null
+              },
+              "advertisedImageCount": 6,
+              "image": "https://c.dns-shop.ru/thumb/st4/fit/500/500/63c8a9a60f724e80edb7d88cf218d70f/ad7217751b6a80fb2054c1513ddae4b2e06fd49e8bbca498823418153f6cf3d0.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st4/fit/500/500/63c8a9a60f724e80edb7d88cf218d70f/ad7217751b6a80fb2054c1513ddae4b2e06fd49e8bbca498823418153f6cf3d0.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st4/fit/300/300/b3ca8683c7d95dd8b50ccbb0efae50f1/ad7217751b6a80fb2054c1513ddae4b2e06fd49e8bbca498823418153f6cf3d0.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st4/fit/200/200/3ab09b768db2ffc24ea214418fc6782b/ad7217751b6a80fb2054c1513ddae4b2e06fd49e8bbca498823418153f6cf3d0.jpg",
+                "https://c.dns-shop.ru/thumb/st4/fit/200/200/3ab09b768db2ffc24ea214418fc6782b/ad7217751b6a80fb2054c1513ddae4b2e06fd49e8bbca498823418153f6cf3d0.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st4/fit/500/500/63c8a9a60f724e80edb7d88cf218d70f/ad7217751b6a80fb2054c1513ddae4b2e06fd49e8bbca498823418153f6cf3d0.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st4/fit/300/300/b3ca8683c7d95dd8b50ccbb0efae50f1/ad7217751b6a80fb2054c1513ddae4b2e06fd49e8bbca498823418153f6cf3d0.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st4/fit/200/200/3ab09b768db2ffc24ea214418fc6782b/ad7217751b6a80fb2054c1513ddae4b2e06fd49e8bbca498823418153f6cf3d0.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st4/fit/200/200/3ab09b768db2ffc24ea214418fc6782b/ad7217751b6a80fb2054c1513ddae4b2e06fd49e8bbca498823418153f6cf3d0.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 2,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d35477ce-4f79-11e9-a206-00155d03332b",
+      "title": "Super Mario Odyssey",
+      "productIds": [
+        "d35477ce-4f79-11e9-a206-00155d03332b"
+      ],
+      "sourceGameTitles": [
+        "Super Mario Odyssey"
+      ],
+      "genres": [
+        "ролевая",
+        "ролевой экшн",
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "d35477ce-4f79-11e9-a206-00155d03332b",
+              "code": "1351687",
+              "title": "Игра Super Mario Odyssey (Switch)",
+              "sourceTitle": "Игра Super Mario Odyssey (Switch) [6+, ролевая, ролевой экшн, экшн, дата выхода: 27.10.2017, язык озвучки: английский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/d35477ce4f793332/igra-super-mario-odyssey-switch/",
+              "releaseDate": "2017-10-27",
+              "releaseDateText": "27.10.2017",
+              "ageRating": "6+",
+              "genres": [
+                "ролевая",
+                "ролевой экшн",
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский"
+              ],
+              "specifications": {
+                "Жанр": "ролевая, ролевой экшн, экшн",
+                "Возрастное ограничение": "6+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский",
+                "Дата выхода": "27.10.2017"
+              },
+              "price": 5499,
+              "currency": "RUB",
+              "priceText": "5 499 ₽",
+              "rating": 4.92,
+              "ratingScale": 5,
+              "reviewCount": 446,
+              "ratingText": "4.92 |446 отзывов",
+              "questionCount": 4,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": null
+              },
+              "advertisedImageCount": 6,
+              "image": "https://c.dns-shop.ru/thumb/st4/fit/500/500/fcf9fe66702995dea645a28bce9db335/3438abe63af98f09acd167636096188944166b69815f340946da465c0cf20435.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st4/fit/500/500/fcf9fe66702995dea645a28bce9db335/3438abe63af98f09acd167636096188944166b69815f340946da465c0cf20435.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st4/fit/300/300/97375663f19724bd1a1e4d9ccf38dbdd/3438abe63af98f09acd167636096188944166b69815f340946da465c0cf20435.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st4/fit/200/200/19f6fa19ae360ba884c5d1222ad753fd/3438abe63af98f09acd167636096188944166b69815f340946da465c0cf20435.jpg",
+                "https://c.dns-shop.ru/thumb/st4/fit/200/200/19f6fa19ae360ba884c5d1222ad753fd/3438abe63af98f09acd167636096188944166b69815f340946da465c0cf20435.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st4/fit/500/500/fcf9fe66702995dea645a28bce9db335/3438abe63af98f09acd167636096188944166b69815f340946da465c0cf20435.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st4/fit/300/300/97375663f19724bd1a1e4d9ccf38dbdd/3438abe63af98f09acd167636096188944166b69815f340946da465c0cf20435.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st4/fit/200/200/19f6fa19ae360ba884c5d1222ad753fd/3438abe63af98f09acd167636096188944166b69815f340946da465c0cf20435.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st4/fit/200/200/19f6fa19ae360ba884c5d1222ad753fd/3438abe63af98f09acd167636096188944166b69815f340946da465c0cf20435.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 3,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b9e9462e-9dc4-11f0-9394-0050569d21a3",
+      "title": "Pokemon Legends: Z-A",
+      "productIds": [
+        "b9e9462e-9dc4-11f0-9394-0050569d21a3"
+      ],
+      "sourceGameTitles": [
+        "Pokemon Legends: Z-A"
+      ],
+      "genres": [
+        "ролевая",
+        "ролевой экшн",
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "b9e9462e-9dc4-11f0-9394-0050569d21a3",
+              "code": "5642512",
+              "title": "Игра Pokemon Legends: Z-A (Switch)",
+              "sourceTitle": "Игра Pokemon Legends: Z-A (Switch) [6+, ролевая, ролевой экшн, экшн, дата выхода: 16.10.2025, язык озвучки: английский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/b9e9462e9dc4d21a/igra-pokemon-legends-z-a-switch/",
+              "releaseDate": "2025-10-16",
+              "releaseDateText": "16.10.2025",
+              "ageRating": "6+",
+              "genres": [
+                "ролевая",
+                "ролевой экшн",
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский"
+              ],
+              "voiceLanguages": [
+                "английский"
+              ],
+              "specifications": {
+                "Жанр": "ролевая, ролевой экшн, экшн",
+                "Возрастное ограничение": "6+",
+                "Язык интерфейса и субтитров": "английский",
+                "Язык озвучки": "английский",
+                "Дата выхода": "16.10.2025"
+              },
+              "price": 4499,
+              "currency": "RUB",
+              "priceText": "4 499 ₽",
+              "rating": 5,
+              "ratingScale": 5,
+              "reviewCount": 25,
+              "ratingText": "5 |25 отзывов",
+              "questionCount": null,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": "При заказе"
+              },
+              "advertisedImageCount": 9,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/92196325b851094e37b55b9336d8a07b/9e96a57f93601a602bddffef822356308f395e87dc030b3e1669148b85aa7657.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/92196325b851094e37b55b9336d8a07b/9e96a57f93601a602bddffef822356308f395e87dc030b3e1669148b85aa7657.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/52674889cfffd361379b72a220b417fe/9e96a57f93601a602bddffef822356308f395e87dc030b3e1669148b85aa7657.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/893005f75524d6c33a2167899df7108f/9e96a57f93601a602bddffef822356308f395e87dc030b3e1669148b85aa7657.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/893005f75524d6c33a2167899df7108f/9e96a57f93601a602bddffef822356308f395e87dc030b3e1669148b85aa7657.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/92196325b851094e37b55b9336d8a07b/9e96a57f93601a602bddffef822356308f395e87dc030b3e1669148b85aa7657.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/52674889cfffd361379b72a220b417fe/9e96a57f93601a602bddffef822356308f395e87dc030b3e1669148b85aa7657.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/893005f75524d6c33a2167899df7108f/9e96a57f93601a602bddffef822356308f395e87dc030b3e1669148b85aa7657.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/893005f75524d6c33a2167899df7108f/9e96a57f93601a602bddffef822356308f395e87dc030b3e1669148b85aa7657.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 4,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1f359a0e-d75a-11ed-90cb-00155d8ed209",
+      "title": "Bayonetta Origins: Cereza And The Lost Demon",
+      "productIds": [
+        "1f359a0e-d75a-11ed-90cb-00155d8ed209"
+      ],
+      "sourceGameTitles": [
+        "Bayonetta Origins: Cereza And The Lost Demon"
+      ],
+      "genres": [
+        "ролевая",
+        "ролевой экшн",
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "1f359a0e-d75a-11ed-90cb-00155d8ed209",
+              "code": "5410240",
+              "title": "Игра Bayonetta Origins: Cereza And The Lost Demon (Switch)",
+              "sourceTitle": "Игра Bayonetta Origins: Cereza And The Lost Demon (Switch) [12+, ролевая, ролевой экшн, экшн, дата выхода: 17.03.2023, язык озвучки: английский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/1f359a0ed75aed20/igra-bayonetta-origins-cereza-and-the-lost-demon-switch/",
+              "releaseDate": "2023-03-17",
+              "releaseDateText": "17.03.2023",
+              "ageRating": "12+",
+              "genres": [
+                "ролевая",
+                "ролевой экшн",
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский"
+              ],
+              "specifications": {
+                "Жанр": "ролевая, ролевой экшн, экшн",
+                "Возрастное ограничение": "12+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский",
+                "Дата выхода": "17.03.2023"
+              },
+              "price": 2050,
+              "currency": "RUB",
+              "priceText": "2 050 ₽",
+              "rating": 4.92,
+              "ratingScale": 5,
+              "reviewCount": 38,
+              "ratingText": "4.92 |38 отзывов",
+              "questionCount": null,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "now",
+                "text": "В наличии"
+              },
+              "advertisedImageCount": 8,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/d014e0bb3d03ee9856d4f0e6e9d4e888/1d342187495cd90977d7185031462eae1c5a583ee561ae800d33229f5c51f561.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/d014e0bb3d03ee9856d4f0e6e9d4e888/1d342187495cd90977d7185031462eae1c5a583ee561ae800d33229f5c51f561.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/b04f9d31e6781c0f6bd7079659283220/1d342187495cd90977d7185031462eae1c5a583ee561ae800d33229f5c51f561.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/85c92209862f71d591e74a49f52fc961/1d342187495cd90977d7185031462eae1c5a583ee561ae800d33229f5c51f561.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/85c92209862f71d591e74a49f52fc961/1d342187495cd90977d7185031462eae1c5a583ee561ae800d33229f5c51f561.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/d014e0bb3d03ee9856d4f0e6e9d4e888/1d342187495cd90977d7185031462eae1c5a583ee561ae800d33229f5c51f561.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/b04f9d31e6781c0f6bd7079659283220/1d342187495cd90977d7185031462eae1c5a583ee561ae800d33229f5c51f561.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/85c92209862f71d591e74a49f52fc961/1d342187495cd90977d7185031462eae1c5a583ee561ae800d33229f5c51f561.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/85c92209862f71d591e74a49f52fc961/1d342187495cd90977d7185031462eae1c5a583ee561ae800d33229f5c51f561.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 5,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8a528c17-4f01-11ea-a20f-00155d03332b",
+      "title": "Animal Crossing: New Horizons",
+      "productIds": [
+        "8a528c17-4f01-11ea-a20f-00155d03332b"
+      ],
+      "sourceGameTitles": [
+        "Animal Crossing: New Horizons"
+      ],
+      "genres": [
+        "стратегия",
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "8a528c17-4f01-11ea-a20f-00155d03332b",
+              "code": "1633084",
+              "title": "Игра Animal Crossing: New Horizons (Switch)",
+              "sourceTitle": "Игра Animal Crossing: New Horizons (Switch) [0+, стратегия, экшн, дата выхода: 20.03.2020, язык озвучки: английский, русский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/8a528c174f013332/igra-animal-crossing-new-horizons-switch/",
+              "releaseDate": "2020-03-20",
+              "releaseDateText": "20.03.2020",
+              "ageRating": "0+",
+              "genres": [
+                "стратегия",
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "specifications": {
+                "Жанр": "стратегия, экшн",
+                "Возрастное ограничение": "0+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский, русский",
+                "Дата выхода": "20.03.2020"
+              },
+              "price": 4599,
+              "currency": "RUB",
+              "priceText": "4 599 ₽",
+              "rating": 4.9,
+              "ratingScale": 5,
+              "reviewCount": 884,
+              "ratingText": "4.9 |884 отзыва",
+              "questionCount": 7,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": "При заказе"
+              },
+              "advertisedImageCount": 6,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/65ad01bd7de9cc916ae6f04ccae63040/67444ae5f5a65cfc020439ed5d31b2f74613809fb7ffe6e72899005ee63fc086.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/65ad01bd7de9cc916ae6f04ccae63040/67444ae5f5a65cfc020439ed5d31b2f74613809fb7ffe6e72899005ee63fc086.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/65ad01bd7de9cc916ae6f04ccae63040/67444ae5f5a65cfc020439ed5d31b2f74613809fb7ffe6e72899005ee63fc086.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/7e6fe037290d8b4e259e4610f2411b10/67444ae5f5a65cfc020439ed5d31b2f74613809fb7ffe6e72899005ee63fc086.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/0be3eeeeb290aced660302b3da6271f7/67444ae5f5a65cfc020439ed5d31b2f74613809fb7ffe6e72899005ee63fc086.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/0be3eeeeb290aced660302b3da6271f7/67444ae5f5a65cfc020439ed5d31b2f74613809fb7ffe6e72899005ee63fc086.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/65ad01bd7de9cc916ae6f04ccae63040/67444ae5f5a65cfc020439ed5d31b2f74613809fb7ffe6e72899005ee63fc086.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/65ad01bd7de9cc916ae6f04ccae63040/67444ae5f5a65cfc020439ed5d31b2f74613809fb7ffe6e72899005ee63fc086.jpg",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/7e6fe037290d8b4e259e4610f2411b10/67444ae5f5a65cfc020439ed5d31b2f74613809fb7ffe6e72899005ee63fc086.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/0be3eeeeb290aced660302b3da6271f7/67444ae5f5a65cfc020439ed5d31b2f74613809fb7ffe6e72899005ee63fc086.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/0be3eeeeb290aced660302b3da6271f7/67444ae5f5a65cfc020439ed5d31b2f74613809fb7ffe6e72899005ee63fc086.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 6,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f4343083-70e1-11ef-9273-0050569d0a4d",
+      "title": "EA Sports FC 25",
+      "productIds": [
+        "f4343083-70e1-11ef-9273-0050569d0a4d"
+      ],
+      "sourceGameTitles": [
+        "EA Sports FC 25"
+      ],
+      "genres": [
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "f4343083-70e1-11ef-9273-0050569d0a4d",
+              "code": "5492206",
+              "title": "Игра EA Sports FC 25 (Switch)",
+              "sourceTitle": "Игра EA Sports FC 25 (Switch) [0+, экшн, дата выхода: 27.09.2024, язык озвучки: английский, русский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/f434308370e1d0a4/igra-ea-sports-fc-25-switch/",
+              "releaseDate": "2024-09-27",
+              "releaseDateText": "27.09.2024",
+              "ageRating": "0+",
+              "genres": [
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "specifications": {
+                "Жанр": "экшн",
+                "Возрастное ограничение": "0+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский, русский",
+                "Дата выхода": "27.09.2024"
+              },
+              "price": 3099,
+              "currency": "RUB",
+              "priceText": "3 099 ₽",
+              "rating": 4.95,
+              "ratingScale": 5,
+              "reviewCount": 10,
+              "ratingText": "4.95 |10 отзывов",
+              "questionCount": null,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "now",
+                "text": "В наличии"
+              },
+              "advertisedImageCount": 7,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/70a32191112225930b604ccb9b92b15d/974ad9abceaf589ad48910343cb88622edd9fbd1e6209834e00474e602bcf957.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/70a32191112225930b604ccb9b92b15d/974ad9abceaf589ad48910343cb88622edd9fbd1e6209834e00474e602bcf957.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/70a32191112225930b604ccb9b92b15d/974ad9abceaf589ad48910343cb88622edd9fbd1e6209834e00474e602bcf957.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/178c1909fa6292c4689a09d8b81e9ffb/974ad9abceaf589ad48910343cb88622edd9fbd1e6209834e00474e602bcf957.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/5d8e8b46c3fe701d528117b6e43a1440/974ad9abceaf589ad48910343cb88622edd9fbd1e6209834e00474e602bcf957.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/5d8e8b46c3fe701d528117b6e43a1440/974ad9abceaf589ad48910343cb88622edd9fbd1e6209834e00474e602bcf957.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/70a32191112225930b604ccb9b92b15d/974ad9abceaf589ad48910343cb88622edd9fbd1e6209834e00474e602bcf957.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/70a32191112225930b604ccb9b92b15d/974ad9abceaf589ad48910343cb88622edd9fbd1e6209834e00474e602bcf957.jpg",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/178c1909fa6292c4689a09d8b81e9ffb/974ad9abceaf589ad48910343cb88622edd9fbd1e6209834e00474e602bcf957.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/5d8e8b46c3fe701d528117b6e43a1440/974ad9abceaf589ad48910343cb88622edd9fbd1e6209834e00474e602bcf957.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/5d8e8b46c3fe701d528117b6e43a1440/974ad9abceaf589ad48910343cb88622edd9fbd1e6209834e00474e602bcf957.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 7,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f7567d69-3ab9-11f0-9345-0050569d0a4d",
+      "title": "Cyberpunk 2077",
+      "productIds": [
+        "f7567d69-3ab9-11f0-9345-0050569d0a4d"
+      ],
+      "sourceGameTitles": [
+        "Cyberpunk 2077"
+      ],
+      "genres": [
+        "ролевая",
+        "ролевой экшн",
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch 2",
+          "editions": [
+            {
+              "id": "f7567d69-3ab9-11f0-9345-0050569d0a4d",
+              "code": "5630210",
+              "title": "Игра Cyberpunk 2077 - Ultimate Edition (Switch)",
+              "sourceTitle": "Игра Cyberpunk 2077 - Ultimate Edition (Switch) [18+, ролевая, ролевой экшн, экшн, дата выхода: 05.06.2025, язык озвучки: английский, русский, расширенное издание]",
+              "platformAnnotation": {
+                "sourceLabel": "Switch",
+                "resolved": "Nintendo Switch 2",
+                "source": "https://www.nintendo.com/us/store/products/cyberpunk-2077-ultimate-edition-switch-2/"
+              },
+              "platforms": [
+                "Nintendo Switch 2"
+              ],
+              "editionTags": [
+                "Ultimate Edition"
+              ],
+              "editionType": "расширенное издание",
+              "editionNameSource": "title",
+              "productUrl": "https://www.dns-shop.ru/product/f7567d693ab9d0a4/igra-cyberpunk-2077-ultimate-edition-switch/",
+              "releaseDate": "2025-06-05",
+              "releaseDateText": "05.06.2025",
+              "ageRating": "18+",
+              "genres": [
+                "ролевая",
+                "ролевой экшн",
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "specifications": {
+                "Жанр": "ролевая, ролевой экшн, экшн",
+                "Возрастное ограничение": "18+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский, русский",
+                "Дата выхода": "05.06.2025"
+              },
+              "price": 6999,
+              "currency": "RUB",
+              "priceText": "6 999 ₽",
+              "rating": 5,
+              "ratingScale": 5,
+              "reviewCount": 40,
+              "ratingText": "5 |40 отзывов",
+              "questionCount": 1,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": "При заказе"
+              },
+              "advertisedImageCount": 9,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/099a693744d6da258232dd3e1ba5a6df/a825908df0333af07515ef3a2e753468d05b8596bd36e8525f365237cf391f13.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/099a693744d6da258232dd3e1ba5a6df/a825908df0333af07515ef3a2e753468d05b8596bd36e8525f365237cf391f13.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/099a693744d6da258232dd3e1ba5a6df/a825908df0333af07515ef3a2e753468d05b8596bd36e8525f365237cf391f13.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/83ec20d9361449b1d86448d7fcae8357/a825908df0333af07515ef3a2e753468d05b8596bd36e8525f365237cf391f13.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/5e070bc7146f35bae91c41a8896d39d6/a825908df0333af07515ef3a2e753468d05b8596bd36e8525f365237cf391f13.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/5e070bc7146f35bae91c41a8896d39d6/a825908df0333af07515ef3a2e753468d05b8596bd36e8525f365237cf391f13.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/099a693744d6da258232dd3e1ba5a6df/a825908df0333af07515ef3a2e753468d05b8596bd36e8525f365237cf391f13.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/099a693744d6da258232dd3e1ba5a6df/a825908df0333af07515ef3a2e753468d05b8596bd36e8525f365237cf391f13.jpg",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/83ec20d9361449b1d86448d7fcae8357/a825908df0333af07515ef3a2e753468d05b8596bd36e8525f365237cf391f13.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/5e070bc7146f35bae91c41a8896d39d6/a825908df0333af07515ef3a2e753468d05b8596bd36e8525f365237cf391f13.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/5e070bc7146f35bae91c41a8896d39d6/a825908df0333af07515ef3a2e753468d05b8596bd36e8525f365237cf391f13.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 8,
+              "name": "Ultimate Edition"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8aee2196-78f3-11f1-946c-0050569d21a3",
+      "title": "Splatoon Raiders",
+      "productIds": [
+        "8aee2196-78f3-11f1-946c-0050569d21a3"
+      ],
+      "sourceGameTitles": [
+        "Splatoon Raiders"
+      ],
+      "genres": [
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch 2",
+          "editions": [
+            {
+              "id": "8aee2196-78f3-11f1-946c-0050569d21a3",
+              "code": "5932417",
+              "title": "Игра Splatoon Raiders (Switch)",
+              "sourceTitle": "Игра Splatoon Raiders (Switch) [6+, экшн, дата выхода: 23.07.2026, язык озвучки: английский, стандартное издание]",
+              "platformAnnotation": {
+                "sourceLabel": "Switch",
+                "resolved": "Nintendo Switch 2",
+                "source": "https://my.nintendo.com/news/a2cf82f43a6eb14d"
+              },
+              "platforms": [
+                "Nintendo Switch 2"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/8aee219678f3d21a/igra-splatoon-raiders-switch/",
+              "releaseDate": "2026-07-23",
+              "releaseDateText": "23.07.2026",
+              "ageRating": "6+",
+              "genres": [
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский"
+              ],
+              "voiceLanguages": [
+                "английский"
+              ],
+              "specifications": {
+                "Жанр": "экшн",
+                "Возрастное ограничение": "6+",
+                "Язык интерфейса и субтитров": "английский",
+                "Язык озвучки": "английский",
+                "Дата выхода": "23.07.2026"
+              },
+              "price": 7099,
+              "currency": "RUB",
+              "priceText": "7 099 ₽",
+              "rating": 5,
+              "ratingScale": 5,
+              "reviewCount": 2,
+              "ratingText": "5 |2 отзыва",
+              "questionCount": null,
+              "reliability": null,
+              "availability": {
+                "code": "later",
+                "text": "При заказе"
+              },
+              "advertisedImageCount": 9,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/b03c641bb320976c38f1f6af2716af53/c5c57739a60a8082e9187245b62a0fe73d1dec9bef50297f0ecc52393b10b3db.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/b03c641bb320976c38f1f6af2716af53/c5c57739a60a8082e9187245b62a0fe73d1dec9bef50297f0ecc52393b10b3db.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/4d5887b3b111a8b24140a337083bf0ec/c5c57739a60a8082e9187245b62a0fe73d1dec9bef50297f0ecc52393b10b3db.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/0b4e24d06863cdce685cc5fe1b5b1ab9/c5c57739a60a8082e9187245b62a0fe73d1dec9bef50297f0ecc52393b10b3db.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/0b4e24d06863cdce685cc5fe1b5b1ab9/c5c57739a60a8082e9187245b62a0fe73d1dec9bef50297f0ecc52393b10b3db.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/b03c641bb320976c38f1f6af2716af53/c5c57739a60a8082e9187245b62a0fe73d1dec9bef50297f0ecc52393b10b3db.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/4d5887b3b111a8b24140a337083bf0ec/c5c57739a60a8082e9187245b62a0fe73d1dec9bef50297f0ecc52393b10b3db.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/0b4e24d06863cdce685cc5fe1b5b1ab9/c5c57739a60a8082e9187245b62a0fe73d1dec9bef50297f0ecc52393b10b3db.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/0b4e24d06863cdce685cc5fe1b5b1ab9/c5c57739a60a8082e9187245b62a0fe73d1dec9bef50297f0ecc52393b10b3db.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 9,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9911f434-4aa2-11f1-944e-0050569d0a4d",
+      "title": "The Disney Afternoon Collection",
+      "productIds": [
+        "9911f434-4aa2-11f1-944e-0050569d0a4d"
+      ],
+      "sourceGameTitles": [
+        "The Disney Afternoon Collection"
+      ],
+      "genres": [
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "9911f434-4aa2-11f1-944e-0050569d0a4d",
+              "code": "5920445",
+              "title": "Игра The Disney Afternoon Collection (Switch)",
+              "sourceTitle": "Игра The Disney Afternoon Collection (Switch) [0+, экшн, дата выхода: 26.02.2026, язык озвучки: английский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/9911f4344aa2d0a4/igra-the-disney-afternoon-collection-switch/",
+              "releaseDate": "2026-02-26",
+              "releaseDateText": "26.02.2026",
+              "ageRating": "0+",
+              "genres": [
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский"
+              ],
+              "specifications": {
+                "Жанр": "экшн",
+                "Возрастное ограничение": "0+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский",
+                "Дата выхода": "26.02.2026"
+              },
+              "price": 4199,
+              "currency": "RUB",
+              "priceText": "4 199 ₽",
+              "rating": 5,
+              "ratingScale": 5,
+              "reviewCount": 4,
+              "ratingText": "5 |4 отзыва",
+              "questionCount": null,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": "При заказе"
+              },
+              "advertisedImageCount": 10,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/908c1d172e5a5b0577bfada7eb3c7be5/5bb05114abed2e3ae3d2b6af0d41a50830c2689cca1aced81ed05f93f0861129.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/908c1d172e5a5b0577bfada7eb3c7be5/5bb05114abed2e3ae3d2b6af0d41a50830c2689cca1aced81ed05f93f0861129.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/269a409e45fc6281764737386d8ecc31/5bb05114abed2e3ae3d2b6af0d41a50830c2689cca1aced81ed05f93f0861129.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/89f74d141b9d1ba43fa662b42d7c81f2/5bb05114abed2e3ae3d2b6af0d41a50830c2689cca1aced81ed05f93f0861129.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/89f74d141b9d1ba43fa662b42d7c81f2/5bb05114abed2e3ae3d2b6af0d41a50830c2689cca1aced81ed05f93f0861129.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/908c1d172e5a5b0577bfada7eb3c7be5/5bb05114abed2e3ae3d2b6af0d41a50830c2689cca1aced81ed05f93f0861129.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/269a409e45fc6281764737386d8ecc31/5bb05114abed2e3ae3d2b6af0d41a50830c2689cca1aced81ed05f93f0861129.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/89f74d141b9d1ba43fa662b42d7c81f2/5bb05114abed2e3ae3d2b6af0d41a50830c2689cca1aced81ed05f93f0861129.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/89f74d141b9d1ba43fa662b42d7c81f2/5bb05114abed2e3ae3d2b6af0d41a50830c2689cca1aced81ed05f93f0861129.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 10,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4ab09985-292b-11ef-921b-0050569d21a3",
+      "title": "Luigi's Mansion 2 HD",
+      "productIds": [
+        "4ab09985-292b-11ef-921b-0050569d21a3"
+      ],
+      "sourceGameTitles": [
+        "Luigi's Mansion 2 HD"
+      ],
+      "genres": [
+        "ролевая",
+        "ролевой экшн",
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "4ab09985-292b-11ef-921b-0050569d21a3",
+              "code": "5465771",
+              "title": "Игра Luigi's Mansion 2 HD (Switch)",
+              "sourceTitle": "Игра Luigi's Mansion 2 HD (Switch) [6+, ролевая, ролевой экшн, экшн, дата выхода: 27.06.2024, язык озвучки: английский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/4ab09985292bd21a/igra-luigis-mansion-2-hd-switch/",
+              "releaseDate": "2024-06-27",
+              "releaseDateText": "27.06.2024",
+              "ageRating": "6+",
+              "genres": [
+                "ролевая",
+                "ролевой экшн",
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский"
+              ],
+              "specifications": {
+                "Жанр": "ролевая, ролевой экшн, экшн",
+                "Возрастное ограничение": "6+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский",
+                "Дата выхода": "27.06.2024"
+              },
+              "price": 4299,
+              "currency": "RUB",
+              "priceText": "4 299 ₽",
+              "rating": 4.87,
+              "ratingScale": 5,
+              "reviewCount": 35,
+              "ratingText": "4.87 |35 отзывов",
+              "questionCount": null,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": "При заказе"
+              },
+              "advertisedImageCount": 7,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/1fda187b5f553a2dedcc4065b10a868d/2c324ee4a68dc7bab004b154a33f23b2bbed987bc0349420fb1c684812ae6401.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/1fda187b5f553a2dedcc4065b10a868d/2c324ee4a68dc7bab004b154a33f23b2bbed987bc0349420fb1c684812ae6401.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/74d6687de673184ff291b03a4b8a6ace/2c324ee4a68dc7bab004b154a33f23b2bbed987bc0349420fb1c684812ae6401.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/9384df1b3c39cf2ce37273ffdf643278/2c324ee4a68dc7bab004b154a33f23b2bbed987bc0349420fb1c684812ae6401.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/9384df1b3c39cf2ce37273ffdf643278/2c324ee4a68dc7bab004b154a33f23b2bbed987bc0349420fb1c684812ae6401.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/1fda187b5f553a2dedcc4065b10a868d/2c324ee4a68dc7bab004b154a33f23b2bbed987bc0349420fb1c684812ae6401.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/74d6687de673184ff291b03a4b8a6ace/2c324ee4a68dc7bab004b154a33f23b2bbed987bc0349420fb1c684812ae6401.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/9384df1b3c39cf2ce37273ffdf643278/2c324ee4a68dc7bab004b154a33f23b2bbed987bc0349420fb1c684812ae6401.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/9384df1b3c39cf2ce37273ffdf643278/2c324ee4a68dc7bab004b154a33f23b2bbed987bc0349420fb1c684812ae6401.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 11,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8d13340f-4aa2-11f1-944e-0050569d0a4d",
+      "title": "Yoshi and the Mysterious Book",
+      "productIds": [
+        "8d13340f-4aa2-11f1-944e-0050569d0a4d"
+      ],
+      "sourceGameTitles": [
+        "Yoshi and the Mysterious Book"
+      ],
+      "genres": [
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch 2",
+          "editions": [
+            {
+              "id": "8d13340f-4aa2-11f1-944e-0050569d0a4d",
+              "code": "5920429",
+              "title": "Игра Yoshi and the Mysterious Book (Switch)",
+              "sourceTitle": "Игра Yoshi and the Mysterious Book (Switch) [6+, экшн, дата выхода: 21.05.2026, язык озвучки: английский, стандартное издание]",
+              "platformAnnotation": {
+                "sourceLabel": "Switch",
+                "resolved": "Nintendo Switch 2",
+                "source": "https://www.nintendo.com/us/store/products/yoshi-and-the-mysterious-book-switch-2/"
+              },
+              "platforms": [
+                "Nintendo Switch 2"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/8d13340f4aa2d0a4/igra-yoshi-and-the-mysterious-book-switch/",
+              "releaseDate": "2026-05-21",
+              "releaseDateText": "21.05.2026",
+              "ageRating": "6+",
+              "genres": [
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский"
+              ],
+              "voiceLanguages": [
+                "английский"
+              ],
+              "specifications": {
+                "Жанр": "экшн",
+                "Возрастное ограничение": "6+",
+                "Язык интерфейса и субтитров": "английский",
+                "Язык озвучки": "английский",
+                "Дата выхода": "21.05.2026"
+              },
+              "price": 5899,
+              "currency": "RUB",
+              "priceText": "5 899 ₽",
+              "rating": 5,
+              "ratingScale": 5,
+              "reviewCount": 5,
+              "ratingText": "5 |5 отзывов",
+              "questionCount": null,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "tomorrow",
+                "text": "При заказе"
+              },
+              "advertisedImageCount": 9,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/2411edad7caae72c987d74f8d5d5ce51/f528e54493fec3763c46c2eb72be548de79ec02a2ea114ea64d8142c75cb6aa3.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/2411edad7caae72c987d74f8d5d5ce51/f528e54493fec3763c46c2eb72be548de79ec02a2ea114ea64d8142c75cb6aa3.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/765ee504ab36e82e38e2583f019c1e65/f528e54493fec3763c46c2eb72be548de79ec02a2ea114ea64d8142c75cb6aa3.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/5833c3bcb597777a97cc57222a39b388/f528e54493fec3763c46c2eb72be548de79ec02a2ea114ea64d8142c75cb6aa3.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/5833c3bcb597777a97cc57222a39b388/f528e54493fec3763c46c2eb72be548de79ec02a2ea114ea64d8142c75cb6aa3.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/2411edad7caae72c987d74f8d5d5ce51/f528e54493fec3763c46c2eb72be548de79ec02a2ea114ea64d8142c75cb6aa3.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/765ee504ab36e82e38e2583f019c1e65/f528e54493fec3763c46c2eb72be548de79ec02a2ea114ea64d8142c75cb6aa3.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/5833c3bcb597777a97cc57222a39b388/f528e54493fec3763c46c2eb72be548de79ec02a2ea114ea64d8142c75cb6aa3.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/5833c3bcb597777a97cc57222a39b388/f528e54493fec3763c46c2eb72be548de79ec02a2ea114ea64d8142c75cb6aa3.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 12,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5c1d0d5c-876a-11ee-917f-00155d8ed209",
+      "title": "Hogwarts Legacy",
+      "productIds": [
+        "5c1d0d5c-876a-11ee-917f-00155d8ed209"
+      ],
+      "sourceGameTitles": [
+        "Hogwarts Legacy"
+      ],
+      "genres": [
+        "ролевая",
+        "ролевая с открытым миром",
+        "ролевой экшн",
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "5c1d0d5c-876a-11ee-917f-00155d8ed209",
+              "code": "5439292",
+              "title": "Игра Hogwarts Legacy (Switch)",
+              "sourceTitle": "Игра Hogwarts Legacy (Switch) [12+, ролевая, ролевая с открытым миром, ролевой экшн, экшн, дата выхода: 14.11.2023, язык озвучки: английский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/5c1d0d5c876aed20/igra-hogwarts-legacy-switch/",
+              "releaseDate": "2023-11-14",
+              "releaseDateText": "14.11.2023",
+              "ageRating": "12+",
+              "genres": [
+                "ролевая",
+                "ролевая с открытым миром",
+                "ролевой экшн",
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский"
+              ],
+              "specifications": {
+                "Жанр": "ролевая, ролевая с открытым миром, ролевой экшн, экшн",
+                "Возрастное ограничение": "12+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский",
+                "Дата выхода": "14.11.2023"
+              },
+              "price": 5499,
+              "currency": "RUB",
+              "priceText": "5 499 ₽",
+              "rating": 4.73,
+              "ratingScale": 5,
+              "reviewCount": 39,
+              "ratingText": "4.73 |39 отзывов",
+              "questionCount": null,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": "При заказе"
+              },
+              "advertisedImageCount": 11,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/60628e8844a5af40c408b0afd0618249/98059994a439f67f450675a8eb5cc6a71f06e01bb4d3b9a661bb272484725ee6.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/60628e8844a5af40c408b0afd0618249/98059994a439f67f450675a8eb5cc6a71f06e01bb4d3b9a661bb272484725ee6.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/1d4604d71b513b433250dab5121e3d2d/98059994a439f67f450675a8eb5cc6a71f06e01bb4d3b9a661bb272484725ee6.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/2e526286ca931cbedb143bd15630b3c4/98059994a439f67f450675a8eb5cc6a71f06e01bb4d3b9a661bb272484725ee6.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/2e526286ca931cbedb143bd15630b3c4/98059994a439f67f450675a8eb5cc6a71f06e01bb4d3b9a661bb272484725ee6.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/60628e8844a5af40c408b0afd0618249/98059994a439f67f450675a8eb5cc6a71f06e01bb4d3b9a661bb272484725ee6.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/1d4604d71b513b433250dab5121e3d2d/98059994a439f67f450675a8eb5cc6a71f06e01bb4d3b9a661bb272484725ee6.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/2e526286ca931cbedb143bd15630b3c4/98059994a439f67f450675a8eb5cc6a71f06e01bb4d3b9a661bb272484725ee6.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/2e526286ca931cbedb143bd15630b3c4/98059994a439f67f450675a8eb5cc6a71f06e01bb4d3b9a661bb272484725ee6.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 13,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8009b498-178c-11ed-8ffd-00155d8ed209",
+      "title": "Minecraft",
+      "productIds": [
+        "8009b498-178c-11ed-8ffd-00155d8ed209"
+      ],
+      "sourceGameTitles": [
+        "Minecraft"
+      ],
+      "genres": [
+        "ролевая",
+        "ролевой экшн",
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "8009b498-178c-11ed-8ffd-00155d8ed209",
+              "code": "5062935",
+              "title": "Игра Minecraft (Switch)",
+              "sourceTitle": "Игра Minecraft (Switch) [6+, ролевая, ролевой экшн, экшн, дата выхода: 20.06.2018, язык озвучки: английский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/8009b498178ced20/igra-minecraft-switch/",
+              "releaseDate": "2018-06-20",
+              "releaseDateText": "20.06.2018",
+              "ageRating": "6+",
+              "genres": [
+                "ролевая",
+                "ролевой экшн",
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский"
+              ],
+              "specifications": {
+                "Жанр": "ролевая, ролевой экшн, экшн",
+                "Возрастное ограничение": "6+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский",
+                "Дата выхода": "20.06.2018"
+              },
+              "price": 3899,
+              "currency": "RUB",
+              "priceText": "3 899 ₽",
+              "rating": 4.95,
+              "ratingScale": 5,
+              "reviewCount": 95,
+              "ratingText": "4.95 |95 отзывов",
+              "questionCount": 1,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": "При заказе"
+              },
+              "advertisedImageCount": 7,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/7763d991e729c7cdd66e6e14fc081566/d63444c2bb12e023f607ecfc691ab37a27669fc7a1e94cad8dc8c849c0231c3b.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/7763d991e729c7cdd66e6e14fc081566/d63444c2bb12e023f607ecfc691ab37a27669fc7a1e94cad8dc8c849c0231c3b.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/6a45fbc063e65c8da27eb9c522aed08c/d63444c2bb12e023f607ecfc691ab37a27669fc7a1e94cad8dc8c849c0231c3b.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/5b23a1e3a401bc4c978f07da5ce73aa9/d63444c2bb12e023f607ecfc691ab37a27669fc7a1e94cad8dc8c849c0231c3b.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/5b23a1e3a401bc4c978f07da5ce73aa9/d63444c2bb12e023f607ecfc691ab37a27669fc7a1e94cad8dc8c849c0231c3b.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/7763d991e729c7cdd66e6e14fc081566/d63444c2bb12e023f607ecfc691ab37a27669fc7a1e94cad8dc8c849c0231c3b.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/6a45fbc063e65c8da27eb9c522aed08c/d63444c2bb12e023f607ecfc691ab37a27669fc7a1e94cad8dc8c849c0231c3b.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/5b23a1e3a401bc4c978f07da5ce73aa9/d63444c2bb12e023f607ecfc691ab37a27669fc7a1e94cad8dc8c849c0231c3b.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/5b23a1e3a401bc4c978f07da5ce73aa9/d63444c2bb12e023f607ecfc691ab37a27669fc7a1e94cad8dc8c849c0231c3b.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 14,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "54cb501b-70e2-11ef-9265-0050569d21a3",
+      "title": "The Legend of Zelda: Echoes of Wisdom",
+      "productIds": [
+        "54cb501b-70e2-11ef-9265-0050569d21a3"
+      ],
+      "sourceGameTitles": [
+        "The Legend of Zelda: Echoes of Wisdom"
+      ],
+      "genres": [
+        "ролевая",
+        "ролевой экшн",
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "54cb501b-70e2-11ef-9265-0050569d21a3",
+              "code": "5492208",
+              "title": "Игра The Legend of Zelda: Echoes of Wisdom (Switch)",
+              "sourceTitle": "Игра The Legend of Zelda: Echoes of Wisdom (Switch) [6+, ролевая, ролевой экшн, экшн, дата выхода: 26.09.2024, язык озвучки: английский, русский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/54cb501b70e2d21a/igra-the-legend-of-zelda-echoes-of-wisdom-switch/",
+              "releaseDate": "2024-09-26",
+              "releaseDateText": "26.09.2024",
+              "ageRating": "6+",
+              "genres": [
+                "ролевая",
+                "ролевой экшн",
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "specifications": {
+                "Жанр": "ролевая, ролевой экшн, экшн",
+                "Возрастное ограничение": "6+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский, русский",
+                "Дата выхода": "26.09.2024"
+              },
+              "price": 5999,
+              "currency": "RUB",
+              "priceText": "5 999 ₽",
+              "rating": 4.82,
+              "ratingScale": 5,
+              "reviewCount": 34,
+              "ratingText": "4.82 |34 отзыва",
+              "questionCount": null,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": "При заказе"
+              },
+              "advertisedImageCount": 8,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/76c2caf1945b45171f98ecc4d42f3caa/de9c4402267401b859fc7ad61cdaf7ae87b75283e0feed712c644608d3d8c170.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/76c2caf1945b45171f98ecc4d42f3caa/de9c4402267401b859fc7ad61cdaf7ae87b75283e0feed712c644608d3d8c170.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/7b4cc3fec718ce2520c8dafb34d35683/de9c4402267401b859fc7ad61cdaf7ae87b75283e0feed712c644608d3d8c170.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/abfc2d3caec0bdf97c8a467c78ebb674/de9c4402267401b859fc7ad61cdaf7ae87b75283e0feed712c644608d3d8c170.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/abfc2d3caec0bdf97c8a467c78ebb674/de9c4402267401b859fc7ad61cdaf7ae87b75283e0feed712c644608d3d8c170.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/76c2caf1945b45171f98ecc4d42f3caa/de9c4402267401b859fc7ad61cdaf7ae87b75283e0feed712c644608d3d8c170.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/7b4cc3fec718ce2520c8dafb34d35683/de9c4402267401b859fc7ad61cdaf7ae87b75283e0feed712c644608d3d8c170.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/abfc2d3caec0bdf97c8a467c78ebb674/de9c4402267401b859fc7ad61cdaf7ae87b75283e0feed712c644608d3d8c170.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/abfc2d3caec0bdf97c8a467c78ebb674/de9c4402267401b859fc7ad61cdaf7ae87b75283e0feed712c644608d3d8c170.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 15,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fe16ce43-3ab9-11f0-9345-0050569d0a4d",
+      "title": "Mario Kart World",
+      "productIds": [
+        "fe16ce43-3ab9-11f0-9345-0050569d0a4d"
+      ],
+      "sourceGameTitles": [
+        "Mario Kart World"
+      ],
+      "genres": [
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch 2",
+          "editions": [
+            {
+              "id": "fe16ce43-3ab9-11f0-9345-0050569d0a4d",
+              "code": "5630221",
+              "title": "Игра Mario Kart World (Switch)",
+              "sourceTitle": "Игра Mario Kart World (Switch) [0+, экшн, дата выхода: 05.06.2025, язык озвучки: английский, русский, стандартное издание]",
+              "platformAnnotation": {
+                "sourceLabel": "Switch",
+                "resolved": "Nintendo Switch 2",
+                "source": "https://www.nintendo.com/us/whatsnew/nintendo-switch-2-choose-your-game-bundle-launches-this-summer/"
+              },
+              "platforms": [
+                "Nintendo Switch 2"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/fe16ce433ab9d0a4/igra-mario-kart-world-switch/",
+              "releaseDate": "2025-06-05",
+              "releaseDateText": "05.06.2025",
+              "ageRating": "0+",
+              "genres": [
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "specifications": {
+                "Жанр": "экшн",
+                "Возрастное ограничение": "0+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский, русский",
+                "Дата выхода": "05.06.2025"
+              },
+              "price": 8499,
+              "currency": "RUB",
+              "priceText": "8 499 ₽",
+              "rating": 4.91,
+              "ratingScale": 5,
+              "reviewCount": 12,
+              "ratingText": "4.91 |12 отзывов",
+              "questionCount": 1,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": "При заказе"
+              },
+              "advertisedImageCount": 5,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/25dbd8fee199362b1698134c0b71a1da/7b4452877fa9eb06e195a32dfb40dccdab03e6a43195d487720ed587fcc8a7d7.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/25dbd8fee199362b1698134c0b71a1da/7b4452877fa9eb06e195a32dfb40dccdab03e6a43195d487720ed587fcc8a7d7.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/e91b03c2e6b433301c8f9c3180537589/7b4452877fa9eb06e195a32dfb40dccdab03e6a43195d487720ed587fcc8a7d7.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/a5aa48e58069253a22502ecaf7410e02/7b4452877fa9eb06e195a32dfb40dccdab03e6a43195d487720ed587fcc8a7d7.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/a5aa48e58069253a22502ecaf7410e02/7b4452877fa9eb06e195a32dfb40dccdab03e6a43195d487720ed587fcc8a7d7.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/25dbd8fee199362b1698134c0b71a1da/7b4452877fa9eb06e195a32dfb40dccdab03e6a43195d487720ed587fcc8a7d7.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/e91b03c2e6b433301c8f9c3180537589/7b4452877fa9eb06e195a32dfb40dccdab03e6a43195d487720ed587fcc8a7d7.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/a5aa48e58069253a22502ecaf7410e02/7b4452877fa9eb06e195a32dfb40dccdab03e6a43195d487720ed587fcc8a7d7.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/a5aa48e58069253a22502ecaf7410e02/7b4452877fa9eb06e195a32dfb40dccdab03e6a43195d487720ed587fcc8a7d7.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 16,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2d20d3e3-8b0b-11f1-947e-0050569d21a3",
+      "title": "Elden Ring",
+      "productIds": [
+        "2d20d3e3-8b0b-11f1-947e-0050569d21a3"
+      ],
+      "sourceGameTitles": [
+        "Elden Ring"
+      ],
+      "genres": [
+        "ролевая",
+        "ролевая с открытым миром",
+        "ролевой экшн",
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch 2",
+          "editions": [
+            {
+              "id": "2d20d3e3-8b0b-11f1-947e-0050569d21a3",
+              "code": "5944644",
+              "title": "Игра Elden Ring - Tarnished Edition (Switch)",
+              "sourceTitle": "Игра Elden Ring - Tarnished Edition (Switch) [16+, ролевая, ролевая с открытым миром, ролевой экшн, экшн, дата выхода: 28.08.2026, язык озвучки: английский, расширенное издание]",
+              "platformAnnotation": {
+                "sourceLabel": "Switch",
+                "resolved": "Nintendo Switch 2",
+                "source": "https://www.fromsoftware.jp/ww/detail.html?csm=109"
+              },
+              "platforms": [
+                "Nintendo Switch 2"
+              ],
+              "editionTags": [
+                "Tarnished Edition"
+              ],
+              "editionType": "расширенное издание",
+              "editionNameSource": "title",
+              "productUrl": "https://www.dns-shop.ru/product/2d20d3e38b0bd21a/igra-elden-ring-tarnished-edition-switch/",
+              "releaseDate": "2026-08-28",
+              "releaseDateText": "28.08.2026",
+              "ageRating": "16+",
+              "genres": [
+                "ролевая",
+                "ролевая с открытым миром",
+                "ролевой экшн",
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский"
+              ],
+              "specifications": {
+                "Жанр": "ролевая, ролевая с открытым миром, ролевой экшн, экшн",
+                "Возрастное ограничение": "16+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский",
+                "Дата выхода": "28.08.2026"
+              },
+              "price": 7399,
+              "currency": "RUB",
+              "priceText": "7 399 ₽",
+              "rating": 5,
+              "ratingScale": 5,
+              "reviewCount": 2,
+              "ratingText": "5 |2 отзыва",
+              "questionCount": null,
+              "reliability": null,
+              "availability": {
+                "code": "later",
+                "text": "При заказе"
+              },
+              "advertisedImageCount": 10,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/6ec5073c27126523e5a59899282165f4/590f2c4bcbedea02a9d565f7423bb02a28d8a156359962481dfc8d5d30447331.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/6ec5073c27126523e5a59899282165f4/590f2c4bcbedea02a9d565f7423bb02a28d8a156359962481dfc8d5d30447331.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/3ea9dd26605653035a7bfb4c5c780e92/590f2c4bcbedea02a9d565f7423bb02a28d8a156359962481dfc8d5d30447331.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/e778b521e87d0e8638edd48aa6681f8e/590f2c4bcbedea02a9d565f7423bb02a28d8a156359962481dfc8d5d30447331.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/e778b521e87d0e8638edd48aa6681f8e/590f2c4bcbedea02a9d565f7423bb02a28d8a156359962481dfc8d5d30447331.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/6ec5073c27126523e5a59899282165f4/590f2c4bcbedea02a9d565f7423bb02a28d8a156359962481dfc8d5d30447331.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/3ea9dd26605653035a7bfb4c5c780e92/590f2c4bcbedea02a9d565f7423bb02a28d8a156359962481dfc8d5d30447331.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/e778b521e87d0e8638edd48aa6681f8e/590f2c4bcbedea02a9d565f7423bb02a28d8a156359962481dfc8d5d30447331.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/e778b521e87d0e8638edd48aa6681f8e/590f2c4bcbedea02a9d565f7423bb02a28d8a156359962481dfc8d5d30447331.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 17,
+              "name": "Tarnished Edition"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2804e61b-3475-11f1-9438-0050569d0a4d",
+      "title": "Xenoblade Chronicles X",
+      "productIds": [
+        "2804e61b-3475-11f1-9438-0050569d0a4d"
+      ],
+      "sourceGameTitles": [
+        "Xenoblade Chronicles X"
+      ],
+      "genres": [
+        "ролевая",
+        "ролевая с открытым миром",
+        "ролевой экшн",
+        "сетевой экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "2804e61b-3475-11f1-9438-0050569d0a4d",
+              "code": "5681750",
+              "title": "Игра Xenoblade Chronicles X - Definitive Edition (Switch)",
+              "sourceTitle": "Игра Xenoblade Chronicles X - Definitive Edition (Switch) [12+, ролевая, ролевая с открытым миром, ролевой экшн, сетевой экшн, дата выхода: 19.02.2026, язык озвучки: английский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [
+                "Definitive Edition"
+              ],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title",
+              "productUrl": "https://www.dns-shop.ru/product/2804e61b3475d0a4/igra-xenoblade-chronicles-x-definitive-edition-switch/",
+              "releaseDate": "2026-02-19",
+              "releaseDateText": "19.02.2026",
+              "ageRating": "12+",
+              "genres": [
+                "ролевая",
+                "ролевая с открытым миром",
+                "ролевой экшн",
+                "сетевой экшн"
+              ],
+              "interfaceLanguages": [
+                "английский"
+              ],
+              "voiceLanguages": [
+                "английский"
+              ],
+              "specifications": {
+                "Жанр": "ролевая, ролевая с открытым миром, ролевой экшн, сетевой экшн",
+                "Возрастное ограничение": "12+",
+                "Язык интерфейса и субтитров": "английский",
+                "Язык озвучки": "английский",
+                "Дата выхода": "19.02.2026"
+              },
+              "price": 6599,
+              "currency": "RUB",
+              "priceText": "6 599 ₽",
+              "rating": 4.83,
+              "ratingScale": 5,
+              "reviewCount": 15,
+              "ratingText": "4.83 |15 отзывов",
+              "questionCount": null,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": "При заказе"
+              },
+              "advertisedImageCount": 8,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/751921b6190a15ca1cbf5f0820256a48/3a860be806f1272148488d0afd5ada63cf6cf33ee17a13fd2ec459fa05bab2cf.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/751921b6190a15ca1cbf5f0820256a48/3a860be806f1272148488d0afd5ada63cf6cf33ee17a13fd2ec459fa05bab2cf.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/edc71db785c0ee2070604f69eb06cfd3/3a860be806f1272148488d0afd5ada63cf6cf33ee17a13fd2ec459fa05bab2cf.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/9d4581cb159e349af6b9e0e93ca45883/3a860be806f1272148488d0afd5ada63cf6cf33ee17a13fd2ec459fa05bab2cf.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/9d4581cb159e349af6b9e0e93ca45883/3a860be806f1272148488d0afd5ada63cf6cf33ee17a13fd2ec459fa05bab2cf.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/751921b6190a15ca1cbf5f0820256a48/3a860be806f1272148488d0afd5ada63cf6cf33ee17a13fd2ec459fa05bab2cf.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/edc71db785c0ee2070604f69eb06cfd3/3a860be806f1272148488d0afd5ada63cf6cf33ee17a13fd2ec459fa05bab2cf.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/9d4581cb159e349af6b9e0e93ca45883/3a860be806f1272148488d0afd5ada63cf6cf33ee17a13fd2ec459fa05bab2cf.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/9d4581cb159e349af6b9e0e93ca45883/3a860be806f1272148488d0afd5ada63cf6cf33ee17a13fd2ec459fa05bab2cf.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 18,
+              "name": "Definitive Edition"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dfdb2cb5-c5eb-11f0-93bc-0050569d21a3",
+      "title": "Mandragora: Whispers of the Witch Tree",
+      "productIds": [
+        "dfdb2cb5-c5eb-11f0-93bc-0050569d21a3"
+      ],
+      "sourceGameTitles": [
+        "Mandragora: Whispers of the Witch Tree"
+      ],
+      "genres": [
+        "ролевая",
+        "ролевой экшн",
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "dfdb2cb5-c5eb-11f0-93bc-0050569d21a3",
+              "code": "5649821",
+              "title": "Игра Mandragora: Whispers of the Witch Tree (Switch)",
+              "sourceTitle": "Игра Mandragora: Whispers of the Witch Tree (Switch) [16+, ролевая, ролевой экшн, экшн, дата выхода: 04.09.2025, язык озвучки: английский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/dfdb2cb5c5ebd21a/igra-mandragora-whispers-of-the-witch-tree-switch/",
+              "releaseDate": "2025-09-04",
+              "releaseDateText": "04.09.2025",
+              "ageRating": "16+",
+              "genres": [
+                "ролевая",
+                "ролевой экшн",
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский"
+              ],
+              "specifications": {
+                "Жанр": "ролевая, ролевой экшн, экшн",
+                "Возрастное ограничение": "16+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский",
+                "Дата выхода": "04.09.2025"
+              },
+              "price": 3799,
+              "currency": "RUB",
+              "priceText": "3 799 ₽",
+              "rating": 5,
+              "ratingScale": 5,
+              "reviewCount": 8,
+              "ratingText": "5 |8 отзывов",
+              "questionCount": null,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": null
+              },
+              "advertisedImageCount": 20,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/4ba32695e7c8f6077eefc1c84dbe8cc3/a2f3b1bb1a31a79226f46b489e12df339abaa5c4a74dcc74e6b6da1d82626258.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/4ba32695e7c8f6077eefc1c84dbe8cc3/a2f3b1bb1a31a79226f46b489e12df339abaa5c4a74dcc74e6b6da1d82626258.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/e8d0b2bc96a331d832da6756e4c21698/a2f3b1bb1a31a79226f46b489e12df339abaa5c4a74dcc74e6b6da1d82626258.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/e378dd4c8a41af2c03675a9808702419/a2f3b1bb1a31a79226f46b489e12df339abaa5c4a74dcc74e6b6da1d82626258.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/e378dd4c8a41af2c03675a9808702419/a2f3b1bb1a31a79226f46b489e12df339abaa5c4a74dcc74e6b6da1d82626258.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/4ba32695e7c8f6077eefc1c84dbe8cc3/a2f3b1bb1a31a79226f46b489e12df339abaa5c4a74dcc74e6b6da1d82626258.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/e8d0b2bc96a331d832da6756e4c21698/a2f3b1bb1a31a79226f46b489e12df339abaa5c4a74dcc74e6b6da1d82626258.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/e378dd4c8a41af2c03675a9808702419/a2f3b1bb1a31a79226f46b489e12df339abaa5c4a74dcc74e6b6da1d82626258.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/e378dd4c8a41af2c03675a9808702419/a2f3b1bb1a31a79226f46b489e12df339abaa5c4a74dcc74e6b6da1d82626258.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 19,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dfdb237e-c5eb-11f0-93bc-0050569d21a3",
+      "title": "Metroid Prime 4: Beyond",
+      "productIds": [
+        "dfdb237e-c5eb-11f0-93bc-0050569d21a3"
+      ],
+      "sourceGameTitles": [
+        "Metroid Prime 4: Beyond"
+      ],
+      "genres": [
+        "ролевая",
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "dfdb237e-c5eb-11f0-93bc-0050569d21a3",
+              "code": "5649820",
+              "title": "Игра Metroid Prime 4: Beyond (Switch)",
+              "sourceTitle": "Игра Metroid Prime 4: Beyond (Switch) [12+, ролевая, экшн, дата выхода: 04.12.2025, язык озвучки: английский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/dfdb237ec5ebd21a/igra-metroid-prime-4-beyond-switch/",
+              "releaseDate": "2025-12-04",
+              "releaseDateText": "04.12.2025",
+              "ageRating": "12+",
+              "genres": [
+                "ролевая",
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский"
+              ],
+              "voiceLanguages": [
+                "английский"
+              ],
+              "specifications": {
+                "Жанр": "ролевая, экшн",
+                "Возрастное ограничение": "12+",
+                "Язык интерфейса и субтитров": "английский",
+                "Язык озвучки": "английский",
+                "Дата выхода": "04.12.2025"
+              },
+              "price": 5299,
+              "currency": "RUB",
+              "priceText": "5 299 ₽",
+              "rating": 4.74,
+              "ratingScale": 5,
+              "reviewCount": 36,
+              "ratingText": "4.74 |36 отзывов",
+              "questionCount": null,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "now",
+                "text": "В наличии"
+              },
+              "advertisedImageCount": 9,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/6820d957efd9d6963331f4edb615ce0f/0ce5957e5fbd3979bc3b14067709c58b43ff68369a04e9a6a4b994f95d0de8d6.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/6820d957efd9d6963331f4edb615ce0f/0ce5957e5fbd3979bc3b14067709c58b43ff68369a04e9a6a4b994f95d0de8d6.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/e1b7ce76db6b74c62f23e02c9a24209e/0ce5957e5fbd3979bc3b14067709c58b43ff68369a04e9a6a4b994f95d0de8d6.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/cec184ff6b952080e899004a99aa66c1/0ce5957e5fbd3979bc3b14067709c58b43ff68369a04e9a6a4b994f95d0de8d6.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/cec184ff6b952080e899004a99aa66c1/0ce5957e5fbd3979bc3b14067709c58b43ff68369a04e9a6a4b994f95d0de8d6.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/6820d957efd9d6963331f4edb615ce0f/0ce5957e5fbd3979bc3b14067709c58b43ff68369a04e9a6a4b994f95d0de8d6.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/e1b7ce76db6b74c62f23e02c9a24209e/0ce5957e5fbd3979bc3b14067709c58b43ff68369a04e9a6a4b994f95d0de8d6.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/cec184ff6b952080e899004a99aa66c1/0ce5957e5fbd3979bc3b14067709c58b43ff68369a04e9a6a4b994f95d0de8d6.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/cec184ff6b952080e899004a99aa66c1/0ce5957e5fbd3979bc3b14067709c58b43ff68369a04e9a6a4b994f95d0de8d6.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 20,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "feeaef04-3ab9-11f0-9345-0050569d0a4d",
+      "title": "The Legend of Zelda: Tears of the Kingdom",
+      "productIds": [
+        "feeaef04-3ab9-11f0-9345-0050569d0a4d"
+      ],
+      "sourceGameTitles": [
+        "The Legend of Zelda: Tears of the Kingdom"
+      ],
+      "genres": [
+        "ролевая",
+        "ролевой экшн",
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "feeaef04-3ab9-11f0-9345-0050569d0a4d",
+              "code": "5630222",
+              "title": "Игра The Legend of Zelda: Tears of the Kingdom (Switch)",
+              "sourceTitle": "Игра The Legend of Zelda: Tears of the Kingdom (Switch) [12+, ролевая, ролевой экшн, экшн, дата выхода: 05.06.2025, язык озвучки: английский, русский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/feeaef043ab9d0a4/igra-the-legend-of-zelda-tears-of-the-kingdom-switch/",
+              "releaseDate": "2025-06-05",
+              "releaseDateText": "05.06.2025",
+              "ageRating": "12+",
+              "genres": [
+                "ролевая",
+                "ролевой экшн",
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "specifications": {
+                "Жанр": "ролевая, ролевой экшн, экшн",
+                "Возрастное ограничение": "12+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский, русский",
+                "Дата выхода": "05.06.2025"
+              },
+              "price": 7499,
+              "currency": "RUB",
+              "priceText": "7 499 ₽",
+              "rating": 5,
+              "ratingScale": 5,
+              "reviewCount": 24,
+              "ratingText": "5 |24 отзыва",
+              "questionCount": null,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": "При заказе"
+              },
+              "advertisedImageCount": 14,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/fb0082f4cd585254531f3021e12da203/5a0fb072aecf6af036213c23c8afd22018ba726d425edaae8d309ec6cab483a3.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/fb0082f4cd585254531f3021e12da203/5a0fb072aecf6af036213c23c8afd22018ba726d425edaae8d309ec6cab483a3.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/badd82da436e3f8613e0626eb7060742/5a0fb072aecf6af036213c23c8afd22018ba726d425edaae8d309ec6cab483a3.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/6a6e164fbb3026d9926068a1b88cf588/5a0fb072aecf6af036213c23c8afd22018ba726d425edaae8d309ec6cab483a3.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/6a6e164fbb3026d9926068a1b88cf588/5a0fb072aecf6af036213c23c8afd22018ba726d425edaae8d309ec6cab483a3.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/fb0082f4cd585254531f3021e12da203/5a0fb072aecf6af036213c23c8afd22018ba726d425edaae8d309ec6cab483a3.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/badd82da436e3f8613e0626eb7060742/5a0fb072aecf6af036213c23c8afd22018ba726d425edaae8d309ec6cab483a3.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/6a6e164fbb3026d9926068a1b88cf588/5a0fb072aecf6af036213c23c8afd22018ba726d425edaae8d309ec6cab483a3.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/6a6e164fbb3026d9926068a1b88cf588/5a0fb072aecf6af036213c23c8afd22018ba726d425edaae8d309ec6cab483a3.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 21,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "20713876-6056-11f0-9369-0050569d0a4d",
+      "title": "Donkey Kong Bananza",
+      "productIds": [
+        "20713876-6056-11f0-9369-0050569d0a4d"
+      ],
+      "sourceGameTitles": [
+        "Donkey Kong Bananza"
+      ],
+      "genres": [
+        "ролевая",
+        "ролевой экшн",
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch 2",
+          "editions": [
+            {
+              "id": "20713876-6056-11f0-9369-0050569d0a4d",
+              "code": "5634242",
+              "title": "Игра Donkey Kong Bananza (Switch)",
+              "sourceTitle": "Игра Donkey Kong Bananza (Switch) [6+, ролевая, ролевой экшн, экшн, дата выхода: 17.07.2025, язык озвучки: английский, русский, стандартное издание]",
+              "platformAnnotation": {
+                "sourceLabel": "Switch",
+                "resolved": "Nintendo Switch 2",
+                "source": "https://www.nintendo.com/us/whatsnew/nintendo-switch-2-choose-your-game-bundle-launches-this-summer/"
+              },
+              "platforms": [
+                "Nintendo Switch 2"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/207138766056d0a4/igra-donkey-kong-bananza-switch/",
+              "releaseDate": "2025-07-17",
+              "releaseDateText": "17.07.2025",
+              "ageRating": "6+",
+              "genres": [
+                "ролевая",
+                "ролевой экшн",
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "voiceLanguages": [
+                "английский",
+                "русский"
+              ],
+              "specifications": {
+                "Жанр": "ролевая, ролевой экшн, экшн",
+                "Возрастное ограничение": "6+",
+                "Язык интерфейса и субтитров": "английский, русский",
+                "Язык озвучки": "английский, русский",
+                "Дата выхода": "17.07.2025"
+              },
+              "price": 8099,
+              "currency": "RUB",
+              "priceText": "8 099 ₽",
+              "rating": 4.88,
+              "ratingScale": 5,
+              "reviewCount": 18,
+              "ratingText": "4.88 |18 отзывов",
+              "questionCount": null,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": null
+              },
+              "advertisedImageCount": 9,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/5bc54391c9d41744ba9c796b3c2d89f3/3bd29eb70240854e3f240e0aa4590b1b6d8b56ad779ac04411d0502e8f3af5b7.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/5bc54391c9d41744ba9c796b3c2d89f3/3bd29eb70240854e3f240e0aa4590b1b6d8b56ad779ac04411d0502e8f3af5b7.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/12ec8f01137959eb67b634bb577725b4/3bd29eb70240854e3f240e0aa4590b1b6d8b56ad779ac04411d0502e8f3af5b7.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/5b2884d53e6ddbda5216245a5635e055/3bd29eb70240854e3f240e0aa4590b1b6d8b56ad779ac04411d0502e8f3af5b7.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/5b2884d53e6ddbda5216245a5635e055/3bd29eb70240854e3f240e0aa4590b1b6d8b56ad779ac04411d0502e8f3af5b7.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/5bc54391c9d41744ba9c796b3c2d89f3/3bd29eb70240854e3f240e0aa4590b1b6d8b56ad779ac04411d0502e8f3af5b7.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/12ec8f01137959eb67b634bb577725b4/3bd29eb70240854e3f240e0aa4590b1b6d8b56ad779ac04411d0502e8f3af5b7.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/5b2884d53e6ddbda5216245a5635e055/3bd29eb70240854e3f240e0aa4590b1b6d8b56ad779ac04411d0502e8f3af5b7.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/5b2884d53e6ddbda5216245a5635e055/3bd29eb70240854e3f240e0aa4590b1b6d8b56ad779ac04411d0502e8f3af5b7.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 22,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "6e6d937d-21a4-11f1-9414-0050569d21a3",
+      "title": "Pokemon Pokopia",
+      "productIds": [
+        "6e6d937d-21a4-11f1-9414-0050569d21a3"
+      ],
+      "sourceGameTitles": [
+        "Pokemon Pokopia"
+      ],
+      "genres": [
+        "стратегия"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch 2",
+          "editions": [
+            {
+              "id": "6e6d937d-21a4-11f1-9414-0050569d21a3",
+              "code": "5669100",
+              "title": "Игра Pokemon Pokopia (Switch)",
+              "sourceTitle": "Игра Pokemon Pokopia (Switch) [0+, стратегия, дата выхода: 05.03.2026, язык озвучки: английский, стандартное издание]",
+              "platformAnnotation": {
+                "sourceLabel": "Switch",
+                "resolved": "Nintendo Switch 2",
+                "source": "https://www.nintendo.com/us/whatsnew/nintendo-switch-2-choose-your-game-bundle-launches-this-summer/"
+              },
+              "platforms": [
+                "Nintendo Switch 2"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/6e6d937d21a4d21a/igra-pokemon-pokopia-switch/",
+              "releaseDate": "2026-03-05",
+              "releaseDateText": "05.03.2026",
+              "ageRating": "0+",
+              "genres": [
+                "стратегия"
+              ],
+              "interfaceLanguages": [
+                "английский"
+              ],
+              "voiceLanguages": [
+                "английский"
+              ],
+              "specifications": {
+                "Жанр": "стратегия",
+                "Возрастное ограничение": "0+",
+                "Язык интерфейса и субтитров": "английский",
+                "Язык озвучки": "английский",
+                "Дата выхода": "05.03.2026"
+              },
+              "price": 7099,
+              "currency": "RUB",
+              "priceText": "7 099 ₽",
+              "rating": 5,
+              "ratingScale": 5,
+              "reviewCount": 3,
+              "ratingText": "5 |3 отзыва",
+              "questionCount": null,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": "При заказе"
+              },
+              "advertisedImageCount": 8,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/02584324665361e9247b09e9c941a013/74ebab6c2632f24039cc7b2e910c29d87f33cc3dac680837ad22af9ef05c0e6b.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/02584324665361e9247b09e9c941a013/74ebab6c2632f24039cc7b2e910c29d87f33cc3dac680837ad22af9ef05c0e6b.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/757d35b2950168260dade501e9f99d9d/74ebab6c2632f24039cc7b2e910c29d87f33cc3dac680837ad22af9ef05c0e6b.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/0193c0f5b17a86fb9511a4db28911e2a/74ebab6c2632f24039cc7b2e910c29d87f33cc3dac680837ad22af9ef05c0e6b.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/0193c0f5b17a86fb9511a4db28911e2a/74ebab6c2632f24039cc7b2e910c29d87f33cc3dac680837ad22af9ef05c0e6b.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/02584324665361e9247b09e9c941a013/74ebab6c2632f24039cc7b2e910c29d87f33cc3dac680837ad22af9ef05c0e6b.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/757d35b2950168260dade501e9f99d9d/74ebab6c2632f24039cc7b2e910c29d87f33cc3dac680837ad22af9ef05c0e6b.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/0193c0f5b17a86fb9511a4db28911e2a/74ebab6c2632f24039cc7b2e910c29d87f33cc3dac680837ad22af9ef05c0e6b.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/0193c0f5b17a86fb9511a4db28911e2a/74ebab6c2632f24039cc7b2e910c29d87f33cc3dac680837ad22af9ef05c0e6b.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 23,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8aee3376-78f3-11f1-946c-0050569d21a3",
+      "title": "Rhythm Paradise Groove",
+      "productIds": [
+        "8aee3376-78f3-11f1-946c-0050569d21a3"
+      ],
+      "sourceGameTitles": [
+        "Rhythm Paradise Groove"
+      ],
+      "genres": [
+        "экшн"
+      ],
+      "platforms": [
+        {
+          "name": "Nintendo Switch",
+          "editions": [
+            {
+              "id": "8aee3376-78f3-11f1-946c-0050569d21a3",
+              "code": "5932419",
+              "title": "Игра Rhythm Paradise Groove (Switch)",
+              "sourceTitle": "Игра Rhythm Paradise Groove (Switch) [6+, экшн, дата выхода: 02.07.2026, язык озвучки: английский, стандартное издание]",
+              "platforms": [
+                "Nintendo Switch"
+              ],
+              "editionTags": [],
+              "editionType": "стандартное издание",
+              "editionNameSource": "title-specifications",
+              "productUrl": "https://www.dns-shop.ru/product/8aee337678f3d21a/igra-rhythm-paradise-groove-switch/",
+              "releaseDate": "2026-07-02",
+              "releaseDateText": "02.07.2026",
+              "ageRating": "6+",
+              "genres": [
+                "экшн"
+              ],
+              "interfaceLanguages": [
+                "английский"
+              ],
+              "voiceLanguages": [
+                "английский"
+              ],
+              "specifications": {
+                "Жанр": "экшн",
+                "Возрастное ограничение": "6+",
+                "Язык интерфейса и субтитров": "английский",
+                "Язык озвучки": "английский",
+                "Дата выхода": "02.07.2026"
+              },
+              "price": 4699,
+              "currency": "RUB",
+              "priceText": "4 699 ₽",
+              "rating": 4.67,
+              "ratingScale": 5,
+              "reviewCount": 3,
+              "ratingText": "4.67 |3 отзыва",
+              "questionCount": null,
+              "reliability": "Отличная надежность",
+              "availability": {
+                "code": "later",
+                "text": null
+              },
+              "advertisedImageCount": 9,
+              "image": "https://c.dns-shop.ru/thumb/st1/fit/500/500/083d5e5716dd80a8de97ae37a94812a1/52ed8398ce68ab5e397d1a12f7a50ed5bcc7621b8f1d26fb7485876a485b76cd.jpg.webp",
+              "images": [
+                "https://c.dns-shop.ru/thumb/st1/fit/500/500/083d5e5716dd80a8de97ae37a94812a1/52ed8398ce68ab5e397d1a12f7a50ed5bcc7621b8f1d26fb7485876a485b76cd.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/300/300/9877f0d2e376b883848eac646eb2b012/52ed8398ce68ab5e397d1a12f7a50ed5bcc7621b8f1d26fb7485876a485b76cd.jpg.webp",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/4044dac876e1d5ccfb7f8b716626ec44/52ed8398ce68ab5e397d1a12f7a50ed5bcc7621b8f1d26fb7485876a485b76cd.jpg",
+                "https://c.dns-shop.ru/thumb/st1/fit/200/200/4044dac876e1d5ccfb7f8b716626ec44/52ed8398ce68ab5e397d1a12f7a50ed5bcc7621b8f1d26fb7485876a485b76cd.jpg.webp"
+              ],
+              "imageVariants": [
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/500/500/083d5e5716dd80a8de97ae37a94812a1/52ed8398ce68ab5e397d1a12f7a50ed5bcc7621b8f1d26fb7485876a485b76cd.jpg.webp",
+                  "width": 500,
+                  "height": 500,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/300/300/9877f0d2e376b883848eac646eb2b012/52ed8398ce68ab5e397d1a12f7a50ed5bcc7621b8f1d26fb7485876a485b76cd.jpg.webp",
+                  "width": 300,
+                  "height": 300,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "srcset",
+                    "data-srcset"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/4044dac876e1d5ccfb7f8b716626ec44/52ed8398ce68ab5e397d1a12f7a50ed5bcc7621b8f1d26fb7485876a485b76cd.jpg",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/jpeg",
+                  "media": [],
+                  "descriptors": [],
+                  "attributes": [
+                    "src",
+                    "data-src"
+                  ]
+                },
+                {
+                  "url": "https://c.dns-shop.ru/thumb/st1/fit/200/200/4044dac876e1d5ccfb7f8b716626ec44/52ed8398ce68ab5e397d1a12f7a50ed5bcc7621b8f1d26fb7485876a485b76cd.jpg.webp",
+                  "width": 200,
+                  "height": 200,
+                  "mimeType": "image/webp",
+                  "media": [
+                    "(min-width: 768px)",
+                    "(max-width: 767px)"
+                  ],
+                  "descriptors": [],
+                  "attributes": [
+                    "data-srcset"
+                  ]
+                }
+              ],
+              "sourceCardIndex": 24,
+              "name": "стандартное издание"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "warnings": []
+}
