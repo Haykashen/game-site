@@ -1715,6 +1715,18 @@
         }
         .form-control::placeholder { color: var(--text-muted); opacity: .8; }
         .form-control:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-light); }
+        select.form-control {
+            -webkit-appearance: none;
+            appearance: none;
+            padding-right: 2.6rem;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2373786a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-position: right .9rem center;
+            background-size: 14px 14px;
+            background-repeat: no-repeat;
+        }
+        html.dark select.form-control {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a1ad9d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+        }
         textarea.form-control { min-height: 120px; resize: vertical; line-height: 1.55; }
         .market-form__hint { margin-top: .28rem; color: var(--text-muted); font-size: .66rem; line-height: 1.45; }
         .market-form__error { margin-top: .42rem; color: #b91c1c; font-size: .72rem; line-height: 1.45; }
