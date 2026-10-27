@@ -12,6 +12,7 @@ import { badRequest, forbidden, notFound } from '../errors.js';
 import { ratingFrom } from '../lib/rating.js';
 import { getUserProfile } from '../lib/serializers.js';
 import { parse } from '../lib/validation.js';
+import { isUserOnline } from '../auth/presence.js';
 
 const adminUserSelect = {
   id: true,
@@ -24,6 +25,12 @@ const adminUserSelect = {
   suspendedAt: true,
   comment: true,
   createdAt: true,
+  lastSeenAt: true,
+  sessions: {
+    select: {lastUsedAt: true, expiresAt: true},
+    orderBy: {lastUsedAt: 'desc'},
+    take: 1,
+  },
   ratingSum: true,
   ratingCount: true,
   _count: {
@@ -39,8 +46,13 @@ function serializeAdminUser(
   user: AdminUserRow,
   listings: number,
   deals: number,
+  now: Date,
 ): AdminUserDto {
+  const sessionActivity = user.sessions.find((session) => session.expiresAt > now)?.lastUsedAt ?? null;
+  const lastSeenAt = user.lastSeenAt ?? sessionActivity;
   return {
+    isOnline: !user.isDemo && isUserOnline(user.status, sessionActivity, now),
+    lastSeenAt: lastSeenAt?.toISOString() ?? null,
     id: user.id,
     email: user.email,
     displayName: user.displayName,
@@ -80,6 +92,12 @@ function compareAdminUsers(
   sortBy: AdminUsersQuery['sortBy'],
 ): number {
   switch (sortBy) {
+    case 'isOnline':
+      return Number(left.isOnline) - Number(right.isOnline);
+    case 'lastSeenAt':
+      return (left.lastSeenAt ? Date.parse(left.lastSeenAt) : 0) - (right.lastSeenAt ? Date.parse(right.lastSeenAt) : 0);
+    case 'id':
+      return userCollator.compare(left.id, right.id);
     case 'user':
       return (
         userCollator.compare(left.displayName, right.displayName) ||
@@ -160,6 +178,11 @@ function matchesColumnFilters(
   user: AdminUserDto,
   query: AdminUsersQuery,
 ): boolean {
+  if (query.online !== 'all' && user.isOnline !== (query.online === 'online')) return false;
+  if (query.lastSeenAt && user.lastSeenAt?.slice(0, 10) !== query.lastSeenAt) return false;
+  if (query.id && !user.id.toLowerCase().includes(query.id.toLowerCase())) {
+    return false;
+  }
   if (
     query.comment &&
     !user.comment?.toLowerCase().includes(query.comment.toLowerCase())
@@ -216,6 +239,7 @@ export function registerUserAdminRoutes(app: FastifyInstance): void {
       requireRoles(request, ['admin']);
 
       const query = parse(adminUsersQuerySchema, request.query);
+      const now = new Date();
       const search = query.search?.trim();
       const where: Prisma.UserWhereInput = {
         ...(query.role !== 'all' ? { role: query.role } : {}),
@@ -232,7 +256,7 @@ export function registerUserAdminRoutes(app: FastifyInstance): void {
 
       const users = await app.prisma.user.findMany({
         where,
-        select: adminUserSelect,
+        select: {...adminUserSelect, sessions: {...adminUserSelect.sessions, where: {expiresAt: {gt: now}}, take: 1}},
       });
 
       const userIds = users.map((user) => user.id);
@@ -294,6 +318,7 @@ export function registerUserAdminRoutes(app: FastifyInstance): void {
             user,
             listingsByUser.get(user.id) ?? 0,
             dealsByUser.get(user.id) ?? 0,
+            now,
           ),
         )
         .filter((user) => matchesColumnFilters(user, query));

@@ -5,6 +5,7 @@ import { getUserProfile } from '../lib/serializers.js';
 import { isPrismaError } from '../lib/prismaErrors.js';
 import { parse } from '../lib/validation.js';
 import { hashPassword, verifyPassword } from './password.js';
+import { persistLastSeen } from './presence.js';
 import {
   clearSessionCookie,
   createSession,
@@ -19,6 +20,7 @@ const AUTH_RATE_LIMIT = {
 } as const;
 
 export function registerAuthRoutes(app: FastifyInstance): void {
+  app.post('/api/v1/auth/heartbeat', {preHandler: app.authenticate}, async (_request, reply) => reply.code(204).send());
   app.post(
     '/api/v1/auth/register',
     { config: { rateLimit: AUTH_RATE_LIMIT } },
@@ -124,7 +126,10 @@ export function registerAuthRoutes(app: FastifyInstance): void {
 
       if (!user) throw unauthorized();
 
-      await app.prisma.session.deleteMany({ where: { userId: user.id } });
+      await app.prisma.$transaction(async (tx) => {
+        await tx.session.deleteMany({where: {userId: user.id}});
+        await persistLastSeen(tx, user.id, new Date());
+      });
       clearSessionCookie(reply);
 
       return reply.code(204).send();

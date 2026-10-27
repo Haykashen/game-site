@@ -8,6 +8,9 @@ import {
 } from './auth.js';
 
 export const adminUserSortFieldSchema = z.enum([
+  'id',
+  'isOnline',
+  'lastSeenAt',
   'user',
   'role',
   'status',
@@ -22,6 +25,9 @@ export const adminUserSortFieldSchema = z.enum([
 export const adminUserSortDirSchema = z.enum(['asc', 'desc']);
 
 export const adminUsersQuerySchema = paginationSchema.extend({
+  id: z.string().trim().max(120).optional(),
+  online: z.enum(['all', 'online', 'offline']).default('all'),
+  lastSeenAt: dateOnlySchema.optional(),
   search: z.string().trim().max(120).optional(),
   role: z.union([z.literal('all'), userRoleSchema]).default('all'),
   status: z.union([z.literal('all'), userStatusSchema]).default('all'),
@@ -40,6 +46,8 @@ export type AdminUserSortDir = z.infer<typeof adminUserSortDirSchema>;
 export type AdminUsersQuery = z.infer<typeof adminUsersQuerySchema>;
 
 export interface AdminUserDto {
+  isOnline: boolean;
+  lastSeenAt: string | null;
   id: string;
   email: string;
   displayName: string;

@@ -21,6 +21,7 @@ import {
   registerRequest,
   updateProfileRequest,
 } from '../api';
+import { apiRequest, ApiError } from '../api/client';
 
 export type ApiStatus = 'checking' | 'api' | 'offline';
 
@@ -77,6 +78,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     void refresh();
   }, [refresh]);
+
+  const presenceUserId = user?.id;
+  useEffect(() => {
+    if (!presenceUserId || status !== 'api') return;
+    const controller = new AbortController();
+    let pending = false;
+    const heartbeat = async () => {
+      if (document.visibilityState !== 'visible' || pending) return;
+      pending = true;
+      try {
+        await apiRequest<void>('/api/v1/auth/heartbeat', {method: 'POST', signal: controller.signal});
+      } catch (cause) {
+        if (!controller.signal.aborted && cause instanceof ApiError && cause.status === 401) setUser(null);
+      } finally {pending = false;}
+    };
+    const onVisibility = () => {void heartbeat();};
+    void heartbeat();
+    const timer = window.setInterval(onVisibility, 60_000);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      controller.abort(); window.clearInterval(timer);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, [presenceUserId, status]);
 
   const login = useCallback(async (input: LoginInput) => {
     const response = await loginRequest(input);

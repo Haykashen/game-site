@@ -50,7 +50,7 @@ function ReferenceInput({field, value, onChange, required, inputId}: {field: Adm
       {value && !options.some((item) => item.value === value) && <option value={value}>{value}</option>}
       {options.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
     </select>
-    <small id={id}>Первые 30 совпадений. <Link to={field.reference === 'User' ? '/admin/users' : `/admin/data/${field.reference}`}>Открыть связанную таблицу</Link></small>
+    <small id={id}>Первые 30 совпадений. <Link to={`/admin/data/${field.reference}`}>Открыть связанную таблицу</Link></small>
     {error && <small role="alert">{error}</small>}
   </div>;
 }

@@ -2908,6 +2908,22 @@
             gap: .8rem; margin-top: 1.25rem; padding-bottom: 1.5rem;
             color: var(--text-muted); font-size: .8rem;
         }
+        .admin-users__id { min-width: 17rem; font-family: monospace; user-select: text; }
+        .admin-data__scroll--compact { max-height: min(34vh, 320px); min-height: 160px; overflow: auto; }
+        .admin-data__scroll--compact thead { position: sticky; top: 0; z-index: 2; background: var(--bg-card); }
+        .admin-data__selectable { cursor: pointer; }
+        .admin-data__selectable.is-selected > td { background: var(--brand-light); }
+        .admin-data__selectable.is-selected > .admin-data__actions { background: var(--bg-card); }
+        .admin-data__selectable:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
+        .admin-users__presence { display: inline-flex; align-items: center; gap: .45rem; white-space: nowrap; color: var(--text-muted); }
+        .admin-users__presence > span { width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); }
+        .admin-users__presence.is-online { color: var(--emerald); }
+        .admin-users__presence.is-online > span { background: var(--emerald); box-shadow: 0 0 0 3px var(--emerald-light); }
+        .admin-users__related { margin-top: 1.5rem; padding-bottom: 1.5rem; }
+        .admin-users__related h2 { font-size: 1.15rem; }
+        .admin-users__related h3 { margin: 1rem 0 .5rem; font-size: 1rem; }
+        .admin-users__related-empty { padding: 1.5rem; color: var(--text-muted); }
+        .admin-users__related .admin-data__tables { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0; }
         @media (max-width: 640px) {
             .admin-users__table-toolbar { justify-content: space-between; }
             .admin-users__pagination { flex-wrap: wrap; }

@@ -5,7 +5,9 @@ import { Prisma, type PrismaClient } from '@prisma/client';
 import { adminRecordKey } from '../shared/src/adminData.ts';
 import { AppError } from '../server/src/errors.ts';
 import { getTable, models, parseData, recordSelect } from '../server/src/admin/metadata.ts';
-import { buildWhere, registerAdminDataRoutes } from '../server/src/admin/routes.ts';
+import { buildWhere, registerAdminDataRoutes, userScopeWhere } from '../server/src/admin/routes.ts';
+import { registerUserAdminRoutes } from '../server/src/users/adminRoutes.ts';
+import { isUserOnline, ONLINE_WINDOW_MS, touchPresence } from '../server/src/auth/presence.ts';
 import { validateRecord, reconcileRecords } from '../server/src/admin/rules.ts';
 import { verifyPassword } from '../server/src/auth/password.ts';
 
@@ -22,13 +24,19 @@ async function fixture() {
   for (const model of models) {
     const key = model.name.charAt(0).toLowerCase() + model.name.slice(1);
     rows.set(key, []);
-    const match = (row: Row, where: Row = {}) => Object.entries(where).every(([field, value]) => row[field] === value);
+    const match = (row: Row, where: Row = {}): boolean => Object.entries(where).every(([field, value]) => {
+      if (field === 'AND') return (value as Row[]).every((clause) => match(row, clause));
+      if (field === 'OR') return (value as Row[]).some((clause) => match(row, clause));
+      if (value && typeof value === 'object' && 'contains' in value) return String(row[field]).toLowerCase().includes(String(value.contains).toLowerCase());
+      return row[field] === value;
+    });
     const select = (row: Row, selection?: Row) => selection ? Object.fromEntries(Object.keys(selection).map((field) => [field, row[field]])) : {...row};
-    db[key] = Object.fromEntries(['findFirst', 'findUnique', 'findMany', 'count', 'create', 'update', 'delete', 'deleteMany'].map((method) => [method, async (args: Row) => {
+    db[key] = Object.fromEntries(['findFirst', 'findUnique', 'findMany', 'groupBy', 'count', 'create', 'update', 'delete', 'deleteMany'].map((method) => [method, async (args: Row) => {
       calls.push({model: key, method, args});
       const list = rows.get(key)!;
       const where = args.where as Row | undefined;
       const found = list.find((row) => match(row, where));
+      if (method === 'groupBy') return [];
       if (method === 'findMany') return list.filter((row) => match(row, where)).slice(Number(args.skip ?? 0), Number(args.skip ?? 0) + Number(args.take ?? 100)).map((row) => select(row, args.select as Row));
       if (method === 'findFirst' || method === 'findUnique') return found ? select(found, args.select as Row) : null;
       if (method === 'count') return list.filter((row) => match(row, where)).length;
@@ -55,6 +63,7 @@ async function fixture() {
     reply.code(status).send({error: {message: error.message, code: error instanceof AppError ? error.code : 'TEST_ERROR'}});
   });
   registerAdminDataRoutes(app);
+  registerUserAdminRoutes(app);
   await app.ready();
   return {app, rows, calls};
 }
@@ -76,7 +85,7 @@ test('all database models are covered and credentials never enter public metadat
 });
 
 test('strict write schemas reject statistics, secrets, primary key changes, nested writes and invalid values', () => {
-  for (const data of [{ratingSum: 99}, {ratingCount: 9}, {passwordHash: 'hash'}, {copies: {deleteMany: {}}}, {role: 'owner'}, {email: 'invalid'}, {password: 'short'}, {id: otherId}]) {
+  for (const data of [{ratingSum: 99}, {ratingCount: 9}, {lastSeenAt: now.toISOString()}, {passwordHash: 'hash'}, {copies: {deleteMany: {}}}, {role: 'owner'}, {email: 'invalid'}, {password: 'short'}, {id: otherId}]) {
     assert.throws(() => parseData(getTable('User'), data, false), AppError);
   }
   assert.throws(() => parseData(getTable('User'), {displayName: 'Valid', email: 'valid@test.invalid'}, true), AppError);
@@ -242,4 +251,81 @@ test('domain validation prevents wrong edition/game links, self-deals, review sp
   await assert.rejects(validateRecord(tx, 'Deal', {buyerId: adminId, sellerId: adminId}, null), AppError);
   await assert.rejects(validateRecord(tx, 'Review', {authorId: adminId, targetId: adminId}, null), AppError);
   await assert.rejects(validateRecord(tx, 'DiscussionComment', {id: 'self', discussionId: 'thread', parentId: 'parent'}, null), AppError);
+});
+
+test('presence has a two-minute cutoff, and suspended users cannot appear online', () => {
+  assert.equal(isUserOnline('active', now, now), true);
+  assert.equal(isUserOnline('active', new Date(now.getTime() - ONLINE_WINDOW_MS), now), true);
+  assert.equal(isUserOnline('active', new Date(now.getTime() - ONLINE_WINDOW_MS - 1), now), false);
+  assert.equal(isUserOnline('active', null, now), false);
+  assert.equal(isUserOnline('suspended', now, now), false);
+  assert.equal(isUserOnline('deleted', now, now), false);
+  assert.equal(isUserOnline('active', new Date(now.getTime() + 1000), now), false);
+});
+
+test('presence writes are throttled and a concurrently revoked session cannot refresh a user', async () => {
+  let persisted = 0;
+  let count = 1;
+  const calls: Row[] = [];
+  const tx = {session: {updateMany: async (args: Row) => {calls.push(args); return {count};}}, $executeRaw: async () => {persisted += 1;}};
+  const prisma = {$transaction: async (action: (value: unknown) => Promise<void>) => action(tx)} as unknown as PrismaClient;
+  await touchPresence(prisma, otherId, adminId, now);
+  assert.equal(persisted, 1);
+  assert.deepEqual(calls[0], {where: {id: otherId, userId: adminId, expiresAt: {gt: now}, lastUsedAt: {lte: new Date(now.getTime() - 60000)}}, data: {lastUsedAt: now}});
+  count = 0;
+  await touchPresence(prisma, otherId, adminId, now);
+  assert.equal(persisted, 1);
+});
+
+test('related user scope includes both sides of deals and all user roles in notifications', () => {
+  assert.deepEqual(userScopeWhere(getTable('Deal'), otherId), {OR: [{buyerId: otherId}, {sellerId: otherId}]});
+  assert.deepEqual(userScopeWhere(getTable('Copy'), otherId), {OR: [{userId: otherId}]});
+  assert.deepEqual(userScopeWhere(getTable('Notification'), otherId), {OR: [{userId: otherId}, {actorId: otherId}]});
+  assert.throws(() => userScopeWhere(getTable('Game'), otherId), AppError);
+});
+
+test('related records are scoped before pagination and cannot be broadened by column filters', async () => {
+  const {app, rows} = await fixture();
+  rows.get('deal')!.push(
+    {id: '33333333-3333-4333-8333-333333333333', buyerId: otherId, sellerId: adminId},
+    {id: '44444444-4444-4444-8444-444444444444', buyerId: adminId, sellerId: otherId},
+    {id: '55555555-5555-4555-8555-555555555555', buyerId: adminId, sellerId: adminId},
+  );
+  try {
+    const url = path('Deal') + '?relatedUserId=' + otherId;
+    const result = await app.inject({method: 'GET', url: url + '&pageSize=1&page=1', headers});
+    assert.equal(result.statusCode, 200, result.body);
+    assert.equal(result.json().total, 2);
+    assert.equal(result.json().items.length, 1);
+    const second = await app.inject({method: 'GET', url: url + '&pageSize=1&page=2', headers});
+    assert.equal(second.json().items[0].id, '44444444-4444-4444-8444-444444444444');
+    const filtered = await app.inject({method: 'GET', url: url + '&filters=' + encodeURIComponent(JSON.stringify({id: '55555555-5555-4555-8555-555555555555'})), headers});
+    assert.equal(filtered.statusCode, 200, filtered.body);
+    assert.equal(filtered.json().total, 0);
+    assert.equal((await app.inject({method: 'GET', url: path('Game') + '?relatedUserId=' + otherId, headers})).statusCode, 400);
+    assert.equal((await app.inject({method: 'GET', url: path('Deal') + '?relatedUserId=not-a-uuid', headers})).statusCode, 400);
+  } finally {await app.close();}
+});
+
+test('user directory exposes last visit, online filters and ID filters without session data', async () => {
+  const {app, rows} = await fixture();
+  const recent = new Date();
+  const old = new Date(recent.getTime() - 600000);
+  const user = (id: string, lastSeenAt: Date | null, sessions: Row[]) => ({id, email: id + '@test.invalid', displayName: id, role: 'user', status: 'active', isDemo: false, createdAt: old, lastSeenAt, sessions, ratingSum: 0, ratingCount: 0, _count: {copies: 0}});
+  rows.get('user')!.push(user(adminId, recent, [{lastUsedAt: recent, expiresAt: new Date(recent.getTime() + 600000)}]), user(otherId, old, []));
+  try {
+    const online = await app.inject({method: 'GET', url: '/api/v1/admin/users?online=online', headers});
+    assert.equal(online.statusCode, 200, online.body);
+    assert.equal(online.json().items.length, 1);
+    assert.equal(online.json().items[0].id, adminId);
+    assert.equal(online.json().items[0].isOnline, true);
+    assert.equal(online.json().items[0].lastSeenAt, recent.toISOString());
+    assert.ok(!online.body.includes('sessions'));
+    const offline = await app.inject({method: 'GET', url: '/api/v1/admin/users?online=offline&id=' + otherId.slice(0, 8) + '&sortBy=lastSeenAt', headers});
+    assert.equal(offline.statusCode, 200, offline.body);
+    assert.equal(offline.json().items[0].id, otherId);
+    assert.equal(offline.json().items[0].lastSeenAt, old.toISOString());
+    const forbidden = await app.inject({method: 'GET', url: '/api/v1/admin/users', headers: {'x-test-role': 'moderator'}});
+    assert.equal(forbidden.statusCode, 403);
+  } finally {await app.close();}
 });

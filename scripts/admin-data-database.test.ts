@@ -6,6 +6,7 @@ import { PrismaClient } from '@prisma/client';
 import { registerAdminDataRoutes } from '../server/src/admin/routes.ts';
 import { registerUserAdminRoutes } from '../server/src/users/adminRoutes.ts';
 import { AppError } from '../server/src/errors.ts';
+import { touchPresence } from '../server/src/auth/presence.ts';
 
 const isolated = process.env.CI === 'true' && (process.env.DATABASE_URL ?? '').includes('/discvault_ci');
 test('administrator CRUD persists to PostgreSQL for every model and preserves business aggregates', {skip: !isolated ? 'Requires the isolated CI database discvault_ci.' : false}, async () => {
@@ -77,6 +78,22 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
     await create('NewsPost', {authorId: sellerId, gameId, title: 'CI news', excerpt: 'CI', body: 'CI', category: 'community', tags: []});
     const session = await prisma.session.create({data: {userId: buyerId, tokenHash: createHash('sha256').update(suffix).digest('hex'), expiresAt: new Date('2099-01-01')}});
     created.push({model: 'Session', key: {id: session.id}});
+    const presenceTime = new Date();
+    const profileVersion = (await prisma.user.findUniqueOrThrow({where: {id: buyerId}})).updatedAt;
+    await prisma.session.update({where: {id: session.id}, data: {lastUsedAt: new Date(presenceTime.getTime() - 70000)}});
+    await touchPresence(prisma, session.id, buyerId, presenceTime);
+    const presentBuyer = await prisma.user.findUniqueOrThrow({where: {id: buyerId}});
+    assert.equal(presentBuyer.lastSeenAt?.toISOString(), presenceTime.toISOString());
+    assert.equal(presentBuyer.updatedAt.toISOString(), profileVersion.toISOString());
+    const online = await app.inject({method: 'GET', url: '/api/v1/admin/users?online=online&id=' + buyerId});
+    assert.equal(online.statusCode, 200, online.body);
+    assert.equal(online.json().items[0].isOnline, true);
+    const related = await app.inject({method: 'GET', url: path('Deal') + '?relatedUserId=' + buyerId});
+    assert.equal(related.statusCode, 200, related.body);
+    assert.equal(related.json().items[0].id, deal.id);
+    assert.equal(related.json().total, 1);
+    const unrelated = await app.inject({method: 'GET', url: path('Deal') + '?relatedUserId=' + adminId});
+    assert.equal(unrelated.json().total, 0);
     const users = await app.inject({method: 'GET', url: '/api/v1/admin/users?search=' + buyerId + '&copies=1'});
     assert.equal(users.statusCode, 200, users.body);
     assert.equal(users.json().items[0].copies, 1);
@@ -90,6 +107,7 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
       assert.equal(current.statusCode, 200, current.body);
       const response = await app.inject({method: 'DELETE', url: path(item.model, item.key), payload: {expectedUpdatedAt: current.json().record.updatedAt ?? null}});
       assert.equal(response.statusCode, 204, item.model + ': ' + response.body);
+      if (item.model === 'Session') assert.equal((await prisma.user.findUniqueOrThrow({where: {id: buyerId}})).lastSeenAt?.toISOString(), presenceTime.toISOString());
     }
     assert.equal((await prisma.user.findUniqueOrThrow({where: {id: adminId}})).role, 'admin');
   } finally {

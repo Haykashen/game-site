@@ -26,10 +26,17 @@ export function delegate(tx: Prisma.TransactionClient, name: string): Delegate {
   return (tx as unknown as Record<string, Delegate>)[key]!;
 }
 const querySchema = paginationSchema.extend({
+  relatedUserId: z.string().uuid().optional(),
   search: z.string().trim().max(200).default(''),
   filters: z.string().max(20_000).optional(),
   sortBy: z.string().max(100).optional(), sortDir: z.enum(['asc', 'desc']).default('desc'),
 });
+
+export function userScopeWhere(table: AdminTable, userId: string): Row {
+  const fields = table.fields.filter((field) => field.reference === 'User');
+  if (!fields.length) throw badRequest('Эта таблица не ссылается на пользователей.');
+  return {OR: fields.map((field) => ({[field.name]: userId}))};
+}
 const updateSchema = z.object({data: z.record(z.unknown()), expectedUpdatedAt: z.string().datetime().nullable()}).strict();
 const deleteSchema = z.object({expectedUpdatedAt: z.string().datetime().nullable()}).strict();
 
@@ -139,7 +146,8 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
     const {table: name} = request.params as {table: string};
     const table = getTable(name);
     const query = parse(querySchema, request.query);
-    const where = buildWhere(table, query.search, query.filters);
+    const filters = buildWhere(table, query.search, query.filters);
+    const where = query.relatedUserId ? {AND: [filters, userScopeWhere(table, query.relatedUserId)]} : filters;
     const sort = query.sortBy ?? (table.fields.some((field) => field.name === 'createdAt') ? 'createdAt' : table.primaryKey[0]!);
     if (!table.fields.some((field) => field.name === sort && !['list', 'password'].includes(field.type))) throw badRequest('Некорректный столбец сортировки.');
     const orderBy = [{[sort]: query.sortDir}, ...table.primaryKey.filter((key) => key !== sort).map((key) => ({[key]: 'asc'}))];

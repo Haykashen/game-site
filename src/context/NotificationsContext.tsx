@@ -103,7 +103,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     if (!isRemote) return;
 
     const timer = window.setInterval(() => {
-      void refreshUnread();
+      if (document.visibilityState === 'visible') void refreshUnread();
     }, UNREAD_POLL_INTERVAL);
 
     return () => window.clearInterval(timer);

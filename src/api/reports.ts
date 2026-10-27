@@ -97,6 +97,10 @@ export function listAdminUsers(
 ): Promise<Paginated<AdminUserDto>> {
   const query = new URLSearchParams();
 
+  if (params.id) query.set('id', params.id);
+  if (params.online && params.online !== 'all') query.set('online', params.online);
+  if (params.lastSeenAt) query.set('lastSeenAt', params.lastSeenAt);
+
   if (params.search) query.set('search', params.search);
   if (params.role && params.role !== 'all') query.set('role', params.role);
   if (params.status && params.status !== 'all') {

@@ -24,10 +24,13 @@ interface Props<T, K extends string> {
   onReset: () => void;
   hasFilters: boolean;
   actions?: (record: T) => ReactNode;
+  onSelect?: (record: T) => void;
+  selectedKey?: string;
+  compact?: boolean;
 }
 
 /** The single table renderer for users and every database model. Data loading stays with the page. */
-export function AdminDataTable<T, K extends string = string>({label, columns, rows, rowKey, sortBy, sortDir, onSort, loading, total, page, pageSize, onPage, onReset, hasFilters, actions}: Props<T, K>) {
+export function AdminDataTable<T, K extends string = string>({label, columns, rows, rowKey, sortBy, sortDir, onSort, loading, total, page, pageSize, onPage, onReset, hasFilters, actions, onSelect, selectedKey, compact}: Props<T, K>) {
   const pages = Math.max(1, Math.ceil(total / pageSize));
   return <>
     <div className="panel analytics-table-panel admin-users__panel">
@@ -35,7 +38,7 @@ export function AdminDataTable<T, K extends string = string>({label, columns, ro
         <span>{loading ? 'Загружаем…' : `Всего: ${total.toLocaleString('ru-RU')}`}</span>
         {hasFilters && <button type="button" className="btn-secondary" onClick={onReset}><X size={14} />Сбросить фильтры</button>}
       </div>
-      <div className="analytics-table-wrap" aria-busy={loading}>
+      <div className={`analytics-table-wrap${compact ? ' admin-data__scroll--compact' : ''}`} aria-busy={loading}>
         <table className="analytics-table admin-users__table admin-data__table" aria-label={label}>
           <thead>
             <tr>{columns.map((column) => <th key={column.key} scope="col" aria-sort={sortBy === column.key ? sortDir === 'asc' ? 'ascending' : 'descending' : 'none'}>
@@ -47,7 +50,12 @@ export function AdminDataTable<T, K extends string = string>({label, columns, ro
           </thead>
           <tbody>{!rows.length ? <tr><td colSpan={columns.length + (actions ? 1 : 0)}><div className="admin-users__empty-row">
             {loading && <RefreshCw className="market-photo-spin" size={18} />}{loading ? 'Загружаем записи…' : 'По выбранным фильтрам записи не найдены.'}
-          </div></td></tr> : rows.map((record) => <tr key={rowKey(record)}>
+          </div></td></tr> : rows.map((record) => <tr key={rowKey(record)}
+            className={onSelect ? `admin-data__selectable${selectedKey === rowKey(record) ? ' is-selected' : ''}` : undefined}
+            aria-selected={onSelect ? selectedKey === rowKey(record) : undefined}
+            tabIndex={onSelect ? 0 : undefined}
+            onClick={onSelect ? (event) => {if (event.target instanceof Element && !event.target.closest('a,button,input,select,textarea,summary')) onSelect(record);} : undefined}
+            onKeyDown={onSelect ? (event) => {if (event.target === event.currentTarget && (event.key === 'Enter' || event.key === ' ')) {event.preventDefault(); onSelect(record);}} : undefined}>
             {columns.map((column) => <td key={column.key}>{column.render(record)}</td>)}
             {actions && <td className="admin-data__actions"><div className="admin-data__row-actions">{actions(record)}</div></td>}
           </tr>)}</tbody>

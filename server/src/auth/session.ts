@@ -3,6 +3,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 import { createHash, randomBytes } from 'node:crypto';
 import type { UserRole, UserStatus } from '@discvault/shared';
 import { env } from '../env.js';
+import { persistLastSeen, PRESENCE_UPDATE_MS, touchPresence } from './presence.js';
 
 export const SESSION_COOKIE = 'rk_session';
 
@@ -29,14 +30,17 @@ export async function createSession(
     Date.now() + env.sessionTtlDays * 24 * 60 * 60 * 1000,
   );
 
-  await prisma.session.create({
-    data: {
-      userId,
-      tokenHash: hashToken(token),
-      expiresAt,
-      userAgent: request.headers['user-agent']?.slice(0, 500) ?? null,
-      ip: request.ip,
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.session.create({
+      data: {
+        userId,
+        tokenHash: hashToken(token),
+        expiresAt,
+        userAgent: request.headers['user-agent']?.slice(0, 500) ?? null,
+        ip: request.ip,
+      },
+    });
+    await persistLastSeen(tx, userId, new Date());
   });
 
   return { token, expiresAt };
@@ -69,7 +73,12 @@ export async function destroySession(
   prisma: PrismaClient,
   token: string,
 ): Promise<void> {
-  await prisma.session.deleteMany({ where: { tokenHash: hashToken(token) } });
+  const tokenHash = hashToken(token);
+  await prisma.$transaction(async (tx) => {
+    const session = await tx.session.findUnique({where: {tokenHash}, select: {userId: true}});
+    await tx.session.deleteMany({where: {tokenHash}});
+    if (session) await persistLastSeen(tx, session.userId, new Date());
+  });
 }
 
 export async function resolveSession(
@@ -111,11 +120,11 @@ export async function resolveSession(
     return;
   }
 
-  const oneHourAgo = Date.now() - 60 * 60 * 1000;
-  if (session.lastUsedAt.getTime() < oneHourAgo) {
-    await prisma.session
-      .update({ where: { id: session.id }, data: { lastUsedAt: new Date() } })
-      .catch(() => undefined);
+  const now = new Date();
+  if (session.lastUsedAt.getTime() <= now.getTime() - PRESENCE_UPDATE_MS) {
+    await touchPresence(prisma, session.id, session.userId, now).catch((error: unknown) => {
+      request.log.warn({err: error}, 'Could not update user presence');
+    });
   }
 
   request.user = session.user;

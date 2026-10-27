@@ -133,6 +133,7 @@ model User {
   status           UserStatus @default(active)
   suspendedAt      DateTime?  @map("suspended_at")
   comment          String?    @db.Text
+  lastSeenAt       DateTime?  @map("last_seen_at")
 
   ratingSum   Int @default(0) @map("rating_sum")
   ratingCount Int @default(0) @map("rating_count")

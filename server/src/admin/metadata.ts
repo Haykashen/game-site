@@ -18,7 +18,7 @@ const FIELD_LABELS: Record<string, string> = {
   id: 'ID', email: 'Почта', displayName: 'Имя', password: 'Пароль', phone: 'Телефон',
   city: 'Город', avatarUrl: 'Аватар', isDemo: 'Демо-аккаунт', role: 'Роль', status: 'Статус',
   suspendedAt: 'Дата блокировки', comment: 'Комментарий', ratingSum: 'Сумма оценок',
-  ratingCount: 'Количество отзывов', createdAt: 'Создано', updatedAt: 'Обновлено',
+  ratingCount: 'Количество отзывов', createdAt: 'Создано', updatedAt: 'Обновлено', lastSeenAt: 'Последнее посещение',
   userId: 'Пользователь', userAgent: 'Браузер', ip: 'IP', expiresAt: 'Истекает', lastUsedAt: 'Последняя активность',
   title: 'Название', publisher: 'Издатель', developer: 'Разработчик', series: 'Серия',
   year: 'Год', genres: 'Жанры', description: 'Описание', coverImage: 'Обложка', gameId: 'Игра',
@@ -44,7 +44,7 @@ const FIELD_LABELS: Record<string, string> = {
   category: 'Категория', publishedAt: 'Опубликовано',
 };
 const HIDDEN = new Set(['passwordHash', 'tokenHash']);
-const READ_ONLY = new Set(['updatedAt', 'ratingSum', 'ratingCount', 'bidCount', 'currentPriceMinor', 'winnerId', 'version', 'views', 'activeKey']);
+const READ_ONLY = new Set(['updatedAt', 'lastSeenAt', 'ratingSum', 'ratingCount', 'bidCount', 'currentPriceMinor', 'winnerId', 'version', 'views', 'activeKey']);
 export const models = Prisma.dmmf.datamodel.models.filter((model) => Object.hasOwn(TABLE_LABELS, model.name));
 
 export function getModel(name: string) {

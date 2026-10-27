@@ -25,6 +25,7 @@ export interface AdminTable {
   canDelete: boolean;
 }
 export interface AdminDataQuery {
+  relatedUserId?: string;
   search?: string;
   filters?: Record<string, string>;
   sortBy?: string;
