@@ -1,13 +1,13 @@
-import { useMemo } from 'react';
+import { useEffect, useRef } from 'react';
 import { GameBrowser } from '../components/GameBrowser';
 import { ApiState } from '../components/ApiState';
 import { SearchToolbar } from '../components/SearchToolbar';
-import { useCollection } from '../context/CollectionContext';
 import { useGameDrawerParam } from '../hooks/useGameDrawerParam';
 import { useUrlFilters } from '../hooks/useUrlFilters';
 import { SEARCH_FILTER_PARAMS } from '../lib/searchFilterConfig';
 import { useSearchFields } from '../hooks/useSearchFields';
-import { selectVisibleGames } from '../lib/selectVisibleGames';
+import { useInfiniteCatalog } from '../hooks/useInfiniteCatalog';
+import { useAuth } from '../context/AuthContext';
 
 function gamesCountLabel(count: number): string {
   const mod10 = count % 10;
@@ -21,19 +21,28 @@ function gamesCountLabel(count: number): string {
 /** Catalogue with URL-backed filters, grid and the game detail drawer. */
 export function GamesPage() {
   const fields = useSearchFields('catalog');
-  const { games, editions, isCatalogLoading, catalogError, refresh } = useCollection();
+  const {user, refresh: refreshAuth, status} = useAuth();
   const { gameId, editionId, openGame, closeGame } = useGameDrawerParam();
   const { values: filters, setValue, reset } = useUrlFilters(SEARCH_FILTER_PARAMS);
 
-  const visibleGames = useMemo(
-    () => selectVisibleGames(games, editions, filters),
-    [editions, filters, games],
-  );
+  const catalog = useInfiniteCatalog(filters);
+  const sentinel = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const target = sentinel.current;
+    if (!target || !catalog.canLoad || catalog.loading || catalog.error || !catalog.hasMore || gameId || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver((entries) => {
+      // A focused manual-load button can follow the page end as content grows.
+      // Keep keyboard paging deliberate instead of draining the catalogue.
+      if (!target.contains(document.activeElement) && entries.some((entry) => entry.isIntersecting)) void catalog.loadMore();
+    }, {rootMargin: '600px 0px'});
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [catalog.canLoad, catalog.loading, catalog.error, catalog.hasMore, catalog.loadMore, gameId]);
 
   return (
     <>
       <h1 className="sr-only">Каталог игр</h1>
-      <ApiState loading={isCatalogLoading} error={catalogError} onRetry={refresh} />
+      <ApiState loading={catalog.loading && catalog.items.length === 0} error={catalog.error} onRetry={status === 'offline' ? refreshAuth : catalog.loadMore} />
       <SearchToolbar
         idPrefix="catalog"
         ariaLabel="Поиск и фильтры каталога"
@@ -41,18 +50,24 @@ export function GamesPage() {
         query={filters.query}
         filterValues={filters}
         fields={fields}
-        resultCountLabel={gamesCountLabel(visibleGames.length)}
+        resultCountLabel={gamesCountLabel(catalog.total)}
         onQueryChange={(query) => setValue('query', query)}
         onFilterChange={setValue}
         onReset={reset}
       />
-      {!isCatalogLoading && !catalogError && <GameBrowser
-        games={visibleGames}
+      <GameBrowser
+        key={user?.id ?? 'guest'}
+        games={catalog.items}
         gameId={gameId}
         editionId={editionId}
         onOpenGame={openGame}
         onCloseGame={closeGame}
-      />}
+        emptyText={catalog.loading ? 'Загружаем игры…' : catalog.error ? 'Не удалось загрузить игры.' : 'Игры не найдены'}
+      />
+      <div ref={sentinel} className="catalog-pagination" aria-live="polite">
+        {catalog.items.length > 0 && <span>Показано {catalog.items.length} из {catalog.total}</span>}
+        {catalog.hasMore && !catalog.error && catalog.canLoad && <button type="button" className="btn-secondary" disabled={catalog.loading} onClick={(event) => {if (event.detail > 0) event.currentTarget.blur(); void catalog.loadMore();}}>{catalog.loading ? 'Загружаем…' : 'Загрузить ещё'}</button>}
+      </div>
     </>
   );
 }

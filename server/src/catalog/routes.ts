@@ -87,11 +87,11 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
         app.prisma.game.count({ where }),
         app.prisma.game.findMany({
           where,
-          orderBy: { title: 'asc' },
+          orderBy: [{ title: 'asc' }, { id: 'asc' }],
           skip,
           take: query.pageSize,
           include: {
-            editions: { where: {canonicalId:null}, select: { id: true, platform: true } },
+            editions: { where: {canonicalId:null}, select: { id: true, platform: true, coverImages: true }, orderBy: {id: 'asc'} },
             _count: { select: { editions: {where: {canonicalId:null}} } },
           },
         }),
@@ -100,12 +100,12 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
       const gameIds = games.map((game) => game.id);
       const editionIds = games.flatMap((game) => game.editions.map((edition) => edition.id));
 
-      const lotsByGame = new Map<string, number>();
+      const marketByGame = new Map<string, {lotsCount: number; salesCount: number; purchasesCount: number; exchangeCount: number}>();
       const ownedByEdition = new Map<string, number>();
 
       if (gameIds.length > 0) {
         const lots = await app.prisma.marketEntry.groupBy({
-          by: ['gameId'],
+          by: ['gameId', 'kind', 'listingType'],
           where: {
             gameId: { in: gameIds },
             status: 'active',
@@ -116,7 +116,14 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
           _count: { _all: true },
         });
 
-        for (const row of lots) lotsByGame.set(row.gameId, row._count._all);
+        for (const row of lots) {
+          const counts = marketByGame.get(row.gameId) ?? {lotsCount: 0, salesCount: 0, purchasesCount: 0, exchangeCount: 0};
+          if (row.kind === 'auction') counts.lotsCount += row._count._all;
+          else if (row.listingType === 'sale') counts.salesCount += row._count._all;
+          else if (row.listingType === 'purchase') counts.purchasesCount += row._count._all;
+          else if (row.listingType === 'exchange') counts.exchangeCount += row._count._all;
+          marketByGame.set(row.gameId, counts);
+        }
 
         if (request.user && editionIds.length > 0) {
           const owned = await app.prisma.copy.groupBy({
@@ -135,6 +142,8 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
       }
 
       const items: GameWithStatsDto[] = games.map((game) => {
+        const coverImages = [...new Set([game.coverImage, ...game.editions.flatMap((edition) => edition.coverImages)].filter(Boolean))]
+          .sort((left, right) => Number(right.startsWith('https://showgames.ru/')) - Number(left.startsWith('https://showgames.ru/'))).slice(0, 3);
         const platforms = [...new Set(game.editions.map((edition) => edition.platform))];
         const ownedCount = game.editions.reduce(
           (sum, edition) => sum + (ownedByEdition.get(edition.id) ?? 0),
@@ -147,7 +156,8 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
             platforms,
             editionCount: game._count.editions,
             ownedCount,
-            lotsCount: lotsByGame.get(game.id) ?? 0,
+            ...(marketByGame.get(game.id) ?? {lotsCount: 0, salesCount: 0, purchasesCount: 0, exchangeCount: 0}),
+            coverImages,
           },
         };
       });

@@ -19,20 +19,21 @@ export interface MarketStore {
 const EMPTY: MarketEntry[] = [];
 const input = (draft: MarketDraft): MarketCreateInput => ({ ...draft });
 
-export function useMarketEntries(): MarketStore {
+export function useMarketEntries({gameId, enabled = true}: {gameId?: string; enabled?: boolean} = {}): MarketStore {
   const { user, status } = useAuth();
   const userId = user?.id;
   const currentUser = useRef(userId);
   currentUser.current = userId;
   const load = useCallback(async (signal: AbortSignal) => {
+    if (!enabled) return EMPTY;
     const list = (mine: boolean) => collectPages((page) => apiRequest<Paginated<MarketEntryDto>>(
-      '/api/v1/market?status=all&sort=newest&pageSize=100&page=' + page + (mine ? '&authorId=me' : ''), { signal }));
+      '/api/v1/market?status=all&sort=newest&pageSize=100&page=' + page + (mine ? '&authorId=me' : '') + (gameId ? '&gameId=' + encodeURIComponent(gameId) : ''), { signal }));
     const [publicEntries, ownEntries] = await Promise.all([list(false), userId ? list(true) : Promise.resolve([])]);
     const combined = new Map(publicEntries.map((entry) => [entry.id, entry]));
     for (const entry of ownEntries) combined.set(entry.id, entry);
     return [...combined.values()].map(mapMarketEntry);
-  }, [userId]);
-  const resource = useApiResource('market:' + (userId ?? 'guest'), load, EMPTY);
+  }, [userId, gameId, enabled]);
+  const resource = useApiResource('market:' + (userId ?? 'guest') + ':' + (gameId ?? 'all') + ':' + enabled, load, EMPTY);
   const [mutationError, setMutationError] = useState<{ owner: string | undefined; message: string } | null>(null);
   const entries = resource.data;
   const ownEntryIds = useMemo(() => new Set(entries.filter((entry) => entry.authorId === userId).map((entry) => entry.id)), [entries, userId]);

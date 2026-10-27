@@ -15,8 +15,12 @@ import type { GameMarketTab } from './modal/GameMarketSection';
 import { SpecBox } from './modal/SpecBox';
 import { IconButton } from './ui/IconButton';
 import { ModalShell } from './ui/ModalShell';
+import { ApiState } from './ApiState';
 
 interface GameModalProps {
+  marketLoading: boolean;
+  marketError: string | null;
+  onRetryMarket: () => Promise<void>;
   game: Game;
   isOpen: boolean;
   editions: readonly Edition[];
@@ -37,6 +41,9 @@ const MODAL_TITLE_ID = 'modal-title';
 
 /** Detail drawer: abstract game info, concrete editions and game-scoped market. */
 export function GameModal({
+  marketLoading,
+  marketError,
+  onRetryMarket,
   game,
   isOpen,
   editions,
@@ -74,6 +81,7 @@ export function GameModal({
 
   return (
     <ModalShell isOpen={isOpen} onClose={onClose} labelledBy={MODAL_TITLE_ID}>
+      <ApiState loading={marketLoading} error={marketError} onRetry={onRetryMarket} />
       <div className="modal-header">
         <div>
           <div className="modal-header-meta">

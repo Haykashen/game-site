@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import type { Copy, CopyDetails, Edition, Game } from '../types';
 import { MAX_COLLECTION_QUANTITY } from '../lib/constants';
 import { useApiResource } from './useApiResource';
+import { useLocation } from 'react-router-dom';
 
 export interface GameCollection {
   games: Game[]; editions: Edition[]; copies: Copy[];
@@ -28,13 +29,18 @@ const EMPTY_COPIES: Copy[] = [];
 const EMPTY_EDITIONS: readonly Edition[] = [];
 
 export function useGameCollection(): GameCollection {
+  const {pathname} = useLocation();
+  // The games page has its own paged resource. Other existing tools still need
+  // complete lookup lists for edition selectors and collection joins.
+  const catalogPath = pathname.replace(/\/+$/, '').toLowerCase();
+  const needsFullCatalog = catalogPath !== '' && catalogPath !== '/games';
   const { status, user } = useAuth();
   const userId = user?.id;
   const owner = useRef(userId);
   owner.current = userId;
   const isRemote = status === 'api' && Boolean(userId);
-  const loadCatalog = useCallback((signal: AbortSignal) => fetchCatalog(signal), []);
-  const catalog = useApiResource('catalog', loadCatalog, EMPTY_CATALOG);
+  const loadCatalog = useCallback((signal: AbortSignal) => needsFullCatalog ? fetchCatalog(signal) : Promise.resolve(EMPTY_CATALOG), [needsFullCatalog]);
+  const catalog = useApiResource('catalog:' + (needsFullCatalog ? 'full' : 'paged'), loadCatalog, EMPTY_CATALOG);
   const loadCopies = useCallback(async (signal: AbortSignal) =>
     userId ? (await listCopies(signal)).map(mapCopy) : EMPTY_COPIES, [userId]);
   const shelf = useApiResource('copies:' + (userId ?? 'guest'), loadCopies, EMPTY_COPIES);

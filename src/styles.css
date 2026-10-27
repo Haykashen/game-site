@@ -30,6 +30,7 @@
         .admin-data__editor-footer { margin-top: auto; padding: 1rem 0; display: flex; justify-content: flex-end; gap: .75rem; }
         .admin-data__delete-note { display: grid; gap: 1rem; line-height: 1.6; overflow-wrap: anywhere; }
         @media (max-width: 600px) { .admin-data__fields { grid-template-columns: 1fr; } .admin-data__toolbar > input { flex-basis: 100%; } }
+        .catalog-pagination { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem; padding: 1.5rem 0 2.5rem; color: var(--text-muted); font-size: .85rem; }
         :root {
             --bg-main: #f8fafc;
             --bg-card: #ffffff;

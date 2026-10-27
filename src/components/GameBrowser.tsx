@@ -1,205 +1,104 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import type { GameDetailDto, GameWithStatsDto } from '@discvault/shared';
+import { fetchGameDetail } from '../api/catalog';
 import { useCollection } from '../context/CollectionContext';
-import { ApiState } from './ApiState';
+import { useApiResource } from '../hooks/useApiResource';
 import { useMarketEntries } from '../hooks/useMarketEntries';
 import { discussionRoutePath } from '../lib/discussions';
-import { gameCoverImage, gameCoverImages } from '../lib/editions';
 import { marketListingPath } from '../lib/market';
-import type { Game, GameStats, MarketEntry } from '../types';
+import type { GameStats, MarketEntry } from '../types';
+import { ApiState } from './ApiState';
 import { GameGrid } from './GameGrid';
 import { GameModal } from './GameModal';
+import { ModalShell } from './ui/ModalShell';
 
 interface GameBrowserProps {
-  games: readonly Game[];
-  /** Game id from the URL: links, reloads and history all drive the drawer. */
+  games: readonly GameWithStatsDto[];
   gameId: string;
-  /** Optional edition preselected in the drawer. */
   editionId?: string;
   onOpenGame: (gameId: string, editionId?: string) => void;
   onCloseGame: () => void;
   emptyText?: string;
 }
 
-/**
- * Shared grid + detail drawer. Selection lives here so the catalogue and the
- * collection page get identical modal behaviour without duplicating state.
- */
-export function GameBrowser({
-  games,
-  gameId,
-  editionId = '',
-  onOpenGame,
-  onCloseGame,
-  emptyText,
-}: GameBrowserProps) {
-  const {
-    games: allGames,
-    editions,
-    copies,
-    addCopy,
-    setEditionQuantity,
-    removeEdition,
-  } = useCollection();
-  const { entries: marketEntries, error: marketError, isLoading: marketLoading, refresh: refreshMarket } = useMarketEntries();
+/** Paged cards use server summaries; full editions and market are fetched on open. */
+export function GameBrowser({games, gameId, editionId = '', onOpenGame, onCloseGame, emptyText}: GameBrowserProps) {
+  const {copies, addCopy, setEditionQuantity, removeEdition, isSyncing} = useCollection();
   const navigate = useNavigate();
-  const [selectedGameId, setSelectedGameId] = useState<string | null>(gameId || null);
-  const [isModalOpen, setIsModalOpen] = useState(Boolean(gameId));
+  const [selectedId, setSelectedId] = useState(gameId);
+  const [ownedCounts, setOwnedCounts] = useState<Record<string, number>>({});
+  const editionIds = useRef(new Map<string, Set<string>>());
+  const cardStats = useRef(new Map<string, {game: GameWithStatsDto; owned: number; stats: GameStats}>());
+  const loadDetail = useCallback((signal: AbortSignal) => selectedId ? fetchGameDetail(selectedId, signal) : Promise.resolve(null), [selectedId]);
+  const detail = useApiResource<GameDetailDto | null>('game-detail:' + selectedId, loadDetail, null);
+  const market = useMarketEntries({...(selectedId ? {gameId: selectedId} : {}), enabled: Boolean(gameId) && selectedId === gameId});
 
+  useEffect(() => {if (gameId) setSelectedId(gameId);}, [gameId]);
   useEffect(() => {
-    if (!gameId) {
-      setIsModalOpen(false);
-      return;
-    }
-
-    if (!allGames.some((game) => game.id === gameId)) return;
-
-    setSelectedGameId(gameId);
-    setIsModalOpen(true);
-  }, [allGames, gameId]);
-
-  const selectedGame = useMemo(
-    () => allGames.find((game) => game.id === selectedGameId) ?? null,
-    [allGames, selectedGameId],
-  );
-
-  const gameEditions = useMemo(
-    () => (selectedGame ? editions.filter((edition) => edition.gameId === selectedGame.id) : []),
-    [editions, selectedGame],
-  );
-
-  const gameCopies = useMemo(
-    () => copies.filter((copy) => gameEditions.some((edition) => edition.id === copy.editionId)),
-    [copies, gameEditions],
-  );
+    if (detail.data) editionIds.current.set(detail.data.id, new Set(detail.data.editions.flatMap((edition) => [edition.id, ...(edition.variants ?? []).map((variant) => variant.id)])));
+    if (isSyncing) return;
+    setOwnedCounts((previous) => {
+      let next = previous;
+      for (const [id, ids] of editionIds.current) {
+        const count = copies.filter((copy) => ids.has(copy.editionId)).length;
+        if (previous[id] !== count) next = {...next, [id]: count};
+      }
+      return next;
+    });
+  }, [copies, detail.data, isSyncing]);
 
   const statsByGame = useMemo(() => {
-    const ownedByGame = new Map<string, number>();
+    const visibleIds = new Set(games.map((game) => game.id));
+    for (const id of cardStats.current.keys()) if (!visibleIds.has(id)) cardStats.current.delete(id);
+    return new Map(games.map((game): [string, GameStats] => {
+      const owned = ownedCounts[game.id] ?? game.stats.ownedCount;
+      const cached = cardStats.current.get(game.id);
+      if (cached?.game === game && cached.owned === owned) return [game.id, cached.stats];
+      const stats: GameStats = {
+    platforms: game.stats.platforms,
+    editionCount: game.stats.editionCount,
+    ownedCount: owned,
+    lotsCount: game.stats.lotsCount,
+    salesCount: game.stats.salesCount ?? 0,
+    purchasesCount: game.stats.purchasesCount ?? 0,
+    exchangeCount: game.stats.exchangeCount ?? 0,
+    coverImages: game.stats.coverImages ?? (game.coverImage ? [game.coverImage] : []),
+    coverImage: game.stats.coverImages?.[0] ?? game.coverImage,
+      };
+      cardStats.current.set(game.id, {game, owned, stats});
+      return [game.id, stats];
+    }));
+  }, [games, ownedCounts]);
 
-    for (const copy of copies) {
-      const edition = editions.find((item) => item.id === copy.editionId);
-      if (!edition) continue;
-      ownedByGame.set(edition.gameId, (ownedByGame.get(edition.gameId) ?? 0) + 1);
-    }
+  const openGame = useCallback((id: string) => {setSelectedId(id); onOpenGame(id);}, [onOpenGame]);
+  const placeEntry = useCallback((path: string, id?: string) => {
+    const params = new URLSearchParams({compose: '1', game: selectedId});
+    if (id) params.set('editionId', id);
+    navigate(`${path}?${params}`);
+  }, [navigate, selectedId]);
+  const openMarketEntry = useCallback((entry: MarketEntry) => {
+    navigate(`${entry.kind === 'auction' ? '/auctions' : marketListingPath(entry.listingType)}?item=${encodeURIComponent(entry.id)}`);
+  }, [navigate]);
+  const selectedGame = detail.data?.id === selectedId ? detail.data : null;
+  const isOpen = Boolean(gameId);
 
-    const marketCounts = new Map<string, { lotsCount: number; salesCount: number; purchasesCount: number; exchangeCount: number }>();
-
-    for (const entry of marketEntries) {
-      if (entry.status !== 'active' || (entry.moderationStatus && entry.moderationStatus !== 'visible')) continue;
-      const counts = marketCounts.get(entry.gameId) ?? { lotsCount: 0, salesCount: 0, purchasesCount: 0, exchangeCount: 0 };
-      if (entry.kind === 'auction') counts.lotsCount += 1;
-      else if (entry.listingType === 'sale') counts.salesCount += 1;
-      else if (entry.listingType === 'purchase') counts.purchasesCount += 1;
-      else if (entry.listingType === 'exchange') counts.exchangeCount += 1;
-      marketCounts.set(entry.gameId, counts);
-    }
-
-    const stats = new Map<string, GameStats>();
-
-    for (const game of allGames) {
-      const editionsForGame = editions.filter((edition) => edition.gameId === game.id);
-      const platforms = [...new Set(editionsForGame.map((edition) => edition.platform))];
-
-      stats.set(game.id, {
-        platforms,
-        editionCount: editionsForGame.length,
-        ownedCount: ownedByGame.get(game.id) ?? 0,
-        lotsCount: marketCounts.get(game.id)?.lotsCount ?? 0,
-        salesCount: marketCounts.get(game.id)?.salesCount ?? 0,
-        purchasesCount: marketCounts.get(game.id)?.purchasesCount ?? 0,
-        exchangeCount: marketCounts.get(game.id)?.exchangeCount ?? 0,
-        coverImage: gameCoverImage(game, editionsForGame),
-        coverImages: gameCoverImages(game, editionsForGame),
-      });
-    }
-
-    return stats;
-  }, [allGames, copies, editions, marketEntries]);
-
-  const openGame = useCallback(
-    (nextGameId: string) => {
-      setSelectedGameId(nextGameId);
-      setIsModalOpen(true);
-      onOpenGame(nextGameId);
-    },
-    [onOpenGame],
-  );
-
-  const closeGame = useCallback(() => {
-    setIsModalOpen(false);
-    onCloseGame();
-  }, [onCloseGame]);
-
-  const placeEntry = useCallback(
-    (path: string, selectedEditionId?: string) => {
-      if (!selectedGameId) return;
-
-      const params = new URLSearchParams({ compose: '1', game: selectedGameId });
-      if (selectedEditionId) params.set('editionId', selectedEditionId);
-
-      navigate(`${path}?${params.toString()}`);
-    },
-    [navigate, selectedGameId],
-  );
-
-  const placeListing = useCallback(
-    (selectedEditionId?: string) =>
-      placeEntry(marketListingPath('sale'), selectedEditionId),
-    [placeEntry],
-  );
-
-  const placeAuction = useCallback(
-    (selectedEditionId?: string) => placeEntry('/auctions', selectedEditionId),
-    [placeEntry],
-  );
-
-  const openMarketEntry = useCallback(
-    (entry: MarketEntry) => {
-      const path =
-        entry.kind === 'auction'
-          ? '/auctions'
-          : marketListingPath(entry.listingType);
-      navigate(`${path}?item=${encodeURIComponent(entry.id)}`);
-    },
-    [navigate],
-  );
-
-  const openGameDiscussions = useCallback(
-    (targetGameId: string) => {
-      navigate(discussionRoutePath(targetGameId));
-    },
-    [navigate],
-  );
-
-  return (
-    <>
-      <ApiState loading={marketLoading} error={marketError} onRetry={refreshMarket} />
-      <GameGrid
-        games={games}
-        statsByGame={statsByGame}
-        onSelectGame={openGame}
-        emptyText={emptyText ?? 'Игры не найдены'}
-      />
-
-      {selectedGame && (
-        <GameModal
-          key={`${selectedGame.id}:${editionId || 'all'}`}
-          game={selectedGame}
-          isOpen={isModalOpen}
-          editions={gameEditions}
-          copies={gameCopies}
-          initialEditionId={editionId}
-          entries={marketEntries}
-          onClose={closeGame}
-          onOpenMarketEntry={openMarketEntry}
-          onOpenDiscussions={openGameDiscussions}
-          onAddCopy={addCopy}
-          onSetEditionQuantity={setEditionQuantity}
-          onRemoveEdition={removeEdition}
-          onPlaceListing={placeListing}
-          onPlaceAuction={placeAuction}
-        />
-      )}
-    </>
-  );
+  return <>
+    <GameGrid games={games} statsByGame={statsByGame} onSelectGame={openGame} emptyText={emptyText ?? 'Игры не найдены'} />
+    {isOpen && (!selectedGame || selectedId !== gameId) && <ModalShell isOpen onClose={onCloseGame} labelledBy="loading-game-title">
+      <div className="modal-header"><h2 id="loading-game-title">Карточка игры</h2><button type="button" className="btn-secondary" onClick={onCloseGame}>Закрыть</button></div>
+      <ApiState loading={detail.isLoading || selectedId !== gameId} error={detail.error} onRetry={detail.refresh} />
+    </ModalShell>}
+    {selectedGame && selectedId === (gameId || selectedId) && <GameModal
+      key={`${selectedGame.id}:${editionId || 'all'}`}
+      game={selectedGame} isOpen={isOpen} editions={selectedGame.editions}
+      copies={copies} initialEditionId={editionId} entries={market.entries}
+      marketLoading={market.isLoading} marketError={market.error} onRetryMarket={market.refresh}
+      onClose={onCloseGame} onOpenMarketEntry={openMarketEntry}
+      onOpenDiscussions={(id) => navigate(discussionRoutePath(id))}
+      onAddCopy={addCopy} onSetEditionQuantity={setEditionQuantity} onRemoveEdition={removeEdition}
+      onPlaceListing={(id) => placeEntry(marketListingPath('sale'), id)}
+      onPlaceAuction={(id) => placeEntry('/auctions', id)}
+    />}
+  </>;
 }

@@ -35,6 +35,10 @@ export interface EditionDto {
 export type EditionVariantDto = Omit<EditionDto,'variants'>;
 
 export interface GameStatsDto {
+  salesCount?: number;
+  purchasesCount?: number;
+  exchangeCount?: number;
+  coverImages?: string[];
   platforms: string[];
   editionCount: number;
   ownedCount: number;

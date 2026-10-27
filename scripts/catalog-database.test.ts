@@ -17,18 +17,33 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
   const { buildApp } = await import('../server/src/app.ts');
   const app = await buildApp();
   const id = 'ci-catalog-' + randomUUID();
+  const pagingIds = [id + '-page-game-1', id + '-page-game-2', id + '-page-game-3'];
   const ownerId=randomUUID();
   try {
     await app.prisma.game.create({ data: {
       id, title: 'PostgreSQL catalogue fixture', publisher: 'Test', year: null,
       genres: ['Test'], description: 'Database-only fixture, never deployed to production.',
       editions: { create: { id: id + '-edition', name: 'Database edition', platform: 'CI Platform',
-        region: 'CI Region', lang: 'CI Language', media: 'Disc', contents: [], coverImages: [] } },
+        region: 'CI Region', lang: 'CI Language', media: 'Disc', contents: [], coverImages: ['https://showgames.ru/image/cache/catalog/covers/ci-test.jpg'] } },
     } });
     const games = await app.inject({ method: 'GET', url: '/api/v1/catalog/games?q=' + encodeURIComponent('PostgreSQL catalogue fixture') });
     assert.equal(games.statusCode, 200);
     assert.equal(games.json().items[0].id, id);
     assert.equal(games.json().items[0].year, null);
+    assert.equal(games.json().items[0].stats.editionCount, 1);
+    assert.equal(games.json().items[0].stats.coverImages[0], 'https://showgames.ru/image/cache/catalog/covers/ci-test.jpg');
+    assert.equal(games.json().items[0].stats.salesCount, 0);
+    assert.ok(!('editions' in games.json().items[0]));
+    await app.prisma.game.createMany({data: pagingIds.map((gameId, index) => ({id: gameId, title: id + ' paged ' + index, publisher: 'CI', genres: [], description: ''}))});
+    const pagedIds: string[] = [];
+    for (let number = 1; number <= 2; number++) {
+      const response = await app.inject({method: 'GET', url: '/api/v1/catalog/games?q=' + encodeURIComponent(id + ' paged') + '&pageSize=2&page=' + number});
+      assert.equal(response.statusCode, 200, response.body);
+      assert.equal(response.json().total, 3);
+      assert.equal(response.json().hasMore, number === 1);
+      pagedIds.push(...response.json().items.map((game: {id: string}) => game.id));
+    }
+    assert.deepEqual(pagedIds, pagingIds);
     for (const title of ['PostgreSQL catalogue fixture', ' POSTGRESQL   catalogue fixture ']) {
       await assert.rejects(app.prisma.game.create({data: {
         id: id + '-duplicate', title, publisher: '', year: null, genres: [], description: '',
@@ -115,7 +130,7 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
     await app.prisma.marketEntry.deleteMany({where:{id:id+'-listing'}});
     await app.prisma.user.deleteMany({where:{id:ownerId}});
     await app.prisma.edition.deleteMany({where:{gameId:{in:[id,id+'-dns']},canonicalId:{not:null}}});
-    await app.prisma.game.deleteMany({ where: { id: {in: [id, id + '-dns']} } });
+    await app.prisma.game.deleteMany({ where: { id: {in: [id, id + '-dns', ...pagingIds]} } });
     await app.close();
     await rm(uploads, { recursive: true, force: true });
   }
