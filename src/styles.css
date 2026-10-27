@@ -2905,7 +2905,7 @@
         .admin-users__state p { margin: 0; }
         .admin-users__pagination {
             display: flex; align-items: center; justify-content: center;
-            gap: .8rem; margin-top: 1.25rem;
+            gap: .8rem; margin-top: 1.25rem; padding-bottom: 1.5rem;
             color: var(--text-muted); font-size: .8rem;
         }
         @media (max-width: 640px) {
