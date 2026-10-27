@@ -1,4 +1,5 @@
 import cookie from '@fastify/cookie';
+import { registerAdminDataRoutes } from './admin/routes.js';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import multipart from '@fastify/multipart';
@@ -33,6 +34,7 @@ import './types.js';
 
 export async function buildApp() {
   const app = Fastify({
+    routerOptions: { maxParamLength: 2000 },
     logger: env.isProduction
       ? { level: 'info' }
       : {
@@ -242,6 +244,7 @@ export async function buildApp() {
   registerAnalyticsRoutes(app);
   registerUserRoutes(app);
   registerUserAdminRoutes(app);
+  registerAdminDataRoutes(app);
   registerCatalogRoutes(app);
   registerGameRatingRoutes(app);
   registerCollectionRoutes(app);

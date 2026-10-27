@@ -4,6 +4,7 @@ import {
   Bell,
   ChartNoAxesCombined,
   ClipboardCheck,
+  Database,
   Gamepad2,
   Gavel,
   Library,
@@ -35,7 +36,8 @@ export type NavSectionId =
   | 'analytics'
   | 'marketReview'
   | 'admin'
-  | 'adminUsers';
+  | 'adminUsers'
+  | 'adminData';
 
 export interface NavItem {
   readonly id: NavSectionId;
@@ -183,6 +185,10 @@ export const NAV_ITEMS = {
     shortLabel: 'Люди',
     path: '/admin/users',
     icon: Users,
+  },
+  adminData: {
+    id: 'adminData', label: 'Данные', pageTitle: 'Данные проекта', shortLabel: 'Данные',
+    path: '/admin/data', icon: Database,
   },
 } as const satisfies Record<NavSectionId, NavItem>;
 

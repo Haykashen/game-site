@@ -93,6 +93,7 @@ export function updateMarketModeration(
 
 export function listAdminUsers(
   params: Partial<AdminUsersQuery> = {},
+  signal?: AbortSignal,
 ): Promise<Paginated<AdminUserDto>> {
   const query = new URLSearchParams();
 
@@ -121,6 +122,7 @@ export function listAdminUsers(
   const suffix = query.toString();
   return apiRequest<Paginated<AdminUserDto>>(
     `/api/v1/admin/users${suffix ? `?${suffix}` : ''}`,
+    signal ? {signal} : {},
   );
 }
 

@@ -88,6 +88,7 @@ export function Sidebar() {
             <NavRow item={NAV_ITEMS.marketReview} count={undefined} />
             <NavRow item={NAV_ITEMS.admin} count={undefined} />
             {isAdmin && <NavRow item={NAV_ITEMS.adminUsers} count={undefined} />}
+            {isAdmin && <NavRow item={NAV_ITEMS.adminData} count={undefined} />}
           </div>
         )}
       </div>

@@ -1,3 +1,35 @@
+        /* Shared administrator data table and record editor. */
+        nav.admin-data__tables { position: static; z-index: auto; height: auto; display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem; border: 0; background: transparent; backdrop-filter: none; box-shadow: none; }
+        .admin-data__tables a { text-decoration: none; }
+        .admin-data__tables .is-active { border-color: var(--brand); background: var(--brand-light); }
+        .admin-data__toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: .75rem; margin-bottom: 1rem; }
+        .admin-data__toolbar > input { flex: 1; min-width: 180px; }
+        .admin-data__row-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+        .admin-data__row-actions .btn-secondary { padding: .55rem .7rem; }
+        .admin-data__actions { position: sticky; right: 0; z-index: 1; background: var(--bg-card); min-width: 105px; box-shadow: -1px 0 var(--border-color); }
+        .admin-data__cell { display: block; max-width: 300px; max-height: 5rem; overflow: auto; overflow-wrap: anywhere; font-size: .8rem; }
+        .admin-data__table .admin-users__column-input { min-width: 115px; }
+        .admin-data__danger { color: #dc2626; }
+        html.dark .admin-data__danger { color: #fca5a5; }
+        .admin-data__error { border: 1px solid #dc2626; padding: 1rem; margin: 1rem 0; border-radius: .75rem; overflow-wrap: anywhere; }
+        .admin-data__error .btn-secondary { margin: .75rem 0 0; }
+        .admin-data__help { color: var(--text-muted); margin: .75rem 0; font-size: .85rem; }
+        .admin-data__editor { display: flex; flex-direction: column; gap: 1.25rem; min-height: 100%; }
+        .admin-data__editor-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+        .admin-data__editor-header h2 { font-size: 1.3rem; margin-top: .35rem; }
+        .admin-data__editor-header small, .admin-data__field small { color: var(--text-muted); }
+        .admin-data__fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem; }
+        .admin-data__field { display: flex; flex-direction: column; gap: .4rem; min-width: 0; }
+        .admin-data__field label { font-weight: 600; font-size: .85rem; }
+        .admin-data__field textarea { resize: vertical; }
+        .admin-data__reference { display: flex; flex-direction: column; gap: .4rem; }
+        .admin-data__reference select { width: 100%; }
+        .admin-data__readonly { color: var(--text-muted); font-size: .8rem; }
+        .admin-data__readonly dl { margin-top: 1rem; display: grid; gap: .5rem; }
+        .admin-data__readonly dl > div { display: flex; justify-content: space-between; gap: 1rem; overflow-wrap: anywhere; }
+        .admin-data__editor-footer { margin-top: auto; padding: 1rem 0; display: flex; justify-content: flex-end; gap: .75rem; }
+        .admin-data__delete-note { display: grid; gap: 1rem; line-height: 1.6; overflow-wrap: anywhere; }
+        @media (max-width: 600px) { .admin-data__fields { grid-template-columns: 1fr; } .admin-data__toolbar > input { flex-basis: 100%; } }
         :root {
             --bg-main: #f8fafc;
             --bg-card: #ffffff;

@@ -32,6 +32,7 @@ export const HEADER_BANNERS: Record<NavSectionId, HeaderBannerMeta> = {
   marketReview: { kicker: 'ADMIN / MODERATION', tone: 'amber' },
   admin: { kicker: 'ADMIN / REPORTS', tone: 'pink' },
   adminUsers: { kicker: 'ADMIN / USERS', tone: 'violet' },
+  adminData: { kicker: 'ADMIN / DATA', tone: 'violet' },
 };
 
 export const PROFILE_BANNER: HeaderBannerMeta = {
