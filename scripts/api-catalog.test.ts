@@ -133,3 +133,22 @@ test('a repeated or empty page with hasMore cannot cause infinite background req
   assert.equal(pager.getSnapshot().items.length, 1);
   assert.equal(pager.getSnapshot().loading, false);
 });
+
+test('refresh after editing cancels a pending next page and reloads the first page', async () => {
+  let version = 0;
+  let resolveOld!: (value: Paginated<GameWithStatsDto>) => void;
+  const calls: number[] = [];
+  const pager = new CatalogPager(async (number) => {
+    calls.push(number);
+    if (number === 2) return new Promise((resolve) => {resolveOld = resolve;});
+    return page(1, [version ? 'updated-game' : 'original-game'], true);
+  });
+  await pager.loadNext();
+  const pending = pager.loadNext();
+  version = 1;
+  await pager.refresh();
+  resolveOld(page(2, ['obsolete-game'], false)); await pending;
+  assert.deepEqual(calls, [1, 2, 1]);
+  assert.equal(pager.getSnapshot().page, 1);
+  assert.deepEqual(pager.getSnapshot().items.map((item) => item.id), ['updated-game']);
+});

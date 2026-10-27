@@ -20,10 +20,12 @@ interface GameBrowserProps {
   onOpenGame: (gameId: string, editionId?: string) => void;
   onCloseGame: () => void;
   emptyText?: string;
+  onEditGame?: (gameId: string) => void;
+  suspendDrawer?: boolean;
 }
 
 /** Paged cards use server summaries; full editions and market are fetched on open. */
-export function GameBrowser({games, gameId, editionId = '', onOpenGame, onCloseGame, emptyText}: GameBrowserProps) {
+export function GameBrowser({games, gameId, editionId = '', onOpenGame, onCloseGame, emptyText, onEditGame, suspendDrawer = false}: GameBrowserProps) {
   const {copies, addCopy, setEditionQuantity, removeEdition, isSyncing} = useCollection();
   const navigate = useNavigate();
   const [selectedId, setSelectedId] = useState(gameId);
@@ -81,7 +83,7 @@ export function GameBrowser({games, gameId, editionId = '', onOpenGame, onCloseG
     navigate(`${entry.kind === 'auction' ? '/auctions' : marketListingPath(entry.listingType)}?item=${encodeURIComponent(entry.id)}`);
   }, [navigate]);
   const selectedGame = detail.data?.id === selectedId ? detail.data : null;
-  const isOpen = Boolean(gameId);
+  const isOpen = Boolean(gameId) && !suspendDrawer;
 
   return <>
     <GameGrid games={games} statsByGame={statsByGame} onSelectGame={openGame} emptyText={emptyText ?? 'Игры не найдены'} />
@@ -95,6 +97,7 @@ export function GameBrowser({games, gameId, editionId = '', onOpenGame, onCloseG
       copies={copies} initialEditionId={editionId} entries={market.entries}
       marketLoading={market.isLoading} marketError={market.error} onRetryMarket={market.refresh}
       onClose={onCloseGame} onOpenMarketEntry={openMarketEntry}
+      {...(onEditGame ? {onEditGame: () => onEditGame(selectedGame.id)} : {})}
       onOpenDiscussions={(id) => navigate(discussionRoutePath(id))}
       onAddCopy={addCopy} onSetEditionQuantity={setEditionQuantity} onRemoveEdition={removeEdition}
       onPlaceListing={(id) => placeEntry(marketListingPath('sale'), id)}

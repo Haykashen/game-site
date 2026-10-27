@@ -24,6 +24,7 @@ export function useInfiniteCatalog(filters: CatalogFilters) {
     loading: status === 'checking' || (status === 'api' && state.page === 0 && !state.error) || state.loading,
     error: status === 'offline' ? 'Сервер недоступен. Повторите загрузку после восстановления соединения.' : state.error,
     loadMore: pager.loadNext,
+    refresh: pager.refresh,
     canLoad: status === 'api' && query === debounced,
   };
 }

@@ -1,4 +1,4 @@
-import { Minus, Plus, X } from 'lucide-react';
+import { Minus, Pencil, Plus, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useCollection } from '../context/CollectionContext';
 import { getPlatformBadgeStyle } from '../data/reference';
@@ -16,11 +16,13 @@ import { SpecBox } from './modal/SpecBox';
 import { IconButton } from './ui/IconButton';
 import { ModalShell } from './ui/ModalShell';
 import { ApiState } from './ApiState';
+import { useAuth } from '../context/AuthContext';
 
 interface GameModalProps {
   marketLoading: boolean;
   marketError: string | null;
   onRetryMarket: () => Promise<void>;
+  onEditGame?: () => void;
   game: Game;
   isOpen: boolean;
   editions: readonly Edition[];
@@ -44,6 +46,7 @@ export function GameModal({
   marketLoading,
   marketError,
   onRetryMarket,
+  onEditGame,
   game,
   isOpen,
   editions,
@@ -60,6 +63,7 @@ export function GameModal({
   onPlaceAuction,
 }: GameModalProps) {
   const { syncError } = useCollection();
+  const {isAdmin} = useAuth();
   const [activeMarketTab, setActiveMarketTab] = useState<GameMarketTab>('lots');
   const [selectedEditionId, setSelectedEditionId] = useState(() =>
     editions.find((edition) => edition.id === initialEditionId || edition.variants?.some(variant=>variant.id===initialEditionId))?.id ?? editions[0]?.id ?? '',
@@ -82,7 +86,7 @@ export function GameModal({
   return (
     <ModalShell isOpen={isOpen} onClose={onClose} labelledBy={MODAL_TITLE_ID}>
       <ApiState loading={marketLoading} error={marketError} onRetry={onRetryMarket} />
-      <div className="modal-header">
+      <div className="modal-header game-modal__header">
         <div>
           <div className="modal-header-meta">
             <div className="game-platforms">
@@ -109,9 +113,12 @@ export function GameModal({
             {game.title}
           </h2>
         </div>
+        <div className="game-modal__admin-actions">
+          {isAdmin && onEditGame && <button type="button" className="btn-secondary" onClick={onEditGame}><Pencil size={15} aria-hidden="true" />Редактировать игру</button>}
         <IconButton label="Закрыть" transparent onClick={onClose}>
           <X size={20} />
         </IconButton>
+        </div>
       </div>
 
       <ArtworkPanel key={selectedEditionId} game={game} editions={editions} selectedEdition={selectedEdition} />

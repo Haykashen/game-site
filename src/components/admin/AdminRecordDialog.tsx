@@ -55,7 +55,7 @@ function ReferenceInput({field, value, onChange, required, inputId}: {field: Adm
   </div>;
 }
 
-export function AdminRecordDialog({table, editor, onClose, onSaved}: {table: AdminTable; editor: AdminEditor; onClose: () => void; onSaved: () => void | Promise<void>}) {
+export function AdminRecordDialog({table, editor, onClose, onSaved, title}: {table: AdminTable; editor: AdminEditor; onClose: () => void; onSaved: (record?: AdminRecord) => void | Promise<void>; title?: string}) {
   const [record, setRecord] = useState<AdminRecord>({});
   const [values, setValues] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(editor.mode !== 'create');
@@ -81,6 +81,7 @@ export function AdminRecordDialog({table, editor, onClose, onSaved}: {table: Adm
   async function submit() {
     setSaving(true); setError('');
     try {
+      let savedRecord: AdminRecord | undefined;
       const version = typeof record.updatedAt === 'string' ? record.updatedAt : null;
       if (deleting) await deleteAdminRecord(table.name, editor.key!, version);
       else {
@@ -102,10 +103,10 @@ export function AdminRecordDialog({table, editor, onClose, onSaved}: {table: Adm
           data[field.name] = parsed;
         }
         if (!Object.keys(data).length) {onClose(); return;}
-        if (creating) await createAdminRecord(table.name, data);
-        else await updateAdminRecord(table.name, editor.key!, data, version);
+        if (creating) savedRecord = (await createAdminRecord(table.name, data)).record;
+        else savedRecord = (await updateAdminRecord(table.name, editor.key!, data, version)).record;
       }
-      await onSaved();
+      await onSaved(savedRecord);
       onClose();
     } catch (cause) {setError(formatError(cause));}
     finally {setSaving(false);}
@@ -113,7 +114,7 @@ export function AdminRecordDialog({table, editor, onClose, onSaved}: {table: Adm
 
   return <ModalShell isOpen onClose={() => {if (!saving) onClose();}} labelledBy={titleId}>
     <form className="admin-data__editor" onSubmit={(event) => {event.preventDefault(); void submit();}}>
-      <div className="admin-data__editor-header"><div><small>{table.label}</small><h2 id={titleId}>{deleting ? table.name === 'Session' ? 'Отозвать сессию' : 'Удалить запись' : creating ? 'Добавить запись' : 'Редактировать запись'}</h2></div>
+      <div className="admin-data__editor-header"><div><small>{table.label}</small><h2 id={titleId}>{title ?? (deleting ? table.name === 'Session' ? 'Отозвать сессию' : 'Удалить запись' : creating ? 'Добавить запись' : 'Редактировать запись')}</h2></div>
         <button type="button" className="btn-secondary" aria-label="Закрыть" disabled={saving} onClick={onClose}><X size={18} /></button>
       </div>
       {loading && <p role="status">Загружаем запись…</p>}

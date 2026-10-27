@@ -31,6 +31,10 @@
         .admin-data__delete-note { display: grid; gap: 1rem; line-height: 1.6; overflow-wrap: anywhere; }
         @media (max-width: 600px) { .admin-data__fields { grid-template-columns: 1fr; } .admin-data__toolbar > input { flex-basis: 100%; } }
         .catalog-pagination { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem; padding: 1.5rem 0 2.5rem; color: var(--text-muted); font-size: .85rem; }
+        .game-modal__admin-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: .5rem; }
+        .game-modal__header { gap: .75rem; flex-wrap: wrap; }
+        .game-modal__header > div:first-child { flex: 1; min-width: 0; }
+        @media (max-width: 600px) { .game-modal__header > div:first-child { flex-basis: 100%; } .game-modal__admin-actions { margin-left: auto; } }
         :root {
             --bg-main: #f8fafc;
             --bg-card: #ffffff;

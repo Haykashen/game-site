@@ -53,4 +53,9 @@ export class CatalogPager {
     this.controller?.abort();
     if (this.state.loading) this.publish({...this.state, loading: false});
   };
+  refresh = async () => {
+    this.dispose();
+    this.publish({items: [], total: 0, page: 0, hasMore: true, loading: false, error: null});
+    await this.loadNext();
+  };
 }
