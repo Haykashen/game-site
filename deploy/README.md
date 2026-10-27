@@ -239,6 +239,16 @@ docker compose -f docker-compose.prod.yml down
 
 ## Если что-то не работает
 
+Если развёртывание остановлено из-за свободного места, workflow
+`Inspect or clean release transport cache` сначала запускается с
+`clean_archives=false`: он показывает использование диска и объём удаляемых
+установочных архивов. С `clean_archives=true` удаляются только старые
+`release.tar.gz`, `release.tar.gz.sha256` и `images.tar.gz` внутри проверенных
+каталогов `.deploy/incoming`. Архивы текущего и самого нового релиза,
+резервные копии, фотографии, Docker-образы и volumes сохраняются.
+Очистка использует тот же lock, что и развёртывание. После неё запустите
+обычный workflow публикации.
+
 ### Caddy не получает сертификат
 
 Проверьте:
