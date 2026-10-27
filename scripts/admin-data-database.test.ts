@@ -14,8 +14,8 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
   const app = Fastify({routerOptions: {maxParamLength: 2000}});
   const suffix = randomUUID();
   const adminId = randomUUID();
-  const sellerId = randomUUID();
-  const buyerId = randomUUID();
+  let sellerId = '';
+  let buyerId = '';
   app.decorate('prisma', prisma);
   app.decorateRequest('user', null);
   app.decorate('authenticate', async (request) => {request.user = {id: adminId, email: suffix + '@test.invalid', displayName: 'CI admin', role: 'admin', status: 'active', isDemo: false};});
@@ -43,14 +43,11 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
   }
   try {
     await prisma.user.create({data: {id: adminId, email: 'admin-' + suffix + '@test.invalid', displayName: 'CI admin', role: 'admin'}});
-    for (const [id, label] of [[sellerId, 'Seller'], [buyerId, 'Buyer']]) {
-      await create('User', {id, email: id + '@test.invalid', displayName: label, password: 'ci-test-password'});
-    }
+    sellerId = (await create('User', {email: 'seller-' + suffix + '@test.invalid', displayName: 'Seller', password: 'ci-test-password'})).id;
+    buyerId = (await create('User', {email: 'buyer-' + suffix + '@test.invalid', displayName: 'Buyer', password: 'ci-test-password'})).id;
     await patch('User', {id: buyerId}, {city: 'Москва', comment: 'Admin note'});
-    const gameId = 'ci-admin-' + suffix;
-    await create('Game', {id: gameId, title: 'Admin fixture ' + suffix, publisher: 'CI', description: 'Fixture', genres: ['RPG']});
-    const editionId = gameId + '-edition';
-    await create('Edition', {id: editionId, gameId, name: 'Standard', platform: 'PS5', region: 'RU', lang: 'Русский', media: 'Disc', contents: [], coverImages: [], releaseDate: '2026-01-02T00:00:00.000Z'});
+    const gameId = (await create('Game', {title: 'Admin fixture ' + suffix, publisher: 'CI', description: 'Fixture', genres: ['RPG']})).id;
+    const editionId = (await create('Edition', {gameId, name: 'Standard', platform: 'PS5', region: 'RU', lang: 'Русский', media: 'Disc', contents: [], coverImages: [], releaseDate: '2026-01-02T00:00:00.000Z'})).id;
     await create('GameRating', {userId: buyerId, gameId, score: 8}, ['userId', 'gameId']);
     await patch('GameRating', {userId: buyerId, gameId}, {score: 9});
     const copy = await create('Copy', {userId: buyerId, editionId, purchasePriceMinor: 12345});
@@ -94,7 +91,7 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
     assert.equal(related.json().total, 1);
     const unrelated = await app.inject({method: 'GET', url: path('Deal') + '?relatedUserId=' + adminId});
     assert.equal(unrelated.json().total, 0);
-    const users = await app.inject({method: 'GET', url: '/api/v1/admin/users?search=' + buyerId + '&copies=1'});
+    const users = await app.inject({method: 'GET', url: '/api/v1/admin/users?id=' + buyerId + '&copies=1'});
     assert.equal(users.statusCode, 200, users.body);
     assert.equal(users.json().items[0].copies, 1);
     const gameFilter = await app.inject({method: 'GET', url: path('Game') + '?search=' + suffix + '&filters=' + encodeURIComponent(JSON.stringify({genres: 'RPG'}))});
@@ -112,14 +109,14 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
     assert.equal((await prisma.user.findUniqueOrThrow({where: {id: adminId}})).role, 'admin');
   } finally {
     // Fixture-scoped cleanup also runs if an assertion failed halfway through.
-    const userIds = [adminId, sellerId, buyerId];
+    const userIds = [adminId, ...created.filter((item) => item.model === 'User').map((item) => item.key.id!)];
     await prisma.report.deleteMany({where: {reporterId: {in: userIds}}});
     await prisma.newsPost.deleteMany({where: {authorId: {in: userIds}}});
     await prisma.discussion.deleteMany({where: {authorId: {in: userIds}}});
     await prisma.review.deleteMany({where: {authorId: {in: userIds}}});
     await prisma.marketEntry.deleteMany({where: {authorId: {in: userIds}}});
     await prisma.user.deleteMany({where: {id: {in: userIds}}});
-    await prisma.game.deleteMany({where: {id: 'ci-admin-' + suffix}});
+    await prisma.game.deleteMany({where: {id: {in: created.filter((item) => item.model === 'Game').map((item) => item.key.id!)}}});
     await app.close(); await prisma.$disconnect();
   }
 });

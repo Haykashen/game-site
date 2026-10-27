@@ -7,7 +7,7 @@ import { hashPassword } from '../auth/password.js';
 import { badRequest, conflict, forbidden, notFound } from '../errors.js';
 import { isPrismaError } from '../lib/prismaErrors.js';
 import { parse } from '../lib/validation.js';
-import { getModel, getTable, models, parseData, parseKey, recordSelect, TABLE_LABELS, uniqueWhere } from './metadata.js';
+import { getModel, getTable, models, parseCreateData, parseData, parseKey, recordSelect, TABLE_LABELS, uniqueWhere } from './metadata.js';
 import { reconcileRecords, validateRecord } from './rules.js';
 
 export type Row = Record<string, unknown>;
@@ -172,7 +172,7 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
     const {table: name} = request.params as {table: string};
     const table = getTable(name);
     if (!table.canCreate) throw forbidden('Сессии создаются только при входе пользователя.');
-    const data = parseData(table, request.body, true);
+    const data = parseCreateData(table, request.body);
     if (name === 'User') {
       data.passwordHash = await hashPassword(data.password as string);
       delete data.password;

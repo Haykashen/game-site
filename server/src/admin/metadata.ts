@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client';
+import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 import type { AdminField, AdminTable } from '@discvault/shared';
 import { displayNameSchema, emailSchema, passwordSchema } from '@discvault/shared';
@@ -58,12 +59,13 @@ export function getTable(name: string): AdminTable {
   const primaryKey = [...(model.primaryKey?.fields ?? model.fields.filter((field) => field.isId).map((field) => field.name))];
   const fields: AdminField[] = model.fields.filter((field) => field.kind !== 'object' && !HIDDEN.has(field.name)).map((field) => {
     const relation = model.fields.find((candidate) => candidate.kind === 'object' && candidate.relationFromFields?.includes(field.name));
+    const generatedId = field.isId && !relation;
     return {
       name: field.name, label: FIELD_LABELS[field.name] ?? field.name,
       type: field.isList ? 'list' : field.kind === 'enum' ? 'enum' : field.type === 'Int' ? 'number' : field.type === 'Boolean' ? 'boolean' : field.type === 'DateTime' ? 'date' : 'string',
-      required: field.isRequired && !field.hasDefaultValue && !field.isUpdatedAt && !field.isList,
-      nullable: !field.isRequired, generated: Boolean(field.hasDefaultValue || field.isUpdatedAt),
-      primary: primaryKey.includes(field.name), readOnly: READ_ONLY.has(field.name) || name === 'Session',
+      required: !generatedId && field.isRequired && !field.hasDefaultValue && !field.isUpdatedAt && !field.isList,
+      nullable: !field.isRequired, generated: Boolean(generatedId || field.hasDefaultValue || field.isUpdatedAt),
+      primary: primaryKey.includes(field.name), readOnly: generatedId || READ_ONLY.has(field.name) || name === 'Session',
       options: Prisma.dmmf.datamodel.enums.find((item) => item.name === field.type)?.values.map((value) => value.name) ?? [],
       reference: relation?.type ?? null,
       multiline: ['description', 'body', 'excerpt', 'text', 'message', 'notes', 'comment', 'moderatorNote', 'moderationNote'].includes(field.name),
@@ -113,6 +115,14 @@ export function parseData(table: AdminTable, body: unknown, creating: boolean): 
   }
   const data = parse(z.object(shape).strict(), body) as Record<string, unknown>;
   if (!Object.keys(data).length) throw badRequest('Не переданы поля для сохранения.');
+  return data;
+}
+
+/** Prisma generates most IDs; text IDs for games and editions need a server default. */
+export function parseCreateData(table: AdminTable, body: unknown): Record<string, unknown> {
+  const data = parseData(table, body, true);
+  const id = getModel(table.name).fields.find((field) => field.isId);
+  if (id && !id.hasDefaultValue) data[id.name] = randomUUID();
   return data;
 }
 

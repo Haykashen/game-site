@@ -4,7 +4,7 @@ import Fastify from 'fastify';
 import { Prisma, type PrismaClient } from '@prisma/client';
 import { adminRecordKey } from '../shared/src/adminData.ts';
 import { AppError } from '../server/src/errors.ts';
-import { getTable, models, parseData, recordSelect } from '../server/src/admin/metadata.ts';
+import { getTable, models, parseCreateData, parseData, recordSelect } from '../server/src/admin/metadata.ts';
 import { buildWhere, registerAdminDataRoutes, userScopeWhere } from '../server/src/admin/routes.ts';
 import { registerUserAdminRoutes } from '../server/src/users/adminRoutes.ts';
 import { isUserOnline, ONLINE_WINDOW_MS, touchPresence } from '../server/src/auth/presence.ts';
@@ -92,8 +92,61 @@ test('strict write schemas reject statistics, secrets, primary key changes, nest
   assert.throws(() => parseData(getTable('GameRating'), {userId: otherId, gameId: 'game', score: 11}, true), AppError);
   assert.throws(() => parseData(getTable('Review'), {rating: 0}, false), AppError);
   assert.throws(() => parseData(getTable('Copy'), {purchasePriceMinor: -1}, false), AppError);
-  assert.throws(() => parseData(getTable('Game'), {id: 'game', title: ' ', publisher: 'Test', description: 'test'}, true), AppError);
+  assert.throws(() => parseData(getTable('Game'), {title: ' ', publisher: 'Test', description: 'test'}, true), AppError);
   assert.equal(parseData(getTable('User'), {email: ' ADMIN@Test.Invalid '}, false).email, 'admin@test.invalid');
+});
+
+test('all standalone IDs are generated and hidden from editable creation fields', () => {
+  for (const model of models) {
+    const field = getTable(model.name).fields.find((item) => item.name === 'id');
+    if (!field) continue;
+    assert.equal(field.readOnly, true, model.name);
+    assert.equal(field.generated, true, model.name);
+    assert.equal(field.required, false, model.name);
+  }
+  const ratings = getTable('GameRating');
+  for (const name of ['userId', 'gameId']) {
+    const field = ratings.fields.find((item) => item.name === name)!;
+    assert.equal(field.readOnly, false);
+    assert.equal(field.required, true);
+    assert.ok(field.reference);
+  }
+});
+
+test('server supplies distinct game and edition UUIDs; Prisma defaults and compound keys stay intact', () => {
+  const body = {title: 'Game', publisher: 'Test', description: 'Description', genres: []};
+  const first = parseCreateData(getTable('Game'), body);
+  const second = parseCreateData(getTable('Game'), body);
+  const edition = parseCreateData(getTable('Edition'), {gameId: first.id, name: 'Standard', platform: 'PS5', region: 'RU', lang: 'Русский', media: 'Disc', contents: [], coverImages: []});
+  const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+  for (const data of [first, second, edition]) assert.match(String(data.id), uuid);
+  assert.notEqual(first.id, second.id);
+  assert.notEqual(first.id, edition.id);
+  assert.equal(edition.gameId, first.id);
+  const user = parseCreateData(getTable('User'), {email: 'new@test.invalid', displayName: 'New user', password: 'test-password'});
+  assert.ok(!Object.hasOwn(user, 'id'));
+  const rating = parseCreateData(getTable('GameRating'), {userId: otherId, gameId: first.id, score: 8});
+  assert.deepEqual(rating, {userId: otherId, gameId: first.id, score: 8});
+  assert.throws(() => parseCreateData(getTable('Game'), {...body, id: 'client-controlled'}), AppError);
+  assert.throws(() => parseCreateData(getTable('User'), {...user, id: otherId}), AppError);
+});
+
+test('HTTP creation accepts no client ID, returns a generated ID, and keeps legacy IDs on edit', async () => {
+  const {app, rows} = await fixture();
+  const payload = {title: 'Generated', publisher: 'Test', description: 'Description', genres: []};
+  try {
+    const injected = await app.inject({method: 'POST', url: path('Game'), headers, payload: {...payload, id: 'custom'}});
+    assert.equal(injected.statusCode, 400, injected.body);
+    const first = await app.inject({method: 'POST', url: path('Game'), headers, payload});
+    const second = await app.inject({method: 'POST', url: path('Game'), headers, payload: {...payload, title: 'Other'}});
+    assert.equal(first.statusCode, 201, first.body);
+    assert.equal(second.statusCode, 201, second.body);
+    assert.notEqual(first.json().record.id, second.json().record.id);
+    rows.get('game')!.push({id: 'legacy-game-slug', title: 'Legacy', updatedAt: now});
+    const edited = await app.inject({method: 'PATCH', url: path('Game', {id: 'legacy-game-slug'}), headers, payload: {data: {title: 'Renamed legacy game'}, expectedUpdatedAt: now.toISOString()}});
+    assert.equal(edited.statusCode, 200, edited.body);
+    assert.equal(edited.json().record.id, 'legacy-game-slug');
+  } finally {await app.close();}
 });
 
 test('global and per-column filters validate types and cannot inject arbitrary Prisma conditions', () => {
@@ -129,23 +182,25 @@ test('every administrative endpoint rejects guests, regular users and moderators
 test('game CRUD uses explicit scalar fields, pagination and optimistic concurrency', async () => {
   const {app, calls} = await fixture();
   try {
-    const create = await app.inject({method: 'POST', url: path('Game'), headers, payload: {id: 'new-game', title: 'New game', publisher: 'Test', description: 'Description', genres: []}});
+    const create = await app.inject({method: 'POST', url: path('Game'), headers, payload: {title: 'New game', publisher: 'Test', description: 'Description', genres: []}});
     assert.equal(create.statusCode, 201, create.body);
+    const id = create.json().record.id;
+    assert.match(id, /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
     const list = await app.inject({method: 'GET', url: path('Game') + '?page=1&pageSize=20&sortBy=title&sortDir=asc', headers});
     assert.equal(list.statusCode, 200, list.body);
     assert.equal(list.json().items[0].title, 'New game');
     assert.equal(list.json().total, 1);
     const find = calls.find((call) => call.model === 'game' && call.method === 'findMany')!;
     assert.deepEqual(find.args.orderBy, [{title: 'asc'}, {id: 'asc'}]);
-    const stale = await app.inject({method: 'PATCH', url: path('Game', {id: 'new-game'}), headers, payload: {data: {title: 'Lost update'}, expectedUpdatedAt: '2020-01-01T00:00:00.000Z'}});
+    const stale = await app.inject({method: 'PATCH', url: path('Game', {id}), headers, payload: {data: {title: 'Lost update'}, expectedUpdatedAt: '2020-01-01T00:00:00.000Z'}});
     assert.equal(stale.statusCode, 409);
     assert.equal(stale.json().error.code, 'STALE_RECORD');
-    const patch = await app.inject({method: 'PATCH', url: path('Game', {id: 'new-game'}), headers, payload: {data: {title: 'Edited'}, expectedUpdatedAt: now.toISOString()}});
+    const patch = await app.inject({method: 'PATCH', url: path('Game', {id}), headers, payload: {data: {title: 'Edited'}, expectedUpdatedAt: now.toISOString()}});
     assert.equal(patch.statusCode, 200, patch.body);
     assert.equal(patch.json().record.title, 'Edited');
-    const remove = await app.inject({method: 'DELETE', url: path('Game', {id: 'new-game'}), headers, payload: {expectedUpdatedAt: now.toISOString()}});
+    const remove = await app.inject({method: 'DELETE', url: path('Game', {id}), headers, payload: {expectedUpdatedAt: now.toISOString()}});
     assert.equal(remove.statusCode, 204, remove.body);
-    const missing = await app.inject({method: 'GET', url: path('Game', {id: 'new-game'}), headers});
+    const missing = await app.inject({method: 'GET', url: path('Game', {id}), headers});
     assert.equal(missing.statusCode, 404);
   } finally {await app.close();}
 });
