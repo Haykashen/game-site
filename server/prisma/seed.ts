@@ -13,6 +13,7 @@ import type {
   SeedGame,
   SeedMarketEntry,
 } from '../src/lib/catalogData.js';
+import { GAME_GENRES } from './reference-data.js';
 
 const prisma = new PrismaClient();
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -93,6 +94,38 @@ async function seedCatalog(): Promise<void> {
   }
 
   console.log(`Seeded ${games.length} games and ${editions.length} editions.`);
+}
+
+async function seedReferenceTables(): Promise<void> {
+  const games = await prisma.game.findMany({
+    select: { series: true },
+  });
+  const genres = GAME_GENRES;
+  const series = [...new Set(
+    games
+      .map((game) => game.series.trim())
+      .filter(Boolean),
+  )];
+
+  for (const name of genres) {
+    await prisma.gameGenre.upsert({
+      where: { name },
+      update: {},
+      create: { name },
+    });
+  }
+
+  for (const name of series) {
+    await prisma.gameSeries.upsert({
+      where: { name },
+      update: {},
+      create: { name },
+    });
+  }
+
+  console.log(
+    `Seeded ${genres.length} game genres and ${series.length} game series.`,
+  );
 }
 
 async function seedUsers(): Promise<Map<string, string>> {
@@ -377,6 +410,7 @@ async function main(): Promise<void> {
   }
 
   await seedCatalog();
+  await seedReferenceTables();
   const userIdByName = await seedUsers();
   await seedMarket(userIdByName);
   await seedCommunity(userIdByName);

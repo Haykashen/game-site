@@ -8,7 +8,7 @@ import { parse } from '../lib/validation.js';
 
 // An explicit allowlist: a newly added database model is never exposed automatically.
 export const TABLE_LABELS: Record<string, string> = {
-  User: 'Пользователи', Session: 'Сессии', Game: 'Игры', GameRating: 'Оценки игр',
+  User: 'Пользователи', Session: 'Сессии', Game: 'Игры', GameGenre: 'Жанры игр', GameSeries: 'Серии игр', GameRating: 'Оценки игр',
   Edition: 'Издания', Copy: 'Экземпляры коллекций', CopyPhoto: 'Фото экземпляров',
   MarketEntry: 'Объявления и аукционы', MarketPhoto: 'Фото объявлений', Bid: 'Ставки',
   Deal: 'Сделки', Review: 'Отзывы', Report: 'Жалобы', Notification: 'Уведомления',

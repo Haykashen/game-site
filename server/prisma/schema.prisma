@@ -209,6 +209,24 @@ model Game {
   @@map("games")
 }
 
+model GameGenre {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("game_genres")
+}
+
+model GameSeries {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("game_series")
+}
+
 model GameRating {
   userId    String   @map("user_id") @db.Uuid
   gameId    String   @map("game_id")

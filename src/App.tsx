@@ -10,6 +10,7 @@ import { AdminMarketPage } from './pages/AdminMarketPage';
 import { AdminReportsPage } from './pages/AdminReportsPage';
 import { AdminUsersPage } from './pages/AdminUsersPage';
 import { AdminDataPage } from './pages/AdminDataPage';
+import { AdminReferencePage } from './pages/AdminReferencePage';
 import { AuctionsPage } from './pages/AuctionsPage';
 import { CollectionPage } from './pages/CollectionPage';
 import { DiscussionsPage } from './pages/DiscussionsPage';
@@ -58,6 +59,7 @@ export default function App() {
                   <Route path="/admin/reports" element={<AdminReportsPage />} />
                   <Route path="/admin/users" element={<AdminUsersPage />} />
                   <Route path="/admin/data/:table?" element={<AdminDataPage />} />
+                  <Route path="/admin/reference/:table?" element={<AdminReferencePage />} />
                   <Route path="/settings" element={<SettingsPage />} />
                   <Route path="*" element={<Navigate to="/games" replace />} />
                 </Routes>

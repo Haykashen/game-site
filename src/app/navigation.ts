@@ -2,6 +2,7 @@ import {
   ArrowLeftRight,
   BarChart3,
   Bell,
+  BookOpen,
   ChartNoAxesCombined,
   ClipboardCheck,
   Database,
@@ -37,6 +38,7 @@ export type NavSectionId =
   | 'marketReview'
   | 'admin'
   | 'adminUsers'
+  | 'adminReference'
   | 'adminData';
 
 export interface NavItem {
@@ -185,6 +187,10 @@ export const NAV_ITEMS = {
     shortLabel: 'Люди',
     path: '/admin/users',
     icon: Users,
+  },
+  adminReference: {
+    id: 'adminReference', label: 'Справочники', pageTitle: 'Справочники', shortLabel: 'Справочники',
+    path: '/admin/reference', icon: BookOpen,
   },
   adminData: {
     id: 'adminData', label: 'Данные', pageTitle: 'Данные проекта', shortLabel: 'Данные',

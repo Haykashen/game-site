@@ -25,9 +25,9 @@ export function MobileNav() {
     ...(isModerator
       ? [NAV_ITEMS.analytics, NAV_ITEMS.marketReview, NAV_ITEMS.admin]
       : []),
-    ...(isAdmin ? [NAV_ITEMS.adminUsers, NAV_ITEMS.adminData] : []),
+    ...(isAdmin ? [NAV_ITEMS.adminUsers, NAV_ITEMS.adminReference, NAV_ITEMS.adminData] : []),
   ];
-  const isMoreActive = moreItems.some((item) => pathname === item.path);
+  const isMoreActive = moreItems.some((item) => pathname === item.path || pathname.startsWith(`${item.path}/`));
 
   return (
     <>
