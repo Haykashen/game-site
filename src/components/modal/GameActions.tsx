@@ -1,4 +1,4 @@
-import { Gavel, Tag } from 'lucide-react';
+import { Gavel, Plus, Tag } from 'lucide-react';
 
 interface GameActionsProps {
   onPlaceListing: () => void;
@@ -14,8 +14,8 @@ export function GameActions({ onPlaceListing, onPlaceAuction }: GameActionsProps
         className="game-cta__btn game-cta__btn--listing"
         onClick={onPlaceListing}
       >
-        <Tag size={16} aria-hidden="true" />
-        <span>Разместить объявление</span>
+        <Plus size={16} aria-hidden="true" /><Tag size={16} aria-hidden="true" />
+        <span>Объявление</span>
       </button>
 
       <button
@@ -23,8 +23,8 @@ export function GameActions({ onPlaceListing, onPlaceAuction }: GameActionsProps
         className="game-cta__btn game-cta__btn--auction"
         onClick={onPlaceAuction}
       >
-        <Gavel size={16} aria-hidden="true" />
-        <span>Разместить аукцион</span>
+        <Plus size={16} aria-hidden="true" /><Gavel size={16} aria-hidden="true" />
+        <span>Аукцион</span>
       </button>
     </div>
   );

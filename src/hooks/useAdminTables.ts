@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useApiResource } from './useApiResource';
 const EMPTY: AdminTable[] = [];
 export function useAdminTables() {
-  const {user, isAdmin} = useAuth();
-  const load = useCallback(async (signal: AbortSignal) => isAdmin ? (await fetchAdminTables(signal)).tables : EMPTY, [isAdmin]);
+  const {user, isModerator} = useAuth();
+  const load = useCallback(async (signal: AbortSignal) => isModerator ? (await fetchAdminTables(signal)).tables : EMPTY, [isModerator]);
   return useApiResource('admin-tables:' + (user?.id ?? 'guest'), load, EMPTY);
 }

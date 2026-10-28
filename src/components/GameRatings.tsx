@@ -1,11 +1,10 @@
-import { ExternalLink, Star } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { GameRatingSummary } from '@discvault/shared';
 import { apiRequest, errorMessage } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { CRITIC_RATINGS } from '../data/criticRatings';
-
 
 export function GameRatings({ gameId }: { gameId: string }) {
   const { status, user } = useAuth();
@@ -15,86 +14,42 @@ export function GameRatings({ gameId }: { gameId: string }) {
 function RatingsContent({ gameId }: { gameId: string }) {
   const { status, user } = useAuth();
   const [remote, setRemote] = useState<GameRatingSummary | null>(null);
-  const [isLoading, setIsLoading] = useState(status === 'checking');
-  const [isSaving, setIsSaving] = useState(false);
+  const [draft, setDraft] = useState('');
+  const [loading, setLoading] = useState(status === 'api' || status === 'checking');
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
-  const path = `/api/v1/catalog/games/${encodeURIComponent(gameId)}/ratings`;
-  const myScore = remote?.myScore ?? null;
   const critic = CRITIC_RATINGS[gameId];
+  const path = `/api/v1/catalog/games/${encodeURIComponent(gameId)}/ratings`;
 
   useEffect(() => {
-    if (status !== 'api') { setIsLoading(false); setError(status === 'offline' ? 'Сервер оценок недоступен.' : ''); return; }
-    setIsLoading(true);
+    if (status !== 'api') { setLoading(false); return; }
     const controller = new AbortController();
     void apiRequest<GameRatingSummary>(path, { signal: controller.signal })
-      .then((data) => { if (!controller.signal.aborted) setRemote(data); })
-      .catch((cause: unknown) => { if (!controller.signal.aborted) setError(errorMessage(cause)); })
-      .finally(() => { if (!controller.signal.aborted) setIsLoading(false); });
+      .then(data => { if (!controller.signal.aborted) { setRemote(data); setDraft(data.myScore === null ? '' : String(data.myScore)); } })
+      .catch(cause => { if (!controller.signal.aborted) setError(errorMessage(cause)); })
+      .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, [path, status]);
 
-  const saveScore = async (score: number | null) => {
-    if (isSaving) return;
-    setError('');
-    setMessage('');
-    if (!user || status !== 'api') return;
-    setIsSaving(true);
+  async function save(input: HTMLInputElement) {
+    if (loading || saving || !user || status !== 'api') return;
+    if (!input.validity.valid) { input.reportValidity(); return; }
+    const score = draft === '' ? null : Number(draft);
+    if (score === (remote?.myScore ?? null)) return;
+    setSaving(true); setError('');
     try {
-      const data = await apiRequest<GameRatingSummary>(path, score === null
-        ? { method: 'DELETE' } : { method: 'PUT', body: { score } });
+      const data = await apiRequest<GameRatingSummary>(path, score === null ? { method: 'DELETE' } : { method: 'PUT', body: { score } });
       setRemote(data);
-      setMessage(score === null ? 'Оценка удалена.' : 'Оценка сохранена.');
-    } catch (cause) {
-      setError(errorMessage(cause));
-    } finally {
-      setIsSaving(false);
-    }
-  };
+    } catch (cause) { setError(errorMessage(cause)); }
+    finally { setSaving(false); }
+  }
 
-  return (
-    <section className="game-ratings" aria-label="Оценки игры">
-      <div className="game-rating-box">
-        <div className="game-rating-head">
-        <h4><Star size={15} aria-hidden="true" /> Оценка DiscVault</h4>
-        <div className="game-rating-value">
-          <strong>{remote?.average?.toFixed(1) ?? '—'}</strong><span>/ 10</span>
-        </div>
-        </div>
-        <p className="panel-hint">{isLoading ? 'Загружаем оценки…' : remote ? `Голосов: ${remote.count}` : 'Оценки пока недоступны'}</p>
-        {user && (
-          <>
-            <div className="game-rating-options" role="group" aria-label="Ваша оценка от 1 до 10">
-              {Array.from({ length: 10 }, (_, index) => index + 1).map((score) => (
-                <button key={score} type="button" aria-pressed={myScore === score}
-                  aria-label={`Оценить на ${score} из 10`} disabled={isLoading || isSaving}
-                  onClick={() => void saveScore(score)}>{score}</button>
-              ))}
-            </div>
-            <div className="game-rating-footer">
-            <p className="panel-hint">{myScore === null ? 'Выберите балл' : `Ваш балл: ${myScore}/10`}</p>
-            {myScore !== null && <button type="button" className="game-rating-remove" disabled={isSaving || isLoading}
-              onClick={() => void saveScore(null)}>Удалить</button>}
-            </div>
-          </>
-        )}
-        {status === 'api' && !user && <p className="panel-hint"><Link className="spec-link" to="/account">Войдите</Link>, чтобы оценить игру.</p>}
-        {error && <p className="market-form__error" role="alert">{error}</p>}
-        <p className="panel-hint game-rating-status" role="status">{isSaving ? 'Сохраняем…' : message}</p>
-      </div>
-      <div className="game-rating-box">
-        <div className="game-rating-head">
-        <h4>Metacritic · критики</h4>
-        <div className="game-rating-value"><strong>{critic?.score ?? '—'}</strong><span>/ 100</span></div>
-        </div>
-        {critic ? <>
-          <p className="panel-hint">{critic.platform} · Metascore</p>
-          <a className="spec-link game-rating-source" href={critic.url} target="_blank" rel="noopener noreferrer">
-            Источник <ExternalLink size={13} aria-hidden="true" />
-          </a>
-          <p className="panel-hint" title="Обновляется вручную">Проверено {critic.checkedAt.split('-').reverse().join('.')}</p>
-        </> : <p className="panel-hint">Оценка агрегатора для этой игры ещё не добавлена.</p>}
-      </div>
-    </section>
-  );
+  return <div className="game-detail__ratings">
+    <dl className="game-detail__facts">
+      <div><dt>Metacritic</dt><dd>{critic ? <a className="game-detail__critic" href={critic.url} target="_blank" rel="noopener noreferrer" title={`Metacritic · ${critic.platform}`}><span>{critic.score}/100</span><ExternalLink size={12} aria-hidden="true" /></a> : '—'}</dd></div>
+      <div><dt>DiscVault</dt><dd title={remote ? `Голосов: ${remote.count}` : undefined}>{loading ? '…' : remote?.average?.toFixed(1) ?? '—'} / 10</dd></div>
+      <div><dt><label htmlFor="game-user-score">Ваша оценка</label></dt><dd>{user && status === 'api' ? <><input id="game-user-score" className="game-detail__score" type="number" min={0} max={10} step={1} inputMode="numeric" placeholder="—" value={draft} disabled={loading || saving} aria-label="Ваша оценка от 0 до 10" onChange={event => setDraft(event.target.value)} onBlur={event => void save(event.currentTarget)} onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); void save(event.currentTarget); } }} /> / 10</> : <Link className="spec-link" to="/account">Войдите, чтобы оценить</Link>}</dd></div>
+    </dl>
+    {error && <p className="market-form__error" role="alert">{error}</p>}
+  </div>;
 }

@@ -25,7 +25,7 @@ function gamesCountLabel(count: number): string {
 /** Catalogue with URL-backed filters, grid and the game detail drawer. */
 export function GamesPage() {
   const fields = useSearchFields('catalog');
-  const {user, isAdmin, refresh: refreshAuth, status} = useAuth();
+  const {user, isAdmin, isModerator, refresh: refreshAuth, status} = useAuth();
   const schema = useAdminTables();
   const gameTable = schema.data.find((table) => table.name === 'Game');
   const [editor, setEditor] = useState<AdminEditor | null>(null);
@@ -83,15 +83,15 @@ export function GamesPage() {
         editionId={editionId}
         onOpenGame={openGame}
         onCloseGame={closeGame}
-        suspendDrawer={isAdmin && Boolean(editor)}
-        {...(isAdmin && gameTable ? {onEditGame: (id: string) => setEditor({mode: 'edit', key: JSON.stringify({id})})} : {})}
+        suspendDrawer={isModerator && Boolean(editor)}
+        {...(isModerator && gameTable ? {onEditGame: (id: string) => setEditor({mode: 'edit', key: JSON.stringify({id})})} : {})}
         emptyText={catalog.loading ? 'Загружаем игры…' : catalog.error ? 'Не удалось загрузить игры.' : 'Игры не найдены'}
       />
       <div ref={sentinel} className="catalog-pagination" aria-live="polite">
         {catalog.items.length > 0 && <span>Показано {catalog.items.length} из {catalog.total}</span>}
         {catalog.hasMore && !catalog.error && catalog.canLoad && <button type="button" className="btn-secondary" disabled={catalog.loading} onClick={(event) => {if (event.detail > 0) event.currentTarget.blur(); void catalog.loadMore();}}>{catalog.loading ? 'Загружаем…' : 'Загрузить ещё'}</button>}
       </div>
-      {isAdmin && gameTable && editor && <AdminRecordDialog key={`${editor.mode}:${editor.key}`} table={gameTable} editor={editor} title={editor.mode === 'create' ? 'Добавить игру' : 'Редактировать игру'} onClose={() => setEditor(null)} onSaved={saved} />}
+      {isModerator && gameTable && editor && <AdminRecordDialog key={`${editor.mode}:${editor.key}`} table={gameTable} editor={editor} title={editor.mode === 'create' ? 'Добавить игру' : 'Редактировать игру'} onClose={() => setEditor(null)} onSaved={saved} />}
     </>
   );
 }

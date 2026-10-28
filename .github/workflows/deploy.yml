@@ -45,7 +45,7 @@ jobs:
       - run: npm run db:validate
       - run: npm run db:migrate
       - run: npm run typecheck:server
-      - run: node --import tsx --test scripts/market-items.test.ts
+      - run: node --import tsx --test scripts/market-items.test.ts scripts/game-rating.test.ts
       - run: node --import tsx --test scripts/admin-data.test.ts scripts/admin-data-database.test.ts
       - run: node --import tsx --test scripts/api-catalog.test.ts scripts/catalog-database.test.ts
       - run: node --import tsx --test scripts/dns-catalog.test.cjs scripts/merge-dns-catalog.test.cjs scripts/edition-dedup.test.cjs scripts/showgames-catalog.test.cjs scripts/edition-artwork.test.ts

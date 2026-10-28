@@ -108,7 +108,7 @@ export function parseData(table: AdminTable, body: unknown, creating: boolean): 
     }
     if (field.type === 'number' && (field.name.endsWith('Minor') || field.name === 'sortOrder')) schema = z.number().int().min(0).max(2147483647);
     if (table.name === 'Review' && field.name === 'rating') schema = z.number().int().min(1).max(5);
-    if (table.name === 'GameRating' && field.name === 'score') schema = z.number().int().min(1).max(10);
+    if (table.name === 'GameRating' && field.name === 'score') schema = z.number().int().min(0).max(10);
     if (field.nullable) schema = schema.nullable();
     if (!creating || !field.required) schema = schema.optional();
     shape[field.name] = schema;

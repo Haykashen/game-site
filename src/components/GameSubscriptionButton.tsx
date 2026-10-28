@@ -1,4 +1,4 @@
-import { Bell, CheckCircle2 } from 'lucide-react';
+import { BellPlus, BellRing } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -24,9 +24,8 @@ export function GameSubscriptionButton({
 
   if (!isAuthenticated) {
     return (
-      <Link className={cx('btn-collection game-subscribe', className)} to="/account">
-        <Bell size={15} aria-hidden="true" />
-        Войти, чтобы следить
+      <Link className={cx('btn-icon game-subscribe', className)} to="/account" aria-label="Войти, чтобы следить за игрой" title="Войти, чтобы следить за игрой">
+        <BellPlus size={18} aria-hidden="true" />
       </Link>
     );
   }
@@ -46,9 +45,10 @@ export function GameSubscriptionButton({
       <button
         type="button"
         className={cx(
-          'btn-collection game-subscribe',
+          'btn-icon game-subscribe',
           isFollowing && 'game-subscribe--active',
         )}
+        aria-label={isFollowing ? 'Отписаться от игры' : 'Следить за игрой'}
         aria-pressed={isFollowing}
         disabled={isSubmitting}
         onClick={() => void handleToggle()}
@@ -59,11 +59,10 @@ export function GameSubscriptionButton({
         }
       >
         {isFollowing ? (
-          <CheckCircle2 size={15} aria-hidden="true" />
+          <BellRing size={18} aria-hidden="true" />
         ) : (
-          <Bell size={15} aria-hidden="true" />
+          <BellPlus size={18} aria-hidden="true" />
         )}
-        {isFollowing ? 'Вы следите за игрой' : 'Следить за игрой'}
       </button>
       {error && (
         <span className="game-subscribe__error" role="alert">

@@ -9,10 +9,10 @@ export function listCopies(signal?: AbortSignal): Promise<CopyDto[]> {
   return apiRequest<CopyDto[]>('/api/v1/collection/copies', { ...(signal ? { signal } : {}) });
 }
 
-export function createCopyRequest(editionId: string): Promise<CopyDto> {
+export function createCopyRequest(editionId: string, details?: CopyDetailsInput): Promise<CopyDto> {
   return apiRequest<CopyDto>('/api/v1/collection/copies', {
     method: 'POST',
-    body: { editionId },
+    body: { ...details, editionId },
   });
 }
 

@@ -14,6 +14,8 @@ interface CopyEditFormProps {
   game: Game;
   quantity: number;
   titleId: string;
+  mode?: 'create' | 'edit';
+  isSaving?: boolean;
   onSubmit: (details: CopyDetails) => void;
   onCancel: () => void;
 }
@@ -30,6 +32,8 @@ export function CopyEditForm({
   titleId,
   onSubmit,
   onCancel,
+  mode = 'edit',
+  isSaving = false,
 }: CopyEditFormProps) {
   const [condition, setCondition] = useState(copy.condition);
   const [completeness, setCompleteness] = useState(copy.completeness);
@@ -43,7 +47,7 @@ export function CopyEditForm({
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (isProcessingPhotos) return;
+    if (isProcessingPhotos || isSaving) return;
 
     const parsedPrice = purchasePrice.trim() === '' ? null : Number(purchasePrice);
     const normalizedPrice =
@@ -78,7 +82,7 @@ export function CopyEditForm({
             <span className="meta-chip">Коллекция</span>
           </div>
           <h2 className="modal-title" id={titleId}>
-            Редактировать экземпляр
+            {mode === 'create' ? 'Добавить экземпляр' : 'Редактировать экземпляр'}
           </h2>
         </div>
         <IconButton label="Закрыть" transparent onClick={onCancel}>
@@ -96,7 +100,7 @@ export function CopyEditForm({
         </p>
       )}
 
-      <form className="market-form" onSubmit={handleSubmit}>
+      <form className="market-form" onSubmit={handleSubmit}><fieldset className="copy-form__fields" disabled={isSaving}>
         <div className="market-form__grid">
           <FormField id="copyCondition" label="Состояние">
             <input
@@ -180,12 +184,12 @@ export function CopyEditForm({
           <button
             type="submit"
             className="market-form__submit copy-form__submit"
-            disabled={isProcessingPhotos}
+            disabled={isProcessingPhotos || isSaving}
           >
-            {isProcessingPhotos ? 'Обработка фото…' : 'Сохранить'}
+            {isSaving ? 'Сохраняем…' : isProcessingPhotos ? 'Обработка фото…' : mode === 'create' ? 'Добавить в коллекцию' : 'Сохранить'}
           </button>
         </div>
-      </form>
+      </fieldset></form>
     </>
   );
 }

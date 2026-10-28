@@ -162,10 +162,10 @@ test('global and per-column filters validate types and cannot inject arbitrary P
   assert.throws(() => buildWhere(getTable('Game'), '', '{bad json'), AppError);
 });
 
-test('every administrative endpoint rejects guests, regular users and moderators before database access', async () => {
+test('administrative endpoints reject guests and regular users before database access', async () => {
   const {app, calls} = await fixture();
   try {
-    for (const role of [undefined, 'user', 'moderator']) {
+    for (const role of [undefined, 'user']) {
       for (const [method, url, payload] of [
         ['GET', '/api/v1/admin/data', undefined], ['GET', path('User'), undefined],
         ['GET', path('User', {id: otherId}), undefined], ['GET', '/api/v1/admin/data/User/references', undefined],
@@ -383,4 +383,30 @@ test('user directory exposes last visit, online filters and ID filters without s
     const forbidden = await app.inject({method: 'GET', url: '/api/v1/admin/users', headers: {'x-test-role': 'moderator'}});
     assert.equal(forbidden.statusCode, 403);
   } finally {await app.close();}
+});
+
+test('moderators can edit games but cannot create, delete or access other tables', async () => {
+  const {app, rows} = await fixture();
+  const moderator = {'x-test-role': 'moderator'};
+  rows.get('game')!.push({id: 'moderated-game', title: 'Original', updatedAt: now});
+  try {
+    const metadata = await app.inject({method: 'GET', url: '/api/v1/admin/data', headers: moderator});
+    assert.equal(metadata.statusCode, 200);
+    assert.deepEqual(metadata.json().tables.map((table: {name: string}) => table.name), ['Game']);
+    assert.equal(metadata.json().tables[0].canCreate, false);
+    assert.equal(metadata.json().tables[0].canDelete, false);
+    const read = await app.inject({method: 'GET', url: path('Game', {id: 'moderated-game'}), headers: moderator});
+    assert.equal(read.statusCode, 200, read.body);
+    const edit = await app.inject({method: 'PATCH', url: path('Game', {id: 'moderated-game'}), headers: moderator, payload: {data: {title: 'Updated'}, expectedUpdatedAt: now.toISOString()}});
+    assert.equal(edit.statusCode, 200, edit.body);
+    assert.equal(edit.json().record.title, 'Updated');
+    for (const [method, url, payload] of [
+      ['GET', path('User'), undefined], ['GET', path('User', {id: otherId}), undefined],
+      ['POST', path('Game'), {}], ['DELETE', path('Game', {id: 'moderated-game'}), undefined],
+      ['PATCH', path('User', {id: otherId}), {data: {displayName: 'Forbidden'}}],
+    ] as const) {
+      const response = await app.inject({method, url, headers: moderator, ...(payload ? {payload} : {})});
+      assert.equal(response.statusCode, 403, method + ' ' + url + ': ' + response.body);
+    }
+  } finally { await app.close(); }
 });

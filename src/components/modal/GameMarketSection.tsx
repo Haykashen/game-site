@@ -1,9 +1,9 @@
-import { editionLabel } from '../../lib/editions';
 import type { Edition, Game, MarketEntry } from '../../types';
+import { gameEditionEntries } from '../../lib/gameMarket';
 import { MarketCard } from '../market/MarketCard';
 import { Tabs } from '../ui/Tabs';
 
-export type GameMarketTab = 'lots' | 'sale-purchase' | 'exchange';
+export type GameMarketTab = 'lots' | 'sale' | 'purchase' | 'exchange';
 
 type GameMarketTabId = GameMarketTab | 'discussions';
 
@@ -12,7 +12,6 @@ interface GameMarketSectionProps {
   entries: readonly MarketEntry[];
   editions: readonly Edition[];
   selectedEditionId: string;
-  onChangeEdition: (editionId: string) => void;
   activeTab: GameMarketTab;
   onChangeTab: (tab: GameMarketTab) => void;
   onOpenEntry: (entry: MarketEntry) => void;
@@ -22,7 +21,8 @@ interface GameMarketSectionProps {
 
 const TAB_ITEMS: ReadonlyArray<{ id: GameMarketTabId; label: string }> = [
   { id: 'lots', label: 'Лоты' },
-  { id: 'sale-purchase', label: 'Продажи и Покупки' },
+  { id: 'sale', label: 'Продажи' },
+  { id: 'purchase', label: 'Покупки' },
   { id: 'exchange', label: 'Обмен' },
   { id: 'discussions', label: 'Обсуждения' },
 ];
@@ -33,27 +33,18 @@ export function GameMarketSection({
   entries,
   editions,
   selectedEditionId,
-  onChangeEdition,
   activeTab,
   onChangeTab,
   onOpenEntry,
   onOpenDiscussions,
 }: GameMarketSectionProps) {
   const editionById = new Map(editions.map((edition) => [edition.id, edition]));
-  const gameEntries = entries.filter(
-    (entry) =>
-      entry.gameId === game.id &&
-      (entry.moderationStatus === undefined ||
-        entry.moderationStatus === 'visible'),
-  );
-  const scopedEntries = selectedEditionId
-    ? gameEntries.filter((entry) => entry.editionId === selectedEditionId || (entry.itemType !== 'game' && entry.editionId === null))
-    : gameEntries;
+  const scopedEntries = gameEditionEntries(entries, game.id, editions.find(edition => edition.id === selectedEditionId));
   const auctionLots = scopedEntries.filter((entry) => entry.kind === 'auction');
   const salePurchaseListings = scopedEntries.filter(
     (entry) =>
       entry.kind === 'listing' &&
-      (entry.listingType === 'sale' || entry.listingType === 'purchase'),
+      entry.listingType === activeTab,
   );
   const exchangeListings = scopedEntries.filter(
     (entry) => entry.kind === 'listing' && entry.listingType === 'exchange',
@@ -61,15 +52,15 @@ export function GameMarketSection({
   const visibleEntries =
     activeTab === 'lots'
       ? auctionLots
-      : activeTab === 'sale-purchase'
+      : (activeTab === 'sale' || activeTab === 'purchase')
         ? salePurchaseListings
         : exchangeListings;
   const items = TAB_ITEMS.map((item) => {
     const count =
       item.id === 'lots'
         ? auctionLots.length
-        : item.id === 'sale-purchase'
-          ? salePurchaseListings.length
+        : (item.id === 'sale' || item.id === 'purchase')
+          ? scopedEntries.filter(entry => entry.kind === 'listing' && entry.listingType === item.id).length
           : item.id === 'exchange'
             ? exchangeListings.length
             : null;
@@ -82,8 +73,8 @@ export function GameMarketSection({
   const emptyText =
     activeTab === 'lots'
       ? 'Активных лотов по этому изданию пока нет.'
-      : activeTab === 'sale-purchase'
-        ? 'Объявлений о продаже и покупке пока нет.'
+      : (activeTab === 'sale' || activeTab === 'purchase')
+        ? (activeTab === 'sale' ? 'Объявлений о продаже пока нет.' : 'Объявлений о покупке пока нет.')
         : 'Обменных объявлений пока нет.';
 
   const handleTabChange = (tab: GameMarketTabId) => {
@@ -97,25 +88,6 @@ export function GameMarketSection({
 
   return (
     <section className="game-market" aria-label="Маркет по игре">
-      <div className="game-market__filter">
-        <label className="game-market__filter-label" htmlFor="gameMarketEdition">
-          Издание
-        </label>
-        <select
-          id="gameMarketEdition"
-          className="form-control game-market__select"
-          value={selectedEditionId}
-          onChange={(event) => onChangeEdition(event.target.value)}
-        >
-          <option value="">Все издания ({editions.length})</option>
-          {editions.map((edition) => (
-            <option key={edition.id} value={edition.id}>
-              {editionLabel(edition)}
-            </option>
-          ))}
-        </select>
-      </div>
-
       <Tabs<GameMarketTabId>
         items={items}
         value={activeTab}

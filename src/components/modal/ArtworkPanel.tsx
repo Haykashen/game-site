@@ -30,10 +30,9 @@ export function ArtworkPanel({ game, editions, selectedEdition }: ArtworkPanelPr
       <div className="artwork-scanlines" />
       {!hasCover && <ImageIcon size={52} style={{ opacity: 0.6, marginBottom: '0.75rem' }} />}
       <span className="gallery-kicker">COLLECTOR ARCHIVE</span>
-      <strong>{game.title}</strong>
+      {!hasCover && <strong>{game.title}</strong>}
       <span className="gallery-caption">
         {selectedEdition ? `${selectedEdition.name} • ${selectedEdition.platform}` : editionsCountLabel(editions.length)}
-        {game.year !== null ? ` • ${game.year}` : ''}
       </span>
       {cover && !hasCover && <span className="gallery-caption" role="status">Не удалось загрузить изображение</span>}
       {images.length > 1 && <div className="artwork-controls" aria-label="Изображения издания">

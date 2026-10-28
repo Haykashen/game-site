@@ -127,8 +127,8 @@ async function write<T>(app: FastifyInstance, action: (tx: Prisma.TransactionCli
 export function registerAdminDataRoutes(app: FastifyInstance): void {
   const auth = { preHandler: app.authenticate };
   app.get('/api/v1/admin/data', auth, async (request) => {
-    requireRoles(request, ['admin']);
-    return {tables: models.map((model) => getTable(model.name))};
+    const user = requireRoles(request, ['admin', 'moderator']);
+    return {tables: user.role === 'admin' ? models.map(model => getTable(model.name)) : [{...getTable('Game'), canCreate: false, canDelete: false}]};
   });
   app.get('/api/v1/admin/data/:table/references', auth, async (request) => {
     requireRoles(request, ['admin']);
@@ -160,8 +160,9 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
     return result;
   });
   app.get('/api/v1/admin/data/:table/records/:key', auth, async (request) => {
-    requireRoles(request, ['admin']);
+    const user = requireRoles(request, ['admin', 'moderator']);
     const {table: name, key} = request.params as {table: string; key: string};
+    if (user.role !== 'admin' && name !== 'Game') throw forbidden('Недостаточно прав для этого действия.');
     const table = getTable(name);
     const row = await delegate(app.prisma, name).findFirst({where: parseKey(table, key), select: recordSelect(table)});
     if (!row) throw notFound();
@@ -187,9 +188,10 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
     return reply.code(201).send({record});
   });
   app.patch('/api/v1/admin/data/:table/records/:key', auth, async (request) => {
-    const admin = requireRoles(request, ['admin']);
+    const admin = requireRoles(request, ['admin', 'moderator']);
     const {table: name, key: encodedKey} = request.params as {table: string; key: string};
     const table = getTable(name);
+    if (admin.role !== 'admin' && name !== 'Game') throw forbidden('Недостаточно прав для этого действия.');
     if (!table.canEdit) throw forbidden('Сессию можно только отозвать.');
     const key = parseKey(table, encodedKey);
     const input = parse(updateSchema, request.body);

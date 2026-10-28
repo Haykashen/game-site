@@ -16,7 +16,7 @@ export interface GameCollection {
   getEdition: (editionId: string) => Edition | undefined;
   getGameEditions: (gameId: string) => readonly Edition[];
   getEditionCopies: (editionId: string) => Copy[];
-  addCopy: (editionId: string) => Promise<boolean>;
+  addCopy: (editionId: string, details?: CopyDetails) => Promise<boolean>;
   setEditionQuantity: (editionId: string, quantity: number) => Promise<boolean>;
   updateEdition: (editionId: string, details: CopyDetails) => Promise<boolean>;
   removeEdition: (editionId: string) => Promise<boolean>;
@@ -88,7 +88,7 @@ export function useGameCollection(): GameCollection {
     getEdition: (id) => editionById.get(id),
     getGameEditions: (id) => editionsByGame.get(id) ?? EMPTY_EDITIONS,
     getEditionCopies: (id) => copies.filter((copy) => copy.editionId === id),
-    addCopy: (id) => mutate(async () => [mapCopy(await createCopyRequest(id))]),
+    addCopy: (id, details) => mutate(async () => [mapCopy(await createCopyRequest(id, details))]),
     setEditionQuantity: (id, quantity) => Number.isFinite(quantity)
       ? mutate(async () => (await setEditionQuantityRequest(id, Math.min(MAX_COLLECTION_QUANTITY, Math.max(0, Math.floor(quantity))))).map(mapCopy), id)
       : Promise.resolve(false),
