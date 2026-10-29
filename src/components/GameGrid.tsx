@@ -36,7 +36,7 @@ export function GameGrid({
   return (
     <section className="games-grid" id="gamesGrid">
       {games.length === 0 ? (
-        <div style={EMPTY_STATE_STYLE}>{emptyText}</div>
+        emptyText ? <div style={EMPTY_STATE_STYLE}>{emptyText}</div> : null
       ) : (
         games.map((game) => (
           <GameCard

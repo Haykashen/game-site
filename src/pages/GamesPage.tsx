@@ -60,8 +60,6 @@ export function GamesPage() {
   return (
     <>
       <h1 className="sr-only">Каталог игр</h1>
-      {isAdmin && <ApiState loading={false} error={schema.error} onRetry={schema.refresh} />}
-      <ApiState loading={catalog.loading && catalog.items.length === 0} error={catalog.error} onRetry={status === 'offline' ? refreshAuth : catalog.loadMore} />
       <SearchToolbar
         idPrefix="catalog"
         ariaLabel="Поиск и фильтры каталога"
@@ -75,6 +73,10 @@ export function GamesPage() {
         onReset={reset}
         actions={isAdmin ? <button type="button" className="btn-primary" disabled={!gameTable} onClick={() => setEditor({mode: 'create', key: null})}><Plus size={16} aria-hidden="true" />Добавить игру</button> : undefined}
       />
+      <ApiState loading={catalog.loading} error={catalog.error ?? (isModerator ? schema.error : null)} onRetry={async () => {
+        if (status === 'offline') { await refreshAuth(); return; }
+        await Promise.all([catalog.error ? catalog.loadMore() : Promise.resolve(), isModerator && schema.error ? schema.refresh() : Promise.resolve()]);
+      }} />
       {notice && <p className="admin-data__help" role="status">{notice}</p>}
       <GameBrowser
         key={`${user?.id ?? 'guest'}:${browserRevision}`}
@@ -85,7 +87,7 @@ export function GamesPage() {
         onCloseGame={closeGame}
         suspendDrawer={isModerator && Boolean(editor)}
         {...(isModerator && gameTable ? {onEditGame: (id: string) => setEditor({mode: 'edit', key: JSON.stringify({id})})} : {})}
-        emptyText={catalog.loading ? 'Загружаем игры…' : catalog.error ? 'Не удалось загрузить игры.' : 'Игры не найдены'}
+        emptyText={catalog.loading || catalog.error || status === 'checking' || (isModerator && schema.error) ? '' : 'Игры не найдены'}
       />
       <div ref={sentinel} className="catalog-pagination" aria-live="polite">
         {catalog.items.length > 0 && <span>Показано {catalog.items.length} из {catalog.total}</span>}
