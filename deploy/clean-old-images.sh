@@ -15,7 +15,7 @@ for repo in discvault-api discvault-web; do
 done
 for service in api web db; do
   container=$("${base[@]}" ps -q "$service")
-  [[ -n "$container" && "$(docker inspect -f '{{.State.Health.Status}}' "$container")" == healthy ]]
+  [[ -n "$container" && "$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$container")"  =~ ^(healthy|running)$ ]]
 done
 df -h "$app_dir"
 docker system df
