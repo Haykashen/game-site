@@ -193,7 +193,7 @@ model Game {
   seriesId    String?  @map("series_id") @db.Uuid
   series      GameSeries? @relation(fields: [seriesId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   year        Int?
-  genres      String[]
+  genres      GameGenre[] @relation("GameGenres")
   description String   @db.Text
   coverImage  String   @default("") @map("cover_image") @db.Text
   createdAt   DateTime @default(now()) @map("created_at")
@@ -213,6 +213,7 @@ model Game {
 }
 
 model GameGenre {
+  games Game[] @relation("GameGenres")
   id        String   @id @default(uuid()) @db.Uuid
   name      String   @unique
   createdAt DateTime @default(now()) @map("created_at")

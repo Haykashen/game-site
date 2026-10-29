@@ -47,7 +47,8 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
     buyerId = (await create('User', {email: 'buyer-' + suffix + '@test.invalid', displayName: 'Buyer', password: 'ci-test-password'})).id;
     await patch('User', {id: buyerId}, {city: 'Москва', comment: 'Admin note'});
     const seriesRecord = await create('GameSeries', {name: 'CI series ' + suffix});
-    const gameId = (await create('Game', {title: 'Admin fixture ' + suffix, publisher: 'CI', description: 'Fixture', genres: ['RPG']})).id;
+    const genreRecord = await create('GameGenre', {name: 'CI RPG ' + suffix});
+    const gameId = (await create('Game', {title: 'Admin fixture ' + suffix, publisher: 'CI', description: 'Fixture', genres: [genreRecord.id]})).id;
     await patch('Game', {id: gameId}, {seriesId: seriesRecord.id});
     await patch('GameSeries', {id: seriesRecord.id}, {name: 'Renamed series ' + suffix});
     assert.equal((await prisma.game.findUniqueOrThrow({where: {id: gameId}, include: {series: true}})).series?.name, 'Renamed series ' + suffix);

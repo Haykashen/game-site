@@ -69,6 +69,8 @@ export function buildWhere(table: AdminTable, search: string, encodedFilters?: s
       and.push({[key]: parse(z.enum(['true', 'false']), value) === 'true'});
     } else if (field.type === 'enum') {
       and.push({[key]: parse(z.enum(field.options as [string, ...string[]]), value)});
+    } else if (table.name === 'Game' && key === 'genres') {
+      and.push({genres: {some: {name: {contains: value, mode: 'insensitive'}}}});
     } else if (field.type === 'list') {
       if (field.options.length) parse(z.enum(field.options as [string, ...string[]]), value);
       and.push({[key]: {has: value}});
@@ -133,7 +135,7 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
   app.get('/api/v1/admin/data/:table/references', auth, async (request) => {
     const user = requireRoles(request, ['admin', 'moderator']);
     const {table: name} = request.params as {table: string};
-    if (user.role !== 'admin' && name !== 'GameSeries') throw forbidden('Недостаточно прав для этого действия.');
+    if (user.role !== 'admin' && !['GameSeries','GameGenre'].includes(name)) throw forbidden('Недостаточно прав для этого действия.');
     const table = getTable(name);
     const {search} = parse(querySchema, request.query);
     if (table.primaryKey.length !== 1) throw badRequest('Таблица имеет составной ключ.');

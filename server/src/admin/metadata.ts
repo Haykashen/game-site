@@ -57,7 +57,7 @@ export function getModel(name: string) {
 export function getTable(name: string): AdminTable {
   const model = getModel(name);
   const primaryKey = [...(model.primaryKey?.fields ?? model.fields.filter((field) => field.isId).map((field) => field.name))];
-  const fields: AdminField[] = model.fields.filter((field) => field.kind !== 'object' && !HIDDEN.has(field.name)).map((field) => {
+  const fields: AdminField[] = model.fields.filter((field) => (field.kind !== 'object' || (name === 'Game' && field.name === 'genres')) && !HIDDEN.has(field.name)).map((field) => {
     const relation = model.fields.find((candidate) => candidate.kind === 'object' && candidate.relationFromFields?.includes(field.name));
     const generatedId = field.isId && !relation;
     return {
@@ -67,7 +67,7 @@ export function getTable(name: string): AdminTable {
       nullable: !field.isRequired, generated: Boolean(generatedId || field.hasDefaultValue || field.isUpdatedAt),
       primary: primaryKey.includes(field.name), readOnly: generatedId || READ_ONLY.has(field.name) || name === 'Session',
       options: Prisma.dmmf.datamodel.enums.find((item) => item.name === field.type)?.values.map((value) => value.name) ?? [],
-      reference: relation?.type ?? null,
+      reference: name === 'Game' && field.name === 'genres' ? 'GameGenre' : relation?.type ?? null,
       multiline: ['description', 'body', 'excerpt', 'text', 'message', 'notes', 'comment', 'moderatorNote', 'moderationNote'].includes(field.name),
       dateOnly: field.nativeType?.[0] === 'Date',
     };
@@ -97,7 +97,7 @@ export function parseData(table: AdminTable, body: unknown, creating: boolean): 
     }
     const raw = getModel(table.name).fields.find((item) => item.name === field.name);
     if (field.required && field.type === 'string') schema = (schema as z.ZodString).trim().min(1);
-    if (field.primary || field.reference) schema = z.string().trim().min(1).max(100);
+    if (field.primary || (field.reference && field.type !== 'list')) schema = z.string().trim().min(1).max(100);
     if (raw?.nativeType?.[0] === 'Uuid') schema = z.string().uuid();
     if (table.name === 'User') {
       if (field.name === 'email') schema = emailSchema;
@@ -109,12 +109,14 @@ export function parseData(table: AdminTable, body: unknown, creating: boolean): 
     if (field.type === 'number' && (field.name.endsWith('Minor') || field.name === 'sortOrder')) schema = z.number().int().min(0).max(2147483647);
     if (table.name === 'Review' && field.name === 'rating') schema = z.number().int().min(1).max(5);
     if (table.name === 'GameRating' && field.name === 'score') schema = z.number().int().min(0).max(10);
+    if (table.name === 'Game' && field.name === 'genres') schema = z.array(z.string().uuid()).max(50);
     if (field.nullable) schema = schema.nullable();
     if (!creating || !field.required) schema = schema.optional();
     shape[field.name] = schema;
   }
   const data = parse(z.object(shape).strict(), body) as Record<string, unknown>;
   if (!Object.keys(data).length) throw badRequest('Не переданы поля для сохранения.');
+  if (table.name === 'Game' && data.genres !== undefined) data.genres = {[creating ? 'connect' : 'set']: [...new Set(data.genres as string[])].map(id => ({id}))};
   return data;
 }
 

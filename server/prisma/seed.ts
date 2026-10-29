@@ -57,7 +57,7 @@ async function seedCatalog(): Promise<void> {
       developer: game.developer,
       ...(game.series.trim() ? {series: {connectOrCreate: {where: {name: game.series.trim()}, create: {name: game.series.trim()}}}} : {}),
       year: game.year,
-      genres: game.genres,
+      genres: {connectOrCreate: [...new Set(game.genres.flatMap(name => name.toLowerCase() === 'action rpg' ? ['Action','RPG'] : [name]))].map(name => ({where: {name}, create: {name}}))},
       description: game.description,
       coverImage: game.coverImage,
     };
@@ -100,7 +100,7 @@ async function seedReferenceTables(): Promise<void> {
   const games = await prisma.game.findMany({
     select: { series: {select: {name: true}} },
   });
-  const genres = GAME_GENRES;
+  const genres = [...new Set(GAME_GENRES.flatMap(name => name.toLowerCase() === 'action rpg' ? ['Action','RPG'] : [name]))];
   const series = [...new Set(
     games
       .map((game) => (game.series?.name ?? '').trim())

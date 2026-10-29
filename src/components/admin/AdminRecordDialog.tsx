@@ -11,7 +11,7 @@ import { ModalShell } from '../ui/ModalShell';
 export interface AdminEditor { mode: 'create' | 'edit' | 'delete'; key: string | null }
 function toInput(field: AdminField, value: AdminValue | undefined): string {
   if (value === null || value === undefined) return '';
-  if (Array.isArray(value)) return value.join('\n');
+  if (Array.isArray(value)) return (value as unknown[]).map(item => typeof item === 'object' && item && 'id' in item ? String(item.id) : String(item)).join('\n');
   if (field.type === 'date') {
     if (field.dateOnly) return String(value).slice(0, 10);
     const date = new Date(String(value));
@@ -29,20 +29,27 @@ function formatError(cause: unknown): string {
   return errorMessage(cause);
 }
 
-function ReferenceInput({field, value, onChange, required, inputId}: {field: AdminField; value: string; onChange: (value: string) => void; required: boolean; inputId: string}) {
+function ReferenceInput({field, value, onChange, required, inputId, selectedNames = {}}: {selectedNames?: Record<string,string>; field: AdminField; value: string; onChange: (value: string) => void; required: boolean; inputId: string}) {
   const id = useId();
   const [search, setSearch] = useState('');
-  const [options, setOptions] = useState<AdminReference[]>([]);
+  const [options, setOptions] = useState<AdminReference[]>(Object.entries(selectedNames).map(([value,label])=>({value,label})));
   const [error, setError] = useState('');
   const query = useDebouncedValue(search);
   useEffect(() => {
     const controller = new AbortController();
     setError('');
     void fetchAdminReferences(field.reference!, query, controller.signal).then((result) => {
-      if (!controller.signal.aborted) setOptions(result.items);
+      if (!controller.signal.aborted) setOptions(previous => [...previous.filter(item => value.split('\n').includes(item.value) && !result.items.some(next => next.value === item.value)), ...result.items]);
     }).catch((cause: unknown) => {if (!controller.signal.aborted) setError(errorMessage(cause));});
     return () => controller.abort();
   }, [field.reference, query]);
+  if (field.type === 'list') {
+    const selected = value.split('\n').filter(Boolean);
+    return <div className="admin-data__reference"><input className="form-control" type="search" aria-label={`Поиск: ${field.label}`} value={search} onChange={event => setSearch(event.target.value)} placeholder="Найти жанр…" />
+      <div role="group" aria-label={field.label}>{[...new Set([...selected,...options.map(item=>item.value)])].map(key => <label key={key} style={{display:'flex',gap:8,padding:'4px 0'}}><input type="checkbox" checked={selected.includes(key)} onChange={event=>onChange((event.target.checked?[...selected,key]:selected.filter(item=>item!==key)).join('\n'))} />{options.find(item=>item.value===key)?.label ?? key}</label>)}</div>
+      <small>Можно выбрать несколько жанров. Поиск показывает первые 30 совпадений.</small>{error && <small role="alert">{error}</small>}
+    </div>;
+  }
   return <div className="admin-data__reference">
     <input className="form-control" aria-label={`Поиск: ${field.label}`} type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Найти связанную запись…" />
     <select id={inputId} className="form-control" aria-label={field.label} aria-describedby={id} required={required} value={value} onChange={(event) => onChange(event.target.value)}>
@@ -127,7 +134,7 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title}: {tab
         const required = field.required && (creating || field.type !== 'password');
         const change = (next: string) => setValues((previous) => ({...previous, [field.name]: next}));
         return <div className="admin-data__field" key={field.name}><label htmlFor={`${titleId}-${field.name}`}>{field.label}{required ? ' *' : ''}</label>
-          {field.reference ? <ReferenceInput field={field} inputId={`${titleId}-${field.name}`} value={value} required={required} onChange={change} /> : field.type === 'enum' || field.type === 'boolean' ? <select id={`${titleId}-${field.name}`} className="form-control" required={required} value={value} onChange={(event) => change(event.target.value)}>
+          {field.reference ? <ReferenceInput selectedNames={Array.isArray(record[field.name]) ? Object.fromEntries((record[field.name] as unknown as {id:string;name:string}[]).filter(item=>item && typeof item === 'object' && item.id).map(item=>[item.id,item.name])) : {}} field={field} inputId={`${titleId}-${field.name}`} value={value} required={required} onChange={change} /> : field.type === 'enum' || field.type === 'boolean' ? <select id={`${titleId}-${field.name}`} className="form-control" required={required} value={value} onChange={(event) => change(event.target.value)}>
             {(creating || field.nullable) && <option value="">{creating && field.generated ? 'По умолчанию' : 'Не указано'}</option>}
             {(field.type === 'boolean' ? ['true', 'false'] : field.options).map((option) => <option key={option} value={option}>{adminOptionLabel(option)}</option>)}
           </select> : field.type === 'list' && field.options.length ? <select id={`${titleId}-${field.name}`} multiple className="form-control" value={value.split('\n')} onChange={(event) => change(Array.from(event.target.selectedOptions).map((item) => item.value).join('\n'))}>

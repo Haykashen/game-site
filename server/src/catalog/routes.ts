@@ -54,7 +54,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
             { developer: { contains: q, mode: 'insensitive' } },
             { series: { is: { name: { contains: q, mode: 'insensitive' } } } },
             { description: { contains: q, mode: 'insensitive' } },
-            { genres: { has: q } },
+            { genres: { some: {name: {equals: q, mode: 'insensitive'}} } },
             {
               editions: {
                 some: {
@@ -90,7 +90,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
           orderBy: [{ title: 'asc' }, { id: 'asc' }],
           skip,
           take: query.pageSize,
-          include: { series: true,
+          include: { series: true, genres: true,
             editions: { where: {canonicalId:null}, select: { id: true, platform: true, coverImages: true }, orderBy: {id: 'asc'} },
             _count: { select: { editions: {where: {canonicalId:null}} } },
           },
@@ -171,7 +171,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
 
     const game = await app.prisma.game.findUnique({
       where: { id },
-      include: { series: true,
+      include: { series: true, genres: true,
         editions: {
           where: {canonicalId:null},
           include: {variants:true},
@@ -237,7 +237,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
 
     const edition = await app.prisma.edition.findUnique({
       where: { id: await resolveEditionId(app.prisma,id) },
-      include: { game: {include: {series: true}}, variants:true },
+      include: { game: {include: {series: true, genres: true}}, variants:true },
     });
 
     if (!edition) throw notFound('Издание не найдено.');

@@ -150,7 +150,7 @@ test('HTTP creation accepts no client ID, returns a generated ID, and keeps lega
 });
 
 test('global and per-column filters validate types and cannot inject arbitrary Prisma conditions', () => {
-  assert.deepEqual(buildWhere(getTable('Game'), '', JSON.stringify({year: '2024', genres: 'RPG'})), {AND: [{year: 2024}, {genres: {has: 'RPG'}}]});
+  assert.deepEqual(buildWhere(getTable('Game'), '', JSON.stringify({year: '2024', genres: 'RPG'})), {AND: [{year: 2024}, {genres: {some: {name: {contains: 'RPG', mode: 'insensitive'}}}}]});
   const uuid = buildWhere(getTable('Copy'), '', JSON.stringify({userId: otherId}));
   assert.deepEqual(uuid, {AND: [{userId: otherId}]});
   assert.throws(() => buildWhere(getTable('Copy'), '', JSON.stringify({userId: 'substring'})), AppError);
@@ -418,4 +418,10 @@ test('game series is a nullable reference, not an editable title string', () => 
   assert.equal(series.nullable, true);
   assert.equal(parseData(table, {seriesId: null}, false).seriesId, null);
   assert.throws(() => parseData(table, {series: 'Free text'}, false), AppError);
+});
+test('game genres connect only selected directory IDs and support clearing', () => {
+  const table=getTable('Game');
+  assert.equal(table.fields.find(field=>field.name==='genres')?.reference,'GameGenre');
+  assert.deepEqual(parseData(table,{genres:[otherId,otherId]},false).genres,{set:[{id:otherId}]});
+  assert.deepEqual(parseData(table,{genres:[]},false).genres,{set:[]});
 });

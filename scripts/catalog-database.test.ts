@@ -22,7 +22,7 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
   try {
     await app.prisma.game.create({ data: {
       id, title: 'PostgreSQL catalogue fixture', publisher: 'Test', year: null,
-      genres: ['Test'], description: 'Database-only fixture, never deployed to production.',
+      genres: {connectOrCreate: {where:{name:'Test'},create:{name:'Test'}}}, description: 'Database-only fixture, never deployed to production.',
       editions: { create: { id: id + '-edition', name: 'Database edition', platform: 'CI Platform',
         region: 'CI Region', lang: 'CI Language', media: 'Disc', contents: [], coverImages: ['https://showgames.ru/image/cache/catalog/covers/ci-test.jpg'] } },
     } });
@@ -34,7 +34,7 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
     assert.equal(games.json().items[0].stats.coverImages[0], 'https://showgames.ru/image/cache/catalog/covers/ci-test.jpg');
     assert.equal(games.json().items[0].stats.salesCount, 0);
     assert.ok(!('editions' in games.json().items[0]));
-    await app.prisma.game.createMany({data: pagingIds.map((gameId, index) => ({id: gameId, title: id + ' paged ' + index, publisher: 'CI', genres: [], description: ''}))});
+    await app.prisma.game.createMany({data: pagingIds.map((gameId, index) => ({id: gameId, title: id + ' paged ' + index, publisher: 'CI', description: ''}))});
     const pagedIds: string[] = [];
     for (let number = 1; number <= 2; number++) {
       const response = await app.inject({method: 'GET', url: '/api/v1/catalog/games?q=' + encodeURIComponent(id + ' paged') + '&pageSize=2&page=' + number});
@@ -46,7 +46,7 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
     assert.deepEqual(pagedIds, pagingIds);
     for (const title of ['PostgreSQL catalogue fixture', ' POSTGRESQL   catalogue fixture ']) {
       await assert.rejects(app.prisma.game.create({data: {
-        id: id + '-duplicate', title, publisher: '', year: null, genres: [], description: '',
+        id: id + '-duplicate', title, publisher: '', year: null, description: '',
       }}), (error: unknown) => (error as {code?: string}).code === 'P2002');
     }
     const editions = await app.inject({ method: 'GET', url: '/api/v1/catalog/editions?gameId=' + id });

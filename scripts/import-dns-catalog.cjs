@@ -1,4 +1,5 @@
 async function linkedSeries(tx, input) {
+  if (Object.hasOwn(input, 'genres')) {const names=[...new Set(input.genres.flatMap(name=>name.trim().toLowerCase()==='action rpg'?['Action','RPG']:[name.trim()]).filter(Boolean))]; const records=[];for(const name of names) records.push(await tx.gameGenre.upsert({where:{name},create:{name},update:{}}));input={...input,genres:{set:records.map(({id})=>({id}))}};}
   if (!Object.hasOwn(input, 'series')) return input;
   const {series, ...data} = input;
   const name = (series ?? '').trim();
@@ -30,7 +31,7 @@ async function main() {
       const before = await counts();
       let reassigned={copies:0,marketEntries:0};
       if (apply) {
-        for (let i=0;i<plan.createGames.length;i+=200) await tx.game.createMany({data:await Promise.all(plan.createGames.slice(i,i+200).map(game => linkedSeries(tx, game)))});
+        for (const game of plan.createGames) {const data=await linkedSeries(tx,game);if(data.genres) data.genres={connect:data.genres.set};await tx.game.create({data});}
         for (const update of plan.updateGames) await tx.game.update({where:{id:update.id},data:await linkedSeries(tx, update.data)});
         for (let i=0;i<plan.createEditions.length;i+=200) await tx.edition.createMany({data:plan.createEditions.slice(i,i+200)});
         for (const update of plan.updateEditions) await tx.edition.update({where:{id:update.id},data:await linkedSeries(tx, update.data)});

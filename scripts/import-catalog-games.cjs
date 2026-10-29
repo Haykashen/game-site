@@ -43,9 +43,9 @@ async function main() {
         const data = [];
         for (const {series, ...game} of additions) {
           const entry = series.trim() ? await tx.gameSeries.upsert({where: {name: series.trim()}, create: {name: series.trim()}, update: {}}) : null;
-          data.push({...game, seriesId: entry?.id ?? null});
+          const {genres,...fields}=game;const names=[...new Set(genres.flatMap(name=>name.trim().toLowerCase()==='action rpg'?['Action','RPG']:[name.trim()]))];const ids=[];for(const name of names) ids.push(await tx.gameGenre.upsert({where:{name},create:{name},update:{}}));data.push({...fields,seriesId:entry?.id??null,genres:{connect:ids.map(({id})=>({id}))}});
         }
-        await tx.game.createMany({data});
+        for(const record of data) await tx.game.create({data:record});
       }
       const unchanged = await tx.game.findMany({ where: { id: { in: existing.map(g => g.id) } } });
       const sorted = values => JSON.stringify(values.sort((a,b) => a.id.localeCompare(b.id)));

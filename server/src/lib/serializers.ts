@@ -81,7 +81,7 @@ export async function getUserProfile(
   };
 }
 
-export function serializeGame(game: Game & {series?: {name: string} | null}): GameDto {
+export function serializeGame(game: Game & {series?: {name: string} | null; genres?: {name: string}[]}): GameDto {
   return {
     id: game.id,
     title: game.title,
@@ -89,7 +89,7 @@ export function serializeGame(game: Game & {series?: {name: string} | null}): Ga
     developer: game.developer,
     series: game.series?.name ?? '',
     year: game.year,
-    genres: game.genres,
+    genres: game.genres?.map(genre => genre.name) ?? [],
     description: game.description,
     coverImage: game.coverImage,
   };
