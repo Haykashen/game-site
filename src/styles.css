@@ -4264,3 +4264,5 @@
 .game-detail__editions button[aria-pressed="false"],.game-detail__actions .btn-secondary,.game-detail__actions .game-cta__btn,.game-detail__actions button:hover {background:var(--brand-light);}
 
 .copy-form__fields {border:0;padding:0;margin:0;min-width:0;}
+
+.game-detail__actions .game-cta__btn > svg,.game-detail__actions .game-cta__btn:hover > svg {color:var(--text-main);}

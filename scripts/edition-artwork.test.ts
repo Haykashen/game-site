@@ -14,7 +14,7 @@ test('an edition without artwork does not borrow a different edition cover',()=>
   assert.deepEqual(artworkImages(game,[a]),['game-cover']);
 });
 
-test('catalogue previews prefer Showgames scans and retain earlier cover URLs',()=>{
+test('catalogue previews prefer the game cover and retain edition scans',()=>{
   const scan='https://showgames.ru/image/front.jpg';
-  assert.deepEqual(gameCoverImages(game,[{...a,coverImages:[scan,'edition-a-back']}]),[scan,'game-cover','edition-a-back']);
+  assert.deepEqual(gameCoverImages(game,[{...a,coverImages:[scan,'edition-a-back']}]),['game-cover',scan,'edition-a-back']);
 });

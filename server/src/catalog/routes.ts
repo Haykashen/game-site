@@ -143,7 +143,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
 
       const items: GameWithStatsDto[] = games.map((game) => {
         const coverImages = [...new Set([game.coverImage, ...game.editions.flatMap((edition) => edition.coverImages)].filter(Boolean))]
-          .sort((left, right) => Number(right.startsWith('https://showgames.ru/')) - Number(left.startsWith('https://showgames.ru/'))).slice(0, 3);
+           .slice(0, 3);
         const platforms = [...new Set(game.editions.map((edition) => edition.platform))];
         const ownedCount = game.editions.reduce(
           (sum, edition) => sum + (ownedByEdition.get(edition.id) ?? 0),

@@ -29,8 +29,7 @@ export function editionContentsLabel(edition: Edition, limit = 4): string {
 }
 
 export function gameCoverImages(game: Game, editions: readonly Edition[]): string[] {
-  return [...new Set([game.coverImage, ...editions.flatMap(edition => edition.coverImages)].filter(Boolean))]
-    .sort((a,b) => Number(b.startsWith('https://showgames.ru/')) - Number(a.startsWith('https://showgames.ru/')));
+  return [...new Set([game.coverImage, ...editions.flatMap(edition => edition.coverImages)].filter(Boolean))];
 }
 export function gameCoverImage(game: Game, editions: readonly Edition[]): string {
   return gameCoverImages(game, editions)[0] ?? '';
