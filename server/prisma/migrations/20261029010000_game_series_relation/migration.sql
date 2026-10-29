@@ -1,6 +1,6 @@
-ALTER TABLE "games" ADD COLUMN "series_id" TEXT;
+ALTER TABLE "games" ADD COLUMN "series_id" UUID;
 INSERT INTO "game_series" ("id", "name", "created_at", "updated_at")
-SELECT gen_random_uuid()::text, names.name, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+SELECT gen_random_uuid(), names.name, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 FROM (SELECT DISTINCT btrim("series") AS name FROM "games" WHERE btrim("series") <> '') names
 ON CONFLICT ("name") DO NOTHING;
 UPDATE "games" g SET "series_id" = s."id" FROM "game_series" s WHERE s."name" = btrim(g."series");
