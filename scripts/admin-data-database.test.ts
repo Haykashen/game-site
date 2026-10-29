@@ -46,7 +46,13 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
     sellerId = (await create('User', {email: 'seller-' + suffix + '@test.invalid', displayName: 'Seller', password: 'ci-test-password'})).id;
     buyerId = (await create('User', {email: 'buyer-' + suffix + '@test.invalid', displayName: 'Buyer', password: 'ci-test-password'})).id;
     await patch('User', {id: buyerId}, {city: 'Москва', comment: 'Admin note'});
+    const seriesRecord = await create('GameSeries', {name: 'CI series ' + suffix});
     const gameId = (await create('Game', {title: 'Admin fixture ' + suffix, publisher: 'CI', description: 'Fixture', genres: ['RPG']})).id;
+    await patch('Game', {id: gameId}, {seriesId: seriesRecord.id});
+    await patch('GameSeries', {id: seriesRecord.id}, {name: 'Renamed series ' + suffix});
+    assert.equal((await prisma.game.findUniqueOrThrow({where: {id: gameId}, include: {series: true}})).series?.name, 'Renamed series ' + suffix);
+    const blockedSeries = await app.inject({method: 'DELETE', url: path('GameSeries', {id: seriesRecord.id}), payload: {expectedUpdatedAt: null}});
+    assert.notEqual(blockedSeries.statusCode, 204);
     const editionId = (await create('Edition', {gameId, name: 'Standard', platform: 'PS5', region: 'RU', lang: 'Русский', media: 'Disc', contents: [], coverImages: [], releaseDate: '2026-01-02T00:00:00.000Z'})).id;
     await create('GameRating', {userId: buyerId, gameId, score: 8}, ['userId', 'gameId']);
     await patch('GameRating', {userId: buyerId, gameId}, {score: 0});
@@ -118,6 +124,7 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
     await prisma.marketEntry.deleteMany({where: {authorId: {in: userIds}}});
     await prisma.user.deleteMany({where: {id: {in: userIds}}});
     await prisma.game.deleteMany({where: {id: {in: created.filter((item) => item.model === 'Game').map((item) => item.key.id!)}}});
+    await prisma.gameSeries.deleteMany({where: {id: {in: created.filter(item => item.model === 'GameSeries').map(item => item.key.id!)}}});
     await app.close(); await prisma.$disconnect();
   }
 });

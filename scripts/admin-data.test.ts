@@ -410,3 +410,12 @@ test('moderators can edit games but cannot create, delete or access other tables
     }
   } finally { await app.close(); }
 });
+test('game series is a nullable reference, not an editable title string', () => {
+  const table = getTable('Game');
+  assert.equal(table.fields.some(field => field.name === 'series'), false);
+  const series = table.fields.find(field => field.name === 'seriesId')!;
+  assert.equal(series.reference, 'GameSeries');
+  assert.equal(series.nullable, true);
+  assert.equal(parseData(table, {seriesId: null}, false).seriesId, null);
+  assert.throws(() => parseData(table, {series: 'Free text'}, false), AppError);
+});

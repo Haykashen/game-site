@@ -55,7 +55,7 @@ async function seedCatalog(): Promise<void> {
       title: game.title,
       publisher: game.publisher,
       developer: game.developer,
-      series: game.series,
+      ...(game.series.trim() ? {series: {connectOrCreate: {where: {name: game.series.trim()}, create: {name: game.series.trim()}}}} : {}),
       year: game.year,
       genres: game.genres,
       description: game.description,
@@ -98,12 +98,12 @@ async function seedCatalog(): Promise<void> {
 
 async function seedReferenceTables(): Promise<void> {
   const games = await prisma.game.findMany({
-    select: { series: true },
+    select: { series: {select: {name: true}} },
   });
   const genres = GAME_GENRES;
   const series = [...new Set(
     games
-      .map((game) => game.series.trim())
+      .map((game) => (game.series?.name ?? '').trim())
       .filter(Boolean),
   )];
 

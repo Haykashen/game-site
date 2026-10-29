@@ -21,7 +21,7 @@ const FIELD_LABELS: Record<string, string> = {
   suspendedAt: 'Дата блокировки', comment: 'Комментарий', ratingSum: 'Сумма оценок',
   ratingCount: 'Количество отзывов', createdAt: 'Создано', updatedAt: 'Обновлено', lastSeenAt: 'Последнее посещение',
   userId: 'Пользователь', userAgent: 'Браузер', ip: 'IP', expiresAt: 'Истекает', lastUsedAt: 'Последняя активность',
-  title: 'Название', publisher: 'Издатель', developer: 'Разработчик', series: 'Серия',
+  title: 'Название', publisher: 'Издатель', developer: 'Разработчик', series: 'Серия', seriesId: 'Серия',
   year: 'Год', genres: 'Жанры', description: 'Описание', coverImage: 'Обложка', gameId: 'Игра',
   recognitionPending: 'Требует проверки после распознавания', score: 'Оценка', name: 'Название', platform: 'Платформа', region: 'Регион', lang: 'Язык',
   media: 'Носитель', releaseDate: 'Дата выхода', contents: 'Комплектация', coverImages: 'Обложки',

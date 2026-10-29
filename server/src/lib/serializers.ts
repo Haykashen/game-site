@@ -81,13 +81,13 @@ export async function getUserProfile(
   };
 }
 
-export function serializeGame(game: Game): GameDto {
+export function serializeGame(game: Game & {series?: {name: string} | null}): GameDto {
   return {
     id: game.id,
     title: game.title,
     publisher: game.publisher,
     developer: game.developer,
-    series: game.series,
+    series: game.series?.name ?? '',
     year: game.year,
     genres: game.genres,
     description: game.description,

@@ -39,7 +39,14 @@ async function main() {
       const additions = rows.filter(g => !existingIds.has(g.id) && !existingTitles.has(normalize(g.title)));
       const relatedCounts = async () => ({ users: await tx.user.count(), editions: await tx.edition.count(), copies: await tx.copy.count(), marketEntries: await tx.marketEntry.count(), bids: await tx.bid.count(), deals: await tx.deal.count(), ratings: await tx.gameRating.count() });
       const before = await relatedCounts();
-      if (apply && additions.length) await tx.game.createMany({ data: additions });
+      if (apply && additions.length) {
+        const data = [];
+        for (const {series, ...game} of additions) {
+          const entry = series.trim() ? await tx.gameSeries.upsert({where: {name: series.trim()}, create: {name: series.trim()}, update: {}}) : null;
+          data.push({...game, seriesId: entry?.id ?? null});
+        }
+        await tx.game.createMany({data});
+      }
       const unchanged = await tx.game.findMany({ where: { id: { in: existing.map(g => g.id) } } });
       const sorted = values => JSON.stringify(values.sort((a,b) => a.id.localeCompare(b.id)));
       if (sorted(existing) !== sorted(unchanged)) throw new Error('Existing games changed; rolling back');

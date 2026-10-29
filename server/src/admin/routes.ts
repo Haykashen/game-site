@@ -131,8 +131,9 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
     return {tables: user.role === 'admin' ? models.map(model => getTable(model.name)) : [{...getTable('Game'), canCreate: false, canDelete: false}]};
   });
   app.get('/api/v1/admin/data/:table/references', auth, async (request) => {
-    requireRoles(request, ['admin']);
+    const user = requireRoles(request, ['admin', 'moderator']);
     const {table: name} = request.params as {table: string};
+    if (user.role !== 'admin' && name !== 'GameSeries') throw forbidden('Недостаточно прав для этого действия.');
     const table = getTable(name);
     const {search} = parse(querySchema, request.query);
     if (table.primaryKey.length !== 1) throw badRequest('Таблица имеет составной ключ.');
