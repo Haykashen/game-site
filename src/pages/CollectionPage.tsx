@@ -42,7 +42,6 @@ export function CollectionPage() {
     setEditionQuantity,
     updateEdition,
     removeEdition,
-    isRemote,
     isSyncing,
     syncError,
     isCatalogLoading,
@@ -111,9 +110,6 @@ export function CollectionPage() {
       <ApiState loading={isSyncing || isCatalogLoading} error={syncError ?? catalogError} onRetry={refresh} />
       {status === 'api' && !user && <div className="panel account-notice"><p>Войдите, чтобы увидеть свою коллекцию.</p><Link to="/account" className="btn-secondary">Войти</Link></div>}
 
-      {isRemote && isSyncing && (
-        <p className="market-form__hint">Синхронизируем коллекцию с сервером…</p>
-      )}
 
       <div className="panel achievements-panel">
         <div className="achievements-icon">
@@ -128,7 +124,7 @@ export function CollectionPage() {
         <span className="placeholder-chip">Скоро</span>
       </div>
 
-      {items.length === 0 ? (
+      {items.length === 0 && (isSyncing || isCatalogLoading || syncError || catalogError || !user) ? null : items.length === 0 ? (
         <div className="market-empty collection-empty">
           <figure className="collection-empty__art">
             <img

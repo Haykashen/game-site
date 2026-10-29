@@ -247,7 +247,7 @@ export function MarketPage({ kind, listingType }: MarketPageProps) {
         description={copy.description}
       />
 
-      <ApiState loading={isLoading} error={marketError} onRetry={refresh} />
+
 
       <SearchToolbar
         key={copyKey}
@@ -302,6 +302,7 @@ export function MarketPage({ kind, listingType }: MarketPageProps) {
         }
       />
 
+      <ApiState loading={isLoading} error={marketError} onRetry={refresh} />
       {isLoading || marketError ? null : baseItems.length === 0 ? (
         <div className="market-empty">
           <p>{showOwn ? 'У вас пока нет объявлений в этом разделе.' : copy.empty}</p>
