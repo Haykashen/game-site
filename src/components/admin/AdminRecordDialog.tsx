@@ -1,4 +1,4 @@
-import { SeriesCombobox } from './SeriesCombobox';
+import { ReferenceCombobox } from './ReferenceCombobox';
 import { useEffect, useId, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { X } from 'lucide-react';
@@ -30,7 +30,11 @@ function formatError(cause: unknown): string {
   return errorMessage(cause);
 }
 
-function ReferenceInput({field, value, onChange, required, inputId, selectedNames = {}}: {selectedNames?: Record<string,string>; field: AdminField; value: string; onChange: (value: string) => void; required: boolean; inputId: string}) {
+function ReferenceInput(props: Parameters<typeof LegacyReferenceInput>[0]) {
+  if (props.field.reference === 'GameSeries' || props.field.reference === 'GameGenre') return <ReferenceCombobox {...props} reference={props.field.reference} multiple={props.field.type === 'list'} />;
+  return <LegacyReferenceInput {...props} />;
+}
+function LegacyReferenceInput({field, value, onChange, required, inputId, selectedNames = {}}: {selectedNames?: Record<string,string>; field: AdminField; value: string; onChange: (value: string) => void; required: boolean; inputId: string}) {
   const id = useId();
   const [search, setSearch] = useState('');
   const [options, setOptions] = useState<AdminReference[]>(Object.entries(selectedNames).map(([value,label])=>({value,label})));
@@ -44,7 +48,6 @@ function ReferenceInput({field, value, onChange, required, inputId, selectedName
     }).catch((cause: unknown) => {if (!controller.signal.aborted) setError(errorMessage(cause));});
     return () => controller.abort();
   }, [field.reference, query]);
-  if (field.reference === 'GameSeries') return <SeriesCombobox value={value} onChange={onChange} inputId={inputId} required={required} />;
   if (field.type === 'list') {
     const selected = value.split('\n').filter(Boolean);
     return <div className="admin-data__reference"><input className="form-control" type="search" aria-label={`Поиск: ${field.label}`} value={search} onChange={event => setSearch(event.target.value)} placeholder="Найти жанр…" />
