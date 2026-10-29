@@ -21,7 +21,7 @@ export async function recognitionImage(source: string): Promise<{mime: string; d
     const addresses = await lookup(url.hostname, {all: true, family: 4});
     if (!addresses.length || addresses.some(item => item.family !== 4 || !publicIPv4(item.address))) throw badRequest('Адрес изображения недоступен для распознавания.');
     buffer = await new Promise<Buffer>((resolve, reject) => {
-      const req = request(url, {family: 4, autoSelectFamily: false, lookup: (_hostname, _options, callback) => callback(null, addresses[0]!.address, 4)}, res => {
+      const req = request(url, {family: 4, lookup: (_hostname, _options, callback) => callback(null, addresses[0]!.address, 4)}, res => {
         if (res.statusCode !== 200) {res.resume(); reject(badRequest('Не удалось скачать изображение. Укажите прямую ссылку без перенаправлений.')); return;}
         const chunks: Buffer[] = []; let size = 0;
         res.on('data', (chunk: Buffer) => {size += chunk.length; if (size > MAX) req.destroy(badRequest('Изображение больше 5 МБ.')); else chunks.push(chunk);});
