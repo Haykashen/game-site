@@ -1,3 +1,4 @@
+import { SeriesCombobox } from './SeriesCombobox';
 import { useEffect, useId, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { X } from 'lucide-react';
@@ -43,6 +44,7 @@ function ReferenceInput({field, value, onChange, required, inputId, selectedName
     }).catch((cause: unknown) => {if (!controller.signal.aborted) setError(errorMessage(cause));});
     return () => controller.abort();
   }, [field.reference, query]);
+  if (field.reference === 'GameSeries') return <SeriesCombobox value={value} onChange={onChange} inputId={inputId} required={required} />;
   if (field.type === 'list') {
     const selected = value.split('\n').filter(Boolean);
     return <div className="admin-data__reference"><input className="form-control" type="search" aria-label={`Поиск: ${field.label}`} value={search} onChange={event => setSearch(event.target.value)} placeholder="Найти жанр…" />

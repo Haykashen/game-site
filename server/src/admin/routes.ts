@@ -140,7 +140,7 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
     const {search} = parse(querySchema, request.query);
     if (table.primaryKey.length !== 1) throw badRequest('Таблица имеет составной ключ.');
     const labelField = ['displayName', 'title', 'name', 'body', 'email'].find((key) => table.fields.some((field) => field.name === key)) ?? table.primaryKey[0]!;
-    const rows = await delegate(app.prisma, name).findMany({where: buildWhere(table, search), select: {[table.primaryKey[0]!]: true, [labelField]: true}, take: 30, orderBy: {[labelField]: 'asc'}});
+    const rows = await delegate(app.prisma, name).findMany({where: /^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(search) ? {[table.primaryKey[0]!]: search} : buildWhere(table, search), select: {[table.primaryKey[0]!]: true, [labelField]: true}, take: 30, orderBy: {[labelField]: 'asc'}});
     const items: AdminReference[] = rows.map((row) => ({value: String(row[table.primaryKey[0]!]), label: String(row[labelField]).slice(0, 100) + ' · ' + String(row[table.primaryKey[0]!])}));
     return {items};
   });

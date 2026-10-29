@@ -4268,3 +4268,5 @@
 .game-detail__actions .game-cta__btn > svg,.game-detail__actions .game-cta__btn:hover > svg {color:var(--text-main);}
 
 .recognize-game {border:1px solid var(--border-color);border-radius:10px;padding:16px;display:grid;gap:10px;} .recognize-game fieldset {display:grid;gap:10px;} .recognize-game label {display:grid;gap:6px;font-size:13px;} .recognize-game .btn-secondary {margin:4px 6px 4px 0;}
+
+.series-combobox{position:relative}.series-combobox__list{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:50;max-height:260px;overflow:auto;background:var(--bg-card);border:1px solid var(--border-color);border-radius:8px;box-shadow:0 8px 24px #0004}.series-combobox__list button{display:block;width:100%;text-align:left;padding:10px 12px;background:transparent;border:0;color:var(--text-main);cursor:pointer}.series-combobox__list button:hover,.series-combobox__list button.is-active{background:var(--brand-light)}.series-combobox__list p{padding:10px 12px;color:var(--text-muted);font-size:13px}
