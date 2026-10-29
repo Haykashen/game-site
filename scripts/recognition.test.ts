@@ -40,6 +40,9 @@ test('recognition handles missing key, model failures, matching and signed confi
     const result=await app.inject({method:'POST',url,payload});assert.equal(result.statusCode,200,result.body);assert.equal(result.json().matches[0].edition.id,'edition');assert.equal(writes,0);
     const invalid=await app.inject({method:'POST',url:url+'/confirm',payload:{token:result.json().token+'tampered'}});assert.equal(invalid.statusCode,400);assert.equal(writes,0);
     const confirm=await app.inject({method:'POST',url:url+'/confirm',payload:{token:result.json().token}});assert.equal(confirm.statusCode,200,confirm.body);assert.equal(confirm.json().game.id,'game');assert.equal(writes,1);
+    game.title='Vampire: The Masquerade - Coteries of New York + Shadows of New York';edition.platform='PS4';edition.name='Standard';
+    Object.assign(facts,{title:game.title,platform:'PS4',edition:'',region:'',language:''});
+    const compilation=await app.inject({method:'POST',url,payload});assert.equal(compilation.statusCode,200,compilation.body);assert.equal(compilation.json().matches.length,1);
     tx.game.findMany=async()=>[];tx.edition.findFirst=async()=>null;
     const created=await app.inject({method:'POST',url:url+'/confirm',payload:{token:result.json().token}});assert.equal(created.statusCode,200,created.body);assert.equal(createdPending,true);
   } finally {globalThis.fetch=oldFetch;if(oldKey===undefined)delete process.env.GEMINI_API_KEY;else process.env.GEMINI_API_KEY=oldKey;await app.close();}
