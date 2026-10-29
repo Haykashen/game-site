@@ -1,3 +1,10 @@
+async function linkedSeries(tx, input) {
+  if (!Object.hasOwn(input, 'series')) return input;
+  const {series, ...data} = input;
+  const name = (series ?? '').trim();
+  const record = name ? await tx.gameSeries.upsert({where: {name}, create: {name}, update: {}}) : null;
+  return {...data, seriesId: record?.id ?? null};
+}
 const fs = require('node:fs');
 const { createRequire } = require('node:module');
 const { resolve } = require('node:path');
@@ -23,10 +30,10 @@ async function main() {
       const before = await counts();
       let reassigned={copies:0,marketEntries:0};
       if (apply) {
-        for (let i=0;i<plan.createGames.length;i+=200) await tx.game.createMany({data:plan.createGames.slice(i,i+200)});
-        for (const update of plan.updateGames) await tx.game.update({where:{id:update.id},data:update.data});
+        for (let i=0;i<plan.createGames.length;i+=200) await tx.game.createMany({data:await Promise.all(plan.createGames.slice(i,i+200).map(game => linkedSeries(tx, game)))});
+        for (const update of plan.updateGames) await tx.game.update({where:{id:update.id},data:await linkedSeries(tx, update.data)});
         for (let i=0;i<plan.createEditions.length;i+=200) await tx.edition.createMany({data:plan.createEditions.slice(i,i+200)});
-        for (const update of plan.updateEditions) await tx.edition.update({where:{id:update.id},data:update.data});
+        for (const update of plan.updateEditions) await tx.edition.update({where:{id:update.id},data:await linkedSeries(tx, update.data)});
         const protectedGame = game=>{const {coverImage,updatedAt,...rest}=game;return rest;};
         for (const old of games) if (JSON.stringify(protectedGame(old))!==JSON.stringify(protectedGame(await tx.game.findUniqueOrThrow({where:{id:old.id}})))) throw Error('Existing game metadata changed; rollback');
         for (const old of editions) {
