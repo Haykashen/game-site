@@ -185,6 +185,7 @@ model Session {
 }
 
 model Game {
+  recognitionPending Boolean @default(false) @map("recognition_pending")
   id          String   @id
   title       String   @unique
   publisher   String
@@ -243,6 +244,7 @@ model GameRating {
 }
 
 model Edition {
+  recognitionPending Boolean @default(false) @map("recognition_pending")
   id             String    @id
   gameId         String    @map("game_id")
   name           String

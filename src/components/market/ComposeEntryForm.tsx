@@ -1,3 +1,4 @@
+import { RecognizeGame } from './RecognizeGame';
 import { Gavel, Tag, X } from 'lucide-react';
 import { useState } from 'react';
 import { MARKET_ITEM_OPTIONS, marketItemLabel, type MarketItemType } from '@discvault/shared';
@@ -64,8 +65,8 @@ function formatDateTimeLocal(date: Date): string {
 export function ComposeEntryForm({
   kind,
   initialListingType,
-  games,
-  editions,
+  games: catalogGames,
+  editions: catalogEditions,
   initialGameId,
   initialEditionId,
   entry,
@@ -73,6 +74,10 @@ export function ComposeEntryForm({
   onSubmit,
   onCancel,
 }: ComposeEntryFormProps) {
+  const [recognizedGames, setRecognizedGames] = useState<Game[]>([]);
+  const [recognizedEditions, setRecognizedEditions] = useState<Edition[]>([]);
+  const games = [...catalogGames.filter(game => !recognizedGames.some(item => item.id === game.id)), ...recognizedGames];
+  const editions = [...catalogEditions.filter(edition => !recognizedEditions.some(item => item.id === edition.id)), ...recognizedEditions];
   const isEditing = Boolean(entry);
   const formKind = entry?.kind ?? kind;
   const isAuction = formKind === 'auction';
@@ -291,6 +296,13 @@ export function ComposeEntryForm({
       </p>
 
       <form className="market-form" onSubmit={handleSubmit}>
+        {!isEditing && !isLoot && <RecognizeGame photo={photos[0]} onSelect={(match, source) => {
+          setRecognizedGames(previous => [...previous.filter(game => game.id !== match.game.id), match.game]);
+          setRecognizedEditions(previous => [...previous.filter(edition => edition.id !== match.edition.id), match.edition]);
+          setGameId(match.game.id); setEditionId(match.edition.id);
+          setTitle(previous => previous || `${match.game.title} · ${match.edition.platform}`);
+          setPhotos(previous => previous.includes(source) ? previous : previous.length < 6 ? [...previous, source] : previous);
+        }} />}
         <div className="market-form__grid">
           <FormField id="marketItemType" label="Что размещаете" className="market-form__full">
             <select id="marketItemType" className="form-control" value={itemType} required

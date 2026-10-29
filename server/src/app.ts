@@ -1,3 +1,4 @@
+import { registerRecognitionRoutes } from './recognition/routes.js';
 import cookie from '@fastify/cookie';
 import { registerAdminDataRoutes } from './admin/routes.js';
 import cors from '@fastify/cors';
@@ -246,6 +247,7 @@ export async function buildApp() {
   registerUserAdminRoutes(app);
   registerAdminDataRoutes(app);
   registerCatalogRoutes(app);
+  registerRecognitionRoutes(app);
   registerGameRatingRoutes(app);
   registerCollectionRoutes(app);
   registerMarketRoutes(app);

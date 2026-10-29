@@ -4266,3 +4266,5 @@
 .copy-form__fields {border:0;padding:0;margin:0;min-width:0;}
 
 .game-detail__actions .game-cta__btn > svg,.game-detail__actions .game-cta__btn:hover > svg {color:var(--text-main);}
+
+.recognize-game {border:1px solid var(--border-color);border-radius:10px;padding:16px;display:grid;gap:10px;} .recognize-game fieldset {display:grid;gap:10px;} .recognize-game label {display:grid;gap:6px;font-size:13px;} .recognize-game .btn-secondary {margin:4px 6px 4px 0;}

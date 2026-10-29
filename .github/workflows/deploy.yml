@@ -45,7 +45,7 @@ jobs:
       - run: npm run db:validate
       - run: npm run db:migrate
       - run: npm run typecheck:server
-      - run: node --import tsx --test scripts/market-items.test.ts scripts/game-rating.test.ts
+      - run: node --import tsx --test scripts/market-items.test.ts scripts/game-rating.test.ts scripts/recognition.test.ts
       - run: node --import tsx --test scripts/admin-data.test.ts scripts/admin-data-database.test.ts
       - run: node --import tsx --test scripts/api-catalog.test.ts scripts/catalog-database.test.ts
       - run: node --import tsx --test scripts/dns-catalog.test.cjs scripts/merge-dns-catalog.test.cjs scripts/edition-dedup.test.cjs scripts/showgames-catalog.test.cjs scripts/edition-artwork.test.ts
@@ -110,6 +110,7 @@ jobs:
           mkdir bundle
           docker save "discvault-api:$GITHUB_SHA" "discvault-web:$GITHUB_SHA" | gzip > bundle/images.tar.gz
           cp deploy/auto-deploy.sh bundle/deploy.sh
+          cp deploy/configure-recognition.sh bundle/
           cp deploy/check-migrations.mjs deploy/migration-state.mjs bundle/
           printf '%s\n' "$GITHUB_SHA" > bundle/revision
           tar -czf release.tar.gz -C bundle .
@@ -123,6 +124,7 @@ jobs:
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
           DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           APPLY_MIGRATIONS: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_migrations && 'true' || 'false' }}
         shell: bash
         run: |
@@ -139,4 +141,8 @@ jobs:
           ssh_options=(-i "$key_dir/key" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o "UserKnownHostsFile=$key_dir/known_hosts" -o ConnectTimeout=15 -o ServerAliveInterval=15 -o ServerAliveCountMax=8)
           ssh -p "$port" "${ssh_options[@]}" "$remote" "umask 077; mkdir -p '$incoming'"
           scp -P "$port" "${ssh_options[@]}" release.tar.gz release.tar.gz.sha256 "$remote:$incoming/"
-          ssh -p "$port" "${ssh_options[@]}" "$remote" "cd '$incoming' && sha256sum -c release.tar.gz.sha256 && tar -xzf release.tar.gz && bash deploy.sh '$DEPLOY_PATH' '$GITHUB_SHA' '$APPLY_MIGRATIONS'"
+          ssh -p "$port" "${ssh_options[@]}" "$remote" "cd '$incoming' && sha256sum -c release.tar.gz.sha256 && tar -xzf release.tar.gz"
+          if [[ -n "$GEMINI_API_KEY" ]]; then
+            printf '%s\n' "$GEMINI_API_KEY" | ssh -p "$port" "${ssh_options[@]}" "$remote" "bash '$incoming/configure-recognition.sh' '$DEPLOY_PATH'"
+          fi
+          ssh -p "$port" "${ssh_options[@]}" "$remote" "cd '$incoming' && bash deploy.sh '$DEPLOY_PATH' '$GITHUB_SHA' '$APPLY_MIGRATIONS'"
