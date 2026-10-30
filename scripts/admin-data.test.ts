@@ -272,6 +272,34 @@ test('dependent rows block deletion with an actionable table name', async () => 
   } finally {await app.close();}
 });
 
+test('game deletion preview reports dependencies and deletion rechecks them', async () => {
+  const {app, rows} = await fixture();
+  rows.get('game')!.push({id: 'disposable', title: 'Disposable', updatedAt: now});
+  const url = path('Game', {id: 'disposable'});
+  try {
+    const preview = await app.inject({method: 'GET', url: url + '/dependencies', headers});
+    assert.equal(preview.statusCode, 200, preview.body);
+    assert.deepEqual(preview.json().dependencies, []);
+    for (const role of ['moderator', 'user']) {
+      const denied = await app.inject({method: 'GET', url: url + '/dependencies', headers: {'x-test-role': role}});
+      assert.equal(denied.statusCode, 403);
+    }
+    rows.get('edition')!.push({id: 'new-edition', gameId: 'disposable'});
+    const blocked = await app.inject({method: 'DELETE', url, headers, payload: {expectedUpdatedAt: now.toISOString()}});
+    assert.equal(blocked.statusCode, 409, blocked.body);
+    const linked = await app.inject({method: 'GET', url: url + '/dependencies', headers});
+    assert.deepEqual(linked.json().dependencies, ['Издания: 1']);
+    rows.get('edition')!.length = 0;
+    const stale = await app.inject({method: 'DELETE', url, headers, payload: {expectedUpdatedAt: '2020-01-01T00:00:00.000Z'}});
+    assert.equal(stale.statusCode, 409, stale.body);
+    const removed = await app.inject({method: 'DELETE', url, headers, payload: {expectedUpdatedAt: now.toISOString()}});
+    assert.equal(removed.statusCode, 204, removed.body);
+    assert.equal(rows.get('game')!.length, 0);
+    const missing = await app.inject({method: 'GET', url: url + '/dependencies', headers});
+    assert.equal(missing.statusCode, 404);
+  } finally {await app.close();}
+});
+
 test('composite keys are routed intact and unknown tables and sort columns are rejected', async () => {
   const {app, rows} = await fixture();
   const record = {userId: otherId, gameId: 'long-game-' + 'x'.repeat(80), score: 8, updatedAt: now};

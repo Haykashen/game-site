@@ -1,11 +1,11 @@
 import { ReferenceCombobox } from './ReferenceCombobox';
 import { useEffect, useId, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { X } from 'lucide-react';
+import { Trash2, X } from 'lucide-react';
 import type { AdminField, AdminRecord, AdminReference, AdminTable, AdminValue } from '@discvault/shared';
 import { adminOptionLabel } from '@discvault/shared';
 import { ApiError, errorMessage } from '../../api/client';
-import { createAdminRecord, deleteAdminRecord, fetchAdminRecord, fetchAdminReferences, updateAdminRecord } from '../../api/adminData';
+import { createAdminRecord, deleteAdminRecord, fetchAdminDependencies, fetchAdminRecord, fetchAdminReferences, updateAdminRecord } from '../../api/adminData';
 import { useDebouncedValue } from '../../hooks/useDebouncedValue';
 import { ModalShell } from '../ui/ModalShell';
 
@@ -67,13 +67,14 @@ function LegacyReferenceInput({field, value, onChange, required, inputId, select
   </div>;
 }
 
-export function AdminRecordDialog({table, editor, onClose, onSaved, title}: {table: AdminTable; editor: AdminEditor; onClose: () => void; onSaved: (record?: AdminRecord) => void | Promise<void>; title?: string}) {
+export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDelete}: {table: AdminTable; editor: AdminEditor; onClose: () => void; onSaved: (record?: AdminRecord) => void | Promise<void>; title?: string; onDelete?: () => void}) {
   const [record, setRecord] = useState<AdminRecord>({});
   const [values, setValues] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(editor.mode !== 'create');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(editor.mode === 'create');
+  const [dependencies, setDependencies] = useState<string[] | null>(null);
   const titleId = useId();
   const deleting = editor.mode === 'delete';
   const creating = editor.mode === 'create';
@@ -90,7 +91,17 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title}: {tab
     return () => controller.abort();
   }, [table, editor.key]);
 
+  useEffect(() => {
+    if (!deleting || !editor.key) return;
+    const controller = new AbortController();
+    void fetchAdminDependencies(table.name, editor.key, controller.signal)
+      .then(result => {if (!controller.signal.aborted) setDependencies(result.dependencies);})
+      .catch((cause: unknown) => {if (!controller.signal.aborted) setError(formatError(cause));});
+    return () => controller.abort();
+  }, [deleting, editor.key, table.name]);
+
   async function submit() {
+    if (deleting && (dependencies === null || dependencies.length > 0)) return;
     setSaving(true); setError('');
     try {
       let savedRecord: AdminRecord | undefined;
@@ -134,6 +145,7 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title}: {tab
       {loaded && (deleting ? <div className="admin-data__delete-note">
         <p>{table.name === 'Session' ? 'Пользователю потребуется снова войти в аккаунт.' : 'Запись будет удалена без возможности восстановления. Если на неё ссылаются другие записи, сервер укажет связанные таблицы — сначала нужно удалить или переназначить эти записи.'}</p>
         <strong>{String(record.displayName ?? record.title ?? record.name ?? record.id ?? editor.key)}</strong>
+        {dependencies === null ? <p role="status">Проверяем связанные записи…</p> : dependencies.length > 0 ? <div role="alert"><p>Сначала удалите или переназначьте связанные записи:</p><ul>{dependencies.map(item => <li key={item}>{item}</li>)}</ul></div> : <p>Связанных записей, препятствующих удалению, нет.</p>}
       </div> : <div className="admin-data__fields">{fields.map((field) => {
         const value = values[field.name] ?? '';
         const required = field.required && (creating || field.type !== 'password');
@@ -153,8 +165,8 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title}: {tab
       {!creating && loaded && !deleting && <details className="admin-data__readonly"><summary>Служебные поля и статистика — только чтение</summary>
         <dl>{table.fields.filter((field) => field.readOnly || field.primary).map((field) => <div key={field.name}><dt>{field.label}</dt><dd>{String(record[field.name] ?? '—')}</dd></div>)}</dl>
       </details>}
-      <div className="admin-data__editor-footer"><button type="button" className="btn-secondary" disabled={saving} onClick={onClose}>Отмена</button>
-        <button type="submit" className={deleting ? 'btn-secondary admin-data__danger' : 'btn-primary'} disabled={saving || loading || !loaded}>{saving ? 'Сохраняем…' : deleting ? table.name === 'Session' ? 'Отозвать' : 'Удалить' : 'Сохранить'}</button>
+      <div className="admin-data__editor-footer">{onDelete && editor.mode === 'edit' && table.canDelete && <button type="button" className="btn-secondary admin-data__danger" style={{marginRight: 'auto'}} disabled={saving || loading || !loaded} onClick={onDelete}><Trash2 size={16} aria-hidden="true" />Удалить игру</button>}<button type="button" className="btn-secondary" disabled={saving} onClick={onClose}>Отмена</button>
+        <button type="submit" className={deleting ? 'btn-secondary admin-data__danger' : 'btn-primary'} disabled={saving || loading || !loaded || (deleting && (dependencies === null || dependencies.length > 0))}>{saving ? 'Сохраняем…' : deleting ? table.name === 'Session' ? 'Отозвать' : 'Удалить' : 'Сохранить'}</button>
       </div>
     </form>
   </ModalShell>;

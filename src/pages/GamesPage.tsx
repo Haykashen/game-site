@@ -50,9 +50,10 @@ export function GamesPage() {
   }, [catalog.canLoad, catalog.loading, catalog.error, catalog.hasMore, catalog.loadMore, gameId, editor]);
 
   async function saved(record?: AdminRecord) {
+    if (editor?.mode === 'delete') closeGame();
     await catalog.refresh();
     setBrowserRevision((revision) => revision + 1);
-    setNotice(editor?.mode === 'create' ? 'Игра добавлена.' : 'Изменения игры сохранены.');
+    setNotice(editor?.mode === 'create' ? 'Игра добавлена.' : editor?.mode === 'delete' ? 'Игра удалена.' : 'Изменения игры сохранены.');
     if (editor?.mode === 'create' && typeof record?.id === 'string') openGame(record.id);
     window.scrollTo(0, 0);
   }
@@ -93,7 +94,7 @@ export function GamesPage() {
         {catalog.items.length > 0 && <span>Показано {catalog.items.length} из {catalog.total}</span>}
         {catalog.hasMore && !catalog.error && catalog.canLoad && <button type="button" className="btn-secondary" disabled={catalog.loading} onClick={(event) => {if (event.detail > 0) event.currentTarget.blur(); void catalog.loadMore();}}>{catalog.loading ? 'Загружаем…' : 'Загрузить ещё'}</button>}
       </div>
-      {isModerator && gameTable && editor && <AdminRecordDialog key={`${editor.mode}:${editor.key}`} table={gameTable} editor={editor} title={editor.mode === 'create' ? 'Добавить игру' : 'Редактировать игру'} onClose={() => setEditor(null)} onSaved={saved} />}
+      {isModerator && gameTable && editor && <AdminRecordDialog key={`${editor.mode}:${editor.key}`} table={gameTable} editor={editor} title={editor.mode === 'create' ? 'Добавить игру' : editor.mode === 'delete' ? 'Удалить игру' : 'Редактировать игру'} onClose={() => setEditor(null)} onSaved={saved} {...(isAdmin ? {onDelete: () => setEditor({mode: 'delete', key: editor.key})} : {})} />}
     </>
   );
 }

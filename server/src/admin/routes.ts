@@ -101,7 +101,7 @@ async function protectUser(tx: Prisma.TransactionClient, adminId: string, old: R
 }
 
 /** Refuse implicit cascade deletion. Related rows can be managed in their own tables. */
-async function checkDependencies(tx: Prisma.TransactionClient, table: AdminTable, old: Row) {
+async function listDependencies(tx: Prisma.TransactionClient, table: AdminTable, old: Row) {
   const dependencies: string[] = [];
   for (const model of models) {
     if (table.name === 'User' && model.name === 'Session') continue; // Session revocation is automatic.
@@ -111,6 +111,11 @@ async function checkDependencies(tx: Prisma.TransactionClient, table: AdminTable
       if (count) dependencies.push(`${TABLE_LABELS[model.name]}: ${count}`);
     }
   }
+  return dependencies;
+}
+
+async function checkDependencies(tx: Prisma.TransactionClient, table: AdminTable, old: Row) {
+  const dependencies = await listDependencies(tx, table, old);
   if (dependencies.length) throw conflict('RELATED_RECORDS', 'Сначала удалите или переназначьте связанные записи: ' + dependencies.join('; ') + '.');
 }
 
@@ -170,6 +175,16 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
     const row = await delegate(app.prisma, name).findFirst({where: parseKey(table, key), select: recordSelect(table)});
     if (!row) throw notFound();
     return {record: row};
+  });
+  app.get('/api/v1/admin/data/:table/records/:key/dependencies', auth, async (request) => {
+    requireRoles(request, ['admin']);
+    const {table: name, key} = request.params as {table: string; key: string};
+    const table = getTable(name);
+    return app.prisma.$transaction(async (tx) => {
+      const row = await delegate(tx, name).findFirst({where: parseKey(table, key), select: recordSelect(table)});
+      if (!row) throw notFound();
+      return {dependencies: await listDependencies(tx, table, row)};
+    }, {isolationLevel: 'RepeatableRead'});
   });
   app.post('/api/v1/admin/data/:table/records', auth, async (request, reply) => {
     requireRoles(request, ['admin']);
