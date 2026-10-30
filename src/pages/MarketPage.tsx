@@ -1,6 +1,6 @@
 import { Plus, RotateCcw, UserRound } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { PageHeading } from '../components/PageHeading';
 import { SearchToolbar } from '../components/SearchToolbar';
 import { MarketCard } from '../components/market/MarketCard';
@@ -107,6 +107,8 @@ export function MarketPage({ kind, listingType }: MarketPageProps) {
     kind === 'listing' ? (selectedListingType ?? 'listing') : kind;
   const copy = COPY[copyKey];
   const navigate = useNavigate();
+  const [marketParams, setMarketParams] = useSearchParams();
+  const gameFilter = marketParams.get('gameFilter') ?? '';
   const { user } = useAuth();
   const { games, editions } = useCollection();
   const {
@@ -143,8 +145,8 @@ export function MarketPage({ kind, listingType }: MarketPageProps) {
     [editions],
   );
   const kindItems = useMemo(
-    () => entries.filter((entry) => entry.kind === kind),
-    [entries, kind],
+    () => entries.filter((entry) => entry.kind === kind && (!gameFilter || entry.gameId === gameFilter)),
+    [entries, kind, gameFilter],
   );
   const scopedItems = useMemo(
     () =>
@@ -302,6 +304,7 @@ export function MarketPage({ kind, listingType }: MarketPageProps) {
         }
       />
 
+      {gameFilter && <p className="market-game-filter">Игра: {gamesById.get(gameFilter)?.title ?? 'Выбранная игра'} <button type="button" className="btn-secondary" onClick={() => setMarketParams(previous => {const next = new URLSearchParams(previous);next.delete('gameFilter');return next;})}>Снять фильтр</button></p>}
       <ApiState loading={isLoading} error={marketError} onRetry={refresh} />
       {isLoading || marketError ? null : baseItems.length === 0 ? (
         <div className="market-empty">

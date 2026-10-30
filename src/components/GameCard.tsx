@@ -1,11 +1,11 @@
+import { Link } from 'react-router-dom';
 import { memo } from 'react';
 import { FallbackImage } from './FallbackImage';
 import type { KeyboardEvent } from 'react';
-import { Check, Disc, Eye, Layers } from 'lucide-react';
+import { Library, Disc, Eye } from 'lucide-react';
 import { getPlatformBadgeStyle } from '../data/reference';
 import { NAV_ITEMS } from '../app/navigation';
 import { cx } from '../lib/cx';
-import { editionsCountLabel } from '../lib/market';
 import type { Game, GameStats } from '../types';
 
 interface GameCardProps {
@@ -20,6 +20,7 @@ interface GameCardProps {
  */
 function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget) return;
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       onSelect(game.id);
@@ -96,16 +97,15 @@ function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
         </div>
 
         {stats.ownedCount > 0 && (
-          <span className="badge-owned">
-            <Check size={12} /> На полке
-            {stats.ownedCount > 1 ? ` ×${stats.ownedCount}` : ''}
+          <span className="badge-owned" title={`В коллекции: ${stats.ownedCount} экз.`} aria-label={`В коллекции: ${stats.ownedCount} экз.`}>
+            <Library size={16} aria-hidden="true" /><span>× {stats.ownedCount}</span>
           </span>
         )}
       </div>
 
       <div className="card-info">
         <div>
-          <h3>{game.title}</h3>
+          <h3 title={game.title}>{game.title}</h3>
           <p className="card-meta">
             {[game.publisher, game.year].filter(value => value !== null && value !== '').join(' • ') || 'Сведения об игре уточняются'}
           </p>
@@ -114,19 +114,16 @@ function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
           )}
         </div>
         <div className="card-footer">
-          <span className="lang-info">
-            <Layers size={14} /> {editionsCountLabel(stats.editionCount)}
-          </span>
           <div className="card-market-stats" aria-label="Активные предложения по игре">
             {marketStats.map(({ section, count }) => {
               const Icon = section.icon;
               const label = `${section.label}: ${count}`;
               return (
-                <span key={section.id} className={cx('card-market-stat', count === 0 && 'card-market-stat--empty')}
-                  role="img" aria-label={label} title={label}>
+                <Link to={`${section.path}?gameFilter=${encodeURIComponent(game.id)}`} onClick={event => event.stopPropagation()} key={section.id} className={cx('card-market-stat', `card-market-stat--${section.id}`, count === 0 && 'card-market-stat--empty')}
+                  aria-label={`${section.label} по игре ${game.title}: ${count}`} title={label}>
                   <Icon size={14} aria-hidden="true" />
-                  <span aria-hidden="true">{count}</span>
-                </span>
+                  <span className="card-market-stat__count" aria-hidden="true">{count}</span><span className="card-market-stat__label">{section.id === 'auctions' ? 'Лоты' : section.id === 'exchange' ? 'Обмены' : section.label}</span>
+                </Link>
               );
             })}
           </div>
