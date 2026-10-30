@@ -24,7 +24,7 @@ function buildEditionFilter(query: {
   const filter: Prisma.EditionWhereInput = {canonicalId: null};
 
   if (query.platform) filter.platform = query.platform;
-  if (query.region) filter.region = query.region;
+  if (query.region) filter.region = {is:{code:query.region}};
   if (query.edition) filter.name = query.edition;
   if (query.lang) filter.lang = { contains: query.lang, mode: 'insensitive' };
 
@@ -61,7 +61,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
                   OR: [
                     { name: { contains: q, mode: 'insensitive' } },
                     { platform: { contains: q, mode: 'insensitive' } },
-                    { region: { contains: q, mode: 'insensitive' } },
+                    { region: {is:{OR:[{code:{contains:q,mode:'insensitive'}},{name:{contains:q,mode:'insensitive'}}]}} },
                     { lang: { contains: q, mode: 'insensitive' } },
                   ],
                 },
@@ -174,7 +174,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
       include: { series: true, genres: true,
         editions: {
           where: {canonicalId:null},
-          include: {variants:true},
+          include: {region:true, variants:{include:{region:true}}},
           orderBy: [{ platform: 'asc' }, { name: 'asc' }, { id: 'asc' }],
         },
       },
@@ -196,7 +196,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
 
     if (query.gameId) and.push({ gameId: query.gameId });
     if (query.platform) and.push({ platform: query.platform });
-    if (query.region) and.push({ region: query.region });
+    if (query.region) and.push({ region: {is:{code:query.region}} });
     if (query.edition) and.push({ name: query.edition });
     if (query.lang) and.push({ lang: { contains: query.lang, mode: 'insensitive' } });
 
@@ -206,7 +206,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
         OR: [
           { name: { contains: q, mode: 'insensitive' } },
           { platform: { contains: q, mode: 'insensitive' } },
-          { region: { contains: q, mode: 'insensitive' } },
+          { region: {is:{OR:[{code:{contains:q,mode:'insensitive'}},{name:{contains:q,mode:'insensitive'}}]}} },
           { lang: { contains: q, mode: 'insensitive' } },
           { game: { title: { contains: q, mode: 'insensitive' } } },
         ],
@@ -220,7 +220,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
       app.prisma.edition.count({ where }),
       app.prisma.edition.findMany({
         where,
-        include: {variants:true},
+        include: {region:true, variants:{include:{region:true}}},
         orderBy: [{ gameId: 'asc' }, { platform: 'asc' }, { name: 'asc' }, { id: 'asc' }],
         skip,
         take: query.pageSize,
@@ -237,7 +237,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
 
     const edition = await app.prisma.edition.findUnique({
       where: { id: await resolveEditionId(app.prisma,id) },
-      include: { game: {include: {series: true, genres: true}}, variants:true },
+      include: { region:true, game: {include: {series: true, genres: true}}, variants:{include:{region:true}} },
     });
 
     if (!edition) throw notFound('Издание не найдено.');
@@ -251,13 +251,13 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
   });
 
   app.get('/api/v1/catalog/filters', async (_request, reply) => {
-    const releases = await app.prisma.edition.findMany({ where: {canonicalId:null}, select: { platform: true, lang: true, region: true, name: true } });
-    const unique = (key: 'platform' | 'lang' | 'region' | 'name') => [...new Set(releases.map((edition) => edition[key]))].filter(Boolean).sort();
+    const releases = await app.prisma.edition.findMany({ where: {canonicalId:null}, select: { platform: true, lang: true, region: {select:{code:true}}, name: true } });
+    const unique = (key: 'platform' | 'lang' | 'name') => [...new Set(releases.map((edition) => edition[key]))].filter(Boolean).sort();
     const body: CatalogFiltersDto = {
       platforms: unique('platform').map((name) => seedPlatforms.find((platform) => platform.name === name)
         ?? { name, group: 'Другие', color: '#64748b', textColor: '#ffffff' }),
       languages: unique('lang'),
-      regions: unique('region'),
+      regions: [...new Set(releases.map(edition=>edition.region.code))].sort(),
       editions: unique('name'),
       completeness: seedFilters.completeness,
       yearRanges: seedFilters.yearRanges,

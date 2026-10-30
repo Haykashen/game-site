@@ -1,3 +1,4 @@
+import {resolveRegion} from '../src/lib/regions.js';
 import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 import editionsJson from '../../src/data/editions.json';
@@ -74,7 +75,7 @@ async function seedCatalog(): Promise<void> {
       gameId: edition.gameId,
       name: edition.name,
       platform: edition.platform,
-      region: edition.region,
+      regionId: (await resolveRegion(prisma, edition.region)).id,
       lang: edition.lang,
       media: edition.media,
       releaseDate: releaseDate(edition.releaseDate),

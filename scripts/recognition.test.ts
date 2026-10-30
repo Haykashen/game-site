@@ -20,9 +20,9 @@ test('recognition handles missing key, model failures, matching and signed confi
   const app=Fastify();
   let writes=0;
   const game={id:'game',title:'Frostpunk',publisher:'',developer:'',series:'',year:null,genres:[],description:'',coverImage:''};
-  const edition={id:'edition',gameId:'game',name:'Console Edition',platform:'Xbox One',region:'PAL',lang:'Русский',media:'Disc',releaseDate:null,description:'',contents:[],coverImages:[],barcode:'',dnsProductId:'',dnsProductCode:''};
+  const edition={id:'edition',gameId:'game',name:'Console Edition',platform:'Xbox One',region:{code:'EUR'},lang:'Русский',media:'Disc',releaseDate:null,description:'',contents:[],coverImages:[],barcode:'',dnsProductId:'',dnsProductCode:''};
   let createdPending = false;
-  const tx={game:{findMany:async()=>[game],create:async({data}:{data:Record<string,unknown>})=>{createdPending=data.recognitionPending===true;return game;}},edition:{findFirst:async():Promise<typeof edition|null>=>edition,create:async({data}:{data:Record<string,unknown>})=>{assert.equal(data.recognitionPending,true);return edition;}},$executeRaw:async()=>0};
+  const tx={region:{findFirst:async()=>({id:'region',code:'EUR'}),findUniqueOrThrow:async()=>({id:'region',code:'EUR'})},game:{findMany:async()=>[game],create:async({data}:{data:Record<string,unknown>})=>{createdPending=data.recognitionPending===true;return game;}},edition:{findFirst:async():Promise<typeof edition|null>=>edition,create:async({data}:{data:Record<string,unknown>})=>{assert.equal(data.recognitionPending,true);return edition;}},$executeRaw:async()=>0};
   app.decorate('prisma',{game:{findMany:async()=>[{...game,editions:[edition]}]},$transaction:async(action:(value:unknown)=>unknown)=>{writes++;return action(tx);}} as unknown as PrismaClient);
   app.decorateRequest('user',null);
   app.decorate('authenticate',async request=>{request.user={id:'user',email:'test@example.com',displayName:'Test',role:'user',status:'active',isDemo:false};});
@@ -35,7 +35,7 @@ test('recognition handles missing key, model failures, matching and signed confi
     process.env.GEMINI_API_KEY='test-only';
     globalThis.fetch=async()=>new Response('unavailable',{status:429});
     assert.equal((await app.inject({method:'POST',url,payload})).statusCode,502);
-    const facts={title:'Frostpunk',platform:'Xbox One',edition:'Console Edition',region:'PAL',language:'Русский',barcode:'',identified:true};
+    const facts={title:'Frostpunk',platform:'Xbox One',edition:'Console Edition',region:'EUR',language:'Русский',barcode:'',identified:true};
     globalThis.fetch=async()=>Response.json({candidates:[{content:{parts:[{text:JSON.stringify(facts)}]}}]});
     const result=await app.inject({method:'POST',url,payload});assert.equal(result.statusCode,200,result.body);assert.equal(result.json().matches[0].edition.id,'edition');assert.equal(writes,0);
     const invalid=await app.inject({method:'POST',url:url+'/confirm',payload:{token:result.json().token+'tampered'}});assert.equal(invalid.statusCode,400);assert.equal(writes,0);

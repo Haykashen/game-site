@@ -2,8 +2,12 @@ const {prioritizeImages}=require('./cover-images.cjs');
 const normalize = value => String(value??'').normalize('NFKC').toLowerCase().replace(/[’‘]/g,"'").replace(/\s+/g,' ').trim();
 const unknown = value => ['не указан','не указано','unknown',''].includes(normalize(value)) ? '' : normalize(value);
 const editionName = value => ['standard','стандартное издание'].includes(normalize(value)) ? 'standard' : normalize(value);
+function regionKey(value) {
+ const raw=normalize(value?.code??value);
+ return ({'':'eur','не указан':'eur','не указано':'eur','unknown':'eur','pal':'eur','eu':'eur','ntsc-j':'jpn','jp':'jpn','ntsc-u':'usa','ntsc-u/c':'usa','us':'usa','ru':'rus'})[raw]??raw;
+}
 function editionKey(edition) {
-  return JSON.stringify([edition.gameId,normalize(edition.platform),editionName(edition.name),unknown(edition.region),
+  return JSON.stringify([edition.gameId,normalize(edition.platform),editionName(edition.name),regionKey(edition.region ?? edition.regionId),
     String(edition.lang??'').split(',').map(unknown).filter(Boolean).sort(),unknown(edition.media)]);
 }
 function planEditionDedup(editions) {

@@ -31,7 +31,7 @@ function formatError(cause: unknown): string {
 }
 
 function ReferenceInput(props: Parameters<typeof LegacyReferenceInput>[0]) {
-  if (props.field.reference === 'GameSeries' || props.field.reference === 'GameGenre') return <ReferenceCombobox {...props} reference={props.field.reference} multiple={props.field.type === 'list'} />;
+  if (props.field.reference === 'GameSeries' || props.field.reference === 'GameGenre' || props.field.reference === 'Region') return <ReferenceCombobox {...props} reference={props.field.reference} multiple={props.field.type === 'list'} />;
   return <LegacyReferenceInput {...props} />;
 }
 function LegacyReferenceInput({field, value, onChange, required, inputId, selectedNames = {}}: {selectedNames?: Record<string,string>; field: AdminField; value: string; onChange: (value: string) => void; required: boolean; inputId: string}) {

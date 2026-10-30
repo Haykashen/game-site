@@ -24,7 +24,7 @@ export function buildMarketWhere(
 
   const editionFilter: Prisma.EditionWhereInput = {};
   if (query.platform) editionFilter.platform = query.platform;
-  if (query.region) editionFilter.region = query.region;
+  if (query.region) editionFilter.region = {is:{code:query.region}};
   if (query.edition) editionFilter.name = query.edition;
   if (query.lang) editionFilter.lang = { contains: query.lang, mode: 'insensitive' };
   if (Object.keys(editionFilter).length > 0) {
@@ -60,7 +60,7 @@ export function buildMarketWhere(
         { game: { title: { contains: q, mode: 'insensitive' } } },
         { edition: { name: { contains: q, mode: 'insensitive' } } },
         { edition: { platform: { contains: q, mode: 'insensitive' } } },
-        { edition: { region: { contains: q, mode: 'insensitive' } } },
+        { edition: { region: {is:{code:{contains:q,mode:'insensitive'}}} } },
         { edition: { lang: { contains: q, mode: 'insensitive' } } },
       ],
     });

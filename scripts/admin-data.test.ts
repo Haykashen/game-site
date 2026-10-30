@@ -117,7 +117,7 @@ test('server supplies distinct game and edition UUIDs; Prisma defaults and compo
   const body = {title: 'Game', publisher: 'Test', description: 'Description', genres: []};
   const first = parseCreateData(getTable('Game'), body);
   const second = parseCreateData(getTable('Game'), body);
-  const edition = parseCreateData(getTable('Edition'), {gameId: first.id, name: 'Standard', platform: 'PS5', region: 'RU', lang: 'Русский', media: 'Disc', contents: [], coverImages: []});
+  const edition = parseCreateData(getTable('Edition'), {gameId: first.id, name: 'Standard', platform: 'PS5', regionId: otherId, lang: 'Русский', media: 'Disc', contents: [], coverImages: []});
   const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
   for (const data of [first, second, edition]) assert.match(String(data.id), uuid);
   assert.notEqual(first.id, second.id);
@@ -424,4 +424,11 @@ test('game genres connect only selected directory IDs and support clearing', () 
   assert.equal(table.fields.find(field=>field.name==='genres')?.reference,'GameGenre');
   assert.deepEqual(parseData(table,{genres:[otherId,otherId]},false).genres,{set:[{id:otherId}]});
   assert.deepEqual(parseData(table,{genres:[]},false).genres,{set:[]});
+});
+test('edition region is a required reference with a database default',()=>{
+ const table=getTable('Edition');
+ assert.equal(table.fields.some(field=>field.name==='region'),false);
+ const region=table.fields.find(field=>field.name==='regionId')!;
+ assert.equal(region.reference,'Region');assert.equal(region.nullable,false);assert.equal(region.generated,true);
+ assert.throws(()=>parseData(table,{region:'EUR'},false),AppError);
 });

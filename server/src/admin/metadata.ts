@@ -23,7 +23,7 @@ const FIELD_LABELS: Record<string, string> = {
   userId: 'Пользователь', userAgent: 'Браузер', ip: 'IP', expiresAt: 'Истекает', lastUsedAt: 'Последняя активность',
   title: 'Название', publisher: 'Издатель', developer: 'Разработчик', series: 'Серия', seriesId: 'Серия',
   year: 'Год', genres: 'Жанры', description: 'Описание', coverImage: 'Обложка', gameId: 'Игра',
-  recognitionPending: 'Требует проверки после распознавания', score: 'Оценка', name: 'Название', platform: 'Платформа', region: 'Регион', lang: 'Язык',
+  recognitionPending: 'Требует проверки после распознавания', score: 'Оценка', name: 'Название', platform: 'Платформа', region: 'Регион', regionId: 'Регион', lang: 'Язык',
   media: 'Носитель', releaseDate: 'Дата выхода', contents: 'Комплектация', coverImages: 'Обложки',
   barcode: 'Штрихкод', dnsProductId: 'ID товара DNS', dnsProductCode: 'Код товара DNS', canonicalId: 'Основное издание',
   editionId: 'Издание', condition: 'Состояние', completeness: 'Комплектность',

@@ -56,7 +56,7 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
     assert.equal((await prisma.game.findUniqueOrThrow({where: {id: gameId}, include: {series: true}})).series?.name, 'Renamed series ' + suffix);
     const blockedSeries = await app.inject({method: 'DELETE', url: path('GameSeries', {id: seriesRecord.id}), payload: {expectedUpdatedAt: null}});
     assert.notEqual(blockedSeries.statusCode, 204);
-    const editionId = (await create('Edition', {gameId, name: 'Standard', platform: 'PS5', region: 'RU', lang: 'Русский', media: 'Disc', contents: [], coverImages: [], releaseDate: '2026-01-02T00:00:00.000Z'})).id;
+    const editionId = (await create('Edition', {gameId, name: 'Standard', platform: 'PS5', regionId: regionRecord.id, lang: 'Русский', media: 'Disc', contents: [], coverImages: [], releaseDate: '2026-01-02T00:00:00.000Z'})).id;
     await create('GameRating', {userId: buyerId, gameId, score: 8}, ['userId', 'gameId']);
     await patch('GameRating', {userId: buyerId, gameId}, {score: 0});
     assert.equal((await prisma.gameRating.findUniqueOrThrow({where: {userId_gameId: {userId: buyerId, gameId}}})).score, 0);

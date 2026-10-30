@@ -1,3 +1,4 @@
+import {resolveRegion,regionCode} from '../lib/regions.js';
 import { storePhotoReference } from '../lib/storage.js';
 import { createHmac, randomBytes, randomUUID, timingSafeEqual } from 'node:crypto';
 import type { FastifyInstance } from 'fastify';
@@ -37,8 +38,8 @@ export function registerRecognitionRoutes(app: FastifyInstance) {
     const platform = recognitionPlatform(facts.platform);
     if (!facts.identified || !facts.title || !platform) throw badRequest('Автоматически определить игру и издание не удалось. Попробуйте фото коробки с читаемыми надписями.');
     facts.platform = platform;
-    const candidates = await app.prisma.game.findMany({where: {title: {contains: facts.title.split(':')[0]!, mode: 'insensitive'}}, include: {series: true, genres: true, editions: {where: {canonicalId: null}}}, take: 15});
-    const matches = candidates.flatMap(game => game.editions.filter(edition => normalized(game.title) === normalized(facts.title) && edition.platform === platform && (facts.barcode ? edition.barcode === facts.barcode : (!facts.edition || normalized(edition.name) === normalized(facts.edition)) && (!facts.region || normalized(edition.region) === normalized(facts.region)) && (!facts.language || normalized(edition.lang) === normalized(facts.language)))).map(edition => ({game: serializeGame(game), edition: serializeEdition(edition)})));
+    const candidates = await app.prisma.game.findMany({where: {title: {contains: facts.title.split(':')[0]!, mode: 'insensitive'}}, include: {series: true, genres: true, editions: {where: {canonicalId: null}, include: {region:true}}}, take: 15});
+    const matches = candidates.flatMap(game => game.editions.filter(edition => normalized(game.title) === normalized(facts.title) && edition.platform === platform && (facts.barcode ? edition.barcode === facts.barcode : (!facts.edition || normalized(edition.name) === normalized(facts.edition)) && (!facts.region || normalized(edition.region.code) === normalized(regionCode(facts.region))) && (!facts.language || normalized(edition.lang) === normalized(facts.language)))).map(edition => ({game: serializeGame(game), edition: serializeEdition(edition)})));
     if (!matches.length && !facts.edition) throw badRequest('Игра определена, но издание не удалось прочитать. Выберите его вручную или приложите другое фото.');
     const imageReference = !matches.length ? await storePhotoReference(source, 'recognition') : '';
     const payload = Buffer.from(JSON.stringify({userId: request.user.id, expires: Date.now() + 10 * 60000, facts, imageReference})).toString('base64url');
@@ -59,8 +60,9 @@ export function registerRecognitionRoutes(app: FastifyInstance) {
       await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${normalized(facts.title)}))`;
       const games = await tx.game.findMany({include: {series: true, genres: true}, where: {title: {contains: facts.title.split(/\s+/)[0]!, mode: 'insensitive'}}});
       const game = games.find(item => normalized(item.title) === normalized(facts.title)) ?? await tx.game.create({data: {id: randomUUID(), title: facts.title, publisher: '', description: '', coverImage: decoded.imageReference, recognitionPending: true}});
-      const existing = await tx.edition.findFirst({where: {gameId: game.id, platform: facts.platform, name: {equals: facts.edition, mode: 'insensitive'}, region: facts.region || 'Не указано', lang: facts.language || 'Не указано', canonicalId: null}});
-      const edition = existing ?? await tx.edition.create({data: {id: randomUUID(), gameId: game.id, name: facts.edition, platform: facts.platform, region: facts.region || 'Не указано', lang: facts.language || 'Не указано', barcode: facts.barcode, media: 'Не указано', contents: [], coverImages: decoded.imageReference ? [decoded.imageReference] : [], recognitionPending: true}});
+      const region = await resolveRegion(tx, facts.region);
+      const existing = await tx.edition.findFirst({where: {gameId: game.id, platform: facts.platform, name: {equals: facts.edition, mode: 'insensitive'}, regionId: region.id, lang: facts.language || 'Не указано', canonicalId: null}, include:{region:true}});
+      const edition = existing ?? await tx.edition.create({data: {id: randomUUID(), gameId: game.id, name: facts.edition, platform: facts.platform, regionId: region.id, lang: facts.language || 'Не указано', barcode: facts.barcode, media: 'Не указано', contents: [], coverImages: decoded.imageReference ? [decoded.imageReference] : [], recognitionPending: true},include:{region:true}});
       return {game: serializeGame(game), edition: serializeEdition(edition)};
     });
   });

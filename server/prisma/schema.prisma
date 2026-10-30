@@ -253,7 +253,8 @@ model Edition {
   gameId         String    @map("game_id")
   name           String
   platform       String
-  region         String
+  regionId       String @default(dbgenerated("default_region_id()")) @map("region_id") @db.Uuid
+  region         Region @relation(fields: [regionId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   lang           String
   media          String
   releaseDate    DateTime? @map("release_date") @db.Date
@@ -276,7 +277,7 @@ model Edition {
   @@index([gameId])
   @@index([canonicalId])
   @@index([platform])
-  @@index([region])
+  @@index([regionId])
   @@index([lang])
   @@map("editions")
 }
@@ -593,6 +594,7 @@ model NewsPost {
 }
 
 model Region {
+  editions Edition[]
   id String @id @default(uuid()) @db.Uuid
   code String @unique
   name String @unique

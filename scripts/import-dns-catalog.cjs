@@ -1,3 +1,11 @@
+async function linkedRegion(tx,input){
+ if(!Object.hasOwn(input,'region'))return input;
+ const {region,...data}=input;
+ const raw=(region??'').trim();const aliases={'':'EUR','НЕ УКАЗАНО':'EUR','UNKNOWN':'EUR','PAL':'EUR','EU':'EUR','NTSC-J':'JPN','JP':'JPN','NTSC-U':'USA','NTSC-U/C':'USA','US':'USA','RU':'RUS'};
+ const code=aliases[raw.toUpperCase()]??raw;
+ const record=await tx.region.findFirst({where:{OR:[{code:{equals:code,mode:'insensitive'}},{name:{equals:raw,mode:'insensitive'}}]}})??await tx.region.findUniqueOrThrow({where:{code:'EUR'}});
+ return {...data,regionId:record.id};
+}
 async function linkedSeries(tx, input) {
   if (Object.hasOwn(input, 'genres')) {const names=[...new Set(input.genres.flatMap(name=>name.trim().toLowerCase()==='action rpg'?['Action','RPG']:[name.trim()]).filter(Boolean))]; const records=[];for(const name of names) records.push(await tx.gameGenre.upsert({where:{name},create:{name},update:{}}));input={...input,genres:{set:records.map(({id})=>({id}))}};}
   if (!Object.hasOwn(input, 'series')) return input;
@@ -24,7 +32,7 @@ async function main() {
   try {
     const result = await prisma.$transaction(async tx => {
       if (apply) await tx.$executeRawUnsafe('LOCK TABLE "games", "editions" IN SHARE ROW EXCLUSIVE MODE');
-      const games = await tx.game.findMany({orderBy:{id:'asc'}}), editions = await tx.edition.findMany({orderBy:{id:'asc'}});
+      const games = await tx.game.findMany({orderBy:{id:'asc'}}), editionRows = await tx.edition.findMany({orderBy:{id:'asc'},include:{region:true}}), editions=editionRows.map(({region,...data})=>({...data,region:region.code}));
       const plan = planCatalog(document,games,editions);
       if (apply && plan.hash !== expected) throw Error('Plan changed; run preview again. Nothing written.');
       const counts = async()=>({users:await tx.user.count(),copies:await tx.copy.count(),market:await tx.marketEntry.count(),bids:await tx.bid.count(),deals:await tx.deal.count(),ratings:await tx.gameRating.count(),discussions:await tx.discussion.count(),news:await tx.newsPost.count()});
@@ -33,12 +41,12 @@ async function main() {
       if (apply) {
         for (const game of plan.createGames) {const data=await linkedSeries(tx,game);if(data.genres) data.genres={connect:data.genres.set};await tx.game.create({data});}
         for (const update of plan.updateGames) await tx.game.update({where:{id:update.id},data:await linkedSeries(tx, update.data)});
-        for (let i=0;i<plan.createEditions.length;i+=200) await tx.edition.createMany({data:plan.createEditions.slice(i,i+200)});
-        for (const update of plan.updateEditions) await tx.edition.update({where:{id:update.id},data:await linkedSeries(tx, update.data)});
+        for (let i=0;i<plan.createEditions.length;i+=200) await tx.edition.createMany({data:await Promise.all(plan.createEditions.slice(i,i+200).map(edition=>linkedRegion(tx,edition)))});
+        for (const update of plan.updateEditions) await tx.edition.update({where:{id:update.id},data:await linkedRegion(tx, update.data)});
         const protectedGame = game=>{const {coverImage,updatedAt,...rest}=game;return rest;};
         for (const old of games) if (JSON.stringify(protectedGame(old))!==JSON.stringify(protectedGame(await tx.game.findUniqueOrThrow({where:{id:old.id}})))) throw Error('Existing game metadata changed; rollback');
         for (const old of editions) {
-          const current = await tx.edition.findUniqueOrThrow({where:{id:old.id}});
+          const currentRow = await tx.edition.findUniqueOrThrow({where:{id:old.id},include:{region:true}});const current={...currentRow,region:currentRow.region.code};
           const mutable = new Set(['coverImages','dnsProductId','dnsProductCode','updatedAt']);
           for(const field of Object.keys(old)) if (!mutable.has(field) && JSON.stringify(old[field])!==JSON.stringify(current[field])) throw Error('Existing edition metadata changed; rollback');
         }

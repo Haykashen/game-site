@@ -95,13 +95,13 @@ export function serializeGame(game: Game & {series?: {name: string} | null; genr
   };
 }
 
-export function serializeEdition(edition: Edition & {variants?: Edition[]}): EditionDto {
+export function serializeEdition(edition: Edition & {region?: {code:string}; variants?: (Edition & {region?: {code:string}})[]}): EditionDto {
   return {
     id: edition.id,
     gameId: edition.gameId,
     name: edition.name,
     platform: edition.platform,
-    region: edition.region,
+    region: edition.region?.code ?? 'EUR',
     lang: edition.lang,
     media: edition.media,
     releaseDate: edition.releaseDate

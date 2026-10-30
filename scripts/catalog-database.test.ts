@@ -24,7 +24,7 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
       id, title: 'PostgreSQL catalogue fixture', publisher: 'Test', year: null,
       genres: {connectOrCreate: {where:{name:'Test'},create:{name:'Test'}}}, description: 'Database-only fixture, never deployed to production.',
       editions: { create: { id: id + '-edition', name: 'Database edition', platform: 'CI Platform',
-        region: 'CI Region', lang: 'CI Language', media: 'Disc', contents: [], coverImages: ['https://showgames.ru/image/cache/catalog/covers/ci-test.jpg'] } },
+         lang: 'CI Language', media: 'Disc', contents: [], coverImages: ['https://showgames.ru/image/cache/catalog/covers/ci-test.jpg'] } },
     } });
     const games = await app.inject({ method: 'GET', url: '/api/v1/catalog/games?q=' + encodeURIComponent('PostgreSQL catalogue fixture') });
     assert.equal(games.statusCode, 200);
@@ -52,6 +52,7 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
     const editions = await app.inject({ method: 'GET', url: '/api/v1/catalog/editions?gameId=' + id });
     assert.equal(editions.statusCode, 200);
     assert.equal(editions.json().items[0].platform, 'CI Platform');
+    assert.equal(editions.json().items[0].region, 'EUR');
     const filters = await app.inject({ method: 'GET', url: '/api/v1/catalog/filters' });
     assert.equal(filters.statusCode, 200);
     assert.ok(filters.json().platforms.some((platform: { name: string }) => platform.name === 'CI Platform'));
@@ -59,7 +60,7 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
     // Several localisations share all previous sort keys. Offset pagination
     // needs a unique tie-breaker to avoid repeating/omitting boundary rows.
     const pageIds=Array.from({length:7},(_,i)=>id+'-page-'+i);
-    await app.prisma.edition.createMany({data:[...pageIds].reverse().map(editionId=>({id:editionId,gameId:id,name:'Pagination fixture',platform:'CI Platform',region:'CI Region',lang:editionId,media:'Disc',contents:[],coverImages:[]}))});
+    await app.prisma.edition.createMany({data:[...pageIds].reverse().map(editionId=>({id:editionId,gameId:id,name:'Pagination fixture',platform:'CI Platform',lang:editionId,media:'Disc',contents:[],coverImages:[]}))});
     const received:string[]=[];
     for(let page=1;page<=4;page++){
       const result=await app.inject({method:'GET',url:`/api/v1/catalog/editions?gameId=${id}&pageSize=2&page=${page}`});
@@ -93,7 +94,7 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
     assert.equal(runImport().createEditions, 0);
     const canonicalId=importedId+'-sku',aliasId=importedId+'-variant';
     await app.prisma.edition.create({data:{id:aliasId,gameId:importedId,name:'Standard',platform:'PS5',
-      region:'Не указан',lang:'русский',media:'Не указан',contents:[],coverImages:['https://c.dns-shop.ru/thumb/st1/fit/500/500/test/back.jpg.webp'],description:'Отличающийся вариант озвучки.'}});
+      lang:'русский',media:'Не указан',contents:[],coverImages:['https://c.dns-shop.ru/thumb/st1/fit/500/500/test/back.jpg.webp'],description:'Отличающийся вариант озвучки.'}});
     await app.prisma.user.create({data:{id:ownerId,email:ownerId+'@test.invalid',displayName:'CI owner'}});
     const copy=await app.prisma.copy.create({data:{userId:ownerId,editionId:aliasId,notes:'Keep user notes'}});
     const listing=await app.prisma.marketEntry.create({data:{id:id+'-listing',authorId:ownerId,kind:'listing',listingType:'sale',gameId:importedId,
