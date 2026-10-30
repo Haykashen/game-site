@@ -591,3 +591,13 @@ model NewsPost {
   @@index([authorId])
   @@map("news_posts")
 }
+
+model Region {
+  id String @id @default(uuid()) @db.Uuid
+  code String @unique
+  name String @unique
+  description String @default("") @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("regions")
+}

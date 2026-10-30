@@ -46,6 +46,8 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
     sellerId = (await create('User', {email: 'seller-' + suffix + '@test.invalid', displayName: 'Seller', password: 'ci-test-password'})).id;
     buyerId = (await create('User', {email: 'buyer-' + suffix + '@test.invalid', displayName: 'Buyer', password: 'ci-test-password'})).id;
     await patch('User', {id: buyerId}, {city: 'Москва', comment: 'Admin note'});
+    const regionRecord = await create('Region', {code: 'CI-' + suffix, name: 'CI region ' + suffix, description: 'Fixture'});
+    await patch('Region', {id: regionRecord.id}, {description: 'Edited region'});
     const seriesRecord = await create('GameSeries', {name: 'CI series ' + suffix});
     const genreRecord = await create('GameGenre', {name: 'CI RPG ' + suffix});
     const gameId = (await create('Game', {title: 'Admin fixture ' + suffix, publisher: 'CI', description: 'Fixture', genres: [genreRecord.id]})).id;
@@ -126,6 +128,7 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
     await prisma.user.deleteMany({where: {id: {in: userIds}}});
     await prisma.game.deleteMany({where: {id: {in: created.filter((item) => item.model === 'Game').map((item) => item.key.id!)}}});
     await prisma.gameSeries.deleteMany({where: {id: {in: created.filter(item => item.model === 'GameSeries').map(item => item.key.id!)}}});
+    await prisma.region.deleteMany({where: {id: {in: created.filter(item => item.model === 'Region').map(item => item.key.id!)}}});
     await app.close(); await prisma.$disconnect();
   }
 });

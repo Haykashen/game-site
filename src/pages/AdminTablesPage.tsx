@@ -10,6 +10,7 @@ export interface AdminTablesPageProps {
   readonly basePath: string;
   readonly defaultTable: string;
   readonly tableNames?: readonly string[];
+  readonly excludeTableNames?: readonly string[];
   readonly title: string;
   readonly heading: (table: AdminTable | undefined) => string;
   readonly eyebrow: string;
@@ -22,6 +23,7 @@ export function AdminTablesPage({
   basePath,
   defaultTable,
   tableNames,
+  excludeTableNames,
   title,
   heading,
   eyebrow,
@@ -33,7 +35,7 @@ export function AdminTablesPage({
   const schema = useAdminTables();
   const tables = tableNames
     ? schema.data.filter((item) => tableNames.includes(item.name))
-    : schema.data;
+    : schema.data.filter(item => !excludeTableNames?.includes(item.name));
   const table = tables.find((item) => item.name === name);
 
   if (!isAdmin) {
@@ -65,6 +67,7 @@ export function AdminTablesPage({
     );
   }
 
+  if (name && excludeTableNames?.includes(name)) return <Navigate to={'/admin/reference/' + name} replace />;
   if (!name) {
     return <Navigate to={`${basePath}/${defaultTable}`} replace />;
   }

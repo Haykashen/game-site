@@ -8,7 +8,7 @@ import { parse } from '../lib/validation.js';
 
 // An explicit allowlist: a newly added database model is never exposed automatically.
 export const TABLE_LABELS: Record<string, string> = {
-  User: 'Пользователи', Session: 'Сессии', Game: 'Игры', GameGenre: 'Жанры игр', GameSeries: 'Серии игр', GameRating: 'Оценки игр',
+  User: 'Пользователи', Session: 'Сессии', Game: 'Игры', GameGenre: 'Жанры игр', GameSeries: 'Серии игр', Region: 'Регионы', GameRating: 'Оценки игр',
   Edition: 'Издания', Copy: 'Экземпляры коллекций', CopyPhoto: 'Фото экземпляров',
   MarketEntry: 'Объявления и аукционы', MarketPhoto: 'Фото объявлений', Bid: 'Ставки',
   Deal: 'Сделки', Review: 'Отзывы', Report: 'Жалобы', Notification: 'Уведомления',
@@ -16,7 +16,7 @@ export const TABLE_LABELS: Record<string, string> = {
   Discussion: 'Обсуждения', DiscussionComment: 'Комментарии', NewsPost: 'Новости',
 };
 const FIELD_LABELS: Record<string, string> = {
-  id: 'ID', email: 'Почта', displayName: 'Имя', password: 'Пароль', phone: 'Телефон',
+  code: 'Код региона', id: 'ID', email: 'Почта', displayName: 'Имя', password: 'Пароль', phone: 'Телефон',
   city: 'Город', avatarUrl: 'Аватар', isDemo: 'Демо-аккаунт', role: 'Роль', status: 'Статус',
   suspendedAt: 'Дата блокировки', comment: 'Комментарий', ratingSum: 'Сумма оценок',
   ratingCount: 'Количество отзывов', createdAt: 'Создано', updatedAt: 'Обновлено', lastSeenAt: 'Последнее посещение',
