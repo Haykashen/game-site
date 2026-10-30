@@ -7,7 +7,7 @@ test('same logical edition groups language-order/case variants, keeping all IDs 
   assert.deepEqual(plan[0].variantIds,['b']);assert.deepEqual(plan[0].coverImages,['image-a','image-b']);
 });
 test('different platforms, regions, interface languages, media or editions stay separate',()=>{
-  for(const change of [{platform:'PS5'},{region:'PAL'},{lang:'английский'},{media:'Цифровое издание'},{name:'Standard'}])
+  for(const change of [{platform:'PS5'},{region:'USA'},{lang:'английский'},{media:'Цифровое издание'},{name:'Standard'}])
     assert.equal(planEditionDedup([edition('a'),edition('b',change)]).length,0);
 });
 test('previously grouped editions stay stable and repeat auditing produces no merges',()=>{
@@ -22,4 +22,9 @@ test('JSON consolidation retains both source products and can be expanded lossle
   assert.equal(grouped.document.games[0].platforms[0].editions.length,1);
   assert.deepEqual(grouped.document.games[0].platforms[0].editions[0].productIds,['a','b']);
   assert.deepEqual(expandProducts(grouped.document).games[0].platforms[0].editions,products);
+});
+
+test('unknown regions and legacy PAL use the EUR default',()=>{
+ assert.equal(planEditionDedup([edition('a'),edition('b',{region:'PAL'})]).length,1);
+ assert.equal(planEditionDedup([edition('a',{region:'EUR'}),edition('b',{region:'USA'})]).length,0);
 });
