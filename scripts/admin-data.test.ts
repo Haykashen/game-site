@@ -4,7 +4,7 @@ import Fastify from 'fastify';
 import { Prisma, type PrismaClient } from '@prisma/client';
 import { adminRecordKey } from '../shared/src/adminData.ts';
 import { AppError } from '../server/src/errors.ts';
-import { getTable, models, parseCreateData, parseData, recordSelect } from '../server/src/admin/metadata.ts';
+import { getTable, models, PRIVATE_MODELS, parseCreateData, parseData, recordSelect } from '../server/src/admin/metadata.ts';
 import { buildWhere, registerAdminDataRoutes, userScopeWhere } from '../server/src/admin/routes.ts';
 import { registerUserAdminRoutes } from '../server/src/users/adminRoutes.ts';
 import { isUserOnline, ONLINE_WINDOW_MS, touchPresence } from '../server/src/auth/presence.ts';
@@ -71,7 +71,8 @@ const headers = {'x-test-role': 'admin'};
 const path = (model: string, key?: Row) => '/api/v1/admin/data/' + model + '/records' + (key ? '/' + encodeURIComponent(JSON.stringify(key)) : '');
 
 test('all database models are covered and credentials never enter public metadata or select', () => {
-  assert.deepEqual(models.map((model) => model.name).sort(), Prisma.dmmf.datamodel.models.map((model) => model.name).sort());
+  assert.deepEqual([...models.map((model) => model.name), ...PRIVATE_MODELS].sort(), Prisma.dmmf.datamodel.models.map((model) => model.name).sort());
+  for(const name of PRIVATE_MODELS) assert.throws(()=>getTable(name), AppError);
   for (const model of models) {
     const table = getTable(model.name);
     assert.ok(table.primaryKey.length);

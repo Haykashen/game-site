@@ -7,6 +7,8 @@ import { badRequest, notFound } from '../errors.js';
 import { parse } from '../lib/validation.js';
 
 // An explicit allowlist: a newly added database model is never exposed automatically.
+// Private conversations are accessible only through participant-checked chat routes.
+export const PRIVATE_MODELS = ['Chat', 'ChatMember', 'ChatMessage'] as const;
 export const TABLE_LABELS: Record<string, string> = {
   User: 'Пользователи', Session: 'Сессии', Game: 'Игры', GameGenre: 'Жанры игр', GameSeries: 'Серии игр', Region: 'Регионы', GameRating: 'Оценки игр',
   Edition: 'Издания', Copy: 'Экземпляры коллекций', CopyPhoto: 'Фото экземпляров',
