@@ -21,6 +21,7 @@ export const HEADER_BANNERS: Record<NavSectionId, HeaderBannerMeta> = {
   sales: { kicker: 'MARKET / SALES', tone: 'pink' },
   purchases: { kicker: 'MARKET / PURCHASES', tone: 'amber' },
   exchange: { kicker: 'MARKET / EXCHANGE', tone: 'violet' },
+  chats: {kicker:'COMMUNITY / MESSAGES',tone:'violet'},
   discussions: { kicker: 'COMMUNITY / DISCUSSIONS', tone: 'violet' },
   news: { kicker: 'COMMUNITY / NEWS', tone: 'amber' },
   collection: { kicker: 'SHELF / COLLECTION', tone: 'emerald' },

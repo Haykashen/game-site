@@ -141,6 +141,8 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  chatMemberships ChatMember[]
+  chatMessages ChatMessage[]
   sessions         Session[]
   copies           Copy[]
   authoredEntries  MarketEntry[] @relation("MarketAuthor")
@@ -602,4 +604,38 @@ model Region {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   @@map("regions")
+}
+model Chat {
+ id String @id @default(uuid()) @db.Uuid
+ key String @unique
+ entryId String? @map("entry_id")
+ title String
+ createdAt DateTime @default(now()) @map("created_at")
+ updatedAt DateTime @default(now()) @map("updated_at")
+ members ChatMember[]
+ messages ChatMessage[]
+ @@map("chats")
+}
+model ChatMember {
+ chatId String @db.Uuid @map("chat_id")
+ userId String @db.Uuid @map("user_id")
+ readAt DateTime @default(now()) @map("read_at")
+ chat Chat @relation(fields:[chatId], references:[id], onDelete:Cascade)
+ user User @relation(fields:[userId], references:[id], onDelete:Restrict)
+ @@id([chatId,userId])
+ @@index([userId])
+ @@map("chat_members")
+}
+model ChatMessage {
+ id String @id @default(uuid()) @db.Uuid
+ chatId String @db.Uuid @map("chat_id")
+ authorId String @db.Uuid @map("author_id")
+ clientId String @db.Uuid @map("client_id")
+ text String @db.Text
+ createdAt DateTime @default(now()) @map("created_at")
+ chat Chat @relation(fields:[chatId], references:[id], onDelete:Cascade)
+ author User @relation(fields:[authorId], references:[id], onDelete:Restrict)
+ @@unique([authorId,clientId])
+ @@index([chatId,createdAt,id])
+ @@map("chat_messages")
 }

@@ -11,6 +11,8 @@ interface ReportSectionProps {
   targetLabel: string;
   /** Hide the control for the current user's own lot or profile. */
   disabled?: boolean;
+  compact?: boolean;
+  showLabel?: boolean;
 }
 
 /** Collapsible report entry point; reports require an authenticated session. */
@@ -19,6 +21,8 @@ export function ReportSection({
   targetId,
   targetLabel,
   disabled = false,
+  compact = false,
+  showLabel = false,
 }: ReportSectionProps) {
   const { isAuthenticated } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
@@ -26,19 +30,21 @@ export function ReportSection({
   if (disabled) return null;
 
   return (
-    <section className="report-section" aria-label="Пожаловаться">
+    <section className={compact ? 'report-section report-section--compact' : 'report-section'} aria-label="Пожаловаться">
       {isAuthenticated ? (
         <button
           type="button"
           className="report-section__trigger"
           aria-expanded={isOpen}
+          aria-label="Пожаловаться"
+          title="Пожаловаться"
           onClick={() => setIsOpen((value) => !value)}
         >
           <Flag size={14} aria-hidden="true" />
-          {isOpen ? 'Скрыть форму жалобы' : 'Пожаловаться'}
+          {showLabel ? 'Пожаловаться' : !compact && (isOpen ? 'Скрыть форму жалобы' : 'Пожаловаться')}
         </button>
       ) : (
-        <p className="report-section__guest">
+        compact ? <Link className="report-section__trigger" to="/account" aria-label="Войти, чтобы пожаловаться" title="Войти, чтобы пожаловаться"><Flag size={16}/>{showLabel && 'Пожаловаться'}</Link> : <p className="report-section__guest">
           <Flag size={14} aria-hidden="true" />
           <span>
             Заметили нарушение?{' '}

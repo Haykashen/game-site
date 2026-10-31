@@ -1,3 +1,4 @@
+import { ChatsPage } from './pages/ChatsPage';
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from './app/AppShell';
 import { AuthProvider } from './context/AuthContext';
@@ -47,6 +48,7 @@ export default function App() {
                     path="/listings/exchange"
                     element={<ListingsPage listingType="exchange" />}
                   />
+                  <Route path="/chats" element={<ChatsPage />} />
                   <Route path="/discussions" element={<DiscussionsPage />} />
                   <Route path="/news" element={<NewsPage />} />
                   <Route path="/collection" element={<CollectionPage />} />

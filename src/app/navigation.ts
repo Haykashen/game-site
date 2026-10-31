@@ -10,6 +10,7 @@ import {
   Gavel,
   Library,
   MessagesSquare,
+  MessageCircle,
   Newspaper,
   Settings2,
   ShieldCheck,
@@ -27,6 +28,7 @@ export type NavSectionId =
   | 'sales'
   | 'purchases'
   | 'exchange'
+  | 'chats'
   | 'discussions'
   | 'news'
   | 'collection'
@@ -100,6 +102,7 @@ export const NAV_ITEMS = {
     path: '/listings/exchange',
     icon: ArrowLeftRight,
   },
+  chats: {id:'chats',label:'Чаты',pageTitle:'Чаты',shortLabel:'Чаты',path:'/chats',icon:MessageCircle},
   discussions: {
     id: 'discussions',
     label: 'Обсуждения',
@@ -219,7 +222,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
   {
     id: 'community',
     label: 'Сообщество',
-    items: [NAV_ITEMS.discussions, NAV_ITEMS.news],
+    items: [NAV_ITEMS.chats, NAV_ITEMS.discussions, NAV_ITEMS.news],
   },
   {
     id: 'shelf',
@@ -229,6 +232,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
 ];
 
 export const MOBILE_MORE_ITEMS: ReadonlyArray<NavItem> = [
+  NAV_ITEMS.chats,
   NAV_ITEMS.discussions,
   NAV_ITEMS.news,
   NAV_ITEMS.notifications,

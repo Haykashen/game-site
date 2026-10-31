@@ -1,9 +1,8 @@
+import { StartChatButton } from '../StartChatButton';
 import {
   ArrowLeftRight,
   CheckCircle2,
-  Clock,
   EyeOff,
-  Gamepad2,
   Gavel,
   LogIn,
   Pencil,
@@ -14,7 +13,7 @@ import {
   Truck,
   X,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { marketItemLabel } from '@discvault/shared';
@@ -73,6 +72,7 @@ export function MarketEntryDetail({
 }: MarketEntryDetailProps) {
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const [bidAmount, setBidAmount] = useState('');
+  const bidInput = useRef<HTMLInputElement>(null);
   const [tradeError, setTradeError] = useState('');
   const [tradeMessage, setTradeMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -238,16 +238,13 @@ export function MarketEntryDetail({
             {entry.title}
           </h2>
         </div>
+        <div className="market-detail-header-actions">
+          {!isOwn && isPubliclyVisible && <EntrySubscriptionButton entryId={entry.id} compact />}
         <IconButton label="Закрыть" transparent onClick={onClose}>
           <X size={20} />
         </IconButton>
-      </div>
-
-      {!isOwn && isPubliclyVisible && (
-        <div className="market-subscribe-row">
-          <EntrySubscriptionButton entryId={entry.id} />
         </div>
-      )}
+      </div>
 
       {isOwn && (
         <section className="market-owner" aria-label="Управление объявлением">
@@ -363,23 +360,62 @@ export function MarketEntryDetail({
         </section>
       )}
 
-      <MarketPhotoGallery photos={entry.photos} title={entry.title} />
-
-      <div className="market-detail-price">
-        <div>
-          <span className="market-detail-price__label">{priceLabel}</span>
-          <strong className="market-detail-price__value">{formatPrice(entry.price)}</strong>
+      <div className="market-detail-overview"><div className="market-detail-overview__media"><MarketPhotoGallery photos={entry.photos} title={entry.title} /></div>
+        <div className="spec-box">
+          <h4>{isAuction ? 'О лоте' : 'Об объявлении'}</h4>
+          <SpecRow label="Игра" value={game ? <button type="button" className="market-game-link" onClick={() => onOpenGame(entry.gameId, entry.editionId ?? undefined)}>{game.title}</button> : '—'} />
+          <SpecRow label="Предмет" value={marketItemLabel(entry.itemType)} />
+          <SpecRow label="Платформа" value={edition?.platform ?? (entry.itemType === 'game' ? 'Любая' : 'Не указана')} />
+          <SpecRow label="Издание" value={edition?.name ?? (entry.itemType === 'game' ? 'Любое издание' : 'Без привязки к изданию')} />
+          <SpecRow label="Регион" value={edition?.region ?? 'Любой'} />
+          <SpecRow label="Язык" value={edition?.lang ?? '—'} />
+          <SpecRow label="Состояние" value={entry.condition} />
+          <SpecRow
+            label="Автор"
+            value={
+              <ProfileLink name={entry.seller} userId={entry.authorId} />
+            }
+          />
+          <SpecRow label="Размещено" value={formatMarketDate(entry.createdAt)} />
+          {isAuction && <SpecRow label="Шаг цены" value={bidStepLabel} />}
+          {isAuction && (
+            <SpecRow label="Открытие" value={formatMarketDateTime(entry.startsAt)} />
+          )}
+          {isAuction && (
+            <SpecRow label="Закрытие" value={formatMarketDateTime(entry.endsAt)} />
+          )}
+          {isAuction && <SpecRow label="Ставок" value={String(entry.bids)} />}
+          {isAuction && <SpecRow label="Срок торгов" value={auctionTimerLabel} />}
+          <SpecRow label={priceLabel} value={<strong className="market-spec-price">{formatPrice(entry.price)}</strong>} />
         </div>
+      </div>
 
-        {isAuction && (
-          <div className="market-detail-price__side">
-            <span className="market-detail-price__timer">
-              <Clock size={15} aria-hidden="true" />
-              {auctionTimerLabel}
-            </span>
-            <span>{bidsLabel(entry.bids)}</span>
-          </div>
-        )}
+      <div className="market-detail-action-bar">
+
+        {!isOwn && isPubliclyVisible && <div className="market-detail-uniform-actions">
+          {isAuction && (isAuthenticated ? <button type="button" className="market-form__submit" disabled={!canBid} onClick={() => bidInput.current?.focus()}><Gavel size={16}/>Сделать ставку</button> : <Link className="btn-secondary" to="/account"><Gavel size={16}/>Сделать ставку</Link>)}
+          {!isAuction && !canBuy && <button className="market-form__submit" disabled>Сделка недоступна</button>}
+          {canBuy && (isAuthenticated ? (<button
+                type="button"
+                className="market-form__submit"
+                disabled={isSubmitting}
+                onClick={() => void handleBuy()}
+              >
+                <ShoppingBag size={15} aria-hidden="true" />
+                {isSubmitting ? 'Создаём…' : buyLabel}
+              </button>) : <Link className="btn-secondary" to="/account"><ShoppingBag size={15}/>{buyLabel}</Link>)}
+          <StartChatButton entryId={entry.id} />
+      <ReportSection
+        key={entry.id}
+        targetType="market_entry"
+        targetId={entry.id}
+        targetLabel={entry.title}
+        disabled={isOwn}
+        compact
+        showLabel
+      />
+        </div>}
+
       </div>
 
       {!isOwn && isPubliclyVisible && (isAuction || canBuy) && (
@@ -416,6 +452,7 @@ export function MarketEntryDetail({
                   step={1}
                   inputMode="numeric"
                   aria-label="Сумма ставки"
+                  ref={bidInput}
                   value={bidAmount}
                   onChange={(event) => setBidAmount(event.target.value)}
                 />
@@ -438,15 +475,7 @@ export function MarketEntryDetail({
           ) : canBuy ? (
             <div className="market-trade__guest">
               <p>Зафиксируйте договорённость — отзыв можно оставить после завершения.</p>
-              <button
-                type="button"
-                className="market-form__submit"
-                disabled={isSubmitting}
-                onClick={() => void handleBuy()}
-              >
-                <ShoppingBag size={15} aria-hidden="true" />
-                {isSubmitting ? 'Создаём…' : buyLabel}
-              </button>
+
             </div>
           ) : (
             <p className="market-trade__meta">Лот больше недоступен для сделки.</p>
@@ -465,39 +494,8 @@ export function MarketEntryDetail({
         </section>
       )}
 
-      <div className="desc-grid">
-        <div className="desc-text">
-          <h4>Описание</h4>
-          <p>{entry.description}</p>
-        </div>
-
-        <div className="spec-box">
-          <h4>{isAuction ? 'О лоте' : 'Об объявлении'}</h4>
-          <SpecRow label="Игра" value={game?.title ?? '—'} />
-          <SpecRow label="Предмет" value={marketItemLabel(entry.itemType)} />
-          <SpecRow label="Платформа" value={edition?.platform ?? (entry.itemType === 'game' ? 'Любая' : 'Не указана')} />
-          <SpecRow label="Издание" value={edition?.name ?? (entry.itemType === 'game' ? 'Любое издание' : 'Без привязки к изданию')} />
-          <SpecRow label="Регион" value={edition?.region ?? 'Любой'} />
-          <SpecRow label="Язык" value={edition?.lang ?? '—'} />
-          <SpecRow label="Состояние" value={entry.condition} />
-          <SpecRow
-            label="Автор"
-            value={
-              <ProfileLink name={entry.seller} userId={entry.authorId} />
-            }
-          />
-          <SpecRow label="Размещено" value={formatMarketDate(entry.createdAt)} />
-          {isAuction && <SpecRow label="Шаг цены" value={bidStepLabel} />}
-          {isAuction && (
-            <SpecRow label="Открытие" value={formatMarketDateTime(entry.startsAt)} />
-          )}
-          {isAuction && (
-            <SpecRow label="Закрытие" value={formatMarketDateTime(entry.endsAt)} />
-          )}
-          {isAuction && <SpecRow label="Ставок" value={String(entry.bids)} />}
-        </div>
-      </div>
-
+      <div className="market-detail-copy">
+        <div className="market-detail-info__left"><div className="desc-text"><h4>Описание</h4><p>{entry.description}</p></div>
       <section className="market-shipping" aria-label="Условия доставки">
         <div className="market-shipping__head">
           <span className="market-shipping__icon" aria-hidden="true">
@@ -564,34 +562,10 @@ export function MarketEntryDetail({
           </div>
         </dl>
       </section>
-
-      <ReportSection
-        key={entry.id}
-        targetType="market_entry"
-        targetId={entry.id}
-        targetLabel={entry.title}
-        disabled={isOwn}
-      />
-
-      {game && (
-        <div className="market-game-strip">
-          <div>
-            <span className="market-game-strip__kicker">Игра в каталоге</span>
-            <p className="market-game-strip__title">{game.title}</p>
-            <p className="market-game-strip__meta">
-              {[game.publisher, game.year].filter(value => value !== null && value !== '').join(' • ')}
-            </p>
-          </div>
-          <button
-            type="button"
-            className="btn-collection"
-            onClick={() => onOpenGame(entry.gameId, entry.editionId ?? undefined)}
-          >
-            <Gamepad2 size={15} aria-hidden="true" />
-            Открыть карточку
-          </button>
         </div>
-      )}
+
+      </div>
+
     </>
   );
 }

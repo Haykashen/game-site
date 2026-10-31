@@ -1,3 +1,4 @@
+import { StartChatButton } from '../components/StartChatButton';
 import { RefreshCw, Star, UserRound } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -145,6 +146,7 @@ function PublicProfileContent({ id }: { id: string | undefined }) {
               )}
               <div className="profile-meta">
                 <p className="profile-name">{profile.displayName}</p>
+                {!isOwnProfile && <StartChatButton userId={id} />}
                 <p className="profile-sub">
                   {profile.city ?? 'Город не указан'}{profile.memberSince ? ` · на сайте с ${formatMemberSince(profile.memberSince)}` : ''}
                 </p>

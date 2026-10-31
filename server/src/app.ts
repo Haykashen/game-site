@@ -1,3 +1,4 @@
+import { registerChatRoutes } from './chats/routes.js';
 import { registerRecognitionRoutes } from './recognition/routes.js';
 import cookie from '@fastify/cookie';
 import { registerAdminDataRoutes } from './admin/routes.js';
@@ -241,6 +242,7 @@ export async function buildApp() {
   app.get('/api/health', healthHandler);
   app.get('/api/v1/health', healthHandler);
 
+  registerChatRoutes(app);
   registerAuthRoutes(app);
   registerAnalyticsRoutes(app);
   registerUserRoutes(app);

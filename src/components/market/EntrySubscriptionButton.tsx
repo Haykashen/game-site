@@ -8,12 +8,14 @@ import { cx } from '../../lib/cx';
 interface EntrySubscriptionButtonProps {
   entryId: string;
   className?: string;
+  compact?: boolean;
 }
 
 /** Follow/unfollow control for a single lot or listing. */
 export function EntrySubscriptionButton({
   entryId,
   className,
+  compact = false,
 }: EntrySubscriptionButtonProps) {
   const { status, isAuthenticated } = useAuth();
   const { isFollowingEntry, toggleEntrySubscription } = useNotifications();
@@ -24,9 +26,9 @@ export function EntrySubscriptionButton({
 
   if (!isAuthenticated) {
     return (
-      <Link className={cx('btn-collection entry-subscribe', className)} to="/account">
+      <Link className={cx('btn-collection entry-subscribe', compact && 'entry-subscribe--compact', className)} to="/account" aria-label="Войти, чтобы следить за лотом" title="Войти, чтобы следить за лотом">
         <Bell size={15} aria-hidden="true" />
-        Войти, чтобы следить за лотом
+        {!compact && 'Войти, чтобы следить за лотом'}
       </Link>
     );
   }
@@ -48,8 +50,10 @@ export function EntrySubscriptionButton({
         className={cx(
           'btn-collection entry-subscribe',
           isFollowing && 'entry-subscribe--active',
+          compact && 'entry-subscribe--compact',
         )}
         aria-pressed={isFollowing}
+        aria-label={isFollowing ? 'Перестать следить за лотом' : 'Следить за лотом'}
         disabled={isSubmitting}
         onClick={() => void handleToggle()}
         title={
@@ -58,12 +62,12 @@ export function EntrySubscriptionButton({
             : 'Получать уведомления о ставках, закрытии и изменениях лота'
         }
       >
-        {isFollowing ? (
+        {isFollowing && !compact ? (
           <CheckCircle2 size={15} aria-hidden="true" />
         ) : (
           <Bell size={15} aria-hidden="true" />
         )}
-        {isFollowing ? 'Вы следите за лотом' : 'Следить за лотом'}
+        {!compact && (isFollowing ? 'Вы следите за лотом' : 'Следить за лотом')}
       </button>
       {error && (
         <span className="entry-subscribe__error" role="alert">
