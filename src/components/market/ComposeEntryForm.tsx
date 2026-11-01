@@ -1,6 +1,6 @@
 import { RecognizeGame } from './RecognizeGame';
 import { Gavel, Tag, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MARKET_ITEM_OPTIONS, marketItemLabel, type MarketItemType } from '@discvault/shared';
 import type { FormEvent } from 'react';
 import { cx } from '../../lib/cx';
@@ -106,7 +106,15 @@ export function ComposeEntryForm({
   const [editionId, setEditionId] = useState(() =>
     entry ? (entry.editionId ?? '') : defaultEditionId(defaultGameId),
   );
-  const [title, setTitle] = useState(entry?.title ?? '');
+  const fallbackEditionId = defaultEditionId(defaultGameId);
+  useEffect(() => {
+    // The catalogue may arrive after a compose URL has already opened the form.
+    if (!gameId && defaultGameId) {
+      setGameId(defaultGameId);
+      if (!entry) setEditionId(fallbackEditionId);
+    }
+  }, [gameId, defaultGameId, fallbackEditionId, entry]);
+  const [titleOverride, setTitle] = useState<string | null>(entry?.title ?? null);
   const [condition, setCondition] = useState(entry?.condition ?? '');
   const [price, setPrice] = useState(
     entry ? String(entry.startPrice ?? entry.price) : '',
@@ -145,6 +153,10 @@ export function ComposeEntryForm({
 
   const gameEditions = editionsForGame(gameId);
   const selectedGame = games.find((game) => game.id === gameId);
+  const selectedEdition = gameEditions.find((edition) => edition.id === editionId);
+  const title = titleOverride ?? (isAuction
+    ? [selectedGame?.title, selectedEdition?.name].filter(Boolean).join(' · ').slice(0, 120)
+    : '');
   const isPurchase = !isAuction && listingType === 'purchase';
   const listingComposeTitle =
     listingType === 'purchase'
@@ -156,6 +168,7 @@ export function ComposeEntryForm({
   const handleGameChange = (nextGameId: string) => {
     setGameId(nextGameId);
     setEditionId(isLoot ? '' : defaultEditionId(nextGameId));
+    if (isAuction) setTitle(null);
   };
 
   const handleListingTypeChange = (nextType: MarketListingType) => {
@@ -300,7 +313,7 @@ export function ComposeEntryForm({
           setRecognizedGames(previous => [...previous.filter(game => game.id !== match.game.id), match.game]);
           setRecognizedEditions(previous => [...previous.filter(edition => edition.id !== match.edition.id), match.edition]);
           setGameId(match.game.id); setEditionId(match.edition.id);
-          setTitle(previous => previous || `${match.game.title} · ${match.edition.platform}`);
+          setTitle(previous => isAuction ? null : previous || `${match.game.title} · ${match.edition.platform}`);
           setPhotos(previous => previous.includes(source) ? previous : previous.length < 6 ? [...previous, source] : previous);
         }} />}
         <div className="market-form__grid">
@@ -311,6 +324,7 @@ export function ComposeEntryForm({
                 setItemType(next);
                 if (next === 'game' && !isPurchase && !editionId) setEditionId(defaultEditionId(gameId));
                 if (itemType === 'game' && next !== 'game' && !initialEditionId) setEditionId('');
+                if (isAuction) setTitle(null);
               }}>
               {MARKET_ITEM_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
             </select>
@@ -374,7 +388,10 @@ export function ComposeEntryForm({
               className="form-control"
               required={!isPurchase && !isLoot}
               value={editionId}
-              onChange={(event) => setEditionId(event.target.value)}
+              onChange={(event) => {
+                setEditionId(event.target.value);
+                if (isAuction) setTitle(null);
+              }}
             >
               {(isPurchase || isLoot) && <option value="">{isLoot ? 'Без привязки к изданию' : 'Любое издание'}</option>}
               {gameEditions.length === 0 && <option value="">Нет изданий</option>}
@@ -502,7 +519,7 @@ export function ComposeEntryForm({
             </div>
           )}
 
-          <FormField id="marketShipsFrom" label="Откуда отправляет">
+          <FormField id="marketShipsFrom" label="Откуда отправляет" className={isAuction ? 'market-form__full' : ''}>
             <input
               id="marketShipsFrom"
               type="text"
@@ -515,7 +532,7 @@ export function ComposeEntryForm({
             />
           </FormField>
 
-          <FormField id="marketPackagingPrice" label="Цена упаковки посылки (₽)">
+          {!isAuction && <FormField id="marketPackagingPrice" label="Цена упаковки посылки (₽)">
             <input
               id="marketPackagingPrice"
               type="number"
@@ -531,7 +548,7 @@ export function ComposeEntryForm({
             <p className="market-form__hint">
               0 — бесплатно, пусто — не указывать.
             </p>
-          </FormField>
+          </FormField>}
 
           <fieldset
             className="market-form__full market-delivery"
@@ -569,7 +586,7 @@ export function ComposeEntryForm({
             )}
           </fieldset>
 
-          <label className="market-form__full market-toggle">
+          {!isAuction && <label className="market-form__full market-toggle">
             <input
               type="checkbox"
               checked={internationalShipping}
@@ -581,7 +598,7 @@ export function ComposeEntryForm({
                 Покупатели увидят, готовы ли вы отправлять за границу.
               </span>
             </span>
-          </label>
+          </label>}
 
           <FormField id="marketDescription" label="Описание" className="market-form__full">
             <textarea
