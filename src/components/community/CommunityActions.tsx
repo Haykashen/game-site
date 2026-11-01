@@ -1,12 +1,13 @@
 import { Plus, ShieldCheck, UserRound, X, CheckCircle2 } from 'lucide-react';
 import { useEffect, useState, type SubmitEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import type { NewsCategory } from '@discvault/shared';
 import { apiRequest } from '../../api/client';
 import { createDiscussion, createNewsPost } from '../../api/community';
 import { useAuth } from '../../context/AuthContext';
 import { useCollection } from '../../context/CollectionContext';
 import { NEWS_CATEGORY_OPTIONS } from '../../lib/news';
+import { GameCombobox } from '../ui/GameCombobox';
 import { ModalShell } from '../ui/ModalShell';
 import './community.css';
 
@@ -23,6 +24,7 @@ export function CommunityActions({ kind, onPublished }: { kind: 'news' | 'discus
 function CommunityActionsInner({ kind, onPublished, isModerator, authenticated }: { kind: 'news' | 'discussions'; onPublished: () => void; isModerator: boolean; authenticated: boolean }) {
   const { games } = useCollection();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [mode, setMode] = useState<Mode | null>(null);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -42,6 +44,7 @@ function CommunityActionsInner({ kind, onPublished, isModerator, authenticated }
   const close = () => { if (!busy) { setMode(null); setError(''); setSent(false); } };
   const open = (next: Mode) => {
     if (!authenticated) { navigate('/account'); return; }
+    if (next === 'create' && searchParams.get('game')) setGame(searchParams.get('game')!);
     setItems([]); setPage(1); setHasMore(false); setError(''); setSent(false); setMode(next);
   };
   useEffect(() => {
@@ -58,7 +61,7 @@ function CommunityActionsInner({ kind, onPublished, isModerator, authenticated }
 
   async function submit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault(); if (busy) return; setError('');
-    const selected = games.find(item => item.title === game);
+    const selected = games.find(item => item.id === game);
     if ((game || !news) && !selected) { setError('Выберите игру из предложенного списка.'); return; }
     const tagList = tags.split(',').map(tag => tag.trim()).filter(Boolean);
     if (tagList.length > 8 || tagList.some(tag => tag.length > 30)) { setError('Добавьте до 8 тегов, каждый не длиннее 30 символов.'); return; }
@@ -92,7 +95,7 @@ function CommunityActionsInner({ kind, onPublished, isModerator, authenticated }
         {mode === 'create' && (sent ? <div className="community-success" role="status"><CheckCircle2 size={36} /><h3>Отправлено на модерацию</h3><p>После одобрения материал появится в общей ленте. Статус и комментарий модератора доступны в ваших публикациях.</p><button type="button" className="btn-secondary" onClick={() => open('mine')}>Посмотреть статус</button></div> : <form className="community-form" onSubmit={submit}>
           <p>Поделитесь находкой или начните разговор. Публикация станет видна всем после проверки модератором.</p>
           <label>Заголовок<input value={title} onChange={event => setTitle(event.target.value)} required minLength={3} maxLength={news ? 180 : 160} /></label>
-          <label>Игра{news ? ' (необязательно)' : ''}<input list="community-games" value={game} onChange={event => setGame(event.target.value)} required={!news} placeholder="Начните вводить название игры" autoComplete="off" /><datalist id="community-games">{games.map(item => <option key={item.id} value={item.title} />)}</datalist></label>
+          <label>Игра{news ? ' (необязательно)' : ''}<GameCombobox id="community-game" games={games} value={game} onChange={setGame} required={!news} /></label>
           {news && <label>Раздел<select value={category} onChange={event => setCategory(event.target.value as NewsCategory)}>{NEWS_CATEGORY_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label>}
           <label>{news ? 'Текст новости' : 'Текст обсуждения'}<textarea rows={9} value={body} onChange={event => setBody(event.target.value)} required minLength={10} maxLength={news ? 30000 : 20000} /></label>
           <label>Теги (необязательно)<input value={tags} onChange={event => setTags(event.target.value)} placeholder="До 8 тегов через запятую" maxLength={255} /></label>

@@ -14,6 +14,7 @@ import { FallbackImage } from '../FallbackImage';
 import { formatPrice } from '../../lib/formatPrice';
 import {
   bidsLabel,
+  formatMarketCondition,
   formatAuctionEnd,
   formatAuctionStart,
   isAuctionUpcoming,
@@ -121,7 +122,7 @@ export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: Ma
                   ? `${edition.platform} • ${edition.region}`
                   : game
                     ? [game.publisher, game.year].filter(value => value !== null && value !== '').join(' • ')
-                    : entry.condition}
+                    : formatMarketCondition(entry.condition)}
               </span>
             </div>
           </div>
@@ -163,7 +164,7 @@ export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: Ma
       <div className="market-card__chips">
         <span className={cx('market-chip', entry.itemType !== 'game' && 'market-chip--loot')}>{marketItemLabel(entry.itemType)}</span>
         {edition && <span className="market-chip">{edition.name}</span>}
-        <span className="market-chip">{entry.condition}</span>
+        <span className="market-chip">{formatMarketCondition(entry.condition)}</span>
         <span className="market-chip"><ProfileLink name={entry.seller} userId={entry.authorId} /></span>
       </div>
 

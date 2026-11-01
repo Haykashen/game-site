@@ -22,6 +22,7 @@ import { deliveryLabel } from '../../lib/delivery';
 import { formatPrice } from '../../lib/formatPrice';
 import {
   bidsLabel,
+  formatMarketCondition,
   formatAuctionEnd,
   formatAuctionStart,
   formatMarketDate,
@@ -37,6 +38,7 @@ import { IconButton } from '../ui/IconButton';
 import { SpecRow } from '../ui/SpecRow';
 import { EntrySubscriptionButton } from './EntrySubscriptionButton';
 import { MarketPhotoGallery } from './MarketPhotoGallery';
+import { DeliveryServiceIcon } from './DeliveryServiceIcon';
 
 interface MarketEntryDetailProps {
   entry: MarketEntry;
@@ -147,7 +149,6 @@ export function MarketEntryDetail({
     : formatAuctionEnd(entry.endsAt);
   const bidStepLabel =
     entry.bidStep === null ? 'Не указан' : formatPrice(entry.bidStep);
-  const deliveryServiceLabels = entry.deliveryServices.map(deliveryLabel);
   const internationalShippingLabel =
     entry.internationalShipping === null
       ? 'Не указано'
@@ -369,7 +370,7 @@ export function MarketEntryDetail({
           <SpecRow label="Издание" value={edition?.name ?? (entry.itemType === 'game' ? 'Любое издание' : 'Без привязки к изданию')} />
           <SpecRow label="Регион" value={edition?.region ?? 'Любой'} />
           <SpecRow label="Язык" value={edition?.lang ?? '—'} />
-          <SpecRow label="Состояние" value={entry.condition} />
+          <SpecRow label="Состояние" value={formatMarketCondition(entry.condition)} />
           <SpecRow
             label="Автор"
             value={
@@ -511,11 +512,12 @@ export function MarketEntryDetail({
           <div className="market-shipping__item">
             <dt>Службы доставки</dt>
             <dd>
-              {deliveryServiceLabels.length > 0 ? (
+              {entry.deliveryServices.length > 0 ? (
                 <span className="market-shipping__services">
-                  {deliveryServiceLabels.map((label) => (
-                    <span className="market-shipping__service" key={label}>
-                      {label}
+                  {entry.deliveryServices.map((service) => (
+                    <span className="market-shipping__service" key={service}>
+                      <DeliveryServiceIcon service={service} />
+                      {deliveryLabel(service)}
                     </span>
                   ))}
                 </span>

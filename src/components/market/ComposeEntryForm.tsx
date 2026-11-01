@@ -1,6 +1,6 @@
 import { RecognizeGame } from './RecognizeGame';
 import { Gavel, Tag, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MARKET_ITEM_OPTIONS, marketItemLabel, type MarketItemType } from '@discvault/shared';
 import type { FormEvent } from 'react';
 import { cx } from '../../lib/cx';
@@ -22,6 +22,8 @@ import type {
 import { FormField } from '../ui/FormField';
 import { IconButton } from '../ui/IconButton';
 import { PhotoPicker } from './PhotoPicker';
+import { DeliveryServiceIcon } from './DeliveryServiceIcon';
+import { GameCombobox } from '../ui/GameCombobox';
 
 interface ComposeEntryFormProps {
   kind: MarketKind;
@@ -81,19 +83,13 @@ export function ComposeEntryForm({
   const isEditing = Boolean(entry);
   const formKind = entry?.kind ?? kind;
   const isAuction = formKind === 'auction';
-  const editingGameId =
-    entry && games.some((game) => game.id === entry.gameId) ? entry.gameId : '';
-  const defaultGameId =
-    editingGameId ||
-    (games.some((game) => game.id === initialGameId)
-      ? initialGameId
-      : (games[0]?.id ?? ''));
+  const defaultGameId = entry?.gameId || initialGameId || '';
 
   const editionsForGame = (gameId: string) => editions.filter((edition) => edition.gameId === gameId);
 
   const defaultEditionId = (gameId: string) => {
     const gameEditions = editionsForGame(gameId);
-    const preferred = gameEditions.find((edition) => edition.id === initialEditionId);
+    const preferred = gameEditions.find((edition) => edition.id === initialEditionId || edition.variants?.some(variant => variant.id === initialEditionId));
     return preferred?.id ?? gameEditions[0]?.id ?? '';
   };
 
@@ -106,14 +102,15 @@ export function ComposeEntryForm({
   const [editionId, setEditionId] = useState(() =>
     entry ? (entry.editionId ?? '') : defaultEditionId(defaultGameId),
   );
-  const fallbackEditionId = defaultEditionId(defaultGameId);
+  const pendingInitialEdition = useRef(!entry && Boolean(initialGameId));
+  const fallbackEditionId = defaultEditionId(gameId);
   useEffect(() => {
-    // The catalogue may arrive after a compose URL has already opened the form.
-    if (!gameId && defaultGameId) {
-      setGameId(defaultGameId);
-      if (!entry) setEditionId(fallbackEditionId);
+    // Retain the game ID from the URL while the catalogue loads, then resolve its edition once.
+    if (pendingInitialEdition.current && gameId && fallbackEditionId) {
+      setEditionId(fallbackEditionId);
+      pendingInitialEdition.current = false;
     }
-  }, [gameId, defaultGameId, fallbackEditionId, entry]);
+  }, [gameId, fallbackEditionId]);
   const [titleOverride, setTitle] = useState<string | null>(entry?.title ?? null);
   const [condition, setCondition] = useState(entry?.condition ?? '');
   const [price, setPrice] = useState(
@@ -154,9 +151,15 @@ export function ComposeEntryForm({
   const gameEditions = editionsForGame(gameId);
   const selectedGame = games.find((game) => game.id === gameId);
   const selectedEdition = gameEditions.find((edition) => edition.id === editionId);
-  const title = titleOverride ?? (isAuction
-    ? [selectedGame?.title, selectedEdition?.name].filter(Boolean).join(' · ').slice(0, 120)
-    : '');
+  const suggestedTitle = [
+    selectedGame?.title,
+    selectedEdition?.name,
+    selectedEdition?.platform,
+    selectedEdition?.region,
+    isLoot ? marketItemLabel(itemType) : null,
+  ]
+    .filter(Boolean).join(' · ').slice(0, 120);
+  const title = titleOverride ?? suggestedTitle;
   const isPurchase = !isAuction && listingType === 'purchase';
   const listingComposeTitle =
     listingType === 'purchase'
@@ -166,9 +169,10 @@ export function ComposeEntryForm({
         : 'Разместить продажу';
 
   const handleGameChange = (nextGameId: string) => {
+    pendingInitialEdition.current = false;
     setGameId(nextGameId);
     setEditionId(isLoot ? '' : defaultEditionId(nextGameId));
-    if (isAuction) setTitle(null);
+    setTitle(null);
   };
 
   const handleListingTypeChange = (nextType: MarketListingType) => {
@@ -176,6 +180,7 @@ export function ComposeEntryForm({
 
     if (!isLoot && nextType !== 'purchase' && !editionId) {
       setEditionId(editionsForGame(gameId)[0]?.id ?? '');
+      setTitle(null);
     }
   };
 
@@ -312,8 +317,9 @@ export function ComposeEntryForm({
         {!isEditing && !isLoot && <RecognizeGame photo={photos[0]} onSelect={(match, source) => {
           setRecognizedGames(previous => [...previous.filter(game => game.id !== match.game.id), match.game]);
           setRecognizedEditions(previous => [...previous.filter(edition => edition.id !== match.edition.id), match.edition]);
+          pendingInitialEdition.current = false;
           setGameId(match.game.id); setEditionId(match.edition.id);
-          setTitle(previous => isAuction ? null : previous || `${match.game.title} · ${match.edition.platform}`);
+          setTitle(null);
           setPhotos(previous => previous.includes(source) ? previous : previous.length < 6 ? [...previous, source] : previous);
         }} />}
         <div className="market-form__grid">
@@ -324,38 +330,15 @@ export function ComposeEntryForm({
                 setItemType(next);
                 if (next === 'game' && !isPurchase && !editionId) setEditionId(defaultEditionId(gameId));
                 if (itemType === 'game' && next !== 'game' && !initialEditionId) setEditionId('');
-                if (isAuction) setTitle(null);
+                setTitle(null);
               }}>
               {MARKET_ITEM_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
             </select>
             <p className="market-form__hint">Лут продаётся отдельно от игры: выберите предмет, который получит покупатель.</p>
           </FormField>
           <FormField id="marketGame" label="Игра" className="market-form__full">
-            <select
-              id="marketGame"
-              className="form-control"
-              value={gameId}
-              onChange={(event) => handleGameChange(event.target.value)}
-              required
-            >
-              {games.length === 0 && <option value="">Каталог пуст</option>}
-              {games.map((game) => {
-                const platforms = [
-                  ...new Set(
-                    editions
-                      .filter((edition) => edition.gameId === game.id)
-                      .map((edition) => edition.platform),
-                  ),
-                ];
-
-                return (
-                  <option key={game.id} value={game.id}>
-                    {game.title}
-                    {platforms.length > 0 ? ` (${platforms.join(', ')})` : ''}
-                  </option>
-                );
-              })}
-            </select>
+            <GameCombobox id="marketGame" games={games} value={gameId}
+              onChange={handleGameChange} required />
           </FormField>
 
           {!isAuction && (
@@ -390,7 +373,7 @@ export function ComposeEntryForm({
               value={editionId}
               onChange={(event) => {
                 setEditionId(event.target.value);
-                if (isAuction) setTitle(null);
+                setTitle(null);
               }}
             >
               {(isPurchase || isLoot) && <option value="">{isLoot ? 'Без привязки к изданию' : 'Любое издание'}</option>}
@@ -415,11 +398,7 @@ export function ComposeEntryForm({
               className="form-control"
               required
               maxLength={120}
-              placeholder={
-                selectedGame
-                  ? `${selectedGame.title} — ${isLoot ? marketItemLabel(itemType).toLowerCase() : 'полный комплект'}`
-                  : 'Например, полный комплект CIB'
-              }
+              placeholder={suggestedTitle || 'Название объявления'}
               value={title}
               onChange={(event) => setTitle(event.target.value)}
             />
@@ -574,6 +553,7 @@ export function ComposeEntryForm({
                       checked={isSelected}
                       onChange={() => toggleDeliveryService(service.value)}
                     />
+                    <DeliveryServiceIcon service={service.value} />
                     <span>{service.label}</span>
                   </label>
                 );

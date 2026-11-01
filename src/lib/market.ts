@@ -1,5 +1,13 @@
 import type { MarketKind, MarketListingType } from '../types';
 
+/** Numeric condition scores use a ten-point scale; free-form descriptions stay intact. */
+export function formatMarketCondition(condition: string): string {
+  const value = condition.trim();
+  return /^\d+(?:[.,]\d+)?$/.test(value) && Number(value.replace(',', '.')) <= 10
+    ? `${value}/10`
+    : condition;
+}
+
 export const MARKET_LISTING_TYPE_OPTIONS = [
   { value: 'sale', label: 'Продажа' },
   { value: 'purchase', label: 'Покупка' },

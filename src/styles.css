@@ -1704,6 +1704,8 @@
         .market-shipping__services { display: flex; flex-wrap: wrap; gap: .3rem; }
         .market-shipping__service {
             display: inline-flex;
+            align-items: center;
+            gap: .4rem;
             padding: .18rem .48rem;
             border: 1px solid rgba(120, 100, 216, .25);
             border-radius: 999px;
@@ -1712,6 +1714,8 @@
             font: 600 .64rem/1.35 'IBM Plex Mono', monospace;
         }
         .market-shipping__muted { color: var(--text-muted); font-weight: 500; }
+        .delivery-service-icon { display: block; flex: 0 0 22px; width: 22px; height: 22px; color: var(--brand-hover); }
+        html.dark .delivery-service-icon { color: var(--brand); }
 
         .market-form__lead {
             margin-top: -.65rem;
