@@ -100,15 +100,28 @@ async function protectUser(tx: Prisma.TransactionClient, adminId: string, old: R
   }
 }
 
-/** Refuse implicit cascade deletion. Related rows can be managed in their own tables. */
+/** Only a game's editions are removed automatically; user-owned data still blocks deletion. */
 async function listDependencies(tx: Prisma.TransactionClient, table: AdminTable, old: Row) {
   const dependencies: string[] = [];
   for (const model of models) {
     if (table.name === 'User' && model.name === 'Session') continue; // Session revocation is automatic.
+    if (table.name === 'Game' && model.name === 'Edition') continue;
     for (const relation of model.fields.filter((field) => field.kind === 'object' && field.type === table.name && field.relationFromFields?.length)) {
       const where = Object.fromEntries(relation.relationFromFields!.map((field, index) => [field, old[relation.relationToFields![index]!]]));
       const count = await delegate(tx, model.name).count({where});
       if (count) dependencies.push(`${TABLE_LABELS[model.name]}: ${count}`);
+    }
+  }
+  if (table.name === 'Game') {
+    const editions = await tx.edition.findMany({where: {gameId: String(old.id)}, select: {id: true}});
+    const ids = editions.map(edition => edition.id);
+    if (ids.length) {
+      const copies = await tx.copy.count({where: {editionId: {in: ids}}});
+      const entries = await tx.marketEntry.count({where: {editionId: {in: ids}, gameId: {not: String(old.id)}}});
+      const externalVariants = await tx.edition.count({where: {canonicalId: {in: ids}, gameId: {not: String(old.id)}}});
+      if (copies) dependencies.push(`Экземпляры в коллекциях: ${copies}`);
+      if (entries) dependencies.push(`Объявления, использующие издания игры: ${entries}`);
+      if (externalVariants) dependencies.push(`Варианты изданий других игр: ${externalVariants}`);
     }
   }
   return dependencies;
@@ -183,7 +196,10 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
     return app.prisma.$transaction(async (tx) => {
       const row = await delegate(tx, name).findFirst({where: parseKey(table, key), select: recordSelect(table)});
       if (!row) throw notFound();
-      return {dependencies: await listDependencies(tx, table, row)};
+      return {
+        dependencies: await listDependencies(tx, table, row),
+        autoDeleteEditions: name === 'Game' ? await tx.edition.count({where: {gameId: String(row.id)}}) : 0,
+      };
     }, {isolationLevel: 'RepeatableRead'});
   });
   app.post('/api/v1/admin/data/:table/records', auth, async (request, reply) => {
@@ -249,6 +265,11 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
       checkVersion(table, old, input.expectedUpdatedAt);
       if (name === 'User') await protectUser(tx, admin.id, old, {}, true);
       await checkDependencies(tx, table, old);
+      if (name === 'Game') {
+        // Break only internal canonical links, then remove all editions atomically with the game.
+        await tx.edition.updateMany({where: {gameId: String(old.id)}, data: {canonicalId: null}});
+        await tx.edition.deleteMany({where: {gameId: String(old.id)}});
+      }
       if (name === 'User') await tx.session.deleteMany({where: {userId: String(old.id)}});
       await db.delete({where: uniqueWhere(table, key)});
       await reconcileRecords(tx, name, old, null);

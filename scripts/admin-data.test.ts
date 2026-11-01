@@ -27,11 +27,13 @@ async function fixture() {
     const match = (row: Row, where: Row = {}): boolean => Object.entries(where).every(([field, value]) => {
       if (field === 'AND') return (value as Row[]).every((clause) => match(row, clause));
       if (field === 'OR') return (value as Row[]).some((clause) => match(row, clause));
+      if (value && typeof value === 'object' && 'in' in value) return (value.in as unknown[]).includes(row[field]);
+      if (value && typeof value === 'object' && 'not' in value) return row[field] !== value.not;
       if (value && typeof value === 'object' && 'contains' in value) return String(row[field]).toLowerCase().includes(String(value.contains).toLowerCase());
       return row[field] === value;
     });
     const select = (row: Row, selection?: Row) => selection ? Object.fromEntries(Object.keys(selection).map((field) => [field, row[field]])) : {...row};
-    db[key] = Object.fromEntries(['findFirst', 'findUnique', 'findMany', 'groupBy', 'count', 'create', 'update', 'delete', 'deleteMany'].map((method) => [method, async (args: Row) => {
+    db[key] = Object.fromEntries(['findFirst', 'findUnique', 'findMany', 'groupBy', 'count', 'create', 'update', 'updateMany', 'delete', 'deleteMany'].map((method) => [method, async (args: Row) => {
       calls.push({model: key, method, args});
       const list = rows.get(key)!;
       const where = args.where as Row | undefined;
@@ -44,6 +46,7 @@ async function fixture() {
         const data = {id: otherId, role: 'user', status: 'active', createdAt: now, updatedAt: now, ...args.data as Row};
         list.push(data); return select(data, args.select as Row);
       }
+      if (method === 'updateMany') {const matched = list.filter(row => match(row, where)); for (const row of matched) Object.assign(row, args.data); return {count: matched.length};}
       if (method === 'deleteMany') {const remaining = list.filter((row) => !match(row, where)); rows.set(key, remaining); return {count: list.length - remaining.length};}
       if (!found) throw new Error('Missing fixture row');
       if (method === 'delete') {list.splice(list.indexOf(found), 1); return found;}
@@ -265,10 +268,11 @@ test('dependent rows block deletion with an actionable table name', async () => 
   const {app, rows} = await fixture();
   rows.get('game')!.push({id: 'game', updatedAt: now});
   rows.get('edition')!.push({id: 'edition', gameId: 'game'});
+  rows.get('copy')!.push({id: 'owned-copy', editionId: 'edition'});
   try {
     const result = await app.inject({method: 'DELETE', url: path('Game', {id: 'game'}), headers, payload: {expectedUpdatedAt: now.toISOString()}});
     assert.equal(result.statusCode, 409, result.body);
-    assert.match(result.json().error.message, /Издания: 1/);
+    assert.match(result.json().error.message, /Экземпляры в коллекциях: 1/);
     assert.equal(rows.get('game')!.length, 1);
   } finally {await app.close();}
 });
@@ -286,16 +290,20 @@ test('game deletion preview reports dependencies and deletion rechecks them', as
       assert.equal(denied.statusCode, 403);
     }
     rows.get('edition')!.push({id: 'new-edition', gameId: 'disposable'});
+    rows.get('copy')!.push({id: 'new-copy', editionId: 'new-edition'});
     const blocked = await app.inject({method: 'DELETE', url, headers, payload: {expectedUpdatedAt: now.toISOString()}});
     assert.equal(blocked.statusCode, 409, blocked.body);
     const linked = await app.inject({method: 'GET', url: url + '/dependencies', headers});
-    assert.deepEqual(linked.json().dependencies, ['Издания: 1']);
-    rows.get('edition')!.length = 0;
+    assert.deepEqual(linked.json().dependencies, ['Экземпляры в коллекциях: 1']);
+    assert.equal(linked.json().autoDeleteEditions, 1);
+    assert.equal(rows.get('edition')!.length, 1);
+    rows.get('copy')!.length = 0;
     const stale = await app.inject({method: 'DELETE', url, headers, payload: {expectedUpdatedAt: '2020-01-01T00:00:00.000Z'}});
     assert.equal(stale.statusCode, 409, stale.body);
     const removed = await app.inject({method: 'DELETE', url, headers, payload: {expectedUpdatedAt: now.toISOString()}});
     assert.equal(removed.statusCode, 204, removed.body);
     assert.equal(rows.get('game')!.length, 0);
+    assert.equal(rows.get('edition')!.length, 0);
     const missing = await app.inject({method: 'GET', url: url + '/dependencies', headers});
     assert.equal(missing.statusCode, 404);
   } finally {await app.close();}

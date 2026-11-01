@@ -1,0 +1,25 @@
+.community-editor{padding:28px;min-width:0}
+.community-form{display:grid;gap:20px}
+.community-form>p,.community-success p{color:var(--text-muted);line-height:1.6}
+.community-form label,.community-review label{display:grid;gap:8px;font-weight:600}
+.community-form input,.community-form select,.community-form textarea,.community-review textarea{width:100%;box-sizing:border-box;background:var(--bg-input);color:var(--text-main);border:1px solid var(--border-color);border-radius:10px;padding:12px 14px;font:inherit;transition:border-color .18s,box-shadow .18s}
+.community-form textarea,.community-review textarea{resize:vertical;line-height:1.6}
+.community-form :is(input,select,textarea):focus-visible,.community-review textarea:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.community-form__footer{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:12px}
+.community-success{display:grid;justify-items:start;gap:12px;padding:32px 0}
+.community-success>svg{color:var(--brand)}
+.community-error{color:#e4a1a9;line-height:1.5}
+.community-submissions{display:grid;gap:20px}
+.community-submission{border:1px solid var(--border-color);border-radius:14px;padding:22px;min-width:0}
+.community-submission h3{margin:14px 0 8px;overflow-wrap:anywhere}
+.community-submission__author{color:var(--text-muted);font-size:14px}
+.community-submission__body{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7;margin:18px 0;max-height:400px;overflow:auto}
+.community-status{font-size:12px;font-weight:700;border:1px solid currentColor;border-radius:6px;padding:5px 9px;display:inline-block}
+.community-status--pending{color:#d6ba75}
+.community-status--visible{color:#a8cb75}
+.community-status--hidden,.community-status--removed{color:#d78c96}
+.community-review{display:grid;gap:14px;border-top:1px solid var(--border-color);padding-top:18px}
+@media(max-width:600px){.community-editor{padding:18px}
+.community-form__footer>*{flex:1 1 100%;justify-content:center}
+.community-submission{padding:16px}}
+@media(prefers-reduced-motion:reduce){.community-form :is(input,select,textarea),.community-review textarea{transition:none}}

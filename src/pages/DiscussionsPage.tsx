@@ -1,3 +1,4 @@
+import { CommunityActions } from '../components/community/CommunityActions';
 import { MessagesSquare } from 'lucide-react';
 import { useEffect, useMemo } from 'react';
 import { DiscussionCard } from '../components/discussions/DiscussionCard';
@@ -106,6 +107,7 @@ export function DiscussionsPage() {
         resultCountLabel={topicsCountLabel(discussions.length)}
         onQueryChange={(query) => setValue('query', query)}
         onFilterChange={(key, value) => setValue(key, value)}
+        actions={<CommunityActions kind="discussions" onPublished={refresh} />}
         onReset={handleReset}
       />
 

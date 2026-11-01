@@ -1,3 +1,4 @@
+import { communityScope, canReadCommunity, communityReviewSchema } from '../lib/community-moderation.js';
 import type { Prisma } from '@prisma/client';
 import type { FastifyInstance } from 'fastify';
 import {
@@ -7,7 +8,7 @@ import {
   paginated,
 } from '@discvault/shared';
 import { requireRoles } from '../auth/authorization.js';
-import { notFound } from '../errors.js';
+import { notFound, unauthorized, conflict } from '../errors.js';
 import {
   newsPostInclude,
   serializeNewsPost,
@@ -56,7 +57,7 @@ export function registerNewsRoutes(app: FastifyInstance): void {
     { preHandler: app.optionalAuth },
     async (request, reply) => {
       const query = parse(newsListQuerySchema, request.query);
-      const and: Prisma.NewsPostWhereInput[] = [];
+      const and: Prisma.NewsPostWhereInput[] = [communityScope(request, query.scope)];
 
       if (query.category) and.push({ category: query.category });
       if (query.gameId) and.push({ gameId: query.gameId });
@@ -106,7 +107,7 @@ export function registerNewsRoutes(app: FastifyInstance): void {
         include: newsPostInclude,
       });
 
-      if (!post) throw notFound('Новость не найдена.');
+      if (!post || !canReadCommunity(request, post)) throw notFound('Новость не найдена.');
 
       return reply.send(serializeNewsPost(post));
     },
@@ -114,15 +115,17 @@ export function registerNewsRoutes(app: FastifyInstance): void {
 
   app.post(
     '/api/v1/news',
-    { preHandler: app.authenticate },
+    { preHandler: app.authenticate, config: { rateLimit: { max: 10, timeWindow: '1 hour' } } },
     async (request, reply) => {
-      const user = requireRoles(request);
+      const user = request.user;
+      if (!user) throw unauthorized();
       const input = parse(newsCreateSchema, request.body);
       await assertGameExists(app, input.gameId);
 
       const post = await app.prisma.newsPost.create({
         data: {
           authorId: user.id,
+          moderationStatus: 'pending',
           gameId: input.gameId ?? null,
           title: input.title,
           excerpt: input.excerpt?.trim() || deriveExcerpt(input.body),
@@ -200,4 +203,19 @@ export function registerNewsRoutes(app: FastifyInstance): void {
       return reply.code(204).send();
     },
   );
+
+  app.patch('/api/v1/news/:id/moderation', { preHandler: app.authenticate }, async (request, reply) => {
+    const moderator = requireRoles(request);
+    const { id } = request.params as { id: string };
+    const input = parse(communityReviewSchema, request.body);
+    const existing = await app.prisma.newsPost.findUnique({ where: { id }, select: { id: true } });
+    if (!existing) throw notFound('Публикация не найдена.');
+    const result = await app.prisma.newsPost.updateMany({ where: { id, moderationStatus: 'pending', updatedAt: new Date(input.updatedAt) }, data: {
+      moderationStatus: input.status, moderationNote: input.note || null,
+      moderatedAt: new Date(), moderatorId: moderator.id,
+      ...(input.status === 'visible' ? { publishedAt: new Date() } : {}),
+    }});
+    if (result.count !== 1) throw conflict('PUBLICATION_CHANGED', 'Публикация уже проверена или изменена. Обновите очередь и проверьте её ещё раз.');
+    return reply.code(204).send();
+  });
 }

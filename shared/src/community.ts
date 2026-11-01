@@ -16,6 +16,7 @@ const tagsSchema = z
   .default([]);
 
 export const discussionListQuerySchema = paginationSchema.extend({
+  scope: z.enum(['public', 'mine', 'pending']).default('public'),
   gameId: idSchema.optional(),
   q: z.string().trim().max(120).optional(),
   sort: discussionSortSchema.default('recent'),
@@ -66,6 +67,7 @@ export const discussionCommentUpdateSchema = z.object({
 
 export const newsListQuerySchema = paginationSchema.extend({
   category: newsCategorySchema.optional(),
+  scope: z.enum(['public', 'mine', 'pending']).default('public'),
   gameId: idSchema.optional(),
   q: z.string().trim().max(120).optional(),
   sort: newsSortSchema.default('newest'),
@@ -94,6 +96,8 @@ export const newsUpdateSchema = z
   .refine((value) => Object.keys(value).length > 0, 'Нет изменений для сохранения.');
 
 export interface DiscussionSummaryDto {
+  moderationStatus: 'pending' | 'visible' | 'hidden' | 'removed';
+  moderationNote: string | null;
   id: string;
   gameId: string;
   title: string;
@@ -135,6 +139,8 @@ export interface DiscussionReplyResponse {
 }
 
 export interface NewsPostDto {
+  moderationStatus: 'pending' | 'visible' | 'hidden' | 'removed';
+  moderationNote: string | null;
   id: string;
   title: string;
   excerpt: string;

@@ -528,6 +528,10 @@ model MarketEntrySubscription {
 }
 
 model Discussion {
+  moderationStatus ModerationStatus @default(pending) @map("moderation_status")
+  moderationNote String? @db.Text @map("moderation_note")
+  moderatedAt DateTime? @map("moderated_at")
+  moderatorId String? @db.Uuid @map("moderator_id")
   id        String   @id @default(uuid())
   gameId    String   @map("game_id")
   authorId  String   @map("author_id") @db.Uuid
@@ -548,6 +552,7 @@ model Discussion {
   @@index([gameId, pinned, updatedAt])
   @@index([updatedAt])
   @@index([authorId])
+  @@index([moderationStatus])
   @@map("discussions")
 }
 
@@ -572,6 +577,10 @@ model DiscussionComment {
 }
 
 model NewsPost {
+  moderationStatus ModerationStatus @default(pending) @map("moderation_status")
+  moderationNote String? @db.Text @map("moderation_note")
+  moderatedAt DateTime? @map("moderated_at")
+  moderatorId String? @db.Uuid @map("moderator_id")
   id          String       @id @default(uuid())
   authorId    String       @map("author_id") @db.Uuid
   gameId      String?      @map("game_id")
@@ -592,6 +601,7 @@ model NewsPost {
   @@index([category, publishedAt])
   @@index([gameId])
   @@index([authorId])
+  @@index([moderationStatus])
   @@map("news_posts")
 }
 

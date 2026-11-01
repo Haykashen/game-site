@@ -1,3 +1,4 @@
+import { CommunityActions } from '../components/community/CommunityActions';
 import { Newspaper } from 'lucide-react';
 import { useMemo } from 'react';
 import { FeedEmpty } from '../components/feed/FeedEmpty';
@@ -88,6 +89,7 @@ export function NewsPage() {
         resultCountLabel={newsCountLabel(news.length)}
         onQueryChange={(query) => setValue('query', query)}
         onFilterChange={(key, value) => setValue(key, value)}
+        actions={<CommunityActions kind="news" onPublished={refresh} />}
         onReset={handleReset}
       />
 

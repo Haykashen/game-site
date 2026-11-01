@@ -1,3 +1,4 @@
+import { communityScope, canReadCommunity, communityReviewSchema } from '../lib/community-moderation.js';
 import type { Prisma } from '@prisma/client';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import {
@@ -10,8 +11,8 @@ import {
   type DiscussionReplyResponse,
   type DiscussionSort,
 } from '@discvault/shared';
-import { forbidden, notFound, unauthorized } from '../errors.js';
-import { hasRole } from '../auth/authorization.js';
+import { forbidden, notFound, unauthorized, conflict } from '../errors.js';
+import { hasRole, requireRoles } from '../auth/authorization.js';
 import {
   discussionDetailInclude,
   discussionListInclude,
@@ -91,7 +92,7 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
     { preHandler: app.optionalAuth },
     async (request, reply) => {
       const query = parse(discussionListQuerySchema, request.query);
-      const and: Prisma.DiscussionWhereInput[] = [];
+      const and: Prisma.DiscussionWhereInput[] = [communityScope(request, query.scope)];
 
       if (query.gameId) and.push({ gameId: query.gameId });
 
@@ -145,7 +146,7 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
         include: discussionDetailInclude,
       });
 
-      if (!discussion) throw notFound('Обсуждение не найдено.');
+      if (!discussion || !canReadCommunity(request, discussion)) throw notFound('Обсуждение не найдено.');
 
       return reply.send(serializeDiscussionDetail(discussion));
     },
@@ -153,7 +154,7 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
 
   app.post(
     '/api/v1/discussions',
-    { preHandler: app.authenticate },
+    { preHandler: app.authenticate, config: { rateLimit: { max: 10, timeWindow: '1 hour' } } },
     async (request, reply) => {
       const user = request.user;
 
@@ -165,6 +166,7 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
       const discussion = await app.prisma.discussion.create({
         data: {
           authorId: user.id,
+          moderationStatus: 'pending',
           gameId: input.gameId,
           title: input.title,
           excerpt: input.excerpt?.trim() || deriveExcerpt(input.body),
@@ -204,6 +206,7 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
       const discussion = await app.prisma.discussion.update({
         where: { id },
         data: {
+          ...(!hasRole(user, ['moderator', 'admin']) ? { moderationStatus: 'pending', moderationNote: null, moderatedAt: null, moderatorId: null } : {}),
           ...(input.title !== undefined ? { title: input.title } : {}),
           ...(input.excerpt !== undefined
             ? {
@@ -258,10 +261,10 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
       const input = parse(discussionCommentCreateSchema, request.body);
       const discussion = await app.prisma.discussion.findUnique({
         where: { id },
-        select: { id: true },
+        select: { id: true, authorId: true, moderationStatus: true },
       });
 
-      if (!discussion) throw notFound('Обсуждение не найдено.');
+      if (!discussion || discussion.moderationStatus !== 'visible') throw notFound('Обсуждение не найдено.');
 
       if (input.parentId) {
         const parent = await app.prisma.discussionComment.findFirst({
@@ -389,4 +392,18 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
       return reply.code(204).send();
     },
   );
+
+  app.patch('/api/v1/discussions/:id/moderation', { preHandler: app.authenticate }, async (request, reply) => {
+    const moderator = requireRoles(request);
+    const { id } = request.params as { id: string };
+    const input = parse(communityReviewSchema, request.body);
+    const existing = await app.prisma.discussion.findUnique({ where: { id }, select: { id: true } });
+    if (!existing) throw notFound('Публикация не найдена.');
+    const result = await app.prisma.discussion.updateMany({ where: { id, moderationStatus: 'pending', updatedAt: new Date(input.updatedAt) }, data: {
+      moderationStatus: input.status, moderationNote: input.note || null,
+      moderatedAt: new Date(), moderatorId: moderator.id,
+    }});
+    if (result.count !== 1) throw conflict('PUBLICATION_CHANGED', 'Публикация уже проверена или изменена. Обновите очередь и проверьте её ещё раз.');
+    return reply.code(204).send();
+  });
 }

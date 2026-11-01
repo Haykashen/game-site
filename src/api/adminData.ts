@@ -30,5 +30,5 @@ export function deleteAdminRecord(table: string, key: string, expectedUpdatedAt:
   return apiRequest<void>(recordPath(table, key), {method: 'DELETE', body: {expectedUpdatedAt}});
 }
 export function fetchAdminDependencies(table: string, key: string, signal: AbortSignal) {
-  return apiRequest<{dependencies: string[]}>(`${recordPath(table, key)}/dependencies`, {signal});
+  return apiRequest<{dependencies: string[]; autoDeleteEditions: number}>(`${recordPath(table, key)}/dependencies`, {signal});
 }

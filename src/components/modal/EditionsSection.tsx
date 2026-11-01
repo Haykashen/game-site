@@ -3,7 +3,7 @@ import { FallbackImage } from '../FallbackImage';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Check, Image as ImageIcon, Layers, Package, Plus } from 'lucide-react';
-import { getPlatformBadgeStyle } from '../../data/reference';
+import { getPlatformBadgeStyle, sortPlatforms } from '../../data/reference';
 import { cx } from '../../lib/cx';
 import { MAX_COLLECTION_QUANTITY } from '../../lib/constants';
 import { editionContentsLabel, formatEditionDate } from '../../lib/editions';
@@ -229,7 +229,9 @@ export function EditionsSection({
         </div>
       ) : (
         <div className="editions-groups">
-          {[...groups.entries()].map(([platform, platformEditions]) => (
+          {sortPlatforms([...groups.keys()]).map(platform => {
+            const platformEditions = groups.get(platform)!;
+            return (
             <section className="editions-group" key={platform} aria-label={platform}>
               <div className="editions-group__head">
                 <span
@@ -256,7 +258,8 @@ export function EditionsSection({
                 ))}
               </div>
             </section>
-          ))}
+            );
+          })}
         </div>
       )}
 

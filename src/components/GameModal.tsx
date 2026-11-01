@@ -1,7 +1,7 @@
 import { Library, Minus, Pencil, Plus, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useCollection } from '../context/CollectionContext';
-import { getPlatformBadgeStyle } from '../data/reference';
+import { getPlatformBadgeStyle, sortPlatforms } from '../data/reference';
 import { MAX_COLLECTION_QUANTITY } from '../lib/constants';
 import { editionsCountLabel } from '../lib/market';
 import type { Copy, CopyDetails, Edition, Game, MarketEntry } from '../types';
@@ -46,7 +46,7 @@ export function GameModal({ marketLoading, marketError, onRetryMarket, onEditGam
   const [selectedEditionId, setSelectedEditionId] = useState(() => editions.find(edition => edition.id === initialEditionId || edition.variants?.some(variant => variant.id === initialEditionId))?.id ?? editions[0]?.id ?? '');
   const [copyFormOpen, setCopyFormOpen] = useState(false);
   const [savingCopy, setSavingCopy] = useState(false);
-  const platforms = useMemo(() => [...new Set(editions.map(edition => edition.platform))], [editions]);
+  const platforms = useMemo(() => sortPlatforms(editions.map(edition => edition.platform)), [editions]);
   const selectedEdition = editions.find(edition => edition.id === selectedEditionId) ?? editions[0];
   const selectedEditionCopies = selectedEdition ? copies.filter(copy => copy.editionId === selectedEdition.id || selectedEdition.variants?.some(variant => variant.id === copy.editionId)) : [];
   const closeCopyForm = () => { if (!savingCopy) setCopyFormOpen(false); };

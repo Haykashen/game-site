@@ -3,7 +3,7 @@ import { memo } from 'react';
 import { FallbackImage } from './FallbackImage';
 import type { KeyboardEvent } from 'react';
 import { Library, Disc, Eye } from 'lucide-react';
-import { getPlatformBadgeStyle } from '../data/reference';
+import { getPlatformBadgeStyle, sortPlatforms } from '../data/reference';
 import { NAV_ITEMS } from '../app/navigation';
 import { cx } from '../lib/cx';
 import type { Game, GameStats } from '../types';
@@ -27,8 +27,9 @@ function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
     }
   };
 
-  const visiblePlatforms = stats.platforms.slice(0, 2);
-  const hiddenPlatforms = stats.platforms.length - visiblePlatforms.length;
+  const platforms = sortPlatforms(stats.platforms);
+  const visiblePlatforms = platforms.slice(0, 2);
+  const hiddenPlatforms = platforms.length - visiblePlatforms.length;
   const marketStats = [
     { section: NAV_ITEMS.auctions, count: stats.lotsCount },
     { section: NAV_ITEMS.sales, count: stats.salesCount },
@@ -91,7 +92,7 @@ function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
           <Disc size={40} />
           <span className="cover-title">{game.title}</span>
           <span className="cover-edition">
-            {stats.platforms.length > 0 ? stats.platforms.join(' / ') : 'Платформа не указана'} •{' '}
+            {platforms.length > 0 ? platforms.join(' / ') : 'Платформа не указана'} •{' '}
             {game.year ?? 'Год не указан'}
           </span>
         </div>
@@ -109,9 +110,9 @@ function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
           <p className="card-meta">
             {[game.publisher, game.year].filter(value => value !== null && value !== '').join(' • ') || 'Сведения об игре уточняются'}
           </p>
-          {game.genres.length > 0 && (
-            <p className="card-genres">{game.genres.slice(0, 2).join(' · ')}</p>
-          )}
+          <p className="card-genres">
+            {game.genres.length > 0 ? game.genres.slice(0, 2).join(' · ') : 'Жанры не указаны'}
+          </p>
         </div>
         <div className="card-footer">
           <div className="card-market-stats" aria-label="Активные предложения по игре">

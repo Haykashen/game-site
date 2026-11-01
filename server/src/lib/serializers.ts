@@ -241,6 +241,8 @@ function discussionBase(
   commentCount: number,
 ): DiscussionSummaryDto {
   return {
+    moderationStatus: discussion.moderationStatus,
+    moderationNote: discussion.moderationNote,
     id: discussion.id,
     gameId: discussion.gameId,
     title: discussion.title,
@@ -330,6 +332,8 @@ export type NewsPostWithAuthor = Prisma.NewsPostGetPayload<{
 
 export function serializeNewsPost(post: NewsPostWithAuthor): NewsPostDto {
   return {
+    moderationStatus: post.moderationStatus,
+    moderationNote: post.moderationNote,
     id: post.id,
     title: post.title,
     excerpt: post.excerpt,

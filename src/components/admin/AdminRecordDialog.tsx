@@ -75,6 +75,7 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
   const [error, setError] = useState('');
   const [loaded, setLoaded] = useState(editor.mode === 'create');
   const [dependencies, setDependencies] = useState<string[] | null>(null);
+  const [autoDeleteEditions, setAutoDeleteEditions] = useState(0);
   const titleId = useId();
   const deleting = editor.mode === 'delete';
   const creating = editor.mode === 'create';
@@ -95,7 +96,7 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
     if (!deleting || !editor.key) return;
     const controller = new AbortController();
     void fetchAdminDependencies(table.name, editor.key, controller.signal)
-      .then(result => {if (!controller.signal.aborted) setDependencies(result.dependencies);})
+      .then(result => {if (!controller.signal.aborted) {setDependencies(result.dependencies); setAutoDeleteEditions(result.autoDeleteEditions);}})
       .catch((cause: unknown) => {if (!controller.signal.aborted) setError(formatError(cause));});
     return () => controller.abort();
   }, [deleting, editor.key, table.name]);
@@ -143,7 +144,8 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
       {loading && <p role="status">Загружаем запись…</p>}
       {error && <div className="admin-data__error" role="alert">{error}</div>}
       {loaded && (deleting ? <div className="admin-data__delete-note">
-        <p>{table.name === 'Session' ? 'Пользователю потребуется снова войти в аккаунт.' : 'Запись будет удалена без возможности восстановления. Если на неё ссылаются другие записи, сервер укажет связанные таблицы — сначала нужно удалить или переназначить эти записи.'}</p>
+        <p>{table.name === 'Session' ? 'Пользователю потребуется снова войти в аккаунт.' : table.name === 'Game' ? 'Игра и все её издания будут удалены без возможности восстановления. Экземпляры в коллекциях и другие связанные данные защищены: если они используются, удаление будет заблокировано.' : 'Запись будет удалена без возможности восстановления. Если на неё ссылаются другие записи, сервер укажет связанные таблицы — сначала нужно удалить или переназначить эти записи.'}</p>
+        {table.name === 'Game' && dependencies !== null && <p>Будут автоматически удалены издания: <strong>{autoDeleteEditions}</strong>.</p>}
         <strong>{String(record.displayName ?? record.title ?? record.name ?? record.id ?? editor.key)}</strong>
         {dependencies === null ? <p role="status">Проверяем связанные записи…</p> : dependencies.length > 0 ? <div role="alert"><p>Сначала удалите или переназначьте связанные записи:</p><ul>{dependencies.map(item => <li key={item}>{item}</li>)}</ul></div> : <p>Связанных записей, препятствующих удалению, нет.</p>}
       </div> : <div className="admin-data__fields">{fields.map((field) => {
