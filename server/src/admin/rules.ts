@@ -21,6 +21,10 @@ export async function validateRecord(tx: Prisma.TransactionClient, name: string,
     requireRule(!used, 'Нельзя менять игру у издания, используемого в коллекции, маркете или вариантах.');
   }
   if (name === 'MarketEntry') {
+    if (!['closed','sold'].includes(String(next.status)) && ['pending','visible'].includes(String(next.moderationStatus))) {
+      const count = next.id ? await tx.marketPhoto.count({where:{entryId:String(next.id)}}) : 0;
+      requireRule(count > 0, 'Для отправки на проверку и публикации нужна хотя бы одна фотография предмета.');
+    }
     const kind = next.kind;
     const itemType = next.itemType ?? 'game';
     if (next.editionId) {

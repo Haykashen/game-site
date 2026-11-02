@@ -72,12 +72,14 @@ export function registerMarketAdminRoutes(app: FastifyInstance): void {
       const existing = await app.prisma.marketEntry.findFirst({
         where: { id, deletedAt: null },
         include: {
+          photos: {select: {id: true}},
           author: { select: { status: true } },
           game: { select: { title: true } },
         },
       });
 
       if (!existing) throw notFound('Объявление не найдено.');
+      if (input.moderationStatus === 'visible' && !existing.photos.length) throw conflict('PHOTO_REQUIRED', 'Перед публикацией автор должен добавить хотя бы одну фотографию предмета.');
 
       if (
         input.moderationStatus === 'visible' &&

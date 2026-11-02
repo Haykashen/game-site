@@ -71,8 +71,7 @@ export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: Ma
       ? 'Фиксированная цена'
       : listingTypeLabel(listingType);
   const photo = entry.photos[0];
-  const previewImage =
-    photo || edition?.coverImages[0] || game?.coverImage || '';
+  const previewImage = photo || '';
   const hasPhotoCount = entry.photos.length > 1;
 
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
@@ -105,27 +104,9 @@ export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: Ma
         )}
       >
         {previewImage ? (
-          <FallbackImage images={[...entry.photos, ...(edition?.coverImages ?? []), game?.coverImage ?? '']} alt="" loading="lazy" decoding="async" />
+          <FallbackImage images={entry.photos} alt="Фотография предмета от продавца" loading="lazy" decoding="async" />
         ) : (
-          <div className={cx('card-cover', 'market-card__cover', game && `game-${game.id}`)}>
-            <div className="cover-art" aria-hidden="true">
-              <span className="art-orbit" />
-              <span className="art-sigil" />
-              <span className="art-horizon" />
-              <span className="art-scanline" />
-            </div>
-            <div className="card-cover-placeholder">
-              <span className="cover-kicker">DISCVAULT / MARKET</span>
-              <span className="cover-title">{game?.title ?? entry.title}</span>
-              <span className="cover-edition">
-                {edition
-                  ? `${edition.platform} • ${edition.region}`
-                  : game
-                    ? [game.publisher, game.year].filter(value => value !== null && value !== '').join(' • ')
-                    : formatMarketCondition(entry.condition)}
-              </span>
-            </div>
-          </div>
+          <div className="market-card__no-photos"><Images size={32} aria-hidden="true" /><span>Фотографии не добавлены</span></div>
         )}
 
         {hasPhotoCount && (

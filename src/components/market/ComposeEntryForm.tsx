@@ -121,6 +121,7 @@ export function ComposeEntryForm({
   const [localizationId, setLocalizationId] = useState(entry?.localizationId ?? '');
   const [localizations, setLocalizations] = useState<{id: string; name: string}[]>([]);
   const [localizationError, setLocalizationError] = useState('');
+  const [photoError, setPhotoError] = useState('');
   useEffect(() => {
     const controller = new AbortController();
     void apiRequest<{items: {id: string; name: string}[]}>('/api/v1/market/localizations', {signal: controller.signal})
@@ -210,6 +211,8 @@ export function ComposeEntryForm({
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setPhotoError('');
+    if (submissionStatus !== 'draft' && photos.length === 0) {setPhotoError('Добавьте хотя бы одну фотографию предмета перед отправкой на проверку.'); return;}
 
     if (isProcessingPhotos || isSubmitting) return;
 
@@ -633,6 +636,7 @@ export function ComposeEntryForm({
           </select>
         </FormField>
         <div className="market-form__actions">
+          {photoError && <p className="market-form__error" role="alert">{photoError}</p>}
           <button type="button" className="btn-secondary" onClick={onCancel}>
             Отмена
           </button>

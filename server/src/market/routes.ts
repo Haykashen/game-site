@@ -458,6 +458,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
       let shouldNotifyStatusChange = true;
 
       if (input.status === 'active') {
+        if (await app.prisma.marketPhoto.count({where:{entryId:id}}) === 0) throw conflict('PHOTO_REQUIRED', 'Перед возвратом в публикацию добавьте хотя бы одну фотографию предмета.');
         if (existing.deal) {
           throw conflict('ENTRY_HAS_DEAL', 'По лоту уже создана сделка — вернуть его в продажу нельзя.');
         }

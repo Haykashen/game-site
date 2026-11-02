@@ -1,5 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import {createElement} from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+import {MemoryRouter} from 'react-router-dom';
+import {MarketCard} from '../src/components/market/MarketCard.tsx';
 import { marketCreateSchema, marketUpdateSchema } from '../shared/src/market.ts';
 import { MARKET_ITEM_OPTIONS } from '../shared/src/marketItems.ts';
 import { INITIAL_EDITIONS, INITIAL_GAMES, INITIAL_MARKET_ENTRIES } from '../src/data/index.ts';
@@ -9,8 +13,32 @@ import { selectVisibleMarketEntries } from '../src/lib/selectVisibleMarketEntrie
 const base = {
   kind: 'listing', listingType: 'sale', gameId: 'elden-ring', editionId: null,
   title: 'Фигурка Elden Ring', condition: 'Оригинал', price: 1000,
-  description: 'Только фигурка, без игры.', photos: [], deliveryServices: ['cdek'], shipsFrom: 'Москва',
+  description: 'Только фигурка, без игры.', photos: ['https://example.com/seller-photo.jpg'], deliveryServices: ['cdek'], shipsFrom: 'Москва',
 };
+
+test('publication requires seller photos; a private draft can be saved without them', () => {
+  for (const listingType of ['sale','purchase','exchange']) {
+    const data = {...base,itemType:'figure',listingType,photos:[]};
+    assert.equal(marketCreateSchema.safeParse(data).success,false);
+    assert.equal(marketCreateSchema.safeParse({...data,submissionStatus:'draft'}).success,true);
+  }
+  const auction = {...base,itemType:'figure',kind:'auction',listingType:null,bidStep:100,endsAt:'2099-01-01T00:00:00.000Z',photos:[]};
+  assert.equal(marketCreateSchema.safeParse(auction).success,false);
+  assert.equal(marketCreateSchema.safeParse({...auction,photos:base.photos}).success,true);
+});
+
+test('market tile never substitutes catalogue artwork for seller photographs', () => {
+  const game = {...INITIAL_GAMES[0]!,coverImage:'https://example.com/game-art.jpg'};
+  const edition = {...INITIAL_EDITIONS[0]!,coverImages:['https://example.com/edition-art.jpg']};
+  const render = (photos:string[]) => renderToStaticMarkup(createElement(MemoryRouter,null,createElement(MarketCard,{entry:{...INITIAL_MARKET_ENTRIES[0]!,photos},game,edition,onSelect:()=>{}})));
+  const empty=render([]);
+  assert.match(empty,/Фотографии не добавлены/);
+  assert.ok(!empty.includes('game-art.jpg'));
+  assert.ok(!empty.includes('edition-art.jpg'));
+  const photographed=render(base.photos);
+  assert.ok(photographed.includes('seller-photo.jpg'));
+  assert.ok(!photographed.includes('edition-art.jpg'));
+});
 
 test('all loot categories support sales, purchases, exchange and auctions without an edition', () => {
   for (const { value: itemType } of MARKET_ITEM_OPTIONS.filter((option) => option.value !== 'game')) {

@@ -26,5 +26,7 @@ test('direct HTTP edit of an active auction is rejected before writing', async (
     assert.equal(result.statusCode, 409, result.body);
     assert.equal(result.json().code, 'ACTIVE_AUCTION_LOCKED');
     assert.match(result.json().message, /Создайте новый/);
+    const withoutPhoto = await app.inject({method:'POST',url:'/api/v1/market',payload:{kind:'listing',itemType:'figure',listingType:'sale',gameId:'game',title:'Figure',condition:'New',price:100,description:'A figure',deliveryServices:['cdek'],shipsFrom:'Moscow',photos:[]}});
+    assert.equal(withoutPhoto.statusCode,400,withoutPhoto.body);
   } finally {await app.close();}
 });

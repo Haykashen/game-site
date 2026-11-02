@@ -59,6 +59,7 @@ const marketFieldsSchema = z.object({
 });
 
 export const marketCreateSchema = marketFieldsSchema.superRefine((value, ctx) => {
+  if (value.submissionStatus !== 'draft' && value.photos.length === 0) ctx.addIssue({code: z.ZodIssueCode.custom, path: ['photos'], message: 'Добавьте хотя бы одну фотографию предмета перед отправкой на проверку.'});
   if (value.kind === 'auction') {
     if (value.listingType !== null && value.listingType !== undefined) {
       ctx.addIssue({

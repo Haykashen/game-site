@@ -1278,6 +1278,7 @@
             backdrop-filter: blur(4px);
         }
         .market-card__media--art { background: #18251d; }
+        .market-card__no-photos { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .75rem; width: 100%; height: 100%; min-height: 180px; color: var(--text-muted); background: var(--bg-card); text-align: center; padding: 1rem; }
         .market-card__cover {
             height: 100%; aspect-ratio: auto;
             border-radius: 0;

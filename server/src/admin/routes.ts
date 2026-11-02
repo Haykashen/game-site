@@ -214,6 +214,7 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
     const table = getTable(name);
     if (!table.canCreate) throw forbidden('Сессии создаются только при входе пользователя.');
     const data = parseCreateData(table, request.body);
+    if (name === 'MarketEntry' && !data.statusId) data.moderationStatus = 'draft';
     if (name === 'User') {
       data.passwordHash = await hashPassword(data.password as string);
       delete data.password;
