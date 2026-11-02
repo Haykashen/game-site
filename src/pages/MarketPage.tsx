@@ -101,7 +101,7 @@ const COPY: Record<MarketKind | MarketListingType, MarketCopy> = {
 
 /** Shared marketplace page: search/filters, entity grid, CTA and URL drawer. */
 export function MarketPage({ kind, listingType }: MarketPageProps) {
-  const fields = useSearchFields('market');
+  const fields = useSearchFields('market', kind === 'auction' ? 'Auction' : 'Listing');
   const selectedListingType = kind === 'listing' ? listingType : undefined;
   const copyKey: MarketKind | MarketListingType =
     kind === 'listing' ? (selectedListingType ?? 'listing') : kind;
@@ -164,11 +164,11 @@ export function MarketPage({ kind, listingType }: MarketPageProps) {
       scopedItems.filter((entry) =>
         showOwn
           ? ownEntryIds.has(entry.id)
-          : entry.status === 'active' &&
+          : (Boolean(filters.statusId) || entry.status === 'active') &&
             (entry.moderationStatus === undefined ||
               entry.moderationStatus === 'visible'),
       ),
-    [scopedItems, ownEntryIds, showOwn],
+    [scopedItems, ownEntryIds, showOwn, filters.statusId],
   );
   const visibleItems = useMemo(
     () => selectVisibleMarketEntries(baseItems, gamesById, editionsById, editions, filters),

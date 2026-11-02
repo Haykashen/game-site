@@ -1,3 +1,4 @@
+import { useStatusFilter } from '../hooks/useStatusFilter';
 import { CommunityActions } from '../components/community/CommunityActions';
 import { MessagesSquare } from 'lucide-react';
 import { useEffect, useMemo } from 'react';
@@ -15,15 +16,17 @@ import { useUrlFilters } from '../hooks/useUrlFilters';
 import { topicsCountLabel } from '../lib/feed';
 import type { SearchFilterField, UrlFilterField } from '../lib/searchFilterConfig';
 
-type DiscussionFilterKey = 'query' | 'game';
+type DiscussionFilterKey = 'query' | 'game' | 'statusId';
 
 const DISCUSSION_FILTER_PARAMS: readonly UrlFilterField<DiscussionFilterKey>[] = [
   { key: 'query', param: 'q' },
+  { key: 'statusId', param: 'statusId' },
   { key: 'game', param: 'game' },
 ];
 
 /** Community feed with URL-backed search, game filter and a discussion drawer. */
 export function DiscussionsPage() {
+  const statusField = useStatusFilter('Discussion');
   const { games } = useCollection();
   const gameById = useMemo(() => new Map(games.map((game) => [game.id, game])), [games]);
   const fields: readonly SearchFilterField<DiscussionFilterKey>[] = useMemo(() => [{
@@ -53,6 +56,7 @@ export function DiscussionsPage() {
 
     return allDiscussions
       .filter((discussion) => {
+        if (values.statusId && discussion.statusId !== values.statusId) return false;
         if (values.game && discussion.gameId !== values.game) return false;
         if (!query) return true;
 
@@ -75,7 +79,7 @@ export function DiscussionsPage() {
           Number(right.pinned) - Number(left.pinned) ||
           Date.parse(right.updatedAt) - Date.parse(left.updatedAt),
       );
-  }, [allDiscussions, gameById, values.game, values.query]);
+  }, [allDiscussions, gameById, values.game, values.query, values.statusId]);
 
   const selectedDiscussion = itemId
     ? allDiscussions.find((discussion) => discussion.id === itemId) ?? null
@@ -103,7 +107,7 @@ export function DiscussionsPage() {
         searchPlaceholder="Найти тему, игру или автора"
         query={values.query}
         filterValues={values}
-        fields={fields}
+        fields={[...fields, statusField]}
         resultCountLabel={topicsCountLabel(discussions.length)}
         onQueryChange={(query) => setValue('query', query)}
         onFilterChange={(key, value) => setValue(key, value)}

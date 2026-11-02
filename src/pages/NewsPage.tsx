@@ -1,3 +1,4 @@
+import { useStatusFilter } from '../hooks/useStatusFilter';
 import { CommunityActions } from '../components/community/CommunityActions';
 import { Newspaper } from 'lucide-react';
 import { useMemo } from 'react';
@@ -15,10 +16,11 @@ import { newsCountLabel } from '../lib/feed';
 import { NEWS_CATEGORY_OPTIONS } from '../lib/news';
 import type { SearchFilterField, UrlFilterField } from '../lib/searchFilterConfig';
 
-type NewsFilterKey = 'query' | 'category';
+type NewsFilterKey = 'query' | 'category' | 'statusId';
 
 const NEWS_FILTER_PARAMS: readonly UrlFilterField<NewsFilterKey>[] = [
   { key: 'query', param: 'q' },
+  { key: 'statusId', param: 'statusId' },
   { key: 'category', param: 'category' },
 ];
 
@@ -35,6 +37,7 @@ const NEWS_FILTER_FIELDS: readonly SearchFilterField<NewsFilterKey>[] = [
 
 /** Editorial feed with URL-backed search, category filter and a news drawer. */
 export function NewsPage() {
+  const statusField = useStatusFilter('NewsPost');
   const { games } = useCollection();
   const gameById = useMemo(() => new Map(games.map((game) => [game.id, game])), [games]);
   const { values, setValue, reset } = useUrlFilters(NEWS_FILTER_PARAMS);
@@ -45,6 +48,7 @@ export function NewsPage() {
     const query = values.query.trim().toLocaleLowerCase('ru-RU');
 
     return allPosts.filter((post) => {
+      if (values.statusId && post.statusId !== values.statusId) return false;
       if (values.category && post.category !== values.category) return false;
       if (!query) return true;
 
@@ -57,7 +61,7 @@ export function NewsPage() {
     }).sort(
       (left, right) => Date.parse(right.publishedAt) - Date.parse(left.publishedAt),
     );
-  }, [allPosts, gameById, values.category, values.query]);
+  }, [allPosts, gameById, values.category, values.query, values.statusId]);
 
   const selectedNews = itemId
     ? allPosts.find((post) => post.id === itemId) ?? null
@@ -85,7 +89,7 @@ export function NewsPage() {
         searchPlaceholder="Найти новость, игру или тему"
         query={values.query}
         filterValues={values}
-        fields={NEWS_FILTER_FIELDS}
+        fields={[...NEWS_FILTER_FIELDS, statusField]}
         resultCountLabel={newsCountLabel(news.length)}
         onQueryChange={(query) => setValue('query', query)}
         onFilterChange={(key, value) => setValue(key, value)}

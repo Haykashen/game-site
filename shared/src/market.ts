@@ -161,6 +161,7 @@ export const bidCreateSchema = z.object({
 });
 
 export interface MarketEntryDto {
+  statusId?: string;
   localizationId?: string | null;
   localization?: string | null;
   itemType: MarketItemType;

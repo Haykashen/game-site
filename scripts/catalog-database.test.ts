@@ -30,6 +30,18 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
     assert.equal(games.statusCode, 200);
     assert.equal(games.json().items[0].id, id);
     assert.equal(games.json().items[0].year, null);
+    const statusOptions = await app.inject({method:'GET',url:'/api/v1/statuses?entity=Game'});
+    assert.equal(statusOptions.statusCode,200,statusOptions.body);
+    const draftStatus = statusOptions.json().items.find((item: {code:string}) => item.code === 'draft');
+    assert.ok(draftStatus);
+    assert.equal(games.json().items[0].statusId,draftStatus.id);
+    const byStatus = await app.inject({method:'GET',url:'/api/v1/catalog/games?q='+encodeURIComponent('PostgreSQL catalogue fixture')+'&statusId='+draftStatus.id});
+    assert.equal(byStatus.json().total,1);
+    const wrongEntity = await app.prisma.status.findFirstOrThrow({where:{entity:'Deal',code:'pending'}});
+    const excluded = await app.inject({method:'GET',url:'/api/v1/catalog/games?q='+encodeURIComponent('PostgreSQL catalogue fixture')+'&statusId='+wrongEntity.id});
+    assert.equal(excluded.json().total,0);
+    const invalidEntity = await app.inject({method:'GET',url:'/api/v1/statuses?entity=Unknown'});
+    assert.equal(invalidEntity.statusCode,400);
     assert.equal(games.json().items[0].stats.editionCount, 1);
     assert.equal(games.json().items[0].stats.coverImages[0], 'https://showgames.ru/image/cache/catalog/covers/ci-test.jpg');
     assert.equal(games.json().items[0].stats.salesCount, 0);

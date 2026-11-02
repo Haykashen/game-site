@@ -31,6 +31,7 @@ export function selectVisibleMarketEntries(
   }
 
   return entries.filter((entry) => {
+    if (filters.statusId && entry.statusId !== filters.statusId) return false;
     if (filters.itemType && entry.itemType !== filters.itemType) return false;
     const game = gamesById.get(entry.gameId);
     const edition = entry.editionId ? editionsById.get(entry.editionId) : undefined;

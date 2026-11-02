@@ -88,3 +88,12 @@ test('localization is an optional directory reference, not arbitrary text', () =
   assert.equal(marketCreateSchema.parse({...base, editionId: INITIAL_EDITIONS[0]!.id, localizationId: null}).localizationId, null);
   assert.equal(marketCreateSchema.safeParse({...base, editionId: INITIAL_EDITIONS[0]!.id, localizationId: 'Русский интерфейс'}).success, false);
 });
+
+test('market status filter matches a directory reference and resets to all entries', () => {
+  const entries = [{...INITIAL_MARKET_ENTRIES[0]!,statusId:'active-id'}, {...INITIAL_MARKET_ENTRIES[0]!,id:'closed-item',statusId:'closed-id'}];
+  const games = new Map(INITIAL_GAMES.map(game=>[game.id,game]));
+  const editions = new Map(INITIAL_EDITIONS.map(edition=>[edition.id,edition]));
+  const filters = {query:'',itemType:'',platform:'',lang:'',yearRange:'',region:'',edition:'',completeness:'',statusId:'closed-id'};
+  assert.deepEqual(selectVisibleMarketEntries(entries,games,editions,INITIAL_EDITIONS,filters).map(entry=>entry.id),['closed-item']);
+  assert.equal(selectVisibleMarketEntries(entries,games,editions,INITIAL_EDITIONS,{...filters,statusId:''}).length,2);
+});

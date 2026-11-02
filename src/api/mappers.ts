@@ -21,6 +21,7 @@ import type {
 export function mapMarketEntry(dto: MarketEntryDto): MarketEntry {
   return {
     itemType: dto.itemType ?? 'game',
+    ...(dto.statusId ? {statusId: dto.statusId} : {}),
     id: dto.id,
     kind: dto.kind,
     listingType: dto.listingType,
@@ -84,6 +85,7 @@ export function mapDiscussionComment(
 
 export function mapDiscussionSummary(dto: DiscussionSummaryDto): Discussion {
   return {
+    ...(dto.statusId ? {statusId: dto.statusId} : {}),
     id: dto.id,
     gameId: dto.gameId,
     title: dto.title,
@@ -110,6 +112,7 @@ export function mapDiscussionDetail(dto: DiscussionDetailDto): Discussion {
 
 export function mapNewsPost(dto: NewsPostDto): NewsPost {
   return {
+    ...(dto.statusId ? {statusId: dto.statusId} : {}),
     id: dto.id,
     title: dto.title,
     excerpt: dto.excerpt,

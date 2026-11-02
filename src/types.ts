@@ -2,6 +2,7 @@ import type { MarketItemType } from '@discvault/shared';
 
 /** A game in the catalogue: the abstract work, without a concrete release. */
 export interface Game {
+  statusId?: string;
   moderationStatus?: 'draft' | 'pending' | 'visible' | 'hidden' | 'removed';
   moderationNote?: string | null;
   id: string;
@@ -21,6 +22,7 @@ export interface Game {
  * physical contents that belong to this particular edition.
  */
 export interface Edition {
+  statusId?: string;
   moderationStatus?: 'draft' | 'pending' | 'visible' | 'hidden' | 'removed';
   moderationNote?: string | null;
   id: string;
@@ -90,6 +92,7 @@ export interface GameStats {
 }
 
 export interface CatalogFilters {
+  statusId?: string;
   itemType: string;
   query: string;
   platform: string;
@@ -119,6 +122,7 @@ export interface DiscussionComment {
 
 /** A game-scoped topic shown in the community feed and the game card. */
 export interface Discussion {
+  statusId?: string;
   id: string;
   gameId: string;
   title: string;
@@ -147,6 +151,7 @@ export type NewsCategory = 'release' | 'guide' | 'community' | 'update';
 
 /** A news article from the DiscVault editorial feed. */
 export interface NewsPost {
+  statusId?: string;
   id: string;
   title: string;
   /** Short card preview and article lead. */
@@ -180,6 +185,7 @@ export type MarketModerationStatus = 'draft' | 'pending' | 'visible' | 'hidden' 
 export type MarketDeliveryService = 'russian-post' | 'cdek' | 'yandex' | 'other';
 
 export interface MarketEntry {
+  statusId?: string;
   localizationId?: string | null;
   localization?: string | null;
   itemType: MarketItemType;

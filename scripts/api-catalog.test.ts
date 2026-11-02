@@ -56,12 +56,12 @@ test('catalogue requests exactly one page of 24 games with all server filters', 
     return new Response(JSON.stringify(page(2, ['filtered'], true)));
   };
   try {
-    const result = await fetchCatalogPage({q: 'Игра & test', platform: 'PS5', region: 'RU', lang: 'русский', edition: 'Collector', year: '2020-2024'}, 2, new AbortController().signal);
+    const result = await fetchCatalogPage({statusId:'a1000000-0000-4000-8000-000000000001',q: 'Игра & test', platform: 'PS5', region: 'RU', lang: 'русский', edition: 'Collector', year: '2020-2024'}, 2, new AbortController().signal);
     assert.equal(result.page, 2);
     assert.equal(calls.length, 1);
     const url = new URL(calls[0]!, 'https://test.invalid');
     assert.equal(url.pathname, '/api/v1/catalog/games');
-    assert.deepEqual(Object.fromEntries(url.searchParams), {page: '2', pageSize: '24', q: 'Игра & test', platform: 'PS5', region: 'RU', lang: 'русский', edition: 'Collector', year: '2020-2024'});
+    assert.deepEqual(Object.fromEntries(url.searchParams), {page: '2', pageSize: '24', statusId:'a1000000-0000-4000-8000-000000000001', q: 'Игра & test', platform: 'PS5', region: 'RU', lang: 'русский', edition: 'Collector', year: '2020-2024'});
   } finally {globalThis.fetch = original;}
 });
 

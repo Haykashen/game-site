@@ -10,6 +10,9 @@ import {
   type GameWithStatsDto,
 } from '@discvault/shared';
 import { notFound } from '../errors.js';
+import { STATUS_ENTITIES } from '../lib/statusDirectories.js';
+import { z } from 'zod';
+import { parse as parseInput } from '../lib/validation.js';
 import { resolveEditionId } from '../lib/editionIdentity.js';
 import { resolveYearRange, seedFilters, seedPlatforms } from '../lib/catalogData.js';
 import { serializeEdition, serializeGame } from '../lib/serializers.js';
@@ -32,6 +35,10 @@ function buildEditionFilter(query: {
 }
 
 export function registerCatalogRoutes(app: FastifyInstance): void {
+  app.get('/api/v1/statuses', async (request) => {
+    const entity = parseInput(z.enum(STATUS_ENTITIES), (request.query as {entity?: string}).entity);
+    return {items: await app.prisma.status.findMany({where:{entity},select:{id:true,name:true,code:true},orderBy:[{sortOrder:'asc'},{name:'asc'}]})};
+  });
   app.get(
     '/api/v1/catalog/games',
     { preHandler: app.optionalAuth },
@@ -42,6 +49,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
       const yearRange = resolveYearRange(query.year);
 
       const and: Prisma.GameWhereInput[] = [{moderationStatus: {notIn: ['hidden', 'removed']}}];
+      if (query.statusId) and.push({statusId: query.statusId});
 
       if (hasEditionFilter) and.push({ editions: { some: editionFilter } });
 

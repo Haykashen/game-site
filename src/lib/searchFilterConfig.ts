@@ -27,6 +27,7 @@ export interface SearchFilterField<Key extends string> {
 
 /** URL keys are shared by the catalogue and both marketplace sections. */
 export const SEARCH_FILTER_PARAMS: readonly UrlFilterField<keyof CatalogFilters>[] = [
+  { key: 'statusId', param: 'statusId' },
   { key: 'itemType', param: 'itemType' },
   { key: 'query', param: 'q' },
   { key: 'platform', param: 'platform' },

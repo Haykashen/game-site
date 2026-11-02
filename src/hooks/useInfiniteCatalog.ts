@@ -7,7 +7,7 @@ import { useDebouncedValue } from './useDebouncedValue';
 
 export function useInfiniteCatalog(filters: CatalogFilters) {
   const {status, user} = useAuth();
-  const query = JSON.stringify({q: filters.query.trim(), platform: filters.platform, lang: filters.lang, region: filters.region, edition: filters.edition, year: filters.yearRange});
+  const query = JSON.stringify({statusId: filters.statusId, q: filters.query.trim(), platform: filters.platform, lang: filters.lang, region: filters.region, edition: filters.edition, year: filters.yearRange});
   const debounced = useDebouncedValue(query);
   const pager = useMemo(() => {
     const search = JSON.parse(debounced) as CatalogSearch;

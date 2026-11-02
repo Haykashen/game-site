@@ -59,6 +59,7 @@ export function registerNewsRoutes(app: FastifyInstance): void {
     async (request, reply) => {
       const query = parse(newsListQuerySchema, request.query);
       const and: Prisma.NewsPostWhereInput[] = [communityScope(request, query.scope)];
+      if (query.statusId) and.push({statusId: query.statusId});
 
       if (query.category) and.push({ category: query.category });
       if (query.gameId) and.push({ gameId: query.gameId });

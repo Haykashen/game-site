@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { paginationSchema } from './common.js';
 
 export interface GameDto {
+  statusId?: string;
   moderationStatus?: 'draft' | 'pending' | 'visible' | 'hidden' | 'removed';
   moderationNote?: string | null;
   id: string;
@@ -16,6 +17,7 @@ export interface GameDto {
 }
 
 export interface EditionDto {
+  statusId?: string;
   moderationStatus?: 'draft' | 'pending' | 'visible' | 'hidden' | 'removed';
   moderationNote?: string | null;
   id: string;
@@ -87,6 +89,7 @@ export interface CatalogFiltersDto {
 const optionalFilter = z.string().trim().max(100).optional();
 
 export const catalogQuerySchema = paginationSchema.extend({
+  statusId: z.string().uuid().optional(),
   q: z.string().trim().max(120).optional(),
   platform: optionalFilter,
   lang: optionalFilter,

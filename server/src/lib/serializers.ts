@@ -85,6 +85,7 @@ export function serializeGame(game: Game & {series?: {name: string} | null; genr
   return {
     moderationStatus: game.moderationStatus,
     moderationNote: game.moderationNote,
+    statusId: game.statusId,
     id: game.id,
     title: game.title,
     publisher: game.publisher,
@@ -101,6 +102,7 @@ export function serializeEdition(edition: Edition & {region?: {code:string}; var
   return {
     moderationStatus: edition.moderationStatus,
     moderationNote: edition.moderationNote,
+    statusId: edition.statusId,
     id: edition.id,
     gameId: edition.gameId,
     name: edition.name,
@@ -161,6 +163,7 @@ export function serializeMarketEntry(entry: MarketEntryWithRelations): MarketEnt
     localizationId: entry.localizationId,
     localization: entry.localization?.name ?? null,
     itemType: entry.itemType,
+    statusId: entry.statusId,
     id: entry.id,
     kind: entry.kind,
     listingType: entry.listingType,
@@ -250,6 +253,7 @@ function discussionBase(
   return {
     moderationStatus: discussion.moderationStatus,
     moderationNote: discussion.moderationNote,
+    statusId: discussion.statusId,
     id: discussion.id,
     gameId: discussion.gameId,
     title: discussion.title,
@@ -341,6 +345,7 @@ export function serializeNewsPost(post: NewsPostWithAuthor): NewsPostDto {
   return {
     moderationStatus: post.moderationStatus,
     moderationNote: post.moderationNote,
+    statusId: post.statusId,
     id: post.id,
     title: post.title,
     excerpt: post.excerpt,

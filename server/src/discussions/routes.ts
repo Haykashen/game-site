@@ -94,6 +94,7 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
     async (request, reply) => {
       const query = parse(discussionListQuerySchema, request.query);
       const and: Prisma.DiscussionWhereInput[] = [communityScope(request, query.scope)];
+      if (query.statusId) and.push({statusId: query.statusId});
 
       if (query.gameId) and.push({ gameId: query.gameId });
 
