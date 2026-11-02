@@ -10,6 +10,7 @@ import {
 import type { KeyboardEvent } from 'react';
 import { marketItemLabel } from '@discvault/shared';
 import { ProfileLink } from '../ProfileLink';
+import { AuctionCard } from './AuctionCard';
 import { FallbackImage } from '../FallbackImage';
 import { formatPrice } from '../../lib/formatPrice';
 import {
@@ -33,6 +34,10 @@ interface MarketCardProps {
 
 /** Entity tile for the listings and auctions pages. */
 export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: MarketCardProps) {
+  return entry.kind === 'auction' ? <AuctionCard entry={entry} isOwn={isOwn} onSelect={onSelect}/> : <ListingCard entry={entry} game={game} edition={edition} isOwn={isOwn} onSelect={onSelect}/>;
+}
+
+function ListingCard({ entry, game, edition, isOwn = false, onSelect }: MarketCardProps) {
   const isAuction = entry.kind === 'auction';
   const isUpcoming = isAuction && isAuctionUpcoming(entry.startsAt);
   const listingType = isAuction ? null : entry.listingType;

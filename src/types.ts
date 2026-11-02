@@ -202,6 +202,8 @@ export interface MarketEntry {
   condition: string;
   price: number;
   seller: string;
+  sellerRating?: number | null;
+  sellerReviewCount?: number;
   description: string;
   /** Owner-controlled lifecycle; seeds and legacy entries default to `active`. */
   status: MarketStatus;

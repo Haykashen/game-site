@@ -33,6 +33,8 @@ export function mapMarketEntry(dto: MarketEntryDto): MarketEntry {
     condition: dto.condition,
     price: dto.kind === 'auction' ? dto.currentPrice : dto.price,
     seller: dto.seller,
+    sellerRating: dto.author.rating,
+    sellerReviewCount: dto.author.reviewCount,
     description: dto.description,
     status: dto.status,
     moderationStatus: dto.moderationStatus,

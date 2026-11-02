@@ -331,7 +331,7 @@ export function MarketPage({ kind, listingType }: MarketPageProps) {
           </button>
         </div>
       ) : (
-        <section className="market-grid" aria-label={copy.title}>
+        <section className={`market-grid${kind === 'auction' ? ' market-grid--auctions' : ''}`} aria-label={copy.title}>
           {visibleItems.map((entry) => (
             <MarketCard
               key={entry.id}

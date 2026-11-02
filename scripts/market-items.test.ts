@@ -97,3 +97,16 @@ test('market status filter matches a directory reference and resets to all entri
   assert.deepEqual(selectVisibleMarketEntries(entries,games,editions,INITIAL_EDITIONS,filters).map(entry=>entry.id),['closed-item']);
   assert.equal(selectVisibleMarketEntries(entries,games,editions,INITIAL_EDITIONS,{...filters,statusId:''}).length,2);
 });
+
+test('auction layout never depends on catalogue loading and uses actual seller ratings', () => {
+  const entry = {...INITIAL_MARKET_ENTRIES[0]!,kind:'auction' as const,endsAt:'2026-11-07T16:30:00.000Z',sellerRating:4.9,photos:[]};
+  const render = (loaded:boolean) => renderToStaticMarkup(createElement(MemoryRouter,null,createElement(MarketCard,{entry,game:loaded?INITIAL_GAMES[0]:undefined,edition:loaded?INITIAL_EDITIONS[0]:undefined,onSelect:()=>{}})));
+  const unloaded=render(false);
+  assert.equal(unloaded,render(true));
+  assert.match(unloaded,/auction-tile/);
+  assert.match(unloaded,/4,9/);
+  assert.match(unloaded,/19:30/);
+  assert.match(unloaded,/МСК/);
+  assert.ok(!unloaded.includes('Игра не найдена'));
+  assert.ok(!unloaded.includes('coverImage'));
+});
