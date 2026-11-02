@@ -35,7 +35,7 @@ export function AdminRecords({table, relatedUserId}: {table: AdminTable; related
   useEffect(() => {
     if (!result.isLoading && !result.error && page > 1 && !result.data.items.length) setPage(Math.max(1, Math.ceil(result.data.total / 20)));
   }, [result.isLoading, result.error, result.data, page]);
-  const columns: AdminColumn<AdminRecord>[] = table.fields.filter((field) => field.type !== 'password').map((field) => ({
+  const columns: AdminColumn<AdminRecord>[] = table.fields.filter((field) => field.type !== 'password' && !(table.fields.some(item => item.name === 'statusId') && ['status', 'moderationStatus'].includes(field.name))).map((field) => ({
     key: field.name, label: field.label, sortable: field.type !== 'list',
     render: (record) => <span className="admin-data__cell" title={fieldValue(record[field.name])}>{field.type === 'date' && record[field.name] ? field.dateOnly ? new Date(String(record[field.name])).toLocaleDateString('ru-RU', {timeZone: 'UTC'}) : new Date(String(record[field.name])).toLocaleString('ru-RU') : field.type === 'enum' && record[field.name] ? adminOptionLabel(String(record[field.name])) : fieldValue(record[field.name])}</span>,
     filter: <ColumnFilter field={field} value={filters[field.name] ?? ''} onChange={(value) => setFilters((previous) => ({...previous, [field.name]: value}))} />,

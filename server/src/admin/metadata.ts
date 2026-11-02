@@ -10,7 +10,8 @@ import { parse } from '../lib/validation.js';
 // Private conversations are accessible only through participant-checked chat routes.
 export const PRIVATE_MODELS = ['Chat', 'ChatMember', 'ChatMessage'] as const;
 export const TABLE_LABELS: Record<string, string> = {
-  User: 'Пользователи', Session: 'Сессии', Game: 'Игры', GameGenre: 'Жанры игр', GameSeries: 'Серии игр', Region: 'Регионы', GameRating: 'Оценки игр',
+  GameStatus: 'Статусы игр и изданий', MarketEntryStatus: 'Статусы объявлений и лотов', ContentStatus: 'Статусы публикаций', AccountStatus: 'Статусы пользователей', TransactionStatus: 'Статусы сделок', ComplaintStatus: 'Статусы жалоб',
+  User: 'Пользователи', Session: 'Сессии', Game: 'Игры', GameGenre: 'Жанры игр', GameSeries: 'Серии игр', Region: 'Регионы', Localization: 'Локализации', GameRating: 'Оценки игр',
   Edition: 'Издания', Copy: 'Экземпляры коллекций', CopyPhoto: 'Фото экземпляров',
   MarketEntry: 'Объявления и аукционы', MarketPhoto: 'Фото объявлений', Bid: 'Ставки',
   Deal: 'Сделки', Review: 'Отзывы', Report: 'Жалобы', Notification: 'Уведомления',
@@ -18,14 +19,14 @@ export const TABLE_LABELS: Record<string, string> = {
   Discussion: 'Обсуждения', DiscussionComment: 'Комментарии', NewsPost: 'Новости',
 };
 const FIELD_LABELS: Record<string, string> = {
-  code: 'Код региона', id: 'ID', email: 'Почта', displayName: 'Имя', password: 'Пароль', phone: 'Телефон',
+  localizationId: 'Локализация', code: 'Код', id: 'ID', email: 'Почта', displayName: 'Имя', password: 'Пароль', phone: 'Телефон',
   city: 'Город', avatarUrl: 'Аватар', isDemo: 'Демо-аккаунт', role: 'Роль', status: 'Статус',
   suspendedAt: 'Дата блокировки', comment: 'Комментарий', ratingSum: 'Сумма оценок',
   ratingCount: 'Количество отзывов', createdAt: 'Создано', updatedAt: 'Обновлено', lastSeenAt: 'Последнее посещение',
   userId: 'Пользователь', userAgent: 'Браузер', ip: 'IP', expiresAt: 'Истекает', lastUsedAt: 'Последняя активность',
   title: 'Название', publisher: 'Издатель', developer: 'Разработчик', series: 'Серия', seriesId: 'Серия',
   year: 'Год', genres: 'Жанры', description: 'Описание', coverImage: 'Обложка', gameId: 'Игра',
-  recognitionPending: 'Требует проверки после распознавания', score: 'Оценка', name: 'Название', platform: 'Платформа', region: 'Регион', regionId: 'Регион', lang: 'Язык',
+  statusId: 'Статус', score: 'Оценка', name: 'Название', platform: 'Платформа', region: 'Регион', regionId: 'Регион', lang: 'Язык',
   media: 'Носитель', releaseDate: 'Дата выхода', contents: 'Комплектация', coverImages: 'Обложки',
   barcode: 'Штрихкод', dnsProductId: 'ID товара DNS', dnsProductCode: 'Код товара DNS', canonicalId: 'Основное издание',
   editionId: 'Издание', condition: 'Состояние', completeness: 'Комплектность',
@@ -47,7 +48,7 @@ const FIELD_LABELS: Record<string, string> = {
   category: 'Категория', publishedAt: 'Опубликовано',
 };
 const HIDDEN = new Set(['passwordHash', 'tokenHash']);
-const READ_ONLY = new Set(['updatedAt', 'lastSeenAt', 'ratingSum', 'ratingCount', 'bidCount', 'currentPriceMinor', 'winnerId', 'version', 'views', 'activeKey']);
+const READ_ONLY = new Set(['updatedAt', 'lastSeenAt', 'ratingSum', 'ratingCount', 'bidCount', 'currentPriceMinor', 'winnerId', 'version', 'views', 'activeKey', 'moderatorId', 'moderatedAt']);
 export const models = Prisma.dmmf.datamodel.models.filter((model) => Object.hasOwn(TABLE_LABELS, model.name));
 
 export function getModel(name: string) {
@@ -59,7 +60,7 @@ export function getModel(name: string) {
 export function getTable(name: string): AdminTable {
   const model = getModel(name);
   const primaryKey = [...(model.primaryKey?.fields ?? model.fields.filter((field) => field.isId).map((field) => field.name))];
-  const fields: AdminField[] = model.fields.filter((field) => (field.kind !== 'object' || (name === 'Game' && field.name === 'genres')) && !HIDDEN.has(field.name)).map((field) => {
+  const fields: AdminField[] = model.fields.filter((field) => (field.kind !== 'object' || (name === 'Game' && field.name === 'genres')) && !HIDDEN.has(field.name) && !(model.fields.some(item => item.name === 'statusId') && ['status', 'moderationStatus'].includes(field.name) && !['User','Deal','Report'].includes(name))).map((field) => {
     const relation = model.fields.find((candidate) => candidate.kind === 'object' && candidate.relationFromFields?.includes(field.name));
     const generatedId = field.isId && !relation;
     return {
@@ -67,7 +68,7 @@ export function getTable(name: string): AdminTable {
       type: field.isList ? 'list' : field.kind === 'enum' ? 'enum' : field.type === 'Int' ? 'number' : field.type === 'Boolean' ? 'boolean' : field.type === 'DateTime' ? 'date' : 'string',
       required: !generatedId && field.isRequired && !field.hasDefaultValue && !field.isUpdatedAt && !field.isList,
       nullable: !field.isRequired, generated: Boolean(generatedId || field.hasDefaultValue || field.isUpdatedAt),
-      primary: primaryKey.includes(field.name), readOnly: generatedId || READ_ONLY.has(field.name) || name === 'Session',
+      primary: primaryKey.includes(field.name), readOnly: generatedId || READ_ONLY.has(field.name) || name === 'Session' || (name.endsWith('Status') && field.name === 'code'),
       options: Prisma.dmmf.datamodel.enums.find((item) => item.name === field.type)?.values.map((value) => value.name) ?? [],
       reference: name === 'Game' && field.name === 'genres' ? 'GameGenre' : relation?.type ?? null,
       multiline: ['description', 'body', 'excerpt', 'text', 'message', 'notes', 'comment', 'moderatorNote', 'moderationNote'].includes(field.name),
@@ -75,11 +76,11 @@ export function getTable(name: string): AdminTable {
     };
   });
   if (name === 'User') fields.push({name: 'password', label: 'Пароль', type: 'password', required: true, nullable: false, generated: false, primary: false, readOnly: false, options: [], reference: null, multiline: false, dateOnly: false});
-  return {name, label: TABLE_LABELS[name] ?? name, fields, primaryKey, canCreate: name !== 'Session', canEdit: name !== 'Session', canDelete: true};
+  return {name, label: TABLE_LABELS[name] ?? name, fields, primaryKey, canCreate: name !== 'Session' && !name.endsWith('Status'), canEdit: name !== 'Session', canDelete: !name.endsWith('Status')};
 }
 
 export function recordSelect(table: AdminTable): Record<string, true> {
-  return Object.fromEntries(table.fields.filter((field) => field.type !== 'password').map((field) => [field.name, true]));
+  return Object.fromEntries([...table.fields.filter((field) => field.type !== 'password').map((field) => [field.name, true]), ...getModel(table.name).fields.filter(field => ['status', 'moderationStatus'].includes(field.name)).map(field => [field.name, true])]);
 }
 
 /** Build a strict scalar schema: nested Prisma writes and computed fields are rejected. */

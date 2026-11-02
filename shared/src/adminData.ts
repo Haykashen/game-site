@@ -38,7 +38,7 @@ const OPTION_LABELS: Record<string, string> = {
   user: 'Пользователь', moderator: 'Модератор', admin: 'Администратор', active: 'Активен', suspended: 'Заблокирован', deleted: 'Удалён',
   listing: 'Объявление', auction: 'Аукцион', game: 'Игра', cover: 'Обложка', manual: 'Мануал', map: 'Карта', soundtrack: 'Саундтрек', figure: 'Фигурка', steelbook: 'Стилбук', other: 'Другое',
   sale: 'Продажа', purchase: 'Покупка', exchange: 'Обмен', sold: 'Продано', closed: 'Закрыто', russian_post: 'Почта России', cdek: 'СДЭК', yandex: 'Яндекс',
-  pending: 'Ожидает', completed: 'Завершена', cancelled: 'Отменена', visible: 'Опубликовано', hidden: 'Скрыто', removed: 'Удалено',
+  draft: 'Черновик', pending: 'На проверке', completed: 'Завершена', cancelled: 'Отменена', visible: 'Проверено', hidden: 'Отклонено', removed: 'Удалено',
   market_entry: 'Объявление', fraud: 'Мошенничество', prohibited: 'Запрещённое', offensive: 'Оскорбления', spam: 'Спам', wrong_category: 'Неверная категория',
   in_review: 'На рассмотрении', resolved: 'Решена', dismissed: 'Отклонена', none: 'Нет', hide_entry: 'Скрыть объявление', suspend_user: 'Заблокировать пользователя',
   bid_placed: 'Новая ставка', bid_outbid: 'Ставка перебита', auction_won: 'Аукцион выигран', auction_lost: 'Аукцион проигран', auction_sold: 'Лот продан', auction_closed: 'Аукцион закрыт',

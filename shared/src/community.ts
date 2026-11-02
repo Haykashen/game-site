@@ -23,6 +23,7 @@ export const discussionListQuerySchema = paginationSchema.extend({
 });
 
 export const discussionCreateSchema = z.object({
+  submissionStatus: z.enum(['draft', 'pending']).optional(),
   gameId: idSchema,
   title: z
     .string()
@@ -49,6 +50,7 @@ export const discussionUpdateSchema = z
   .refine((value) => Object.keys(value).length > 0, 'Нет изменений для сохранения.');
 
 export const discussionCommentCreateSchema = z.object({
+  submissionStatus: z.enum(['draft', 'pending']).optional(),
   body: z
     .string()
     .trim()
@@ -74,6 +76,7 @@ export const newsListQuerySchema = paginationSchema.extend({
 });
 
 export const newsCreateSchema = z.object({
+  submissionStatus: z.enum(['draft', 'pending']).optional(),
   title: z.string().trim().min(3, 'Заголовок слишком короткий.').max(180),
   excerpt: z.string().trim().max(320).optional(),
   body: z.string().trim().min(10, 'Добавьте текст новости.').max(30_000),
@@ -96,7 +99,7 @@ export const newsUpdateSchema = z
   .refine((value) => Object.keys(value).length > 0, 'Нет изменений для сохранения.');
 
 export interface DiscussionSummaryDto {
-  moderationStatus: 'pending' | 'visible' | 'hidden' | 'removed';
+  moderationStatus: 'draft' | 'pending' | 'visible' | 'hidden' | 'removed';
   moderationNote: string | null;
   id: string;
   gameId: string;
@@ -139,7 +142,7 @@ export interface DiscussionReplyResponse {
 }
 
 export interface NewsPostDto {
-  moderationStatus: 'pending' | 'visible' | 'hidden' | 'removed';
+  moderationStatus: 'draft' | 'pending' | 'visible' | 'hidden' | 'removed';
   moderationNote: string | null;
   id: string;
   title: string;

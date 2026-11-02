@@ -98,7 +98,7 @@ export async function notifyEntryModerated(
   db: Db,
   params: {
     entry: EntryNotificationTarget;
-    status: 'visible' | 'hidden' | 'removed';
+    status: 'draft' | 'visible' | 'hidden' | 'removed';
     note: string | null;
   },
 ): Promise<void> {

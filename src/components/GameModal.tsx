@@ -60,6 +60,7 @@ export function GameModal({ marketLoading, marketError, onRetryMarket, onEditGam
     </> : <div className="game-detail">
       <div className="modal-header game-modal__header">
         <div><div className="modal-header-meta">
+          {isModerator && <ModerationBadge status={game.moderationStatus} />}
           {game.year !== null && <span className="year">{game.year}</span>}<span className="meta-chip">{editionsCountLabel(editions.length)}</span>{game.genres.slice(0, 2).map(genre => <span className="meta-chip" key={genre}>{genre}</span>)}
         </div><h2 className="modal-title" id="modal-title">{game.title}</h2></div>
         <div className="game-modal__admin-actions">
@@ -86,3 +87,4 @@ export function GameModal({ marketLoading, marketError, onRetryMarket, onEditGam
     </div>}
   </ModalShell>;
 }
+import { ModerationBadge } from './ModerationBadge';

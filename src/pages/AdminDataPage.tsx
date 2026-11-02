@@ -5,7 +5,7 @@ export function AdminDataPage() {
     <AdminTablesPage
       basePath="/admin/data"
       defaultTable="Game"
-      excludeTableNames={['GameGenre', 'GameSeries', 'Region']}
+      excludeTableNames={['GameGenre', 'GameSeries', 'Region', 'Localization', 'GameStatus', 'MarketEntryStatus', 'ContentStatus', 'AccountStatus', 'TransactionStatus', 'ComplaintStatus']}
       title="Данные"
       heading={(table) => table?.label ?? 'Таблица не найдена'}
       eyebrow="ADMIN / DATA"

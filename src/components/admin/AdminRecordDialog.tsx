@@ -31,7 +31,7 @@ function formatError(cause: unknown): string {
 }
 
 function ReferenceInput(props: Parameters<typeof LegacyReferenceInput>[0]) {
-  if (props.field.reference === 'GameSeries' || props.field.reference === 'GameGenre' || props.field.reference === 'Region') return <ReferenceCombobox {...props} reference={props.field.reference} multiple={props.field.type === 'list'} />;
+  if (props.field.reference === 'GameSeries' || props.field.reference === 'GameGenre' || props.field.reference === 'Region' || props.field.reference?.endsWith('Status')) return <ReferenceCombobox {...props} reference={props.field.reference} multiple={props.field.type === 'list'} />;
   return <LegacyReferenceInput {...props} />;
 }
 function LegacyReferenceInput({field, value, onChange, required, inputId, selectedNames = {}}: {selectedNames?: Record<string,string>; field: AdminField; value: string; onChange: (value: string) => void; required: boolean; inputId: string}) {
@@ -79,7 +79,7 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
   const titleId = useId();
   const deleting = editor.mode === 'delete';
   const creating = editor.mode === 'create';
-  const fields = table.fields.filter((field) => !field.readOnly && (creating || !field.primary));
+  const fields = table.fields.filter((field) => !field.readOnly && (creating || !field.primary) && !(table.fields.some(item => item.name === 'statusId') && ['status', 'moderationStatus'].includes(field.name)));
   useEffect(() => {
     if (!editor.key) return;
     const controller = new AbortController();

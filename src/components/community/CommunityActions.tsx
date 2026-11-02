@@ -12,7 +12,7 @@ import { ModalShell } from '../ui/ModalShell';
 import './community.css';
 
 type Submission = { id: string; updatedAt: string; gameId: string | null; category?: NewsCategory; tags: string[]; title: string; body: string; author: { displayName: string }; moderationStatus: string; moderationNote: string | null };
-const STATUS: Record<string, string> = { pending: 'На модерации', visible: 'Опубликовано', hidden: 'Отклонено', removed: 'Снято с публикации' };
+const STATUS: Record<string, string> = { draft: 'Черновик', pending: 'На проверке', visible: 'Проверено', hidden: 'Отклонено', removed: 'Снято с публикации' };
 type Mode = 'create' | 'mine' | 'pending';
 
 export function CommunityActions({ kind, onPublished }: { kind: 'news' | 'discussions'; onPublished: () => void }) {
@@ -39,6 +39,7 @@ function CommunityActionsInner({ kind, onPublished, isModerator, authenticated }
   const [loading, setLoading] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [submissionStatus, setSubmissionStatus] = useState<'draft' | 'pending'>('pending');
   const [sent, setSent] = useState(false);
   const news = kind === 'news';
   const close = () => { if (!busy) { setMode(null); setError(''); setSent(false); } };
@@ -67,8 +68,8 @@ function CommunityActionsInner({ kind, onPublished, isModerator, authenticated }
     if (tagList.length > 8 || tagList.some(tag => tag.length > 30)) { setError('Добавьте до 8 тегов, каждый не длиннее 30 символов.'); return; }
     setBusy(true);
     try {
-      if (news) await createNewsPost({ title, body, category, tags: tagList, gameId: selected?.id ?? null });
-      else await createDiscussion({ title, body, tags: tagList, gameId: selected!.id });
+      if (news) await createNewsPost({ submissionStatus, title, body, category, tags: tagList, gameId: selected?.id ?? null });
+      else await createDiscussion({ submissionStatus, title, body, tags: tagList, gameId: selected!.id });
       setSent(true); setTitle(''); setBody(''); setGame(''); setTags('');
     } catch (cause) { setError(cause instanceof Error ? cause.message : 'Не удалось отправить публикацию.'); }
     finally { setBusy(false); }
@@ -92,18 +93,19 @@ function CommunityActionsInner({ kind, onPublished, isModerator, authenticated }
       <div className="community-editor">
         <div className="modal-header"><div><div className="eyebrow">СООБЩЕСТВО / {news ? 'НОВОСТИ' : 'ОБСУЖДЕНИЯ'}</div><h2 id="community-compose-title" className="modal-title">{mode === 'create' ? (news ? 'Новая новость' : 'Новое обсуждение') : mode === 'mine' ? 'Мои публикации' : 'Ожидают модерации'}</h2></div><button type="button" className="btn-icon" aria-label="Закрыть" onClick={close} disabled={busy}><X size={20} /></button></div>
         {error && <p className="community-error" role="alert">{error}</p>}
-        {mode === 'create' && (sent ? <div className="community-success" role="status"><CheckCircle2 size={36} /><h3>Отправлено на модерацию</h3><p>После одобрения материал появится в общей ленте. Статус и комментарий модератора доступны в ваших публикациях.</p><button type="button" className="btn-secondary" onClick={() => open('mine')}>Посмотреть статус</button></div> : <form className="community-form" onSubmit={submit}>
+        {mode === 'create' && (sent ? <div className="community-success" role="status"><CheckCircle2 size={36} /><h3>{submissionStatus === 'draft' ? 'Черновик сохранён' : 'Отправлено на проверку'}</h3><p>После одобрения материал появится в общей ленте. Статус и комментарий модератора доступны в ваших публикациях.</p><button type="button" className="btn-secondary" onClick={() => open('mine')}>Посмотреть статус</button></div> : <form className="community-form" onSubmit={submit}>
           <p>Поделитесь находкой или начните разговор. Публикация станет видна всем после проверки модератором.</p>
           <label>Заголовок<input value={title} onChange={event => setTitle(event.target.value)} required minLength={3} maxLength={news ? 180 : 160} /></label>
           <label>Игра{news ? ' (необязательно)' : ''}<GameCombobox id="community-game" games={games} value={game} onChange={setGame} required={!news} /></label>
           {news && <label>Раздел<select value={category} onChange={event => setCategory(event.target.value as NewsCategory)}>{NEWS_CATEGORY_OPTIONS.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label>}
           <label>{news ? 'Текст новости' : 'Текст обсуждения'}<textarea rows={9} value={body} onChange={event => setBody(event.target.value)} required minLength={10} maxLength={news ? 30000 : 20000} /></label>
           <label>Теги (необязательно)<input value={tags} onChange={event => setTags(event.target.value)} placeholder="До 8 тегов через запятую" maxLength={255} /></label>
-          <div className="community-form__footer"><button type="button" className="btn-secondary" disabled={busy} onClick={close}>Отмена</button><button type="submit" className="market-compose-btn" disabled={busy}>{busy ? 'Отправляем…' : 'Отправить на модерацию'}</button></div>
+          <label>Публикация<select value={submissionStatus} onChange={event => setSubmissionStatus(event.target.value as 'draft' | 'pending')}><option value="draft">Сохранить черновик</option><option value="pending">Отправить на проверку</option></select></label>
+          <div className="community-form__footer"><button type="button" className="btn-secondary" disabled={busy} onClick={close}>Отмена</button><button type="submit" className="market-compose-btn" disabled={busy}>{busy ? 'Сохраняем…' : submissionStatus === 'draft' ? 'Сохранить черновик' : 'Отправить на проверку'}</button></div>
         </form>)}
         {mode && mode !== 'create' && <div className="community-submissions" aria-busy={loading}>
           {!loading && !error && items.length === 0 && <p>{mode === 'pending' ? 'Все публикации проверены.' : 'Вы ещё ничего не публиковали.'}</p>}
-          {items.map(item => <article key={item.id} className="community-submission"><span className={'community-status community-status--' + item.moderationStatus}>{STATUS[item.moderationStatus]}</span><h3>{item.title}</h3><p className="community-submission__author">{item.author.displayName}</p><p>{[games.find(game => game.id === item.gameId)?.title, NEWS_CATEGORY_OPTIONS.find(category => category.value === item.category)?.label].filter(Boolean).join(' · ')}</p><div className="community-submission__body">{item.body}</div><div className="feed-tags">{item.tags.map(tag => <span className="feed-tag" key={tag}>{tag}</span>)}</div>{item.moderationNote && <p><strong>Комментарий модератора:</strong> {item.moderationNote}</p>}{mode === 'pending' && <div className="community-review"><label>Комментарий модератора<textarea rows={2} maxLength={1000} value={notes[item.id] ?? ''} onChange={event => setNotes(previous => ({ ...previous, [item.id]: event.target.value }))} placeholder="При отклонении укажите причину" /></label><div className="community-form__footer"><button type="button" className="btn-secondary" disabled={busy || loading} onClick={() => void review(item, 'hidden')}>Отклонить</button><button type="button" className="market-compose-btn" disabled={busy || loading} onClick={() => void review(item, 'visible')}>Одобрить и опубликовать</button></div></div>}</article>)}
+          {items.map(item => <article key={item.id} className="community-submission"><span className={'community-status community-status--' + item.moderationStatus}>{STATUS[item.moderationStatus]}</span><h3>{item.title}</h3><p className="community-submission__author">{item.author.displayName}</p><p>{[games.find(game => game.id === item.gameId)?.title, NEWS_CATEGORY_OPTIONS.find(category => category.value === item.category)?.label].filter(Boolean).join(' · ')}</p><div className="community-submission__body">{item.body}</div><div className="feed-tags">{item.tags.map(tag => <span className="feed-tag" key={tag}>{tag}</span>)}</div>{item.moderationNote && <p><strong>Комментарий модератора:</strong> {item.moderationNote}</p>}{mode === 'mine' && (item.moderationStatus === 'draft' || item.moderationStatus === 'hidden') && <button type="button" className="btn-secondary" disabled={busy} onClick={async () => {setBusy(true);setError('');try {await apiRequest('/api/v1/' + kind + '/' + encodeURIComponent(item.id) + '/submit', {method: 'POST'});setPage(1);setRevision(value => value + 1);} catch (cause) {setError(cause instanceof Error ? cause.message : 'Не удалось отправить на проверку.');} finally {setBusy(false);}}}>Отправить на проверку</button>}{mode === 'pending' && <div className="community-review"><label>Комментарий модератора<textarea rows={2} maxLength={1000} value={notes[item.id] ?? ''} onChange={event => setNotes(previous => ({ ...previous, [item.id]: event.target.value }))} placeholder="При отклонении укажите причину" /></label><div className="community-form__footer"><button type="button" className="btn-secondary" disabled={busy || loading} onClick={() => void review(item, 'hidden')}>Отклонить</button><button type="button" className="market-compose-btn" disabled={busy || loading} onClick={() => void review(item, 'visible')}>Одобрить и опубликовать</button></div></div>}</article>)}
           {loading && <p role="status">Загружаем публикации…</p>}
           {error && <button type="button" className="btn-secondary" disabled={loading} onClick={() => {setPage(1);setRevision(value => value + 1);}}>Повторить загрузку</button>}
           {hasMore && !loading && <button type="button" className="btn-secondary" onClick={() => setPage(value => value + 1)}>Показать ещё</button>}

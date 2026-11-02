@@ -1,4 +1,7 @@
 import { Prisma } from '@prisma/client';
+import { applyModeration } from '../lib/moderation.js';
+import { resolveStatus } from '../lib/statusDirectories.js';
+import { isActiveAuction } from '../../../shared/src/marketLifecycle.js';
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { dateOnlySchema, paginated, paginationSchema, type AdminReference, type AdminTable } from '@discvault/shared';
@@ -203,7 +206,7 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
     }, {isolationLevel: 'RepeatableRead'});
   });
   app.post('/api/v1/admin/data/:table/records', auth, async (request, reply) => {
-    requireRoles(request, ['admin']);
+    const admin = requireRoles(request, ['admin']);
     const {table: name} = request.params as {table: string};
     const table = getTable(name);
     if (!table.canCreate) throw forbidden('Сессии создаются только при входе пользователя.');
@@ -214,6 +217,8 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
       if (data.status === 'suspended') data.suspendedAt = new Date();
     }
     const record = await write(app, async (tx) => {
+      await resolveStatus(tx, name, data);
+      applyModeration(name, data, null, admin.id);
       await validateRecord(tx, name, data, null);
       const created = await delegate(tx, name).create({data, select: recordSelect(table)});
       await reconcileRecords(tx, name, null, created);
@@ -239,6 +244,9 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
       const old = await db.findFirst({where: key, select: recordSelect(table)});
       if (!old) throw notFound();
       checkVersion(table, old, input.expectedUpdatedAt);
+      await resolveStatus(tx, name, data);
+      if (name === 'MarketEntry' && isActiveAuction(old as {kind: string; status: string; moderationStatus: string}) && Object.keys(data).some(field => !['statusId', 'status', 'moderationStatus', 'moderationNote'].includes(field))) throw conflict('ACTIVE_AUCTION_LOCKED', 'Активный лот нельзя редактировать. Создайте новый на основе текущего, а этот закройте или удалите.');
+      applyModeration(name, data, old, admin.id);
       if (name === 'User') {
         await protectUser(tx, admin.id, old, data, false);
         if (data.status !== undefined && data.status !== old.status) data.suspendedAt = data.status === 'suspended' ? new Date() : null;
@@ -257,6 +265,7 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
     const {table: name, key: encodedKey} = request.params as {table: string; key: string};
     const table = getTable(name);
     const key = parseKey(table, encodedKey);
+    if (!table.canDelete) throw forbidden('Системные статусы нельзя удалять.');
     const input = parse(deleteSchema, request.body);
     await write(app, async (tx) => {
       const db = delegate(tx, name);

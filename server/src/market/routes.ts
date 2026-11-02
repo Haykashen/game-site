@@ -1,4 +1,5 @@
 import type { FastifyInstance, FastifyRequest } from 'fastify';
+import { isActiveAuction } from '../../../shared/src/marketLifecycle.js';
 import { resolveEditionId } from '../lib/editionIdentity.js';
 import {
   fromMinorUnits,
@@ -119,6 +120,7 @@ async function listMarketEntries(
 }
 
 export function registerMarketRoutes(app: FastifyInstance): void {
+  app.get('/api/v1/market/localizations', async () => ({items: await app.prisma.localization.findMany({select: {id: true, name: true}, orderBy: {createdAt: 'asc'}})}));
   app.get(
     '/api/v1/market',
     { preHandler: app.optionalAuth },
@@ -178,6 +180,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
       const input = parse(marketCreateSchema, request.body);
       if (input.editionId) input.editionId = await resolveEditionId(app.prisma,input.editionId);
       await assertMarketTarget(app, input.gameId, input.editionId);
+      if (input.localizationId && !await app.prisma.localization.findUnique({where: {id: input.localizationId}})) throw badRequest('Выбранная локализация не найдена.');
 
       const photos = await storePhotoReferences(input.photos, 'market');
       const priceMinor = toMinorUnits(input.price);
@@ -199,12 +202,13 @@ export function registerMarketRoutes(app: FastifyInstance): void {
             listingType: input.kind === 'auction' ? null : (input.listingType ?? null),
             gameId: input.gameId,
             editionId: input.editionId ?? null,
+            localizationId: input.itemType === 'game' ? input.localizationId ?? null : null,
             title: input.title,
             condition: input.condition,
             priceMinor,
             description: input.description,
             status: 'active',
-            moderationStatus: 'pending',
+            moderationStatus: input.submissionStatus ?? 'pending',
             deliveryServices: deliveryServicesFromApi(input.deliveryServices),
             internationalShipping: input.internationalShipping ?? null,
             packagingPriceMinor:
@@ -250,7 +254,10 @@ export function registerMarketRoutes(app: FastifyInstance): void {
       if (!existing) throw notFound('Объявление не найдено.');
       if (existing.authorId !== user.id) throw forbidden('Это не ваше объявление.');
 
+      if (isActiveAuction(existing)) throw conflict('ACTIVE_AUCTION_LOCKED', 'Активный лот нельзя редактировать. Создайте новый на основе текущего, а этот закройте или удалите.');
+
       const merged = {
+        submissionStatus: input.submissionStatus,
         itemType: input.itemType ?? existing.itemType,
         kind: input.kind ?? existing.kind,
         listingType:
@@ -258,6 +265,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
         gameId: input.gameId ?? existing.gameId,
         editionId:
           input.editionId !== undefined ? input.editionId : existing.editionId,
+        localizationId: input.localizationId !== undefined ? input.localizationId : existing.localizationId,
         title: input.title ?? existing.title,
         condition: input.condition ?? existing.condition,
         price: input.price ?? fromMinorUnits(existing.priceMinor),
@@ -304,6 +312,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
         };
 
         const immutableChanged =
+          (validated.localizationId ?? null) !== existing.localizationId ||
           validated.itemType !== existing.itemType ||
           validated.kind !== existing.kind ||
           validated.gameId !== existing.gameId ||
@@ -323,6 +332,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
       }
 
       await assertMarketTarget(app, validated.gameId, validated.editionId);
+      if (validated.localizationId && !await app.prisma.localization.findUnique({where: {id: validated.localizationId}})) throw badRequest('Выбранная локализация не найдена.');
 
       const photos =
         input.photos !== undefined
@@ -345,6 +355,8 @@ export function registerMarketRoutes(app: FastifyInstance): void {
           const updated = await tx.marketEntry.update({
             where: { id, version: existing.version },
             data: {
+              moderationStatus: validated.submissionStatus ?? (existing.moderationStatus === 'draft' ? 'draft' : 'pending'),
+              moderationNote: null, moderatedAt: null, moderatorId: null,
               version: { increment: 1 },
               kind: validated.kind,
               itemType: validated.itemType,
@@ -352,6 +364,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
                 validated.kind === 'auction' ? null : (validated.listingType ?? null),
               gameId: validated.gameId,
               editionId: validated.editionId ?? null,
+              localizationId: validated.itemType === 'game' ? validated.localizationId ?? null : null,
               title: validated.title,
               condition: validated.condition,
               priceMinor,

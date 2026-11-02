@@ -14,6 +14,7 @@ export const marketKindSchema = z.enum(['listing', 'auction']);
 export const marketListingTypeSchema = z.enum(['sale', 'purchase', 'exchange']);
 export const marketStatusSchema = z.enum(['active', 'sold', 'closed']);
 export const marketModerationStatusSchema = z.enum([
+  'draft',
   'pending',
   'visible',
   'hidden',
@@ -33,11 +34,13 @@ export type MarketModerationStatus = z.infer<typeof marketModerationStatusSchema
 export type MarketDeliveryService = z.infer<typeof marketDeliveryServiceSchema>;
 
 const marketFieldsSchema = z.object({
+  submissionStatus: z.enum(['draft', 'pending']).optional(),
   kind: marketKindSchema,
   itemType: marketItemTypeSchema.default('game'),
   listingType: marketListingTypeSchema.nullable().optional(),
   gameId: idSchema,
   editionId: idSchema.nullable().optional(),
+  localizationId: z.string().uuid().nullable().optional(),
   title: z.string().trim().min(1, 'Укажите заголовок.').max(120),
   condition: z.string().trim().min(1, 'Укажите состояние.').max(60),
   price: rubleAmountSchema,
@@ -157,6 +160,8 @@ export const bidCreateSchema = z.object({
 });
 
 export interface MarketEntryDto {
+  localizationId?: string | null;
+  localization?: string | null;
   itemType: MarketItemType;
   id: string;
   kind: MarketKind;

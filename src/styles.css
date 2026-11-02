@@ -403,6 +403,10 @@
         .view-mode-btn { border-radius: 7px; }
         .view-mode-btn.active { background: var(--brand); color: #172013; box-shadow: 3px 3px 0 rgba(120,100,216,.35); }
         .catalog-toolbar { border-radius: 14px; padding: clamp(1rem, 2vw, 1.5rem); }
+        .catalog-toolbar, .admin-reports__filters, .admin-data__toolbar, .notifications-toolbar, .analytics-toolbar {
+            position: sticky; top: calc(var(--topbar-height, 4rem) + .5rem); z-index: 35;
+            background: var(--bg-card);
+        }
         .catalog-search input, .filter-trigger { border-radius: 9px; }
         .btn-primary { background: var(--brand); color: #172013; border-radius: 9px; box-shadow: 3px 3px 0 rgba(120,100,216,.4); }
         .btn-primary:hover { background: var(--brand-hover); transform: translate(-1px,-1px); box-shadow: 4px 4px 0 rgba(120,100,216,.45); }

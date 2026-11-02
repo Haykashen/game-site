@@ -12,6 +12,7 @@ import type {
 import { ModalShell } from '../ui/ModalShell';
 import { ComposeEntryForm } from './ComposeEntryForm';
 import { MarketEntryDetail } from './MarketEntryDetail';
+import { isActiveAuction } from '../../../shared/src/marketLifecycle';
 
 interface MarketDrawerProps {
   isOpen: boolean;
@@ -81,6 +82,8 @@ export function MarketDrawer({
   error,
 }: MarketDrawerProps) {
   const [lastView, setLastView] = useState<DrawerView | null>(null);
+  const [copyEntry, setCopyEntry] = useState<MarketEntry | null>(null);
+  useEffect(() => {setCopyEntry(null);}, [entry?.id, isOpen]);
 
   useEffect(() => {
     if (isComposing) {
@@ -123,6 +126,8 @@ export function MarketDrawer({
       {error && <p className="market-form__error" role="alert">{error}</p>}
       {(view?.type === 'compose' || view?.type === 'edit') && !isAuthenticated ? (
         <div className="panel account-notice"><h2 id={TITLE_ID}>Войдите в аккаунт</h2><p>Для размещения и изменения объявления нужна авторизация.</p><Link className="btn-secondary" to="/account" onClick={onClose}>Войти</Link></div>
+      ) : copyEntry && isOwn && isAuthenticated ? (
+        <><p className="market-form__hint">Новый лот на основе текущего. Проверьте данные и сроки торгов. Ставки не переносятся. Исходный лот остаётся активным — закройте или удалите его отдельно.</p><ComposeEntryForm key={`copy-${copyEntry.id}`} kind={copyEntry.kind} sourceEntry={copyEntry} games={games} editions={editions} initialGameId={copyEntry.gameId} initialEditionId={copyEntry.editionId ?? ''} titleId={TITLE_ID} onSubmit={async draft => {await onCreate(draft); setCopyEntry(null);}} onCancel={() => setCopyEntry(null)} /></>
       ) : view?.type === 'compose' ? (
         <ComposeEntryForm
           key={composeKey}
@@ -136,7 +141,7 @@ export function MarketDrawer({
           onSubmit={onCreate}
           onCancel={onClose}
         />
-      ) : view?.type === 'edit' ? (
+      ) : view?.type === 'edit' && !isActiveAuction(view.entry) ? (
         <ComposeEntryForm
           key={`edit-${view.entry.id}`}
           kind={view.entry.kind}
@@ -149,10 +154,11 @@ export function MarketDrawer({
           onSubmit={onUpdate}
           onCancel={onCancelEdit}
         />
-      ) : view?.type === 'entry' ? (
+      ) : view?.type === 'entry' || view?.type === 'edit' ? (
         <MarketEntryDetail
           key={view.entry.id}
           entry={view.entry}
+          onDuplicate={() => setCopyEntry(view.entry)}
           game={view.game}
           edition={view.edition}
           titleId={TITLE_ID}

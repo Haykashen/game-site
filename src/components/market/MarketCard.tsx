@@ -38,7 +38,7 @@ export function MarketCard({ entry, game, edition, isOwn = false, onSelect }: Ma
   const listingType = isAuction ? null : entry.listingType;
   const kindLabel = isAuction ? 'Аукцион' : listingTypeLabel(listingType);
   const moderationLabel =
-    entry.moderationStatus === 'pending'
+    entry.moderationStatus === 'draft' ? 'Черновик' : entry.moderationStatus === 'pending'
       ? 'На проверке'
       : entry.moderationStatus === 'hidden' ||
           entry.moderationStatus === 'removed'

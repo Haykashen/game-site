@@ -1,7 +1,21 @@
 import { z } from 'zod';
-import type { FastifyRequest } from 'fastify';
+import type { FastifyRequest, FastifyInstance } from 'fastify';
 import { hasRole, requireRoles } from '../auth/authorization.js';
-import { unauthorized } from '../errors.js';
+import { unauthorized, conflict } from '../errors.js';
+
+export function registerCommunitySubmit(app: FastifyInstance, kind: 'news' | 'discussions') {
+  app.post('/api/v1/' + kind + '/:id/submit', {preHandler: app.authenticate}, async (request) => {
+    if (!request.user) throw unauthorized();
+    const {id} = request.params as {id: string};
+    const args = {
+      where: {id, authorId: request.user.id, moderationStatus: {in: ['draft', 'hidden'] as ('draft' | 'hidden')[]}},
+      data: {moderationStatus: 'pending' as const, moderationNote: null, moderatedAt: null, moderatorId: null},
+    };
+    const result = kind === 'news' ? await app.prisma.newsPost.updateMany(args) : await app.prisma.discussion.updateMany(args);
+    if (!result.count) throw conflict('SUBMISSION_CHANGED', 'Запись уже отправлена на проверку или недоступна.');
+    return {status: 'pending'};
+  });
+}
 
 export const communityReviewSchema = z.object({
   updatedAt: z.string().datetime(),

@@ -63,6 +63,7 @@ enum UserStatus {
 }
 
 enum ModerationStatus {
+  draft
   pending
   visible
   hidden
@@ -121,6 +122,9 @@ enum NewsCategory {
 }
 
 model User {
+  statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
+  statusReference AccountStatus @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  @@index([statusId])
   id               String     @id @default(uuid()) @db.Uuid
   email            String     @unique
   passwordHash     String?    @map("password_hash")
@@ -187,7 +191,13 @@ model Session {
 }
 
 model Game {
-  recognitionPending Boolean @default(false) @map("recognition_pending")
+  statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
+  statusReference GameStatus @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  @@index([statusId])
+  moderationStatus ModerationStatus @default(draft) @map("moderation_status")
+  moderationNote String? @map("moderation_note") @db.Text
+  moderatedAt DateTime? @map("moderated_at")
+  moderatorId String? @map("moderator_id") @db.Uuid
   id          String   @id
   title       String   @unique
   publisher   String
@@ -250,7 +260,13 @@ model GameRating {
 }
 
 model Edition {
-  recognitionPending Boolean @default(false) @map("recognition_pending")
+  statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
+  statusReference GameStatus @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  @@index([statusId])
+  moderationStatus ModerationStatus @default(draft) @map("moderation_status")
+  moderationNote String? @map("moderation_note") @db.Text
+  moderatedAt DateTime? @map("moderated_at")
+  moderatorId String? @map("moderator_id") @db.Uuid
   id             String    @id
   gameId         String    @map("game_id")
   name           String
@@ -317,7 +333,22 @@ model CopyPhoto {
   @@map("copy_photos")
 }
 
+model Localization {
+  id String @id @default(uuid()) @db.Uuid
+  name String @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  entries MarketEntry[]
+  @@map("localizations")
+}
+
 model MarketEntry {
+  statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
+  statusReference MarketEntryStatus @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  @@index([statusId])
+  localizationId String? @map("localization_id") @db.Uuid
+  localization Localization? @relation(fields: [localizationId], references: [id], onDelete: Restrict)
+  @@index([localizationId])
   id          String       @id @default(uuid())
   authorId    String       @map("author_id") @db.Uuid
   kind        MarketKind
@@ -402,6 +433,9 @@ model Bid {
 }
 
 model Deal {
+  statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
+  statusReference TransactionStatus @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  @@index([statusId])
   id            String     @id @default(uuid()) @db.Uuid
   marketEntryId String     @unique @map("market_entry_id")
   buyerId       String     @map("buyer_id") @db.Uuid
@@ -442,6 +476,9 @@ model Review {
 }
 
 model Report {
+  statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
+  statusReference ComplaintStatus @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  @@index([statusId])
   id            String           @id @default(uuid()) @db.Uuid
   reporterId    String           @map("reporter_id") @db.Uuid
   targetType    ReportTargetType @map("target_type")
@@ -528,6 +565,9 @@ model MarketEntrySubscription {
 }
 
 model Discussion {
+  statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
+  statusReference ContentStatus @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  @@index([statusId])
   moderationStatus ModerationStatus @default(pending) @map("moderation_status")
   moderationNote String? @db.Text @map("moderation_note")
   moderatedAt DateTime? @map("moderated_at")
@@ -577,6 +617,9 @@ model DiscussionComment {
 }
 
 model NewsPost {
+  statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
+  statusReference ContentStatus @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  @@index([statusId])
   moderationStatus ModerationStatus @default(pending) @map("moderation_status")
   moderationNote String? @db.Text @map("moderation_note")
   moderatedAt DateTime? @map("moderated_at")
@@ -648,4 +691,78 @@ model ChatMessage {
  @@unique([authorId,clientId])
  @@index([chatId,createdAt,id])
  @@map("chat_messages")
+}
+
+model GameStatus {
+  id String @id @default(uuid()) @db.Uuid
+  code String @unique
+  name String
+  description String @default("")
+  sortOrder Int @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  gameRecords Game[]
+  editionRecords Edition[]
+  @@map("game_statuses")
+}
+
+model MarketEntryStatus {
+  id String @id @default(uuid()) @db.Uuid
+  code String @unique
+  name String
+  description String @default("")
+  sortOrder Int @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  marketEntryRecords MarketEntry[]
+  @@map("market_entry_statuses")
+}
+
+model ContentStatus {
+  id String @id @default(uuid()) @db.Uuid
+  code String @unique
+  name String
+  description String @default("")
+  sortOrder Int @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  newsPostRecords NewsPost[]
+  discussionRecords Discussion[]
+  @@map("content_statuses")
+}
+
+model AccountStatus {
+  id String @id @default(uuid()) @db.Uuid
+  code String @unique
+  name String
+  description String @default("")
+  sortOrder Int @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  userRecords User[]
+  @@map("account_statuses")
+}
+
+model TransactionStatus {
+  id String @id @default(uuid()) @db.Uuid
+  code String @unique
+  name String
+  description String @default("")
+  sortOrder Int @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  dealRecords Deal[]
+  @@map("transaction_statuses")
+}
+
+model ComplaintStatus {
+  id String @id @default(uuid()) @db.Uuid
+  code String @unique
+  name String
+  description String @default("")
+  sortOrder Int @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  reportRecords Report[]
+  @@map("complaint_statuses")
 }

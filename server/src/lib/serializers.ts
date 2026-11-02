@@ -83,6 +83,8 @@ export async function getUserProfile(
 
 export function serializeGame(game: Game & {series?: {name: string} | null; genres?: {name: string}[]}): GameDto {
   return {
+    moderationStatus: game.moderationStatus,
+    moderationNote: game.moderationNote,
     id: game.id,
     title: game.title,
     publisher: game.publisher,
@@ -97,6 +99,8 @@ export function serializeGame(game: Game & {series?: {name: string} | null; genr
 
 export function serializeEdition(edition: Edition & {region?: {code:string}; variants?: (Edition & {region?: {code:string}})[]}): EditionDto {
   return {
+    moderationStatus: edition.moderationStatus,
+    moderationNote: edition.moderationNote,
     id: edition.id,
     gameId: edition.gameId,
     name: edition.name,
@@ -143,6 +147,7 @@ export function serializeCopy(copy: CopyWithPhotos): CopyDto {
 }
 
 export const marketEntryInclude = {
+  localization: true,
   author: { select: userSelect },
   photos: { orderBy: { sortOrder: 'asc' } },
 } satisfies Prisma.MarketEntryInclude;
@@ -153,6 +158,8 @@ export type MarketEntryWithRelations = Prisma.MarketEntryGetPayload<{
 
 export function serializeMarketEntry(entry: MarketEntryWithRelations): MarketEntryDto {
   return {
+    localizationId: entry.localizationId,
+    localization: entry.localization?.name ?? null,
     itemType: entry.itemType,
     id: entry.id,
     kind: entry.kind,

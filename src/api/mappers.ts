@@ -26,6 +26,8 @@ export function mapMarketEntry(dto: MarketEntryDto): MarketEntry {
     listingType: dto.listingType,
     gameId: dto.gameId,
     editionId: dto.editionId,
+    localizationId: dto.localizationId ?? null,
+    localization: dto.localization ?? null,
     title: dto.title,
     condition: dto.condition,
     price: dto.kind === 'auction' ? dto.currentPrice : dto.price,

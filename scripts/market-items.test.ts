@@ -53,3 +53,10 @@ test('category and text filters find loot without inventing a platform for unbou
   assert.deepEqual(select({ itemType: 'figure', platform: 'PS2' }), []);
   assert.equal(select({ itemType: 'game' }).length, INITIAL_MARKET_ENTRIES.length);
 });
+
+test('localization is an optional directory reference, not arbitrary text', () => {
+  const localizationId = 'a1000000-0000-4000-8000-000000000001';
+  assert.equal(marketCreateSchema.parse({...base, editionId: INITIAL_EDITIONS[0]!.id, localizationId}).localizationId, localizationId);
+  assert.equal(marketCreateSchema.parse({...base, editionId: INITIAL_EDITIONS[0]!.id, localizationId: null}).localizationId, null);
+  assert.equal(marketCreateSchema.safeParse({...base, editionId: INITIAL_EDITIONS[0]!.id, localizationId: 'Русский интерфейс'}).success, false);
+});

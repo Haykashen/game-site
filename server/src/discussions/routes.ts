@@ -1,4 +1,4 @@
-import { communityScope, canReadCommunity, communityReviewSchema } from '../lib/community-moderation.js';
+import { registerCommunitySubmit, communityScope, canReadCommunity, communityReviewSchema } from '../lib/community-moderation.js';
 import type { Prisma } from '@prisma/client';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import {
@@ -87,6 +87,7 @@ async function assertGameExists(app: FastifyInstance, gameId: string): Promise<v
 }
 
 export function registerDiscussionRoutes(app: FastifyInstance): void {
+  registerCommunitySubmit(app, 'discussions');
   app.get(
     '/api/v1/discussions',
     { preHandler: app.optionalAuth },
@@ -166,7 +167,7 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
       const discussion = await app.prisma.discussion.create({
         data: {
           authorId: user.id,
-          moderationStatus: 'pending',
+          moderationStatus: input.submissionStatus ?? 'pending',
           gameId: input.gameId,
           title: input.title,
           excerpt: input.excerpt?.trim() || deriveExcerpt(input.body),

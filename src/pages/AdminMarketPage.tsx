@@ -37,6 +37,7 @@ type StatusFilter = 'all' | MarketModerationStatus;
 type KindFilter = 'all' | 'listing' | 'auction';
 
 const STATUS_LABELS: Record<MarketModerationStatus, string> = {
+  draft: 'Черновик',
   pending: 'На проверке',
   visible: 'Опубликован',
   hidden: 'Отклонён',

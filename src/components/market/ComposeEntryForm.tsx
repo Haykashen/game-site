@@ -1,4 +1,5 @@
 import { RecognizeGame } from './RecognizeGame';
+import { apiRequest } from '../../api/client';
 import { Gavel, Tag, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { MARKET_ITEM_OPTIONS, marketItemLabel, type MarketItemType } from '@discvault/shared';
@@ -37,6 +38,7 @@ interface ComposeEntryFormProps {
   initialEditionId: string;
   /** When present, the form edits this entry instead of creating a new one. */
   entry?: MarketEntry;
+  sourceEntry?: MarketEntry;
   titleId: string;
   onSubmit: (draft: MarketDraft) => Promise<void>;
   onCancel: () => void;
@@ -71,16 +73,18 @@ export function ComposeEntryForm({
   editions: catalogEditions,
   initialGameId,
   initialEditionId,
-  entry,
+  entry: editingEntry,
+  sourceEntry,
   titleId,
   onSubmit,
   onCancel,
 }: ComposeEntryFormProps) {
+  const entry = editingEntry ?? (sourceEntry ? {...sourceEntry, startsAt: null, endsAt: null, price: sourceEntry.startPrice ?? sourceEntry.price, moderationStatus: 'draft' as const} : undefined);
   const [recognizedGames, setRecognizedGames] = useState<Game[]>([]);
   const [recognizedEditions, setRecognizedEditions] = useState<Edition[]>([]);
   const games = [...catalogGames.filter(game => !recognizedGames.some(item => item.id === game.id)), ...recognizedGames];
   const editions = [...catalogEditions.filter(edition => !recognizedEditions.some(item => item.id === edition.id)), ...recognizedEditions];
-  const isEditing = Boolean(entry);
+  const isEditing = Boolean(editingEntry);
   const formKind = entry?.kind ?? kind;
   const isAuction = formKind === 'auction';
   const defaultGameId = entry?.gameId || initialGameId || '';
@@ -112,7 +116,18 @@ export function ComposeEntryForm({
     }
   }, [gameId, fallbackEditionId]);
   const [titleOverride, setTitle] = useState<string | null>(entry?.title ?? null);
+  const [submissionStatus, setSubmissionStatus] = useState<'draft' | 'pending'>(entry?.moderationStatus === 'draft' ? 'draft' : 'pending');
   const [condition, setCondition] = useState(entry?.condition ?? '');
+  const [localizationId, setLocalizationId] = useState(entry?.localizationId ?? '');
+  const [localizations, setLocalizations] = useState<{id: string; name: string}[]>([]);
+  const [localizationError, setLocalizationError] = useState('');
+  useEffect(() => {
+    const controller = new AbortController();
+    void apiRequest<{items: {id: string; name: string}[]}>('/api/v1/market/localizations', {signal: controller.signal})
+      .then(result => {if (!controller.signal.aborted) setLocalizations(result.items);})
+      .catch(() => {if (!controller.signal.aborted) setLocalizationError('Не удалось загрузить локализации. Повторно откройте форму.');});
+    return () => controller.abort();
+  }, []);
   const [price, setPrice] = useState(
     entry ? String(entry.startPrice ?? entry.price) : '',
   );
@@ -255,6 +270,8 @@ export function ComposeEntryForm({
       listingType: isAuction ? null : listingType,
       gameId,
       editionId: trimmedEditionId || null,
+      submissionStatus,
+      localizationId: isLoot ? null : localizationId || null,
       title: trimmedTitle,
       condition: trimmedCondition,
       price: numericPrice,
@@ -404,6 +421,14 @@ export function ComposeEntryForm({
             />
           </FormField>
 
+          {!isLoot && <FormField id="marketLocalization" label="Локализация">
+            <select id="marketLocalization" className="form-control" value={localizationId} onChange={event => setLocalizationId(event.target.value)}>
+              <option value="">Не указано</option>
+              {localizationId && !localizations.some(item => item.id === localizationId) && <option value={localizationId}>{entry?.localization ?? 'Текущая локализация'}</option>}
+              {localizations.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
+            </select>
+            {localizationError && <p role="alert">{localizationError}</p>}
+          </FormField>}
           <FormField id="marketCondition" label="Состояние / комплект">
             <input
               id="marketCondition"
@@ -602,12 +627,17 @@ export function ComposeEntryForm({
           </div>
         </div>
 
+        <FormField id="marketSubmissionStatus" label="Публикация">
+          <select id="marketSubmissionStatus" className="form-control" value={submissionStatus} onChange={event => setSubmissionStatus(event.target.value as 'draft' | 'pending')}>
+            <option value="draft">Сохранить черновик</option><option value="pending">Отправить на проверку</option>
+          </select>
+        </FormField>
         <div className="market-form__actions">
           <button type="button" className="btn-secondary" onClick={onCancel}>
             Отмена
           </button>
           <button type="submit" className="market-form__submit" disabled={isProcessingPhotos || isSubmitting}>
-            {isSubmitting ? 'Сохраняем…' : isProcessingPhotos
+            {submissionStatus === 'draft' ? 'Сохранить черновик' : isSubmitting ? 'Сохраняем…' : isProcessingPhotos
               ? 'Обработка фото…'
               : isEditing
                 ? 'Сохранить изменения'

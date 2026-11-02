@@ -70,7 +70,7 @@ export const adminReportsQuerySchema = paginationSchema.extend({
 
 export const adminMarketQueueQuerySchema = paginationSchema.extend({
   status: z
-    .enum(['all', 'pending', 'visible', 'hidden', 'removed'])
+    .enum(['all', 'draft', 'pending', 'visible', 'hidden', 'removed'])
     .default('pending'),
   kind: z.enum(['listing', 'auction']).optional(),
 });

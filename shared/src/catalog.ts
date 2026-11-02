@@ -2,6 +2,8 @@ import { z } from 'zod';
 import { paginationSchema } from './common.js';
 
 export interface GameDto {
+  moderationStatus?: 'draft' | 'pending' | 'visible' | 'hidden' | 'removed';
+  moderationNote?: string | null;
   id: string;
   title: string;
   publisher: string;
@@ -14,6 +16,8 @@ export interface GameDto {
 }
 
 export interface EditionDto {
+  moderationStatus?: 'draft' | 'pending' | 'visible' | 'hidden' | 'removed';
+  moderationNote?: string | null;
   id: string;
   gameId: string;
   name: string;

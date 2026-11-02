@@ -50,6 +50,7 @@ interface MarketEntryDetailProps {
   onClose: () => void;
   onOpenGame: (gameId: string, editionId?: string) => void;
   onEdit: () => void;
+  onDuplicate: () => void;
   onDelete: () => void;
   onSetStatus: (status: MarketStatus) => void;
   onPlaceBid: (amount: number) => Promise<string | null>;
@@ -67,6 +68,7 @@ export function MarketEntryDetail({
   onClose,
   onOpenGame,
   onEdit,
+  onDuplicate,
   onDelete,
   onSetStatus,
   onPlaceBid,
@@ -125,7 +127,7 @@ export function MarketEntryDetail({
       : listingType === 'exchange'
         ? 'Оценка'
         : 'Цена';
-  const status = isPending
+  const status = entry.moderationStatus === 'draft' ? 'Черновик' : isPending
     ? 'На проверке'
     : isHiddenByModeration
       ? 'Скрыто модератором'
@@ -253,7 +255,7 @@ export function MarketEntryDetail({
             <div>
               <span className="market-owner__kicker">Ваше объявление</span>
               <p className="market-owner__hint">
-                {isPending
+                {entry.moderationStatus === 'draft' ? 'Черновик виден только вам и администрации. Откройте редактирование, чтобы отправить его на проверку.' : isPending
                   ? 'Лот отправлен на проверку. После одобрения администрацией он появится в общей ленте.'
                   : isHiddenByModeration
                     ? 'Объявление скрыто модератором и не показывается другим пользователям.'
@@ -293,10 +295,12 @@ export function MarketEntryDetail({
           </div>
 
           <div className="market-owner__actions">
+            {isActiveAuction(entry) && <><p className="market-owner__hint">Активный лот нельзя редактировать. Создайте новый на основе текущего, а этот закройте или удалите. Данные будут скопированы в новую форму.</p><button type="button" className="btn-secondary market-owner__btn" onClick={onDuplicate}>Создать новый на основе этого</button></>}
+            {!isActiveAuction(entry) &&
             <button type="button" className="btn-secondary market-owner__btn" onClick={onEdit}>
               <Pencil size={15} aria-hidden="true" />
               Редактировать
-            </button>
+            </button>}
 
             {!isPending &&
               (entry.status === 'active' ? (
@@ -369,7 +373,7 @@ export function MarketEntryDetail({
           <SpecRow label="Платформа" value={edition?.platform ?? (entry.itemType === 'game' ? 'Любая' : 'Не указана')} />
           <SpecRow label="Издание" value={edition?.name ?? (entry.itemType === 'game' ? 'Любое издание' : 'Без привязки к изданию')} />
           <SpecRow label="Регион" value={edition?.region ?? 'Любой'} />
-          <SpecRow label="Язык" value={edition?.lang ?? '—'} />
+          {entry.itemType === 'game' && <SpecRow label="Локализация" value={entry.localization ?? 'Не указано'} />}
           <SpecRow label="Состояние" value={formatMarketCondition(entry.condition)} />
           <SpecRow
             label="Автор"
@@ -571,3 +575,4 @@ export function MarketEntryDetail({
     </>
   );
 }
+import { isActiveAuction } from '../../../shared/src/marketLifecycle';

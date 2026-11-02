@@ -2,6 +2,8 @@ import type { MarketItemType } from '@discvault/shared';
 
 /** A game in the catalogue: the abstract work, without a concrete release. */
 export interface Game {
+  moderationStatus?: 'draft' | 'pending' | 'visible' | 'hidden' | 'removed';
+  moderationNote?: string | null;
   id: string;
   title: string;
   publisher: string;
@@ -19,6 +21,8 @@ export interface Game {
  * physical contents that belong to this particular edition.
  */
 export interface Edition {
+  moderationStatus?: 'draft' | 'pending' | 'visible' | 'hidden' | 'removed';
+  moderationNote?: string | null;
   id: string;
   gameId: string;
   /** Standard, Launch Edition, Collector's Edition, … */
@@ -170,12 +174,14 @@ export type MarketListingType = 'sale' | 'purchase' | 'exchange';
 export type MarketStatus = 'active' | 'sold' | 'closed';
 
 /** Publication state: new lots wait in `pending` until an administrator approves them. */
-export type MarketModerationStatus = 'pending' | 'visible' | 'hidden' | 'removed';
+export type MarketModerationStatus = 'draft' | 'pending' | 'visible' | 'hidden' | 'removed';
 
 /** Courier service ids are stable so saved entries survive label edits. */
 export type MarketDeliveryService = 'russian-post' | 'cdek' | 'yandex' | 'other';
 
 export interface MarketEntry {
+  localizationId?: string | null;
+  localization?: string | null;
   itemType: MarketItemType;
   id: string;
   kind: MarketKind;
@@ -227,6 +233,6 @@ export interface MarketEntry {
 }
 
 /** Everything the placement form collects; ids, counters and status are assigned by the store. */
-export type MarketDraft = Omit<MarketEntry, 'id' | 'createdAt' | 'bids' | 'status'>;
+export type MarketDraft = Omit<MarketEntry, 'id' | 'createdAt' | 'bids' | 'status'> & {submissionStatus?: 'draft' | 'pending'};
 
 export type Theme = 'light' | 'dark';

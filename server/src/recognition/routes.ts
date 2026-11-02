@@ -59,10 +59,10 @@ export function registerRecognitionRoutes(app: FastifyInstance) {
     return app.prisma.$transaction(async tx => {
       await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${normalized(facts.title)}))`;
       const games = await tx.game.findMany({include: {series: true, genres: true}, where: {title: {contains: facts.title.split(/\s+/)[0]!, mode: 'insensitive'}}});
-      const game = games.find(item => normalized(item.title) === normalized(facts.title)) ?? await tx.game.create({data: {id: randomUUID(), title: facts.title, publisher: '', description: '', coverImage: decoded.imageReference, recognitionPending: true}});
+      const game = games.find(item => normalized(item.title) === normalized(facts.title)) ?? await tx.game.create({data: {id: randomUUID(), title: facts.title, publisher: '', description: '', coverImage: decoded.imageReference, moderationStatus: 'pending'}});
       const region = await resolveRegion(tx, facts.region);
       const existing = await tx.edition.findFirst({where: {gameId: game.id, platform: facts.platform, name: {equals: facts.edition, mode: 'insensitive'}, regionId: region.id, lang: facts.language || 'Не указано', canonicalId: null}, include:{region:true}});
-      const edition = existing ?? await tx.edition.create({data: {id: randomUUID(), gameId: game.id, name: facts.edition, platform: facts.platform, regionId: region.id, lang: facts.language || 'Не указано', barcode: facts.barcode, media: 'Не указано', contents: [], coverImages: decoded.imageReference ? [decoded.imageReference] : [], recognitionPending: true},include:{region:true}});
+      const edition = existing ?? await tx.edition.create({data: {id: randomUUID(), gameId: game.id, name: facts.edition, platform: facts.platform, regionId: region.id, lang: facts.language || 'Не указано', barcode: facts.barcode, media: 'Не указано', contents: [], coverImages: decoded.imageReference ? [decoded.imageReference] : [], moderationStatus: 'pending'},include:{region:true}});
       return {game: serializeGame(game), edition: serializeEdition(edition)};
     });
   });
