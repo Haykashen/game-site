@@ -73,6 +73,29 @@ async function fixture() {
 const headers = {'x-test-role': 'admin'};
 const path = (model: string, key?: Row) => '/api/v1/admin/data/' + model + '/records' + (key ? '/' + encodeURIComponent(JSON.stringify(key)) : '');
 
+test('unified statuses are scoped to the entity and system identities are protected', async () => {
+  const {app, rows} = await fixture();
+  const gameStatusId = 'a1000000-0000-4000-8000-000000000001';
+  const dealStatusId = 'a1000000-0000-4000-8000-000000000002';
+  rows.get('status')!.push({id:gameStatusId,entity:'Game',code:'draft',name:'Черновик'}, {id:dealStatusId,entity:'Deal',code:'pending',name:'Ожидает'});
+  rows.get('game')!.push({id:'status-game',title:'Status game',moderationStatus:'draft',updatedAt:now});
+  try {
+    const result = await app.inject({method:'GET',url:'/api/v1/admin/data/Status/references?entity=Game',headers});
+    assert.equal(result.statusCode,200,result.body);
+    assert.deepEqual(result.json().items.map((item: {value:string})=>item.value),[gameStatusId]);
+    const wrong = await app.inject({method:'PATCH',url:path('Game',{id:'status-game'}),headers,payload:{data:{statusId:dealStatusId},expectedUpdatedAt:now.toISOString()}});
+    assert.equal(wrong.statusCode,400,wrong.body);
+    for(const field of ['code','entity']) assert.throws(()=>parseData(getTable('Status'),{[field]:'changed'},false),AppError);
+    assert.equal(getTable('Status').canCreate,false);
+    assert.equal(getTable('Status').canDelete,false);
+    const moderator = {'x-test-role':'moderator'};
+    const permitted = await app.inject({method:'GET',url:'/api/v1/admin/data/Status/references?entity=Game',headers:moderator});
+    assert.equal(permitted.statusCode,200,permitted.body);
+    const denied = await app.inject({method:'GET',url:'/api/v1/admin/data/Status/references?entity=Deal',headers:moderator});
+    assert.equal(denied.statusCode,403,denied.body);
+  } finally {await app.close();}
+});
+
 test('all database models are covered and credentials never enter public metadata or select', () => {
   assert.deepEqual([...models.map((model) => model.name), ...PRIVATE_MODELS].sort(), Prisma.dmmf.datamodel.models.map((model) => model.name).sort());
   for(const name of PRIVATE_MODELS) assert.throws(()=>getTable(name), AppError);

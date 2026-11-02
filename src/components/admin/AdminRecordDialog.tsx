@@ -31,10 +31,10 @@ function formatError(cause: unknown): string {
 }
 
 function ReferenceInput(props: Parameters<typeof LegacyReferenceInput>[0]) {
-  if (props.field.reference === 'GameSeries' || props.field.reference === 'GameGenre' || props.field.reference === 'Region' || props.field.reference?.endsWith('Status')) return <ReferenceCombobox {...props} reference={props.field.reference} multiple={props.field.type === 'list'} />;
+  if (props.field.reference === 'GameSeries' || props.field.reference === 'GameGenre' || props.field.reference === 'Region' || props.field.reference?.endsWith('Status')) return <ReferenceCombobox {...props} reference={props.field.reference} entity={props.entity} multiple={props.field.type === 'list'} />;
   return <LegacyReferenceInput {...props} />;
 }
-function LegacyReferenceInput({field, value, onChange, required, inputId, selectedNames = {}}: {selectedNames?: Record<string,string>; field: AdminField; value: string; onChange: (value: string) => void; required: boolean; inputId: string}) {
+function LegacyReferenceInput({field, value, onChange, required, inputId, selectedNames = {}}: {entity?: string | undefined; selectedNames?: Record<string,string>; field: AdminField; value: string; onChange: (value: string) => void; required: boolean; inputId: string}) {
   const id = useId();
   const [search, setSearch] = useState('');
   const [options, setOptions] = useState<AdminReference[]>(Object.entries(selectedNames).map(([value,label])=>({value,label})));
@@ -153,7 +153,7 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
         const required = field.required && (creating || field.type !== 'password');
         const change = (next: string) => setValues((previous) => ({...previous, [field.name]: next}));
         return <div className="admin-data__field" key={field.name}><label htmlFor={`${titleId}-${field.name}`}>{field.label}{required ? ' *' : ''}</label>
-          {field.reference ? <ReferenceInput selectedNames={Array.isArray(record[field.name]) ? Object.fromEntries((record[field.name] as unknown as {id:string;name:string}[]).filter(item=>item && typeof item === 'object' && item.id).map(item=>[item.id,item.name])) : {}} field={field} inputId={`${titleId}-${field.name}`} value={value} required={required} onChange={change} /> : field.type === 'enum' || field.type === 'boolean' ? <select id={`${titleId}-${field.name}`} className="form-control" required={required} value={value} onChange={(event) => change(event.target.value)}>
+          {field.reference ? <ReferenceInput entity={table.name === 'MarketEntry' ? (values.kind === 'auction' ? 'Auction' : 'Listing') : table.name} selectedNames={Array.isArray(record[field.name]) ? Object.fromEntries((record[field.name] as unknown as {id:string;name:string}[]).filter(item=>item && typeof item === 'object' && item.id).map(item=>[item.id,item.name])) : {}} field={field} inputId={`${titleId}-${field.name}`} value={value} required={required} onChange={change} /> : field.type === 'enum' || field.type === 'boolean' ? <select id={`${titleId}-${field.name}`} className="form-control" required={required} value={value} onChange={(event) => change(event.target.value)}>
             {(creating || field.nullable) && <option value="">{creating && field.generated ? 'По умолчанию' : 'Не указано'}</option>}
             {(field.type === 'boolean' ? ['true', 'false'] : field.options).map((option) => <option key={option} value={option}>{adminOptionLabel(option)}</option>)}
           </select> : field.type === 'list' && field.options.length ? <select id={`${titleId}-${field.name}`} multiple className="form-control" value={value.split('\n')} onChange={(event) => change(Array.from(event.target.selectedOptions).map((item) => item.value).join('\n'))}>

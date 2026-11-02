@@ -1,6 +1,6 @@
 import { AdminTablesPage } from './AdminTablesPage';
 
-const REFERENCE_TABLES = ['GameGenre', 'GameSeries', 'Region', 'Localization', 'GameStatus', 'MarketEntryStatus', 'ContentStatus', 'AccountStatus', 'TransactionStatus', 'ComplaintStatus'] as const;
+const REFERENCE_TABLES = ['GameGenre', 'GameSeries', 'Region', 'Localization', 'Status'] as const;
 
 export function AdminReferencePage() {
   return (

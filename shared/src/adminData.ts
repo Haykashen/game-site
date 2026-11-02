@@ -35,6 +35,7 @@ export interface AdminDataQuery {
 }
 export interface AdminReference { value: string; label: string }
 const OPTION_LABELS: Record<string, string> = {
+  Game: 'Игра', Edition: 'Издание', Listing: 'Объявление', Auction: 'Лот аукциона', NewsPost: 'Новость', Discussion: 'Обсуждение', User: 'Пользователь', Deal: 'Сделка', Report: 'Жалоба',
   user: 'Пользователь', moderator: 'Модератор', admin: 'Администратор', active: 'Активен', suspended: 'Заблокирован', deleted: 'Удалён',
   listing: 'Объявление', auction: 'Аукцион', game: 'Игра', cover: 'Обложка', manual: 'Мануал', map: 'Карта', soundtrack: 'Саундтрек', figure: 'Фигурка', steelbook: 'Стилбук', other: 'Другое',
   sale: 'Продажа', purchase: 'Покупка', exchange: 'Обмен', sold: 'Продано', closed: 'Закрыто', russian_post: 'Почта России', cdek: 'СДЭК', yandex: 'Яндекс',

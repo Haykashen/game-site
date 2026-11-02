@@ -10,7 +10,7 @@ import { parse } from '../lib/validation.js';
 // Private conversations are accessible only through participant-checked chat routes.
 export const PRIVATE_MODELS = ['Chat', 'ChatMember', 'ChatMessage'] as const;
 export const TABLE_LABELS: Record<string, string> = {
-  GameStatus: 'Статусы игр и изданий', MarketEntryStatus: 'Статусы объявлений и лотов', ContentStatus: 'Статусы публикаций', AccountStatus: 'Статусы пользователей', TransactionStatus: 'Статусы сделок', ComplaintStatus: 'Статусы жалоб',
+  Status: 'Статусы',
   User: 'Пользователи', Session: 'Сессии', Game: 'Игры', GameGenre: 'Жанры игр', GameSeries: 'Серии игр', Region: 'Регионы', Localization: 'Локализации', GameRating: 'Оценки игр',
   Edition: 'Издания', Copy: 'Экземпляры коллекций', CopyPhoto: 'Фото экземпляров',
   MarketEntry: 'Объявления и аукционы', MarketPhoto: 'Фото объявлений', Bid: 'Ставки',
@@ -26,7 +26,7 @@ const FIELD_LABELS: Record<string, string> = {
   userId: 'Пользователь', userAgent: 'Браузер', ip: 'IP', expiresAt: 'Истекает', lastUsedAt: 'Последняя активность',
   title: 'Название', publisher: 'Издатель', developer: 'Разработчик', series: 'Серия', seriesId: 'Серия',
   year: 'Год', genres: 'Жанры', description: 'Описание', coverImage: 'Обложка', gameId: 'Игра',
-  statusId: 'Статус', score: 'Оценка', name: 'Название', platform: 'Платформа', region: 'Регион', regionId: 'Регион', lang: 'Язык',
+  entity: 'Сущность', statusId: 'Статус', score: 'Оценка', name: 'Название', platform: 'Платформа', region: 'Регион', regionId: 'Регион', lang: 'Язык',
   media: 'Носитель', releaseDate: 'Дата выхода', contents: 'Комплектация', coverImages: 'Обложки',
   barcode: 'Штрихкод', dnsProductId: 'ID товара DNS', dnsProductCode: 'Код товара DNS', canonicalId: 'Основное издание',
   editionId: 'Издание', condition: 'Состояние', completeness: 'Комплектность',
@@ -68,7 +68,7 @@ export function getTable(name: string): AdminTable {
       type: field.isList ? 'list' : field.kind === 'enum' ? 'enum' : field.type === 'Int' ? 'number' : field.type === 'Boolean' ? 'boolean' : field.type === 'DateTime' ? 'date' : 'string',
       required: !generatedId && field.isRequired && !field.hasDefaultValue && !field.isUpdatedAt && !field.isList,
       nullable: !field.isRequired, generated: Boolean(generatedId || field.hasDefaultValue || field.isUpdatedAt),
-      primary: primaryKey.includes(field.name), readOnly: generatedId || READ_ONLY.has(field.name) || name === 'Session' || (name.endsWith('Status') && field.name === 'code'),
+      primary: primaryKey.includes(field.name), readOnly: generatedId || READ_ONLY.has(field.name) || name === 'Session' || (name.endsWith('Status') && ['code','entity'].includes(field.name)),
       options: Prisma.dmmf.datamodel.enums.find((item) => item.name === field.type)?.values.map((value) => value.name) ?? [],
       reference: name === 'Game' && field.name === 'genres' ? 'GameGenre' : relation?.type ?? null,
       multiline: ['description', 'body', 'excerpt', 'text', 'message', 'notes', 'comment', 'moderatorNote', 'moderationNote'].includes(field.name),

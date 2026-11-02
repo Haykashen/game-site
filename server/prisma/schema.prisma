@@ -123,7 +123,7 @@ enum NewsCategory {
 
 model User {
   statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
-  statusReference AccountStatus @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  statusReference Status @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   @@index([statusId])
   id               String     @id @default(uuid()) @db.Uuid
   email            String     @unique
@@ -192,7 +192,7 @@ model Session {
 
 model Game {
   statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
-  statusReference GameStatus @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  statusReference Status @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   @@index([statusId])
   moderationStatus ModerationStatus @default(draft) @map("moderation_status")
   moderationNote String? @map("moderation_note") @db.Text
@@ -261,7 +261,7 @@ model GameRating {
 
 model Edition {
   statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
-  statusReference GameStatus @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  statusReference Status @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   @@index([statusId])
   moderationStatus ModerationStatus @default(draft) @map("moderation_status")
   moderationNote String? @map("moderation_note") @db.Text
@@ -344,7 +344,7 @@ model Localization {
 
 model MarketEntry {
   statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
-  statusReference MarketEntryStatus @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  statusReference Status @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   @@index([statusId])
   localizationId String? @map("localization_id") @db.Uuid
   localization Localization? @relation(fields: [localizationId], references: [id], onDelete: Restrict)
@@ -434,7 +434,7 @@ model Bid {
 
 model Deal {
   statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
-  statusReference TransactionStatus @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  statusReference Status @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   @@index([statusId])
   id            String     @id @default(uuid()) @db.Uuid
   marketEntryId String     @unique @map("market_entry_id")
@@ -477,7 +477,7 @@ model Review {
 
 model Report {
   statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
-  statusReference ComplaintStatus @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  statusReference Status @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   @@index([statusId])
   id            String           @id @default(uuid()) @db.Uuid
   reporterId    String           @map("reporter_id") @db.Uuid
@@ -566,7 +566,7 @@ model MarketEntrySubscription {
 
 model Discussion {
   statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
-  statusReference ContentStatus @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  statusReference Status @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   @@index([statusId])
   moderationStatus ModerationStatus @default(pending) @map("moderation_status")
   moderationNote String? @db.Text @map("moderation_note")
@@ -618,7 +618,7 @@ model DiscussionComment {
 
 model NewsPost {
   statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
-  statusReference ContentStatus @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  statusReference Status @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   @@index([statusId])
   moderationStatus ModerationStatus @default(pending) @map("moderation_status")
   moderationNote String? @db.Text @map("moderation_note")
@@ -693,9 +693,23 @@ model ChatMessage {
  @@map("chat_messages")
 }
 
-model GameStatus {
+
+enum StatusEntity {
+  Game
+  Edition
+  Listing
+  Auction
+  NewsPost
+  Discussion
+  User
+  Deal
+  Report
+}
+
+model Status {
   id String @id @default(uuid()) @db.Uuid
-  code String @unique
+  entity StatusEntity
+  code String
   name String
   description String @default("")
   sortOrder Int @default(0) @map("sort_order")
@@ -703,66 +717,12 @@ model GameStatus {
   updatedAt DateTime @updatedAt @map("updated_at")
   gameRecords Game[]
   editionRecords Edition[]
-  @@map("game_statuses")
-}
-
-model MarketEntryStatus {
-  id String @id @default(uuid()) @db.Uuid
-  code String @unique
-  name String
-  description String @default("")
-  sortOrder Int @default(0) @map("sort_order")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
   marketEntryRecords MarketEntry[]
-  @@map("market_entry_statuses")
-}
-
-model ContentStatus {
-  id String @id @default(uuid()) @db.Uuid
-  code String @unique
-  name String
-  description String @default("")
-  sortOrder Int @default(0) @map("sort_order")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
   newsPostRecords NewsPost[]
   discussionRecords Discussion[]
-  @@map("content_statuses")
-}
-
-model AccountStatus {
-  id String @id @default(uuid()) @db.Uuid
-  code String @unique
-  name String
-  description String @default("")
-  sortOrder Int @default(0) @map("sort_order")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
   userRecords User[]
-  @@map("account_statuses")
-}
-
-model TransactionStatus {
-  id String @id @default(uuid()) @db.Uuid
-  code String @unique
-  name String
-  description String @default("")
-  sortOrder Int @default(0) @map("sort_order")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
   dealRecords Deal[]
-  @@map("transaction_statuses")
-}
-
-model ComplaintStatus {
-  id String @id @default(uuid()) @db.Uuid
-  code String @unique
-  name String
-  description String @default("")
-  sortOrder Int @default(0) @map("sort_order")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
   reportRecords Report[]
-  @@map("complaint_statuses")
+  @@unique([entity, code])
+  @@map("statuses")
 }

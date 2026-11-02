@@ -17,8 +17,8 @@ export function fetchAdminRecords(table: string, query: AdminDataQuery, signal?:
 export function fetchAdminRecord(table: string, key: string, signal?: AbortSignal) {
   return apiRequest<{record: AdminRecord}>(recordPath(table, key), signal ? {signal} : {});
 }
-export function fetchAdminReferences(table: string, search: string, signal: AbortSignal) {
-  return apiRequest<{items: AdminReference[]}>(`${tablePath(table)}/references?search=${encodeURIComponent(search)}`, {signal});
+export function fetchAdminReferences(table: string, search: string, signal: AbortSignal, entity?: string | undefined) {
+  return apiRequest<{items: AdminReference[]}>(`${tablePath(table)}/references?search=${encodeURIComponent(search)}${entity ? '&entity=' + encodeURIComponent(entity) : ''}`, {signal});
 }
 export function createAdminRecord(table: string, data: AdminRecord) {
   return apiRequest<{record: AdminRecord}>(`${tablePath(table)}/records`, {method: 'POST', body: data});
