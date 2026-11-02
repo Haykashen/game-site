@@ -36,7 +36,7 @@ db_bytes=$(docker exec "$db_id" sh -ec 'psql -U "$POSTGRES_USER" -d "$POSTGRES_D
 uploads_kb=$(docker run --rm --network none --volumes-from "$api_id:ro" --entrypoint du "$old_api" -sk /data/uploads | awk '{print $1}')
 archive_bytes=$(stat -c %s "$release_dir/images.tar.gz")
 [[ "$db_bytes" =~ ^[0-9]+$ && "$uploads_kb" =~ ^[0-9]+$ ]] || exit 1
-required_bytes=$((db_bytes * 2 + uploads_kb * 2048 + archive_bytes * 4 + 1073741824))
+required_bytes=$((db_bytes * 3 + uploads_kb * 2048 + archive_bytes * 4 + 1073741824))
 docker_root=$(docker info -f '{{.DockerRootDir}}')
 for directory in "$app_dir" "$docker_root"; do
   free_bytes=$(df -PB1 -- "$directory" | awk 'NR==2 { print $4 }')
@@ -92,6 +92,15 @@ case "$migration_status" in
   *) echo 'Migration verification failed. Live services were not stopped.' >&2; exit 1 ;;
 esac
 
+preflight_created=false
+preflight_database="discvault_check_${revision:0:12}_${BASHPID}"
+[[ "$preflight_database" =~ ^discvault_check_[a-f0-9]{12}_[0-9]+$ ]] || exit 1
+cleanup_preflight() {
+  if [[ "$preflight_created" == true ]]; then
+    docker exec "$db_id" sh -ec 'dropdb --if-exists --force -U "$POSTGRES_USER" "$1"' sh "$preflight_database"
+    preflight_created=false
+  fi
+}
 stopped=false
 schema_touched=false
 switched=false
@@ -99,6 +108,7 @@ recover() {
   local code=${1:-$?}
   trap - ERR HUP INT TERM
   set +e
+  cleanup_preflight
   echo "Deployment failed. Recovery files: $backup" >&2
   if [[ "$schema_touched" == true ]]; then
     # Never restore a DB automatically: it could erase accepted writes or conceal
@@ -135,6 +145,12 @@ printf '%s\n' "$revision" >"$backup/target-revision"
 migration_status=0
 check_migrations || migration_status=$?
 if [[ "$migration_status" == 2 && "$allow_migrations" == true ]]; then
+  # Rehearse on a separate database restored from the verified backup.
+  docker exec "$db_id" sh -ec 'createdb -U "$POSTGRES_USER" "$1"' sh "$preflight_database"
+  preflight_created=true
+  docker exec -i "$db_id" sh -ec 'pg_restore --exit-on-error --no-owner --no-acl -U "$POSTGRES_USER" -d "$1"' sh "$preflight_database" <"$backup/database.dump"
+  "${next[@]}" run --rm --no-deps -T --pull never -e "STATUS_PREFLIGHT_DB=$preflight_database" -v "$release_dir:/deployment:ro" api node /deployment/check-restored-migrations.mjs
+  cleanup_preflight
   schema_touched=true
   "${next[@]}" run --rm --no-deps -T --pull never api npx prisma migrate deploy
   check_migrations

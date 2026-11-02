@@ -3,8 +3,12 @@
 set -eu
 printf '%s\n' "$*" >> "$MOCK_LOG"
 for argument; do last="$argument"; done
+if [[ "$*" == *check-restored-migrations.mjs* ]]; then
+  if [[ "$MOCK_SCENARIO" == preflight-failure ]]; then exit 1; fi
+  exit 0
+fi
 if [[ "$*" == *check-migrations.mjs* ]]; then
-  if [[ "$MOCK_SCENARIO" == pending || "$MOCK_SCENARIO" == migration-failure ]]; then exit 2; fi
+  if [[ "$MOCK_SCENARIO" == pending || "$MOCK_SCENARIO" == migration-failure || "$MOCK_SCENARIO" == preflight-failure ]]; then exit 2; fi
   exit 0
 fi
 if [[ "$*" == *'npx prisma migrate deploy'* ]]; then exit 1; fi

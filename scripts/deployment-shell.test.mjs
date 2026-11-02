@@ -73,3 +73,15 @@ test('migration failure stops API and does not blindly roll code or DB back', op
   assert.match(result.commands, /images.yml stop api/);
   assert.doesNotMatch(result.commands, /rollback.yml up|start api-id/);
 });
+
+
+test('restored backup migration failure restarts the old API without touching live schema', options, () => {
+  const result = runDeployment('preflight-failure', 'true');
+  assert.notEqual(result.status, 0);
+  assert.match(result.commands, /createdb/);
+  assert.match(result.commands, /pg_restore --exit-on-error/);
+  assert.match(result.commands, /check-restored-migrations.mjs/);
+  assert.match(result.commands, /dropdb --if-exists --force/);
+  assert.match(result.commands, /start api-id/);
+  assert.doesNotMatch(result.commands, /npx prisma migrate deploy|up -d/);
+});
