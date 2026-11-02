@@ -1,3 +1,4 @@
+import { statusWrite } from '../src/lib/statusSource.js';
 import {resolveRegion} from '../src/lib/regions.js';
 import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
@@ -63,7 +64,7 @@ async function seedCatalog(): Promise<void> {
       coverImage: game.coverImage,
     };
 
-    await prisma.game.upsert({
+    await prisma.game.upsert({ include: {statusReference: {select: {code: true}}},
       where: { id: game.id },
       update: data,
       create: { id: game.id, ...data },
@@ -87,7 +88,7 @@ async function seedCatalog(): Promise<void> {
       dnsProductCode: edition.dnsProductCode,
     };
 
-    await prisma.edition.upsert({
+    await prisma.edition.upsert({ include: {statusReference: {select: {code: true}}},
       where: { id: edition.id },
       update: data,
       create: { id: edition.id, ...data },
@@ -99,7 +100,7 @@ async function seedCatalog(): Promise<void> {
 
 async function seedReferenceTables(): Promise<void> {
   const games = await prisma.game.findMany({
-    select: { series: {select: {name: true}} },
+    select: { statusReference: { select: { code: true } }, series: {select: {name: true}} },
   });
   const genres = [...new Set(GAME_GENRES.flatMap(name => name.toLowerCase() === 'action rpg' ? ['Action','RPG'] : [name]))];
   const series = [...new Set(
@@ -147,13 +148,13 @@ async function seedUsers(): Promise<Map<string, string>> {
     const email = demoEmail(slugify(name));
     const isBidder = (BIDDER_NAMES as readonly string[]).includes(name);
 
-    const user = await prisma.user.upsert({
+    const user = await prisma.user.upsert({ include: {statusReference: {select: {code: true}}},
       where: { email },
       update: {
         displayName: name,
         isDemo: true,
         role: 'user',
-        status: 'active',
+        ...await statusWrite(prisma, 'User', {status: 'active'}),
         ratingSum: 0,
         ratingCount: 0,
         passwordHash: null,
@@ -164,7 +165,7 @@ async function seedUsers(): Promise<Map<string, string>> {
         displayName: name,
         isDemo: true,
         role: 'user',
-        status: 'active',
+        ...await statusWrite(prisma, 'User', {status: 'active'}),
         ratingSum: 0,
         ratingCount: 0,
         passwordHash: null,
@@ -178,13 +179,13 @@ async function seedUsers(): Promise<Map<string, string>> {
   const demoEmailAddress = env.seedDemoEmail.trim().toLowerCase();
   const passwordHash = await hashPassword(env.seedDemoPassword);
 
-  await prisma.user.upsert({
+  await prisma.user.upsert({ include: {statusReference: {select: {code: true}}},
     where: { email: demoEmailAddress },
     update: {
       displayName: 'Demo Collector',
       isDemo: false,
       role: env.seedDemoRole,
-      status: 'active',
+      ...await statusWrite(prisma, 'User', {status: 'active'}),
       suspendedAt: null,
       comment: null,
       ratingSum: 0,
@@ -197,7 +198,7 @@ async function seedUsers(): Promise<Map<string, string>> {
       displayName: 'Demo Collector',
       isDemo: false,
       role: env.seedDemoRole,
-      status: 'active',
+      ...await statusWrite(prisma, 'User', {status: 'active'}),
       ratingSum: 0,
       ratingCount: 0,
       passwordHash,
@@ -259,8 +260,7 @@ async function seedMarket(userIdByName: Map<string, string>): Promise<void> {
       condition: entry.condition,
       priceMinor: toMinor(entry.price),
       description: entry.description,
-      status: 'active' as const,
-      moderationStatus: 'visible' as const,
+      ...await statusWrite(prisma, 'MarketEntry', {kind: entry.kind, moderationStatus: 'visible'}),
       deliveryServices: entry.deliveryServices.map(deliveryServiceFromApi),
       internationalShipping: entry.internationalShipping,
       packagingPriceMinor:
@@ -279,7 +279,7 @@ async function seedMarket(userIdByName: Map<string, string>): Promise<void> {
       version: 0,
     };
 
-    await prisma.marketEntry.upsert({
+    await prisma.marketEntry.upsert({ include: {statusReference: {select: {code: true}}},
       where: { id: entry.id },
       update: data,
       create: { id: entry.id, ...data },
@@ -333,7 +333,7 @@ async function seedCommunity(userIdByName: Map<string, string>): Promise<void> {
       throw new Error(`No demo user for discussion author "${discussion.author}".`);
     }
 
-    await prisma.discussion.create({
+    await prisma.discussion.create({ include: {statusReference: {select: {code: true}}},
       data: {
         id: discussion.id,
         gameId: discussion.gameId,
@@ -379,7 +379,7 @@ async function seedCommunity(userIdByName: Map<string, string>): Promise<void> {
       throw new Error(`No demo user for news author "${post.author}".`);
     }
 
-    await prisma.newsPost.create({
+    await prisma.newsPost.create({ include: {statusReference: {select: {code: true}}},
       data: {
         id: post.id,
         authorId,

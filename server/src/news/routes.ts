@@ -1,3 +1,4 @@
+import { statusWrite, statusWhere } from '../lib/statusSource.js';
 import { registerCommunitySubmit, communityScope, canReadCommunity, communityReviewSchema } from '../lib/community-moderation.js';
 import type { Prisma } from '@prisma/client';
 import type { FastifyInstance } from 'fastify';
@@ -45,7 +46,7 @@ async function assertGameExists(
 
   const game = await app.prisma.game.findUnique({
     where: { id: gameId },
-    select: { id: true },
+    select: { statusReference: { select: { code: true } }, id: true },
   });
 
   if (!game) throw notFound('Игра не найдена.');
@@ -127,7 +128,7 @@ export function registerNewsRoutes(app: FastifyInstance): void {
       const post = await app.prisma.newsPost.create({
         data: {
           authorId: user.id,
-          moderationStatus: input.submissionStatus ?? 'pending',
+          ...await statusWrite(app.prisma, 'NewsPost', {moderationStatus: input.submissionStatus ?? 'pending'}),
           gameId: input.gameId ?? null,
           title: input.title,
           excerpt: input.excerpt?.trim() || deriveExcerpt(input.body),
@@ -154,7 +155,7 @@ export function registerNewsRoutes(app: FastifyInstance): void {
       const input = parse(newsUpdateSchema, request.body);
       const existing = await app.prisma.newsPost.findUnique({
         where: { id },
-        select: { id: true, body: true },
+        select: { statusReference: { select: { code: true } }, id: true, body: true },
       });
 
       if (!existing) throw notFound('Новость не найдена.');
@@ -195,12 +196,12 @@ export function registerNewsRoutes(app: FastifyInstance): void {
       const { id } = request.params as { id: string };
       const existing = await app.prisma.newsPost.findUnique({
         where: { id },
-        select: { id: true },
+        select: { statusReference: { select: { code: true } }, id: true },
       });
 
       if (!existing) throw notFound('Новость не найдена.');
 
-      await app.prisma.newsPost.delete({ where: { id } });
+      await app.prisma.newsPost.delete({ include: {statusReference: {select: {code: true}}}, where: { id } });
 
       return reply.code(204).send();
     },
@@ -210,10 +211,10 @@ export function registerNewsRoutes(app: FastifyInstance): void {
     const moderator = requireRoles(request);
     const { id } = request.params as { id: string };
     const input = parse(communityReviewSchema, request.body);
-    const existing = await app.prisma.newsPost.findUnique({ where: { id }, select: { id: true } });
+    const existing = await app.prisma.newsPost.findUnique({ where: { id }, select: { statusReference: { select: { code: true } }, id: true } });
     if (!existing) throw notFound('Публикация не найдена.');
-    const result = await app.prisma.newsPost.updateMany({ where: { id, moderationStatus: 'pending', updatedAt: new Date(input.updatedAt) }, data: {
-      moderationStatus: input.status, moderationNote: input.note || null,
+    const result = await app.prisma.newsPost.updateMany({ where: { id, ...statusWhere('pending'), updatedAt: new Date(input.updatedAt) }, data: {
+      ...await statusWrite(app.prisma, 'NewsPost', {moderationStatus: input.status}), moderationNote: input.note || null,
       moderatedAt: new Date(), moderatorId: moderator.id,
       ...(input.status === 'visible' ? { publishedAt: new Date() } : {}),
     }});

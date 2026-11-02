@@ -1,3 +1,4 @@
+import { moderationStatus, statusWrite, statusWhere } from '../lib/statusSource.js';
 import { registerCommunitySubmit, communityScope, canReadCommunity, communityReviewSchema } from '../lib/community-moderation.js';
 import type { Prisma } from '@prisma/client';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
@@ -80,7 +81,7 @@ function canManageDiscussion(
 async function assertGameExists(app: FastifyInstance, gameId: string): Promise<void> {
   const game = await app.prisma.game.findUnique({
     where: { id: gameId },
-    select: { id: true },
+    select: { statusReference: { select: { code: true } }, id: true },
   });
 
   if (!game) throw notFound('Игра не найдена.');
@@ -168,7 +169,7 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
       const discussion = await app.prisma.discussion.create({
         data: {
           authorId: user.id,
-          moderationStatus: input.submissionStatus ?? 'pending',
+          ...await statusWrite(app.prisma, 'Discussion', {moderationStatus: input.submissionStatus ?? 'pending'}),
           gameId: input.gameId,
           title: input.title,
           excerpt: input.excerpt?.trim() || deriveExcerpt(input.body),
@@ -194,7 +195,7 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
       const input = parse(discussionUpdateSchema, request.body);
       const existing = await app.prisma.discussion.findUnique({
         where: { id },
-        select: { authorId: true, body: true },
+        select: { statusReference: { select: { code: true } }, authorId: true, body: true },
       });
 
       if (!existing) throw notFound('Обсуждение не найдено.');
@@ -208,7 +209,7 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
       const discussion = await app.prisma.discussion.update({
         where: { id },
         data: {
-          ...(!hasRole(user, ['moderator', 'admin']) ? { moderationStatus: 'pending', moderationNote: null, moderatedAt: null, moderatorId: null } : {}),
+          ...(!hasRole(user, ['moderator', 'admin']) ? { ...await statusWrite(app.prisma, 'Discussion', {moderationStatus: 'pending'}), moderationNote: null, moderatedAt: null, moderatorId: null } : {}),
           ...(input.title !== undefined ? { title: input.title } : {}),
           ...(input.excerpt !== undefined
             ? {
@@ -235,7 +236,7 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
       const { id } = request.params as { id: string };
       const existing = await app.prisma.discussion.findUnique({
         where: { id },
-        select: { authorId: true },
+        select: { statusReference: { select: { code: true } }, authorId: true },
       });
 
       if (!existing) throw notFound('Обсуждение не найдено.');
@@ -243,7 +244,7 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
         throw forbidden('Нельзя удалить чужое обсуждение.');
       }
 
-      await app.prisma.discussion.delete({ where: { id } });
+      await app.prisma.discussion.delete({ include: {statusReference: {select: {code: true}}}, where: { id } });
       return reply.code(204).send();
     },
   );
@@ -263,10 +264,10 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
       const input = parse(discussionCommentCreateSchema, request.body);
       const discussion = await app.prisma.discussion.findUnique({
         where: { id },
-        select: { id: true, authorId: true, moderationStatus: true },
+        select: { statusReference: { select: { code: true } }, id: true, authorId: true, },
       });
 
-      if (!discussion || discussion.moderationStatus !== 'visible') throw notFound('Обсуждение не найдено.');
+      if (!discussion || moderationStatus(discussion) !== 'visible') throw notFound('Обсуждение не найдено.');
 
       if (input.parentId) {
         const parent = await app.prisma.discussionComment.findFirst({
@@ -292,7 +293,7 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
         const updated = await tx.discussion.update({
           where: { id },
           data: { updatedAt: new Date() },
-          select: { updatedAt: true },
+          select: { statusReference: { select: { code: true } }, updatedAt: true },
         });
         const commentCount = await tx.discussionComment.count({
           where: { discussionId: id },
@@ -332,7 +333,7 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
         where: { id: commentId, discussionId: id },
         include: {
           author: { select: userSelect },
-          discussion: { select: { authorId: true } },
+          discussion: { select: { statusReference: { select: { code: true } }, authorId: true } },
         },
       });
 
@@ -370,7 +371,7 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
       };
       const comment = await app.prisma.discussionComment.findFirst({
         where: { id: commentId, discussionId: id },
-        include: { discussion: { select: { authorId: true } } },
+        include: { discussion: { select: { statusReference: { select: { code: true } }, authorId: true } } },
       });
 
       if (!comment) throw notFound('Ответ не найден.');
@@ -385,7 +386,7 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
 
       await app.prisma.$transaction([
         app.prisma.discussionComment.delete({ where: { id: commentId } }),
-        app.prisma.discussion.update({
+        app.prisma.discussion.update({ include: {statusReference: {select: {code: true}}},
           where: { id },
           data: { updatedAt: new Date() },
         }),
@@ -399,10 +400,10 @@ export function registerDiscussionRoutes(app: FastifyInstance): void {
     const moderator = requireRoles(request);
     const { id } = request.params as { id: string };
     const input = parse(communityReviewSchema, request.body);
-    const existing = await app.prisma.discussion.findUnique({ where: { id }, select: { id: true } });
+    const existing = await app.prisma.discussion.findUnique({ where: { id }, select: { statusReference: { select: { code: true } }, id: true } });
     if (!existing) throw notFound('Публикация не найдена.');
-    const result = await app.prisma.discussion.updateMany({ where: { id, moderationStatus: 'pending', updatedAt: new Date(input.updatedAt) }, data: {
-      moderationStatus: input.status, moderationNote: input.note || null,
+    const result = await app.prisma.discussion.updateMany({ where: { id, ...statusWhere('pending'), updatedAt: new Date(input.updatedAt) }, data: {
+      ...await statusWrite(app.prisma, 'Discussion', {moderationStatus: input.status}), moderationNote: input.note || null,
       moderatedAt: new Date(), moderatorId: moderator.id,
     }});
     if (result.count !== 1) throw conflict('PUBLICATION_CHANGED', 'Публикация уже проверена или изменена. Обновите очередь и проверьте её ещё раз.');

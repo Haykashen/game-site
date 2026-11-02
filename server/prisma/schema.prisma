@@ -29,12 +29,6 @@ enum ListingType {
   exchange
 }
 
-enum MarketStatus {
-  active
-  sold
-  closed
-}
-
 enum DeliveryService {
   russian_post @map("russian-post")
   cdek
@@ -44,30 +38,10 @@ enum DeliveryService {
   @@map("delivery_service")
 }
 
-enum DealStatus {
-  pending
-  completed
-  cancelled
-}
-
 enum UserRole {
   user
   moderator
   admin
-}
-
-enum UserStatus {
-  active
-  suspended
-  deleted
-}
-
-enum ModerationStatus {
-  draft
-  pending
-  visible
-  hidden
-  removed
 }
 
 enum ReportTargetType {
@@ -82,13 +56,6 @@ enum ReportReason {
   spam
   wrong_category
   other
-}
-
-enum ReportStatus {
-  pending
-  in_review
-  resolved
-  dismissed
 }
 
 enum ReportAction {
@@ -134,7 +101,6 @@ model User {
   avatarUrl        String?    @map("avatar_url") @db.Text
   isDemo           Boolean    @default(false) @map("is_demo")
   role             UserRole   @default(user)
-  status           UserStatus @default(active)
   suspendedAt      DateTime?  @map("suspended_at")
   comment          String?    @db.Text
   lastSeenAt       DateTime?  @map("last_seen_at")
@@ -194,7 +160,6 @@ model Game {
   statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
   statusReference Status @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   @@index([statusId])
-  moderationStatus ModerationStatus @default(draft) @map("moderation_status")
   moderationNote String? @map("moderation_note") @db.Text
   moderatedAt DateTime? @map("moderated_at")
   moderatorId String? @map("moderator_id") @db.Uuid
@@ -263,7 +228,6 @@ model Edition {
   statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
   statusReference Status @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   @@index([statusId])
-  moderationStatus ModerationStatus @default(draft) @map("moderation_status")
   moderationNote String? @map("moderation_note") @db.Text
   moderatedAt DateTime? @map("moderated_at")
   moderatorId String? @map("moderator_id") @db.Uuid
@@ -360,7 +324,6 @@ model MarketEntry {
   condition   String
   priceMinor  Int          @map("price_minor")
   description String       @db.Text
-  status      MarketStatus @default(active)
 
   deliveryServices      DeliveryService[] @map("delivery_services")
   internationalShipping Boolean?          @map("international_shipping")
@@ -377,7 +340,6 @@ model MarketEntry {
   isSeeded          Boolean          @default(false) @map("is_seeded")
   soldAt            DateTime?        @map("sold_at")
   deletedAt         DateTime?        @map("deleted_at")
-  moderationStatus  ModerationStatus @default(pending) @map("moderation_status")
   moderationNote    String?          @map("moderation_note") @db.Text
   moderatedAt       DateTime?        @map("moderated_at")
   moderatorId       String?          @map("moderator_id") @db.Uuid
@@ -396,12 +358,11 @@ model MarketEntry {
   notifications Notification[]
   subscriptions MarketEntrySubscription[]
 
-  @@index([kind, status, createdAt])
+  @@index([kind, statusId, createdAt])
   @@index([authorId])
   @@index([gameId])
   @@index([editionId])
   @@index([endsAt])
-  @@index([moderationStatus])
   @@map("market_entries")
 }
 
@@ -441,7 +402,6 @@ model Deal {
   buyerId       String     @map("buyer_id") @db.Uuid
   sellerId      String     @map("seller_id") @db.Uuid
   amountMinor   Int        @map("amount_minor")
-  status        DealStatus @default(pending)
   completedAt   DateTime?  @map("completed_at")
   createdAt     DateTime   @default(now()) @map("created_at")
   updatedAt     DateTime   @updatedAt @map("updated_at")
@@ -453,7 +413,6 @@ model Deal {
 
   @@index([buyerId])
   @@index([sellerId])
-  @@index([status])
   @@map("deals")
 }
 
@@ -487,7 +446,6 @@ model Report {
   targetUserId  String?          @map("target_user_id") @db.Uuid
   reason        ReportReason
   comment       String           @default("") @db.Text
-  status        ReportStatus     @default(pending)
   action        ReportAction     @default(none)
   moderatorId   String?          @map("moderator_id") @db.Uuid
   moderatorNote String?          @map("moderator_note") @db.Text
@@ -501,7 +459,7 @@ model Report {
   marketEntry MarketEntry? @relation(fields: [marketEntryId], references: [id], onDelete: Cascade)
   moderator   User?        @relation("ReportModerator", fields: [moderatorId], references: [id], onDelete: SetNull)
 
-  @@index([status, createdAt])
+  @@index([statusId, createdAt])
   @@index([targetType, targetId])
   @@index([reporterId])
   @@index([marketEntryId])
@@ -568,7 +526,6 @@ model Discussion {
   statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
   statusReference Status @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   @@index([statusId])
-  moderationStatus ModerationStatus @default(pending) @map("moderation_status")
   moderationNote String? @db.Text @map("moderation_note")
   moderatedAt DateTime? @map("moderated_at")
   moderatorId String? @db.Uuid @map("moderator_id")
@@ -592,7 +549,6 @@ model Discussion {
   @@index([gameId, pinned, updatedAt])
   @@index([updatedAt])
   @@index([authorId])
-  @@index([moderationStatus])
   @@map("discussions")
 }
 
@@ -620,7 +576,6 @@ model NewsPost {
   statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
   statusReference Status @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   @@index([statusId])
-  moderationStatus ModerationStatus @default(pending) @map("moderation_status")
   moderationNote String? @db.Text @map("moderation_note")
   moderatedAt DateTime? @map("moderated_at")
   moderatorId String? @db.Uuid @map("moderator_id")
@@ -644,7 +599,6 @@ model NewsPost {
   @@index([category, publishedAt])
   @@index([gameId])
   @@index([authorId])
-  @@index([moderationStatus])
   @@map("news_posts")
 }
 

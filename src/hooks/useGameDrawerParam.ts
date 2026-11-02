@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { usePanelParams } from './usePanelParams';
 
 interface GameDrawerParam {
   /** Game id from the URL; empty string when the drawer is closed. */
@@ -16,34 +16,12 @@ interface GameDrawerParam {
  * current one to avoid a dead step behind the user.
  */
 export function useGameDrawerParam(): GameDrawerParam {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { params: searchParams, update } = usePanelParams();
 
-  const openGame = useCallback(
-    (gameId: string, editionId = '') => {
-      setSearchParams((previous) => {
-        const next = new URLSearchParams(previous);
-        next.set('game', gameId);
-
-        if (editionId) next.set('editionId', editionId);
-        else next.delete('editionId');
-
-        return next;
-      });
-    },
-    [setSearchParams],
-  );
-
-  const closeGame = useCallback(() => {
-    setSearchParams(
-      (previous) => {
-        const next = new URLSearchParams(previous);
-        next.delete('game');
-        next.delete('editionId');
-        return next;
-      },
-      { replace: true },
-    );
-  }, [setSearchParams]);
+  const openGame = useCallback((gameId: string, editionId = '') => {
+    update({ game: gameId, editionId: editionId || null });
+  }, [update]);
+  const closeGame = useCallback(() => update({ game: null, editionId: null }, true), [update]);
 
   return {
     gameId: searchParams.get('game') ?? '',

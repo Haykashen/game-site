@@ -69,8 +69,8 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
     await patch('Bid', {id: bid.id}, {amountMinor: 14000});
     const auctionAfter = await prisma.marketEntry.findUniqueOrThrow({where: {id: auction.id}});
     assert.equal(auctionAfter.bidCount, 1); assert.equal(auctionAfter.currentPriceMinor, 14000);
-    const deal = await create('Deal', {marketEntryId: listing.id, sellerId, buyerId, amountMinor: 10000, status: 'completed'});
-    assert.equal((await prisma.marketEntry.findUniqueOrThrow({where: {id: listing.id}})).status, 'sold');
+    const deal = await create('Deal', {marketEntryId: listing.id, sellerId, buyerId, amountMinor: 10000, statusId: (await prisma.status.findUniqueOrThrow({where: {entity_code: {entity: 'Deal', code: 'completed'}}})).id});
+    assert.equal((await prisma.marketEntry.findUniqueOrThrow({where: {id: listing.id}, include: {statusReference: true}})).statusReference.code, 'sold');
     const review = await create('Review', {dealId: deal.id, authorId: buyerId, targetId: sellerId, rating: 5, text: 'Great'});
     await patch('Review', {id: review.id}, {rating: 4});
     const seller = await prisma.user.findUniqueOrThrow({where: {id: sellerId}});

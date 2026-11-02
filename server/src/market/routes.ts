@@ -1,5 +1,5 @@
+import { moderationStatus, statusCode, marketStatus, statusWrite } from '../lib/statusSource.js';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
-import { isActiveAuction } from '../../../shared/src/marketLifecycle.js';
 import { resolveEditionId } from '../lib/editionIdentity.js';
 import {
   fromMinorUnits,
@@ -36,7 +36,7 @@ async function assertMarketTarget(
 ): Promise<{ id: string; title: string }> {
   const game = await app.prisma.game.findUnique({
     where: { id: gameId },
-    select: { id: true, title: true },
+    select: { statusReference: { select: { code: true } }, id: true, title: true },
   });
 
   if (!game) throw notFound('Игра не найдена.');
@@ -44,7 +44,7 @@ async function assertMarketTarget(
   if (editionId) {
     const edition = await app.prisma.edition.findUnique({
       where: { id: editionId },
-      select: { id: true, gameId: true },
+      select: { statusReference: { select: { code: true } }, id: true, gameId: true },
     });
 
     if (!edition || edition.gameId !== gameId) {
@@ -161,7 +161,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
 
       if (
         !canSeeModeration &&
-        (entry.moderationStatus !== 'visible' || entry.author.status !== 'active')
+        (moderationStatus(entry) !== 'visible' || statusCode(entry.author) !== 'active')
       ) {
         throw notFound('Объявление не найдено.');
       }
@@ -207,8 +207,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
             condition: input.condition,
             priceMinor,
             description: input.description,
-            status: 'active',
-            moderationStatus: input.submissionStatus ?? 'pending',
+            ...await statusWrite(tx, 'MarketEntry', {status: 'active',moderationStatus: input.submissionStatus ?? 'pending',kind: input.kind}),
             deliveryServices: deliveryServicesFromApi(input.deliveryServices),
             internationalShipping: input.internationalShipping ?? null,
             packagingPriceMinor:
@@ -248,13 +247,13 @@ export function registerMarketRoutes(app: FastifyInstance): void {
 
       const existing = await app.prisma.marketEntry.findFirst({
         where: { id, deletedAt: null },
-        include: { photos: { orderBy: { sortOrder: 'asc' } } },
+        include: { statusReference: { select: { code: true } }, photos: { orderBy: { sortOrder: 'asc' } } },
       });
 
       if (!existing) throw notFound('Объявление не найдено.');
       if (existing.authorId !== user.id) throw forbidden('Это не ваше объявление.');
 
-      if (isActiveAuction(existing)) throw conflict('ACTIVE_AUCTION_LOCKED', 'Активный лот нельзя редактировать. Создайте новый на основе текущего, а этот закройте или удалите.');
+      if (existing.kind === 'auction' && statusCode(existing) === 'active') throw conflict('ACTIVE_AUCTION_LOCKED', 'Активный лот нельзя редактировать. Создайте новый на основе текущего, а этот закройте или удалите.');
 
       const merged = {
         submissionStatus: input.submissionStatus,
@@ -355,7 +354,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
           const updated = await tx.marketEntry.update({
             where: { id, version: existing.version },
             data: {
-              moderationStatus: validated.submissionStatus ?? (existing.moderationStatus === 'draft' ? 'draft' : 'pending'),
+              ...await statusWrite(tx, 'MarketEntry', {moderationStatus: validated.submissionStatus ?? (moderationStatus(existing) === 'draft' ? 'draft' : 'pending'),kind: validated.kind}, id),
               moderationNote: null, moderatedAt: null, moderatorId: null,
               version: { increment: 1 },
               kind: validated.kind,
@@ -432,16 +431,15 @@ export function registerMarketRoutes(app: FastifyInstance): void {
 
       const existing = await app.prisma.marketEntry.findFirst({
         where: { id, deletedAt: null },
-        select: {
+        select: { statusReference: { select: { code: true } },
           id: true,
           authorId: true,
           title: true,
           gameId: true,
           kind: true,
-          status: true,
           endsAt: true,
           version: true,
-          deal: { select: { id: true } },
+          deal: { select: { statusReference: { select: { code: true } }, id: true } },
         },
       });
 
@@ -474,7 +472,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
           const changed = await app.prisma.marketEntry.updateMany({
             where: { id, version: existing.version },
             data: {
-              status: 'active',
+              ...await statusWrite(app.prisma, 'MarketEntry', {status: 'active'}, id),
               soldAt: null,
               winnerId: null,
               version: { increment: 1 },
@@ -492,7 +490,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
         const changed = await app.prisma.marketEntry.updateMany({
           where: { id, version: existing.version },
           data: {
-            status: input.status,
+            ...await statusWrite(app.prisma, 'MarketEntry', {status: input.status}, id),
             version: { increment: 1 },
             ...(input.status === 'sold' ? { soldAt: new Date() } : {}),
           },
@@ -514,7 +512,7 @@ export function registerMarketRoutes(app: FastifyInstance): void {
       if (shouldNotifyStatusChange) {
         await notifyEntryStatusChange(app.prisma, {
           entry,
-          previousStatus: existing.status,
+          previousStatus: marketStatus(existing),
           status: input.status,
         });
       }
@@ -534,11 +532,11 @@ export function registerMarketRoutes(app: FastifyInstance): void {
 
       const existing = await app.prisma.marketEntry.findFirst({
         where: { id, deletedAt: null },
-        select: {
+        select: { statusReference: { select: { code: true } },
           id: true,
           authorId: true,
           bidCount: true,
-          deal: { select: { id: true } },
+          deal: { select: { statusReference: { select: { code: true } }, id: true } },
           _count: { select: { bids: true } },
         },
       });
@@ -552,16 +550,16 @@ export function registerMarketRoutes(app: FastifyInstance): void {
         existing._count.bids > 0;
 
       if (mustBeSoftDeleted) {
-        await app.prisma.marketEntry.update({
+        await app.prisma.marketEntry.update({ include: {statusReference: {select: {code: true}}},
           where: { id },
           data: {
             deletedAt: new Date(),
-            status: 'closed',
+            ...await statusWrite(app.prisma, 'MarketEntry', {status: 'closed'}, id),
             version: { increment: 1 },
           },
         });
       } else {
-        await app.prisma.marketEntry.delete({ where: { id } });
+        await app.prisma.marketEntry.delete({ include: {statusReference: {select: {code: true}}}, where: { id } });
       }
 
       return reply.code(204).send();

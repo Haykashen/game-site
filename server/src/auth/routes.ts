@@ -1,3 +1,4 @@
+import { statusCode } from '../lib/statusSource.js';
 import type { FastifyInstance } from 'fastify';
 import { loginSchema, registerSchema, type AuthResponse } from '@discvault/shared';
 import { conflict, forbidden, unauthorized } from '../errors.js';
@@ -29,7 +30,7 @@ export function registerAuthRoutes(app: FastifyInstance): void {
 
       const existing = await app.prisma.user.findUnique({
         where: { email: input.email },
-        select: { id: true },
+        select: { statusReference: { select: { code: true } }, id: true },
       });
 
       if (existing) {
@@ -41,7 +42,7 @@ export function registerAuthRoutes(app: FastifyInstance): void {
       let user;
 
       try {
-        user = await app.prisma.user.create({
+        user = await app.prisma.user.create({ include: {statusReference: {select: {code: true}}},
           data: {
             email: input.email,
             passwordHash,
@@ -72,7 +73,7 @@ export function registerAuthRoutes(app: FastifyInstance): void {
     async (request, reply) => {
       const input = parse(loginSchema, request.body);
 
-      const user = await app.prisma.user.findUnique({
+      const user = await app.prisma.user.findUnique({ include: {statusReference: {select: {code: true}}},
         where: { email: input.email },
       });
 
@@ -86,7 +87,7 @@ export function registerAuthRoutes(app: FastifyInstance): void {
         throw unauthorized('Неверная почта или пароль.');
       }
 
-      if (user.status !== 'active') {
+      if (statusCode(user) !== 'active') {
         throw forbidden(
           'Аккаунт заблокирован. Обратитесь в поддержку, если считаете это ошибкой.',
         );
@@ -144,7 +145,7 @@ export function registerAuthRoutes(app: FastifyInstance): void {
 
       if (!sessionUser) throw unauthorized();
 
-      const user = await app.prisma.user.findUnique({
+      const user = await app.prisma.user.findUnique({ include: {statusReference: {select: {code: true}}},
         where: { id: sessionUser.id },
       });
 

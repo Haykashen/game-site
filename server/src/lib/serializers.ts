@@ -1,3 +1,5 @@
+import { moderationStatus, marketStatus, statusCode, statusWhere } from './statusSource.js';
+import type { StatusRecord } from './statusSource.js';
 import type {
   Bid,
   Copy,
@@ -36,19 +38,18 @@ import {
 import { serializeDeliveryServices } from './delivery.js';
 import { ratingFrom } from './rating.js';
 
-export const userSelect = {
+export const userSelect = { statusReference: { select: { code: true } },
   id: true,
   displayName: true,
   avatarUrl: true,
   isDemo: true,
-  status: true,
   ratingSum: true,
   ratingCount: true,
 } satisfies Prisma.UserSelect;
 
 export type SelectedUser = Prisma.UserGetPayload<{ select: typeof userSelect }>;
 
-export function serializePublicUser(user: SelectedUser): PublicUser {
+export function serializePublicUser(user: Omit<SelectedUser, 'statusReference'>): PublicUser {
   return {
     id: user.id,
     displayName: user.displayName,
@@ -65,7 +66,7 @@ export async function getUserProfile(
 ): Promise<UserProfile> {
   const dealsCompleted = await client.deal.count({
     where: {
-      status: 'completed',
+      ...statusWhere('completed'),
       OR: [{ buyerId: user.id }, { sellerId: user.id }],
     },
   });
@@ -81,9 +82,9 @@ export async function getUserProfile(
   };
 }
 
-export function serializeGame(game: Game & {series?: {name: string} | null; genres?: {name: string}[]}): GameDto {
+export function serializeGame(game: Game & StatusRecord & {series?: {name: string} | null; genres?: {name: string}[]}): GameDto {
   return {
-    moderationStatus: game.moderationStatus,
+    moderationStatus: moderationStatus(game),
     moderationNote: game.moderationNote,
     statusId: game.statusId,
     id: game.id,
@@ -98,9 +99,9 @@ export function serializeGame(game: Game & {series?: {name: string} | null; genr
   };
 }
 
-export function serializeEdition(edition: Edition & {region?: {code:string}; variants?: (Edition & {region?: {code:string}})[]}): EditionDto {
+export function serializeEdition(edition: Edition & StatusRecord & {region?: {code:string}; variants?: (Edition & StatusRecord & {region?: {code:string}})[]}): EditionDto {
   return {
-    moderationStatus: edition.moderationStatus,
+    moderationStatus: moderationStatus(edition),
     moderationNote: edition.moderationNote,
     statusId: edition.statusId,
     id: edition.id,
@@ -148,7 +149,7 @@ export function serializeCopy(copy: CopyWithPhotos): CopyDto {
   };
 }
 
-export const marketEntryInclude = {
+export const marketEntryInclude = { statusReference: { select: { code: true } },
   localization: true,
   author: { select: userSelect },
   photos: { orderBy: { sortOrder: 'asc' } },
@@ -177,8 +178,8 @@ export function serializeMarketEntry(entry: MarketEntryWithRelations): MarketEnt
     authorId: entry.authorId,
     author: serializePublicUser(entry.author),
     description: entry.description,
-    status: entry.status,
-    moderationStatus: entry.moderationStatus,
+    status: marketStatus(entry),
+    moderationStatus: moderationStatus(entry),
     photos: entry.photos.map((photo) => photo.url),
     deliveryServices: serializeDeliveryServices(entry.deliveryServices),
     internationalShipping: entry.internationalShipping,
@@ -220,7 +221,7 @@ export function serializeAdminMarketEntry(
   };
 }
 
-export const discussionListInclude = {
+export const discussionListInclude = { statusReference: { select: { code: true } },
   author: { select: userSelect },
   _count: { select: { comments: true } },
 } satisfies Prisma.DiscussionInclude;
@@ -229,7 +230,7 @@ export type DiscussionSummaryWithRelations = Prisma.DiscussionGetPayload<{
   include: typeof discussionListInclude;
 }>;
 
-export const discussionDetailInclude = {
+export const discussionDetailInclude = { statusReference: { select: { code: true } },
   author: { select: userSelect },
   comments: {
     include: { author: { select: userSelect } },
@@ -246,12 +247,12 @@ export type DiscussionCommentWithAuthor = DiscussionComment & {
 };
 
 function discussionBase(
-  discussion: Discussion,
+  discussion: Discussion & StatusRecord,
   author: SelectedUser,
   commentCount: number,
 ): DiscussionSummaryDto {
   return {
-    moderationStatus: discussion.moderationStatus,
+    moderationStatus: moderationStatus(discussion),
     moderationNote: discussion.moderationNote,
     statusId: discussion.statusId,
     id: discussion.id,
@@ -333,7 +334,7 @@ export function serializeDiscussionDetail(
   };
 }
 
-export const newsPostInclude = {
+export const newsPostInclude = { statusReference: { select: { code: true } },
   author: { select: userSelect },
 } satisfies Prisma.NewsPostInclude;
 
@@ -343,7 +344,7 @@ export type NewsPostWithAuthor = Prisma.NewsPostGetPayload<{
 
 export function serializeNewsPost(post: NewsPostWithAuthor): NewsPostDto {
   return {
-    moderationStatus: post.moderationStatus,
+    moderationStatus: moderationStatus(post),
     moderationNote: post.moderationNote,
     statusId: post.statusId,
     id: post.id,
@@ -400,8 +401,8 @@ export function serializeReview(review: ReviewWithRelations): ReviewDto {
   };
 }
 
-export const dealInclude = {
-  marketEntry: true,
+export const dealInclude = { statusReference: { select: { code: true } },
+  marketEntry: {include: {statusReference: {select: {code: true}}}},
   buyer: { select: userSelect },
   seller: { select: userSelect },
   reviews: {
@@ -414,7 +415,7 @@ export type DealWithRelations = Prisma.DealGetPayload<{
   include: typeof dealInclude;
 }>;
 
-function dealEntrySummary(entry: MarketEntry): DealEntrySummary {
+function dealEntrySummary(entry: MarketEntry & StatusRecord): DealEntrySummary {
   return {
     id: entry.id,
     kind: entry.kind,
@@ -422,7 +423,7 @@ function dealEntrySummary(entry: MarketEntry): DealEntrySummary {
     gameId: entry.gameId,
     editionId: entry.editionId,
     price: fromMinorUnits(entry.priceMinor),
-    status: entry.status,
+    status: marketStatus(entry),
   };
 }
 
@@ -437,21 +438,21 @@ export function serializeDeal(deal: DealWithRelations, currentUserId: string): D
     buyer: serializePublicUser(deal.buyer),
     seller: serializePublicUser(deal.seller),
     amount: fromMinorUnits(deal.amountMinor),
-    status: deal.status,
+    status: statusCode(deal) as DealDto['status'],
     createdAt: deal.createdAt.toISOString(),
     completedAt: deal.completedAt?.toISOString() ?? null,
     reviews: deal.reviews.map(serializeReview),
-    canReview: isParticipant && deal.status === 'completed' && !hasReviewed,
-    canComplete: isParticipant && deal.status === 'pending',
+    canReview: isParticipant && statusCode(deal) === 'completed' && !hasReviewed,
+    canComplete: isParticipant && statusCode(deal) === 'pending',
   };
 }
 
-export const reportInclude = {
+export const reportInclude = { statusReference: { select: { code: true } },
   reporter: { select: userSelect },
   targetUser: { select: userSelect },
   moderator: { select: userSelect },
   marketEntry: {
-    include: {
+    include: { statusReference: { select: { code: true } },
       author: { select: userSelect },
     },
   },
@@ -470,7 +471,7 @@ export function serializeReport(report: ReportWithRelations): ReportDto {
     targetId: report.targetId,
     reason: report.reason,
     comment: report.comment,
-    status: report.status,
+    status: statusCode(report) as ReportDto['status'],
     action: report.action,
     reporter: serializePublicUser(report.reporter),
     targetUser: report.targetUser ? serializePublicUser(report.targetUser) : null,
@@ -479,8 +480,8 @@ export function serializeReport(report: ReportWithRelations): ReportDto {
           id: entry.id,
           title: entry.title,
           kind: entry.kind,
-          status: entry.status,
-          moderationStatus: entry.moderationStatus,
+          status: marketStatus(entry),
+          moderationStatus: moderationStatus(entry),
           author: serializePublicUser(entry.author),
         }
       : null,
@@ -494,8 +495,8 @@ export function serializeReport(report: ReportWithRelations): ReportDto {
 
 export const notificationInclude = {
   actor: { select: userSelect },
-  marketEntry: { select: { id: true, title: true, kind: true } },
-  game: { select: { id: true, title: true } },
+  marketEntry: { select: { statusReference: { select: { code: true } }, id: true, title: true, kind: true } },
+  game: { select: { statusReference: { select: { code: true } }, id: true, title: true } },
 } satisfies Prisma.NotificationInclude;
 
 export type NotificationWithRelations = Prisma.NotificationGetPayload<{
@@ -522,7 +523,7 @@ export function serializeNotification(
 }
 
 export const gameSubscriptionInclude = {
-  game: { select: { id: true, title: true } },
+  game: { select: { statusReference: { select: { code: true } }, id: true, title: true } },
 } satisfies Prisma.GameSubscriptionInclude;
 
 export type GameSubscriptionWithRelations = Prisma.GameSubscriptionGetPayload<{
@@ -544,7 +545,7 @@ export function serializeGameSubscription(
 
 export const marketEntrySubscriptionInclude = {
   marketEntry: {
-    select: { id: true, title: true, kind: true, gameId: true },
+    select: { statusReference: { select: { code: true } }, id: true, title: true, kind: true, gameId: true },
   },
 } satisfies Prisma.MarketEntrySubscriptionInclude;
 

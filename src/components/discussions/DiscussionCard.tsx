@@ -1,3 +1,5 @@
+import { UserAvatar } from '../UserAvatar';
+import { FeedTags } from '../feed/FeedTags';
 import { ArrowUpRight, Eye, Gamepad2, MessageSquare, Pin } from 'lucide-react';
 import type { KeyboardEvent } from 'react';
 import { ProfileLink } from '../ProfileLink';
@@ -48,19 +50,11 @@ export function DiscussionCard({ discussion, game, onSelect }: DiscussionCardPro
       <h2 className="discussion-card__title">{discussion.title}</h2>
       <p className="discussion-card__excerpt">{discussion.excerpt}</p>
 
-      <div className="feed-tags">
-        {discussion.tags.map((tag) => (
-          <span className="feed-tag" key={tag}>
-            {tag}
-          </span>
-        ))}
-      </div>
+      <FeedTags tags={discussion.tags} />
 
       <footer className="feed-card__footer">
         <span className="feed-author">
-          <span className="feed-avatar" aria-hidden="true">
-            {discussion.author.slice(0, 1).toUpperCase()}
-          </span>
+          <UserAvatar name={discussion.author} />
           <ProfileLink name={discussion.author} userId={discussion.authorId} />
         </span>
         <span className="feed-stats">

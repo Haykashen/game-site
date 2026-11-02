@@ -1,3 +1,4 @@
+import { statusCode, statusWhere, statusWrite, type StatusRecord } from './statusSource.js';
 import { z } from 'zod';
 import type { FastifyRequest, FastifyInstance } from 'fastify';
 import { hasRole, requireRoles } from '../auth/authorization.js';
@@ -8,8 +9,8 @@ export function registerCommunitySubmit(app: FastifyInstance, kind: 'news' | 'di
     if (!request.user) throw unauthorized();
     const {id} = request.params as {id: string};
     const args = {
-      where: {id, authorId: request.user.id, moderationStatus: {in: ['draft', 'hidden'] as ('draft' | 'hidden')[]}},
-      data: {moderationStatus: 'pending' as const, moderationNote: null, moderatedAt: null, moderatorId: null},
+      where: {id, authorId: request.user.id, ...statusWhere({in: ['draft', 'hidden']})},
+      data: {...await statusWrite(app.prisma, kind === 'news' ? 'NewsPost' : 'Discussion', {moderationStatus: 'pending'}), moderationNote: null, moderatedAt: null, moderatorId: null},
     };
     const result = kind === 'news' ? await app.prisma.newsPost.updateMany(args) : await app.prisma.discussion.updateMany(args);
     if (!result.count) throw conflict('SUBMISSION_CHANGED', 'Запись уже отправлена на проверку или недоступна.');
@@ -26,15 +27,15 @@ export const communityReviewSchema = z.object({
 export function communityScope(request: FastifyRequest, scope: 'public' | 'mine' | 'pending') {
   if (scope === 'pending') {
     requireRoles(request);
-    return { moderationStatus: 'pending' as const };
+    return statusWhere('pending');
   }
   if (scope === 'mine') {
     if (!request.user) throw unauthorized();
     return { authorId: request.user.id };
   }
-  return { moderationStatus: 'visible' as const };
+  return statusWhere('visible');
 }
 
-export function canReadCommunity(request: FastifyRequest, post: {authorId: string; moderationStatus: string}) {
-  return post.moderationStatus === 'visible' || post.authorId === request.user?.id || hasRole(request.user, ['moderator', 'admin']);
+export function canReadCommunity(request: FastifyRequest, post: {authorId: string} & StatusRecord) {
+  return statusCode(post) === 'visible' || post.authorId === request.user?.id || hasRole(request.user, ['moderator', 'admin']);
 }

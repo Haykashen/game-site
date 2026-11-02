@@ -1,3 +1,4 @@
+import { statusCode, statusWhere, marketStatusWhere } from '../lib/statusSource.js';
 import type { FastifyInstance } from 'fastify';
 import {
   analyticsQuerySchema,
@@ -184,8 +185,8 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
         prisma.edition.count({where:{canonicalId:null}}),
         prisma.copy.count(),
         prisma.user.count(),
-        prisma.user.count({ where: { status: 'active' } }),
-        prisma.user.count({ where: { status: 'suspended' } }),
+        prisma.user.count({ where: { ...statusWhere('active') } }),
+        prisma.user.count({ where: { ...statusWhere('suspended') } }),
         prisma.user.count({ where: { createdAt: { gte: start } } }),
         prisma.copy.groupBy({ by: ['userId'] }),
         prisma.marketEntry.groupBy({
@@ -195,53 +196,51 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
         prisma.marketEntry.count({
           where: {
             kind: 'listing',
-            status: 'active',
-            moderationStatus: 'visible',
-            author: { status: 'active' },
+            ...marketStatusWhere({status: 'active',moderationStatus: 'visible'}),
+            author: { ...statusWhere('active') },
             deletedAt: null,
           },
         }),
         prisma.marketEntry.count({
           where: {
             kind: 'auction',
-            status: 'active',
-            moderationStatus: 'visible',
-            author: { status: 'active' },
+            ...marketStatusWhere({status: 'active',moderationStatus: 'visible'}),
+            author: { ...statusWhere('active') },
             deletedAt: null,
           },
         }),
-        prisma.deal.count({ where: { status: 'completed' } }),
+        prisma.deal.count({ where: { ...statusWhere('completed') } }),
         prisma.deal.aggregate({
-          where: { status: 'completed' },
+          where: { ...statusWhere('completed') },
           _sum: { amountMinor: true },
         }),
         prisma.bid.count(),
-        prisma.report.count({ where: { status: 'pending' } }),
+        prisma.report.count({ where: { ...statusWhere('pending') } }),
         prisma.marketEntry.count({
-          where: { moderationStatus: 'pending', deletedAt: null },
+          where: { ...marketStatusWhere({moderationStatus: 'pending'}), deletedAt: null },
         }),
         prisma.marketEntry.count({
           where: { createdAt: { gte: start }, deletedAt: null },
         }),
         prisma.deal.count({
-          where: { status: 'completed', createdAt: { gte: start } },
+          where: { ...statusWhere('completed'), createdAt: { gte: start } },
         }),
         prisma.deal.aggregate({
-          where: { status: 'completed', createdAt: { gte: start } },
+          where: { ...statusWhere('completed'), createdAt: { gte: start } },
           _sum: { amountMinor: true },
         }),
         prisma.user.groupBy({ by: ['role'], _count: { _all: true } }),
         prisma.user.findMany({
           where: { createdAt: { gte: start } },
-          select: { createdAt: true },
+          select: { statusReference: { select: { code: true } }, createdAt: true },
         }),
         prisma.marketEntry.findMany({
           where: { createdAt: { gte: start }, deletedAt: null },
-          select: { createdAt: true },
+          select: { statusReference: { select: { code: true } }, createdAt: true },
         }),
         prisma.deal.findMany({
-          where: { status: 'completed', createdAt: { gte: start } },
-          select: { createdAt: true },
+          where: { ...statusWhere('completed'), createdAt: { gte: start } },
+          select: { statusReference: { select: { code: true } }, createdAt: true },
         }),
       ]);
 
@@ -257,13 +256,13 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
       const games = gameIds.length
         ? await prisma.game.findMany({
             where: { id: { in: gameIds } },
-            select: {
+            select: { statusReference: { select: { code: true } },
               id: true,
               title: true,
               coverImage: true,
               year: true,
               publisher: true,
-              editions: { where: {canonicalId:null}, select: { id: true } },
+              editions: { where: {canonicalId:null}, select: { statusReference: { select: { code: true } }, id: true } },
               _count: { select: { subscriptions: true } },
             },
           })
@@ -288,25 +287,25 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
       const [statusGroups, dealRows, ratingGroups] = gameIds.length
         ? await Promise.all([
             prisma.marketEntry.groupBy({
-              by: ['gameId', 'status'],
+              by: ['gameId', 'statusId'],
               where: {
                 gameId: { in: gameIds },
                 deletedAt: null,
                 createdAt: { gte: start },
-                moderationStatus: 'visible',
-                author: { status: 'active' },
+                ...marketStatusWhere({moderationStatus: 'visible'}),
+                author: { ...statusWhere('active') },
               },
               _count: { _all: true },
             }),
             prisma.deal.findMany({
               where: {
-                status: 'completed',
+                ...statusWhere('completed'),
                 createdAt: { gte: start },
                 marketEntry: { gameId: { in: gameIds } },
               },
-              select: {
+              select: { statusReference: { select: { code: true } },
                 amountMinor: true,
-                marketEntry: { select: { gameId: true } },
+                marketEntry: { select: { statusReference: { select: { code: true } }, gameId: true } },
               },
             }),
             prisma.gameRating.groupBy({
@@ -329,6 +328,8 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
         );
       }
 
+      const directory = await prisma.status.findMany({where: {entity: {in: ['Listing', 'Auction']}}, select: {id: true, code: true}});
+      const codeById = new Map(directory.map(row => [row.id, row.code]));
       const statusByGame = new Map<
         string,
         { active: number; sold: number }
@@ -339,8 +340,8 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
           sold: 0,
         };
 
-        if (group.status === 'active') current.active += group._count._all;
-        if (group.status === 'sold') current.sold += group._count._all;
+        if (codeById.get(group.statusId) === 'active') current.active += group._count._all;
+        if (codeById.get(group.statusId) === 'sold') current.sold += group._count._all;
         statusByGame.set(group.gameId, current);
       }
 
@@ -418,13 +419,13 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
       const [sellerGroups, buyerGroups, collectorGroups] = await Promise.all([
         prisma.deal.groupBy({
           by: ['sellerId'],
-          where: { status: 'completed', createdAt: { gte: start } },
+          where: { ...statusWhere('completed'), createdAt: { gte: start } },
           _count: { _all: true },
           _sum: { amountMinor: true },
         }),
         prisma.deal.groupBy({
           by: ['buyerId'],
-          where: { status: 'completed', createdAt: { gte: start } },
+          where: { ...statusWhere('completed'), createdAt: { gte: start } },
           _count: { _all: true },
           _sum: { amountMinor: true },
         }),
@@ -449,13 +450,12 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
         ? await Promise.all([
             prisma.user.findMany({
               where: { id: { in: userIds } },
-              select: {
+              select: { statusReference: { select: { code: true } },
                 id: true,
                 displayName: true,
                 avatarUrl: true,
                 role: true,
-                status: true,
-              },
+                },
             }),
             prisma.marketEntry.groupBy({
               by: ['authorId'],
@@ -493,7 +493,7 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
           displayName: user.displayName,
           avatarUrl: user.avatarUrl,
           role: user.role,
-          status: user.status,
+          status: statusCode(user) as 'active' | 'suspended' | 'deleted',
           deals,
           gmvMinor,
           listings: listingCounts.get(user.id) ?? 0,

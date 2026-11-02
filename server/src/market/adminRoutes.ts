@@ -1,3 +1,4 @@
+import { moderationStatus, statusCode, marketStatus, marketStatusWhere, statusWrite } from '../lib/statusSource.js';
 import type { Prisma } from '@prisma/client';
 import type { FastifyInstance } from 'fastify';
 import {
@@ -25,7 +26,7 @@ import {
 export function registerMarketAdminRoutes(app: FastifyInstance): void {
   app.get('/api/v1/admin/market/pending-count', {preHandler: app.authenticate}, async request => {
     requireRoles(request);
-    return {count: await app.prisma.marketEntry.count({where:{deletedAt:null,moderationStatus:'pending'}})};
+    return {count: await app.prisma.marketEntry.count({where:{deletedAt:null,...marketStatusWhere({moderationStatus:'pending'})}})};
   });
   app.get(
     '/api/v1/admin/market',
@@ -36,7 +37,7 @@ export function registerMarketAdminRoutes(app: FastifyInstance): void {
       const query = parse(adminMarketQueueQuerySchema, request.query);
       const where: Prisma.MarketEntryWhereInput = {
         deletedAt: null,
-        ...(query.status !== 'all' ? { moderationStatus: query.status } : {}),
+        ...(query.status !== 'all' ? marketStatusWhere({moderationStatus: query.status}) : {}),
         ...(query.kind ? { kind: query.kind } : {}),
       };
 
@@ -75,10 +76,10 @@ export function registerMarketAdminRoutes(app: FastifyInstance): void {
 
       const existing = await app.prisma.marketEntry.findFirst({
         where: { id, deletedAt: null },
-        include: {
+        include: { statusReference: { select: { code: true } },
           photos: {select: {id: true}},
-          author: { select: { status: true } },
-          game: { select: { title: true } },
+          author: { select: { statusReference: { select: { code: true } }, } },
+          game: { select: { statusReference: { select: { code: true } }, title: true } },
         },
       });
 
@@ -87,9 +88,9 @@ export function registerMarketAdminRoutes(app: FastifyInstance): void {
 
       if (
         input.moderationStatus === 'visible' &&
-        existing.moderationStatus !== 'visible'
+        moderationStatus(existing) !== 'visible'
       ) {
-        if (existing.author.status !== 'active') {
+        if (statusCode(existing.author) !== 'active') {
           throw conflict(
             'AUTHOR_SUSPENDED',
             'Автор лота заблокирован. Публикация недоступна.',
@@ -114,7 +115,7 @@ export function registerMarketAdminRoutes(app: FastifyInstance): void {
           .update({
             where: { id },
             data: {
-              moderationStatus: input.moderationStatus,
+              ...await statusWrite(tx, 'MarketEntry', {moderationStatus: input.moderationStatus}, id),
               moderationNote: input.note ?? null,
               moderatedAt,
               moderatorId: moderator.id,
@@ -131,9 +132,9 @@ export function registerMarketAdminRoutes(app: FastifyInstance): void {
 
         // Subscribers learn about the lot only when it actually becomes public.
         if (
-          existing.moderationStatus === 'pending' &&
+          moderationStatus(existing) === 'pending' &&
           input.moderationStatus === 'visible' &&
-          updated.status === 'active'
+          marketStatus(updated) === 'active'
         ) {
           await notifyNewEntry(tx, {
             id: updated.id,
@@ -147,7 +148,7 @@ export function registerMarketAdminRoutes(app: FastifyInstance): void {
         }
 
         if (
-          existing.moderationStatus !== input.moderationStatus &&
+          moderationStatus(existing) !== input.moderationStatus &&
           input.moderationStatus !== 'pending'
         ) {
           await notifyEntryModerated(tx, {

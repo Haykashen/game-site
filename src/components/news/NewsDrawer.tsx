@@ -1,3 +1,5 @@
+import { UserAvatar } from '../UserAvatar';
+import { FeedTags } from '../feed/FeedTags';
 import { ArrowUpRight, Clock, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cx } from '../../lib/cx';
@@ -68,19 +70,11 @@ export function NewsDrawer({ post, game, onClose }: NewsDrawerProps) {
             ))}
           </div>
 
-          <div className="feed-tags">
-            {post.tags.map((tag) => (
-              <span className="feed-tag" key={tag}>
-                {tag}
-              </span>
-            ))}
-          </div>
+          <FeedTags tags={post.tags} />
 
           <div className="news-detail__footer">
             <span className="feed-author">
-              <span className="feed-avatar" aria-hidden="true">
-                {post.author.slice(0, 1).toUpperCase()}
-              </span>
+              <UserAvatar name={post.author} />
               {post.author}
             </span>
             <span className="feed-stats">

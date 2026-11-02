@@ -1,3 +1,5 @@
+import { UserAvatar } from '../UserAvatar';
+import { FeedTags } from '../feed/FeedTags';
 import {
   Clock,
   CornerDownRight,
@@ -54,9 +56,7 @@ function CommentNode({ comment, onReplyClick }: CommentNodeProps) {
   return (
     <li className="discussion-comment">
       <div className="discussion-comment__row">
-        <span className="feed-avatar feed-avatar--comment" aria-hidden="true">
-          {comment.author.slice(0, 1).toUpperCase()}
-        </span>
+        <UserAvatar name={comment.author} className="feed-avatar--comment" />
         <div className="discussion-comment__body">
           <div className="discussion-comment__head">
             <ProfileLink className="feed-author spec-link" name={comment.author} userId={comment.authorId} />
@@ -200,9 +200,7 @@ export function DiscussionDrawer({
 
           <div className="discussion-detail__meta">
             <span className="feed-author">
-              <span className="feed-avatar" aria-hidden="true">
-                {discussion.author.slice(0, 1).toUpperCase()}
-              </span>
+              <UserAvatar name={discussion.author} />
               <ProfileLink name={discussion.author} userId={discussion.authorId} />
             </span>
             <span className="feed-stats">
@@ -225,13 +223,7 @@ export function DiscussionDrawer({
             ))}
           </div>
 
-          <div className="feed-tags">
-            {discussion.tags.map((tag) => (
-              <span className="feed-tag" key={tag}>
-                {tag}
-              </span>
-            ))}
-          </div>
+          <FeedTags tags={discussion.tags} />
 
           <section className="discussion-comments" aria-labelledby="discussion-comments-title">
             <div className="discussion-comments__head">

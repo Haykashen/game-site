@@ -9,7 +9,7 @@ test('pending count is restricted to staff and matches the moderation queue', as
   const {registerMarketAdminRoutes} = await import('../server/src/market/adminRoutes.ts');
   const app=Fastify();
   let queries=0;
-  app.decorate('prisma',{marketEntry:{count:async(args:unknown)=>{assert.deepEqual(args,{where:{deletedAt:null,moderationStatus:'pending'}});queries++;return 7;}}} as any);
+  app.decorate('prisma',{marketEntry:{count:async(args:unknown)=>{assert.deepEqual(args,{where:{deletedAt:null,statusReference:{code:{in:['pending']}}}});queries++;return 7;}}} as any);
   app.decorate('authenticate',async(request:any)=>{request.user=request.headers['x-role']?{id:'user',role:request.headers['x-role']}:null;});
   app.setErrorHandler((error,_request,reply)=>{reply.code(error instanceof AppError?error.statusCode:500).send({message:error.message});});
   registerMarketAdminRoutes(app);

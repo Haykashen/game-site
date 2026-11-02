@@ -1,3 +1,4 @@
+import { statusWhere, marketStatusWhere } from '../lib/statusSource.js';
 import type { Prisma } from '@prisma/client';
 import { MARKET_ITEM_OPTIONS, type MarketSearchQuery } from '@discvault/shared';
 import { resolveYearRange } from '../lib/catalogData.js';
@@ -10,11 +11,11 @@ export function buildMarketWhere(
   const and: Prisma.MarketEntryWhereInput[] = [{ deletedAt: null }];
 
   if (!includeModeration) {
-    and.push({ moderationStatus: 'visible' });
-    and.push({ author: { status: 'active' } });
+    and.push(marketStatusWhere({moderationStatus: 'visible'}));
+    and.push({author: statusWhere('active')});
   }
 
-  if (query.status !== 'all') and.push({ status: query.status });
+  if (query.status !== 'all') and.push(marketStatusWhere({status: query.status}));
   if (query.kind) and.push({ kind: query.kind });
   if (query.itemType) and.push({ itemType: query.itemType });
   if (query.listingType) and.push({ listingType: query.listingType });

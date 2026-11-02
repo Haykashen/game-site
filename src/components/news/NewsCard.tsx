@@ -1,3 +1,5 @@
+import { UserAvatar } from '../UserAvatar';
+import { FeedTags } from '../feed/FeedTags';
 import { ArrowUpRight, Clock } from 'lucide-react';
 import type { KeyboardEvent } from 'react';
 import { cx } from '../../lib/cx';
@@ -58,19 +60,11 @@ export function NewsCard({ post, featured = false, onSelect }: NewsCardProps) {
         <h2 className="news-card__title">{post.title}</h2>
         <p className="news-card__excerpt">{post.excerpt}</p>
 
-        <div className="feed-tags">
-          {post.tags.map((tag) => (
-            <span className="feed-tag" key={tag}>
-              {tag}
-            </span>
-          ))}
-        </div>
+        <FeedTags tags={post.tags} />
 
         <footer className="feed-card__footer">
           <span className="feed-author">
-            <span className="feed-avatar" aria-hidden="true">
-              {post.author.slice(0, 1).toUpperCase()}
-            </span>
+            <UserAvatar name={post.author} />
             {post.author}
           </span>
           <span className="feed-stats">

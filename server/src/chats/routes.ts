@@ -1,3 +1,4 @@
+import { moderationStatus, statusWhere } from '../lib/statusSource.js';
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { parse } from '../lib/validation.js';
@@ -15,12 +16,12 @@ export function registerChatRoutes(app: FastifyInstance) {
     const me=request.user!.id;
     let target=input.userId, title='Личная переписка';
     if(input.entryId){
-      const entry=await app.prisma.marketEntry.findUnique({where:{id:input.entryId}});
-      if(!entry||entry.deletedAt||entry.moderationStatus!=='visible')throw notFound('Объявление недоступно.');
+      const entry=await app.prisma.marketEntry.findUnique({ include: {statusReference: {select: {code: true}}},where:{id:input.entryId}});
+      if(!entry||entry.deletedAt||moderationStatus(entry)!=='visible')throw notFound('Объявление недоступно.');
       target=entry.authorId;title=entry.title;
     }
     if(target===me)throw badRequest('Нельзя написать самому себе.');
-    if(!await app.prisma.user.findFirst({where:{id:target!,status:'active'}}))throw notFound('Пользователь недоступен.');
+    if(!await app.prisma.user.findFirst({ include: {statusReference: {select: {code: true}}},where:{id:target!,...statusWhere('active')}}))throw notFound('Пользователь недоступен.');
     const key=[input.entryId??'direct',...[me,target!].sort()].join(':');
     const chat=await app.prisma.chat.upsert({where:{key},update:{},create:{key,title,entryId:input.entryId??null,members:{create:[{userId:me},{userId:target!}]}}}).catch(async error=>{
       if(!isPrismaError(error,'P2002'))throw error;
@@ -31,7 +32,7 @@ export function registerChatRoutes(app: FastifyInstance) {
   app.get('/api/v1/chats',auth,async request=>{
     const me=request.user!.id;
     const chats=await app.prisma.chat.findMany({where:{members:{some:{userId:me}}},include:{members:{include:{user:{select:person}}},messages:{orderBy:[{createdAt:'desc'},{id:'desc'}],take:1}},orderBy:[{updatedAt:'desc'},{id:'desc'}]});
-    const entries=await app.prisma.marketEntry.findMany({where:{id:{in:chats.flatMap(c=>c.entryId?[c.entryId]:[])}},select:{id:true,kind:true}});
+    const entries=await app.prisma.marketEntry.findMany({where:{id:{in:chats.flatMap(c=>c.entryId?[c.entryId]:[])}},select:{ statusReference: { select: { code: true } },id:true,kind:true}});
     return Promise.all(chats.map(async c=>({...c,entryKind:entries.find(e=>e.id===c.entryId)?.kind??null,members:c.members.map(m=>({user:m.user,readAt:m.readAt})),unread:await app.prisma.chatMessage.count({where:{chatId:c.id,authorId:{not:me},createdAt:{gt:c.members.find(m=>m.userId===me)!.readAt}}})})));
   });
   app.get('/api/v1/chats/:id/messages',auth,async request=>{
@@ -51,7 +52,7 @@ export function registerChatRoutes(app: FastifyInstance) {
     const {id}=parse(z.object({id:z.string().uuid()}),request.params);const me=request.user!.id;await member(id,me);
     const {text,clientId}=parse(z.object({text:z.string().trim().min(1).max(4000),clientId:z.string().uuid()}),request.body);
     return app.prisma.$transaction(async tx=>{
-      if(await tx.chatMember.count({where:{chatId:id,user:{status:{not:'active'}}}}))throw badRequest('Переписка с этим пользователем недоступна.');
+      if(await tx.chatMember.count({where:{chatId:id,user:{...statusWhere({not:'active'})}}}))throw badRequest('Переписка с этим пользователем недоступна.');
       const existing=await tx.chatMessage.findUnique({where:{authorId_clientId:{authorId:me,clientId}}});
       if(existing){if(existing.chatId!==id||existing.text!==text)throw badRequest('Идентификатор сообщения уже использован.');return existing;}
       const message=await tx.chatMessage.create({data:{chatId:id,authorId:me,text,clientId}});

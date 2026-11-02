@@ -1,3 +1,4 @@
+import { statusCode } from '../lib/statusSource.js';
 import type { PrismaClient } from '@prisma/client';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { createHash, randomBytes } from 'node:crypto';
@@ -96,14 +97,13 @@ export async function resolveSession(
     where: { tokenHash: hashToken(token) },
     include: {
       user: {
-        select: {
+        select: { statusReference: { select: { code: true } },
           id: true,
           email: true,
           displayName: true,
           isDemo: true,
           role: true,
-          status: true,
-        },
+          },
       },
     },
   });
@@ -111,7 +111,7 @@ export async function resolveSession(
   if (
     !session ||
     session.expiresAt.getTime() <= Date.now() ||
-    session.user.status !== 'active'
+    statusCode(session.user) !== 'active'
   ) {
     if (session) {
       await prisma.session.delete({ where: { id: session.id } }).catch(() => undefined);
@@ -127,6 +127,6 @@ export async function resolveSession(
     });
   }
 
-  request.user = session.user;
+  request.user = { ...session.user, status: statusCode(session.user) as UserStatus };
   request.sessionId = session.id;
 }

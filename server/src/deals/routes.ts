@@ -1,3 +1,4 @@
+import { moderationStatus, statusCode, marketStatus, marketStatusWhere, statusWhere, statusWrite } from '../lib/statusSource.js';
 import type { Prisma } from '@prisma/client';
 import type { FastifyInstance } from 'fastify';
 import {
@@ -43,27 +44,25 @@ export function registerDealRoutes(app: FastifyInstance): void {
 
       const entry = await app.prisma.marketEntry.findFirst({
         where: { id, deletedAt: null },
-        select: {
+        select: { statusReference: { select: { code: true } },
           id: true,
           authorId: true,
           title: true,
           gameId: true,
           kind: true,
           listingType: true,
-          status: true,
-          moderationStatus: true,
           priceMinor: true,
           version: true,
-          author: { select: { status: true } },
-          deal: { select: { id: true } },
+          author: { select: { statusReference: { select: { code: true } }, } },
+          deal: { select: { statusReference: { select: { code: true } }, id: true } },
         },
       });
 
       if (!entry) throw notFound('Объявление не найдено.');
 
       if (
-        entry.moderationStatus !== 'visible' ||
-        entry.author.status !== 'active'
+        moderationStatus(entry) !== 'visible' ||
+        statusCode(entry.author) !== 'active'
       ) {
         throw conflict('ENTRY_NOT_AVAILABLE', 'Лот недоступен.');
       }
@@ -79,7 +78,7 @@ export function registerDealRoutes(app: FastifyInstance): void {
         throw forbidden('Нельзя заключить сделку с самим собой.');
       }
 
-      if (entry.status !== 'active' || entry.deal) {
+      if (marketStatus(entry) !== 'active' || entry.deal) {
         throw conflict('ENTRY_NOT_AVAILABLE', 'Лот уже недоступен для сделки.');
       }
 
@@ -92,14 +91,13 @@ export function registerDealRoutes(app: FastifyInstance): void {
           const updated = await tx.marketEntry.updateMany({
             where: {
               id,
-              status: 'active',
-              moderationStatus: 'visible',
+              ...marketStatusWhere({status: 'active',moderationStatus: 'visible'}),
               deletedAt: null,
-              author: { status: 'active' },
+              author: { ...statusWhere('active') },
               deal: { is: null },
             },
             data: {
-              status: 'sold',
+              ...await statusWrite(tx, 'MarketEntry', {status: 'sold'}, id),
               soldAt: new Date(),
               version: { increment: 1 },
             },
@@ -115,7 +113,7 @@ export function registerDealRoutes(app: FastifyInstance): void {
               buyerId,
               sellerId,
               amountMinor: entry.priceMinor,
-              status: 'pending',
+              ...await statusWrite(tx, 'Deal', {status: 'pending'}),
             },
             include: dealInclude,
           });
@@ -170,7 +168,7 @@ export function registerDealRoutes(app: FastifyInstance): void {
           : query.role === 'seller'
             ? { sellerId: user.id }
             : { OR: [{ buyerId: user.id }, { sellerId: user.id }] }),
-        ...(query.status !== 'all' ? { status: query.status } : {}),
+        ...(query.status !== 'all' ? statusWhere(query.status) : {}),
       };
 
       const [total, deals] = await app.prisma.$transaction([
@@ -221,13 +219,12 @@ export function registerDealRoutes(app: FastifyInstance): void {
 
       const existing = await app.prisma.deal.findUnique({
         where: { id },
-        select: {
+        select: { statusReference: { select: { code: true } },
           id: true,
           buyerId: true,
           sellerId: true,
-          status: true,
           marketEntryId: true,
-          marketEntry: { select: { kind: true, deletedAt: true } },
+          marketEntry: { select: { statusReference: { select: { code: true } }, kind: true, deletedAt: true } },
         },
       });
 
@@ -237,15 +234,15 @@ export function registerDealRoutes(app: FastifyInstance): void {
         throw forbidden('Эта сделка относится к другим пользователям.');
       }
 
-      if (existing.status !== 'pending') {
+      if (statusCode(existing) !== 'pending') {
         throw conflict('DEAL_ALREADY_CLOSED', 'Сделка уже завершена или отменена.');
       }
 
       const deal = await app.prisma.$transaction(async (tx) => {
         const changed = await tx.deal.updateMany({
-          where: { id, status: 'pending' },
+          where: { id, ...statusWhere('pending') },
           data: {
-            status: input.status,
+            ...await statusWrite(tx, 'Deal', {status: input.status}),
             completedAt: input.status === 'completed' ? new Date() : null,
           },
         });
@@ -267,10 +264,10 @@ export function registerDealRoutes(app: FastifyInstance): void {
           existing.marketEntry.kind === 'listing' &&
           existing.marketEntry.deletedAt === null
         ) {
-          await tx.marketEntry.update({
+          await tx.marketEntry.update({ include: {statusReference: {select: {code: true}}},
             where: { id: existing.marketEntryId },
             data: {
-              status: 'active',
+              ...await statusWrite(tx, 'MarketEntry', {status: 'active'}, existing.marketEntryId),
               soldAt: null,
               version: { increment: 1 },
             },
@@ -278,7 +275,7 @@ export function registerDealRoutes(app: FastifyInstance): void {
 
           // `marketEntryId` is unique. A cancelled negotiation must not block
           // the listing from being sold again, so remove the pending deal.
-          await tx.deal.delete({ where: { id } });
+          await tx.deal.delete({ include: {statusReference: {select: {code: true}}}, where: { id } });
         }
 
         return updated;
@@ -300,7 +297,7 @@ export function registerDealRoutes(app: FastifyInstance): void {
 
       const deal = await getDealForUser(app, id, user.id);
 
-      if (deal.status !== 'completed') {
+      if (statusCode(deal) !== 'completed') {
         throw conflict('DEAL_NOT_COMPLETED', 'Отзыв можно оставить после завершения сделки.');
       }
 
@@ -323,7 +320,7 @@ export function registerDealRoutes(app: FastifyInstance): void {
             include: reviewInclude,
           });
 
-          await tx.user.update({
+          await tx.user.update({ include: {statusReference: {select: {code: true}}},
             where: { id: targetId },
             data: {
               ratingSum: { increment: input.rating },

@@ -1,3 +1,4 @@
+import { statusCode, statusWhere, statusWrite } from '../lib/statusSource.js';
 import type { Prisma } from '@prisma/client';
 import type { FastifyInstance } from 'fastify';
 import {
@@ -14,14 +15,13 @@ import { getUserProfile } from '../lib/serializers.js';
 import { parse } from '../lib/validation.js';
 import { isUserOnline } from '../auth/presence.js';
 
-const adminUserSelect = {
+const adminUserSelect = { statusReference: { select: { code: true } },
   id: true,
   email: true,
   displayName: true,
   avatarUrl: true,
   isDemo: true,
   role: true,
-  status: true,
   suspendedAt: true,
   comment: true,
   createdAt: true,
@@ -51,7 +51,7 @@ function serializeAdminUser(
   const sessionActivity = user.sessions.find((session) => session.expiresAt > now)?.lastUsedAt ?? null;
   const lastSeenAt = user.lastSeenAt ?? sessionActivity;
   return {
-    isOnline: !user.isDemo && isUserOnline(user.status, sessionActivity, now),
+    isOnline: !user.isDemo && isUserOnline(statusCode(user), sessionActivity, now),
     lastSeenAt: lastSeenAt?.toISOString() ?? null,
     id: user.id,
     email: user.email,
@@ -59,7 +59,7 @@ function serializeAdminUser(
     avatarUrl: user.avatarUrl,
     isDemo: user.isDemo,
     role: user.role,
-    status: user.status,
+    status: statusCode(user) as AdminUserDto['status'],
     rating: ratingFrom(user.ratingSum, user.ratingCount),
     reviewCount: user.ratingCount,
     listings,
@@ -243,7 +243,7 @@ export function registerUserAdminRoutes(app: FastifyInstance): void {
       const search = query.search?.trim();
       const where: Prisma.UserWhereInput = {
         ...(query.role !== 'all' ? { role: query.role } : {}),
-        ...(query.status !== 'all' ? { status: query.status } : {}),
+        ...(query.status !== 'all' ? statusWhere(query.status) : {}),
         ...(search
           ? {
               OR: [
@@ -276,7 +276,7 @@ export function registerUserAdminRoutes(app: FastifyInstance): void {
               by: ['buyerId'],
               where: {
                 buyerId: { in: userIds },
-                status: 'completed',
+                ...statusWhere('completed'),
               },
               _count: { _all: true },
             })
@@ -286,7 +286,7 @@ export function registerUserAdminRoutes(app: FastifyInstance): void {
               by: ['sellerId'],
               where: {
                 sellerId: { in: userIds },
-                status: 'completed',
+                ...statusWhere('completed'),
               },
               _count: { _all: true },
             })
@@ -351,7 +351,7 @@ export function registerUserAdminRoutes(app: FastifyInstance): void {
 
       const target = await app.prisma.user.findUnique({
         where: { id },
-        select: { id: true, role: true },
+        select: { statusReference: { select: { code: true } }, id: true, role: true },
       });
 
       if (!target) throw notFound('Пользователь не найден.');
@@ -361,10 +361,10 @@ export function registerUserAdminRoutes(app: FastifyInstance): void {
       }
 
       const user = await app.prisma.$transaction(async (tx) => {
-        const updated = await tx.user.update({
+        const updated = await tx.user.update({ include: {statusReference: {select: {code: true}}},
           where: { id },
           data: {
-            status: input.status,
+            ...await statusWrite(tx, 'User', {status: input.status}),
             suspendedAt: input.status === 'suspended' ? new Date() : null,
             comment:
               input.status === 'suspended' ? (input.reason ?? null) : null,

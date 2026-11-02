@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import Fastify from 'fastify';
@@ -25,6 +26,8 @@ async function fixture() {
     const key = model.name.charAt(0).toLowerCase() + model.name.slice(1);
     rows.set(key, []);
     const match = (row: Row, where: Row = {}): boolean => Object.entries(where).every(([field, value]) => {
+      if (field === 'entity_code') return match(row, value as Row);
+      if (field === 'statusReference') {const reference = rows.get('status')!.find(item => item.id === row.statusId) ?? row.statusReference as Row; return Boolean(reference) && match(reference!, value as Row);}
       if (field === 'AND') return (value as Row[]).every((clause) => match(row, clause));
       if (field === 'OR') return (value as Row[]).some((clause) => match(row, clause));
       if (value && typeof value === 'object' && 'in' in value) return (value.in as unknown[]).includes(row[field]);
@@ -32,7 +35,11 @@ async function fixture() {
       if (value && typeof value === 'object' && 'contains' in value) return String(row[field]).toLowerCase().includes(String(value.contains).toLowerCase());
       return row[field] === value;
     });
-    const select = (row: Row, selection?: Row) => selection ? Object.fromEntries(Object.keys(selection).map((field) => [field, row[field]])) : {...row};
+    const select = (row: Row, selection?: Row) => {
+      const reference = rows.get('status')!.find(item => item.id === row.statusId) ?? row.statusReference;
+      const hydrated = {...row, ...(reference ? {statusReference: reference} : {})};
+      return selection ? Object.fromEntries(Object.keys(selection).map(field => [field, hydrated[field]])) : hydrated;
+    };
     db[key] = Object.fromEntries(['findFirst', 'findUnique', 'findMany', 'groupBy', 'count', 'create', 'update', 'updateMany', 'delete', 'deleteMany'].map((method) => [method, async (args: Row) => {
       calls.push({model: key, method, args});
       const list = rows.get(key)!;
@@ -43,7 +50,7 @@ async function fixture() {
       if (method === 'findFirst' || method === 'findUnique') return found ? select(found, args.select as Row) : null;
       if (method === 'count') return list.filter((row) => match(row, where)).length;
       if (method === 'create') {
-        const data = {id: otherId, role: 'user', status: 'active', createdAt: now, updatedAt: now, ...args.data as Row};
+        const data = {statusReference: {code: model.name === 'Game' || model.name === 'Edition' ? 'draft' : 'active'}, id: otherId, role: 'user', createdAt: now, updatedAt: now, ...args.data as Row};
         list.push(data); return select(data, args.select as Row);
       }
       if (method === 'updateMany') {const matched = list.filter(row => match(row, where)); for (const row of matched) Object.assign(row, args.data); return {count: matched.length};}
@@ -53,13 +60,16 @@ async function fixture() {
       Object.assign(found, args.data); return select(found, args.select as Row);
     }]));
   }
+  for (const [entity, codes] of Object.entries({Game: ['draft', 'pending', 'visible', 'hidden', 'removed'], Edition: ['draft'], User: ['active', 'suspended', 'deleted'], Deal: ['pending', 'completed', 'cancelled'], Report: ['pending']})) {
+    for (const code of codes) rows.get('status')!.push({id: randomUUID(), entity, code, name: code});
+  }
   db.$transaction = async (action: (tx: unknown) => unknown) => action(db);
   const app = Fastify({routerOptions: {maxParamLength: 2000}});
   app.decorate('prisma', db as unknown as PrismaClient);
   app.decorateRequest('user', null);
   app.decorate('authenticate', async (request) => {
     const role = request.headers['x-test-role'];
-    request.user = role ? {id: adminId, email: 'admin@test.invalid', displayName: 'Admin', role: role as 'admin' | 'user' | 'moderator', status: 'active', isDemo: false} : null;
+    request.user = role ? {id: adminId, email: 'admin@test.invalid', displayName: 'Admin', role: role as 'admin' | 'user' | 'moderator', statusReference: {code: 'active'}, isDemo: false} : null;
   });
   app.setErrorHandler((error, _request, reply) => {
     const status = error instanceof AppError ? error.statusCode : 500;
@@ -78,11 +88,11 @@ test('unified statuses are scoped to the entity and system identities are protec
   const gameStatusId = 'a1000000-0000-4000-8000-000000000001';
   const dealStatusId = 'a1000000-0000-4000-8000-000000000002';
   rows.get('status')!.push({id:gameStatusId,entity:'Game',code:'draft',name:'Черновик'}, {id:dealStatusId,entity:'Deal',code:'pending',name:'Ожидает'});
-  rows.get('game')!.push({id:'status-game',title:'Status game',moderationStatus:'draft',updatedAt:now});
+  rows.get('game')!.push({id:'status-game',title:'Status game',statusReference:{code:'draft'},updatedAt:now});
   try {
     const result = await app.inject({method:'GET',url:'/api/v1/admin/data/Status/references?entity=Game',headers});
     assert.equal(result.statusCode,200,result.body);
-    assert.deepEqual(result.json().items.map((item: {value:string})=>item.value),[gameStatusId]);
+    assert.deepEqual(result.json().items.map((item: {value:string})=>item.value),[...rows.get('status')!.filter(row => row.entity === 'Game').map(row => row.id)]);
     const wrong = await app.inject({method:'PATCH',url:path('Game',{id:'status-game'}),headers,payload:{data:{statusId:dealStatusId},expectedUpdatedAt:now.toISOString()}});
     assert.equal(wrong.statusCode,400,wrong.body);
     for(const field of ['code','entity']) assert.throws(()=>parseData(getTable('Status'),{[field]:'changed'},false),AppError);
@@ -169,7 +179,7 @@ test('HTTP creation accepts no client ID, returns a generated ID, and keeps lega
     assert.equal(first.statusCode, 201, first.body);
     assert.equal(second.statusCode, 201, second.body);
     assert.notEqual(first.json().record.id, second.json().record.id);
-    rows.get('game')!.push({id: 'legacy-game-slug', title: 'Legacy', updatedAt: now});
+    rows.get('game')!.push({id: 'legacy-game-slug', title: 'Legacy', statusReference: {code: 'draft'}, updatedAt: now});
     const edited = await app.inject({method: 'PATCH', url: path('Game', {id: 'legacy-game-slug'}), headers, payload: {data: {title: 'Renamed legacy game'}, expectedUpdatedAt: now.toISOString()}});
     assert.equal(edited.statusCode, 200, edited.body);
     assert.equal(edited.json().record.id, 'legacy-game-slug');
@@ -253,9 +263,9 @@ test('creating users hashes passwords, hides hashes, and editing a password revo
 
 test('own administrator account cannot be deleted, suspended or demoted', async () => {
   const {app, rows} = await fixture();
-  rows.get('user')!.push({id: adminId, email: 'admin@test.invalid', displayName: 'Admin', role: 'admin', status: 'active', updatedAt: now});
+  rows.get('user')!.push({id: adminId, email: 'admin@test.invalid', displayName: 'Admin', role: 'admin', statusReference: {code: 'active'}, updatedAt: now});
   try {
-    for (const data of [{role: 'user'}, {status: 'suspended'}, {status: 'deleted'}, {isDemo: true}]) {
+    for (const data of [{role: 'user'}, ...['suspended', 'deleted'].map(code => ({statusId: rows.get('status')!.find(item => item.entity === 'User' && item.code === code)!.id})), {isDemo: true}]) {
       const result = await app.inject({method: 'PATCH', url: path('User', {id: adminId}), headers, payload: {data, expectedUpdatedAt: now.toISOString()}});
       assert.equal(result.statusCode, 403, result.body);
     }
@@ -266,7 +276,7 @@ test('own administrator account cannot be deleted, suspended or demoted', async 
 
 test('last active administrator cannot be removed even when the acting identity differs', async () => {
   const {app, rows} = await fixture();
-  rows.get('user')!.push({id: otherId, role: 'admin', status: 'active', isDemo: false, updatedAt: now});
+  rows.get('user')!.push({id: otherId, role: 'admin', statusReference: {code: 'active'}, isDemo: false, updatedAt: now});
   try {
     const result = await app.inject({method: 'PATCH', url: path('User', {id: otherId}), headers, payload: {data: {role: 'user'}, expectedUpdatedAt: now.toISOString()}});
     assert.equal(result.statusCode, 403, result.body);
@@ -353,16 +363,16 @@ test('review corrections rebuild cached ratings for both previous and new recipi
   const updates: Row[] = [];
   const tx = {review: {aggregate: async ({where}: {where: {targetId: string}}) => ({_sum: {rating: where.targetId === adminId ? null : 5}, _count: {_all: where.targetId === adminId ? 0 : 1}})}, user: {update: async (args: Row) => {updates.push(args);}}} as unknown as Prisma.TransactionClient;
   await reconcileRecords(tx, 'Review', {targetId: adminId}, {targetId: otherId});
-  assert.deepEqual(updates, [{where: {id: adminId}, data: {ratingSum: 0, ratingCount: 0}}, {where: {id: otherId}, data: {ratingSum: 5, ratingCount: 1}}]);
+  assert.deepEqual(updates.map(({include: _include, ...args}) => args), [{where: {id: adminId}, data: {ratingSum: 0, ratingCount: 0}}, {where: {id: otherId}, data: {ratingSum: 5, ratingCount: 1}}]);
 });
 
 test('domain validation prevents wrong edition/game links, self-deals, review spoofing and cyclic comments', async () => {
   const tx = {
     edition: {findUnique: async () => ({gameId: 'other-game', canonicalId: null})},
-    deal: {findUnique: async () => ({status: 'completed', buyerId: adminId, sellerId: otherId})},
+    deal: {findUnique: async () => ({statusReference: {code: 'completed'}, buyerId: adminId, sellerId: otherId})},
     discussionComment: {findUnique: async () => ({discussionId: 'thread', parentId: 'self'})},
   } as unknown as Prisma.TransactionClient;
-  await assert.rejects(validateRecord(tx, 'MarketEntry', {editionId: 'edition', gameId: 'game'}, null), AppError);
+  await assert.rejects(validateRecord(tx, 'MarketEntry', {editionId: 'edition', gameId: 'game', statusReference: {code: 'draft'}}, null), AppError);
   await assert.rejects(validateRecord(tx, 'Deal', {buyerId: adminId, sellerId: adminId}, null), AppError);
   await assert.rejects(validateRecord(tx, 'Review', {authorId: adminId, targetId: adminId}, null), AppError);
   await assert.rejects(validateRecord(tx, 'DiscussionComment', {id: 'self', discussionId: 'thread', parentId: 'parent'}, null), AppError);
@@ -426,7 +436,7 @@ test('user directory exposes last visit, online filters and ID filters without s
   const {app, rows} = await fixture();
   const recent = new Date();
   const old = new Date(recent.getTime() - 600000);
-  const user = (id: string, lastSeenAt: Date | null, sessions: Row[]) => ({id, email: id + '@test.invalid', displayName: id, role: 'user', status: 'active', isDemo: false, createdAt: old, lastSeenAt, sessions, ratingSum: 0, ratingCount: 0, _count: {copies: 0}});
+  const user = (id: string, lastSeenAt: Date | null, sessions: Row[]) => ({id, email: id + '@test.invalid', displayName: id, role: 'user', statusReference: {code: 'active'}, isDemo: false, createdAt: old, lastSeenAt, sessions, ratingSum: 0, ratingCount: 0, _count: {copies: 0}});
   rows.get('user')!.push(user(adminId, recent, [{lastUsedAt: recent, expiresAt: new Date(recent.getTime() + 600000)}]), user(otherId, old, []));
   try {
     const online = await app.inject({method: 'GET', url: '/api/v1/admin/users?online=online', headers});
@@ -448,7 +458,7 @@ test('user directory exposes last visit, online filters and ID filters without s
 test('moderators can edit games but cannot create, delete or access other tables', async () => {
   const {app, rows} = await fixture();
   const moderator = {'x-test-role': 'moderator'};
-  rows.get('game')!.push({id: 'moderated-game', title: 'Original', updatedAt: now});
+  rows.get('game')!.push({id: 'moderated-game', title: 'Original', statusReference: {code: 'draft'}, updatedAt: now});
   try {
     const metadata = await app.inject({method: 'GET', url: '/api/v1/admin/data', headers: moderator});
     assert.equal(metadata.statusCode, 200);
@@ -491,4 +501,28 @@ test('edition region is a required reference with a database default',()=>{
  const region=table.fields.find(field=>field.name==='regionId')!;
  assert.equal(region.reference,'Region');assert.equal(region.nullable,false);assert.equal(region.generated,true);
  assert.throws(()=>parseData(table,{region:'EUR'},false),AppError);
+});
+
+
+test('directory status changes cannot suspend the last admin and revoke regular-user sessions', async () => {
+  const {app, rows, calls} = await fixture();
+  const suspendedId = rows.get('status')!.find(row => row.entity === 'User' && row.code === 'suspended')!.id;
+  const activeId = rows.get('status')!.find(row => row.entity === 'User' && row.code === 'active')!.id;
+  rows.get('user')!.push({id: otherId, role: 'admin', isDemo: false, statusId: activeId, updatedAt: now});
+  try {
+    const blocked = await app.inject({method: 'PATCH', url: path('User', {id: otherId}), headers,
+      payload: {data: {statusId: suspendedId}, expectedUpdatedAt: now.toISOString()}});
+    assert.equal(blocked.statusCode, 403, blocked.body);
+    rows.get('user')![0]!.role = 'user';
+    rows.get('session')!.push({id: 'revoked-session', userId: otherId});
+    const changed = await app.inject({method: 'PATCH', url: path('User', {id: otherId}), headers,
+      payload: {data: {statusId: suspendedId}, expectedUpdatedAt: now.toISOString()}});
+    assert.equal(changed.statusCode, 200, changed.body);
+    assert.equal(changed.json().record.statusId, suspendedId);
+    assert.ok(changed.json().record.suspendedAt);
+    assert.equal(rows.get('session')!.length, 0);
+    const update = calls.findLast(call => call.model === 'user' && call.method === 'update')!;
+    assert.ok(!('status' in (update.args.data as Row)));
+    assert.ok(!('statusReference' in (update.args.data as Row)));
+  } finally {await app.close();}
 });

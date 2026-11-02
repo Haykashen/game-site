@@ -1,3 +1,4 @@
+import { moderationStatus, statusWhere, marketStatusWhere } from '../lib/statusSource.js';
 import type { Prisma } from '@prisma/client';
 import type { FastifyInstance } from 'fastify';
 import {
@@ -48,7 +49,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
       const hasEditionFilter = Object.keys(editionFilter).length > 1;
       const yearRange = resolveYearRange(query.year);
 
-      const and: Prisma.GameWhereInput[] = [{moderationStatus: {notIn: ['hidden', 'removed']}}];
+      const and: Prisma.GameWhereInput[] = [statusWhere({notIn: ['hidden', 'removed']})];
       if (query.statusId) and.push({statusId: query.statusId});
 
       if (hasEditionFilter) and.push({ editions: { some: editionFilter } });
@@ -98,8 +99,8 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
           orderBy: [{ title: 'asc' }, { id: 'asc' }],
           skip,
           take: query.pageSize,
-          include: { series: true, genres: true,
-            editions: { where: {canonicalId:null, moderationStatus: {notIn: ['hidden', 'removed']}}, select: { id: true, platform: true, coverImages: true }, orderBy: {id: 'asc'} },
+          include: { statusReference: { select: { code: true } }, series: true, genres: true,
+            editions: { where: {canonicalId:null, ...statusWhere({notIn: ['hidden', 'removed']})}, select: { statusReference: { select: { code: true } }, id: true, platform: true, coverImages: true }, orderBy: {id: 'asc'} },
             _count: { select: { editions: {where: {canonicalId:null}} } },
           },
         }),
@@ -116,9 +117,8 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
           by: ['gameId', 'kind', 'listingType'],
           where: {
             gameId: { in: gameIds },
-            status: 'active',
-            moderationStatus: 'visible',
-            author: { status: 'active' },
+            ...marketStatusWhere({status: 'active',moderationStatus: 'visible'}),
+            author: { ...statusWhere('active') },
             deletedAt: null,
           },
           _count: { _all: true },
@@ -179,16 +179,16 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
 
     const game = await app.prisma.game.findUnique({
       where: { id },
-      include: { series: true, genres: true,
+      include: { statusReference: { select: { code: true } }, series: true, genres: true,
         editions: {
-          where: {canonicalId:null, moderationStatus: {notIn: ['hidden', 'removed']}},
-          include: {region:true, variants:{include:{region:true}}},
+          where: {canonicalId:null, ...statusWhere({notIn: ['hidden', 'removed']})},
+          include: { statusReference: { select: { code: true } },region:true, variants:{include:{ statusReference: { select: { code: true } },region:true}}},
           orderBy: [{ platform: 'asc' }, { name: 'asc' }, { id: 'asc' }],
         },
       },
     });
 
-    if (!game || game.moderationStatus === 'hidden' || game.moderationStatus === 'removed') throw notFound('Игра не найдена.');
+    if (!game || moderationStatus(game) === 'hidden' || moderationStatus(game) === 'removed') throw notFound('Игра не найдена.');
 
     const body: GameDetailDto = {
       ...serializeGame(game),
@@ -200,7 +200,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
 
   app.get('/api/v1/catalog/editions', async (request, reply) => {
     const query = parse(editionQuerySchema, request.query);
-    const and: Prisma.EditionWhereInput[] = [{canonicalId:null}, {moderationStatus: {notIn: ['hidden', 'removed']}}, {game: {moderationStatus: {notIn: ['hidden', 'removed']}}}];
+    const and: Prisma.EditionWhereInput[] = [{canonicalId:null}, statusWhere({notIn: ['hidden', 'removed']}), {game: statusWhere({notIn: ['hidden', 'removed']})}];
 
     if (query.gameId) and.push({ gameId: query.gameId });
     if (query.platform) and.push({ platform: query.platform });
@@ -228,7 +228,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
       app.prisma.edition.count({ where }),
       app.prisma.edition.findMany({
         where,
-        include: {region:true, variants:{include:{region:true}}},
+        include: { statusReference: { select: { code: true } },region:true, variants:{include:{ statusReference: { select: { code: true } },region:true}}},
         orderBy: [{ gameId: 'asc' }, { platform: 'asc' }, { name: 'asc' }, { id: 'asc' }],
         skip,
         take: query.pageSize,
@@ -245,10 +245,10 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
 
     const edition = await app.prisma.edition.findUnique({
       where: { id: await resolveEditionId(app.prisma,id) },
-      include: { region:true, game: {include: {series: true, genres: true}}, variants:{include:{region:true}} },
+      include: { statusReference: { select: { code: true } }, region:true, game: {include: { statusReference: { select: { code: true } },series: true, genres: true}}, variants:{include:{ statusReference: { select: { code: true } },region:true}} },
     });
 
-    if (!edition || ['hidden', 'removed'].includes(edition.moderationStatus) || ['hidden', 'removed'].includes(edition.game.moderationStatus)) throw notFound('Издание не найдено.');
+    if (!edition || ['hidden', 'removed'].includes(moderationStatus(edition)) || ['hidden', 'removed'].includes(moderationStatus(edition.game))) throw notFound('Издание не найдено.');
 
     const body: EditionDetailDto = {
       ...serializeEdition(edition),
@@ -259,7 +259,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
   });
 
   app.get('/api/v1/catalog/filters', async (_request, reply) => {
-    const releases = await app.prisma.edition.findMany({ where: {canonicalId:null, moderationStatus: {notIn: ['hidden', 'removed']}}, select: { platform: true, lang: true, region: {select:{code:true}}, name: true } });
+    const releases = await app.prisma.edition.findMany({ where: {canonicalId:null, ...statusWhere({notIn: ['hidden', 'removed']})}, select: { statusReference: { select: { code: true } }, platform: true, lang: true, region: {select:{code:true}}, name: true } });
     const unique = (key: 'platform' | 'lang' | 'name') => [...new Set(releases.map((edition) => edition[key]))].filter(Boolean).sort();
     const body: CatalogFiltersDto = {
       platforms: unique('platform').map((name) => seedPlatforms.find((platform) => platform.name === name)

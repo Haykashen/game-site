@@ -1,3 +1,4 @@
+import { moderationStatus, statusCode, marketStatus, marketStatusWhere, statusWhere } from '../lib/statusSource.js';
 import type { FastifyInstance } from 'fastify';
 import {
   bidCreateSchema,
@@ -32,10 +33,10 @@ export function registerBidRoutes(app: FastifyInstance): void {
       where: {
         id,
         deletedAt: null,
-        moderationStatus: 'visible',
-        author: { status: 'active' },
+        ...marketStatusWhere({moderationStatus: 'visible'}),
+        author: { ...statusWhere('active') },
       },
-      select: { id: true },
+      select: { statusReference: { select: { code: true } }, id: true },
     });
 
     if (!entry) throw notFound('Объявление не найдено.');
@@ -74,17 +75,15 @@ export function registerBidRoutes(app: FastifyInstance): void {
           where: {
             id,
             deletedAt: null,
-            moderationStatus: 'visible',
-            author: { status: 'active' },
+            ...marketStatusWhere({moderationStatus: 'visible'}),
+            author: { ...statusWhere('active') },
           },
-          select: {
+          select: { statusReference: { select: { code: true } },
             id: true,
             title: true,
             gameId: true,
             kind: true,
             authorId: true,
-            status: true,
-            moderationStatus: true,
             startsAt: true,
             endsAt: true,
             priceMinor: true,
@@ -92,15 +91,15 @@ export function registerBidRoutes(app: FastifyInstance): void {
             currentPriceMinor: true,
             bidCount: true,
             version: true,
-            author: { select: { status: true } },
+            author: { select: { statusReference: { select: { code: true } }, } },
           },
         });
 
         if (!entry) throw notFound('Объявление не найдено.');
 
         if (
-          entry.moderationStatus !== 'visible' ||
-          entry.author.status !== 'active'
+          moderationStatus(entry) !== 'visible' ||
+          statusCode(entry.author) !== 'active'
         ) {
           throw notFound('Объявление не найдено.');
         }
@@ -113,7 +112,7 @@ export function registerBidRoutes(app: FastifyInstance): void {
           throw forbidden('Нельзя делать ставки на свой лот.');
         }
 
-        if (entry.status !== 'active') {
+        if (marketStatus(entry) !== 'active') {
           throw conflict('AUCTION_CLOSED', 'Торги по этому лоту уже завершены.');
         }
 
@@ -151,8 +150,7 @@ export function registerBidRoutes(app: FastifyInstance): void {
           const updated = await tx.marketEntry.updateMany({
             where: {
               id,
-              status: 'active',
-              moderationStatus: 'visible',
+              ...marketStatusWhere({status: 'active',moderationStatus: 'visible'}),
               version: entry.version,
             },
             data: {

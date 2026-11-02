@@ -60,7 +60,7 @@ export function getModel(name: string) {
 export function getTable(name: string): AdminTable {
   const model = getModel(name);
   const primaryKey = [...(model.primaryKey?.fields ?? model.fields.filter((field) => field.isId).map((field) => field.name))];
-  const fields: AdminField[] = model.fields.filter((field) => (field.kind !== 'object' || (name === 'Game' && field.name === 'genres')) && !HIDDEN.has(field.name) && !(model.fields.some(item => item.name === 'statusId') && ['status', 'moderationStatus'].includes(field.name) && !['User','Deal','Report'].includes(name))).map((field) => {
+  const fields: AdminField[] = model.fields.filter((field) => (field.kind !== 'object' || (name === 'Game' && field.name === 'genres')) && !HIDDEN.has(field.name)).map((field) => {
     const relation = model.fields.find((candidate) => candidate.kind === 'object' && candidate.relationFromFields?.includes(field.name));
     const generatedId = field.isId && !relation;
     return {
@@ -79,8 +79,9 @@ export function getTable(name: string): AdminTable {
   return {name, label: TABLE_LABELS[name] ?? name, fields, primaryKey, canCreate: name !== 'Session' && !name.endsWith('Status'), canEdit: name !== 'Session', canDelete: !name.endsWith('Status')};
 }
 
-export function recordSelect(table: AdminTable): Record<string, true> {
-  return Object.fromEntries([...table.fields.filter((field) => field.type !== 'password').map((field) => [field.name, true]), ...getModel(table.name).fields.filter(field => ['status', 'moderationStatus'].includes(field.name)).map(field => [field.name, true])]);
+export function recordSelect(table: AdminTable): Record<string, unknown> {
+  return {...Object.fromEntries(table.fields.filter(field => field.type !== 'password').map(field => [field.name, true])),
+    ...(table.fields.some(field => field.name === 'statusId') ? {statusReference: {select: {code: true}}} : {})};
 }
 
 /** Build a strict scalar schema: nested Prisma writes and computed fields are rejected. */

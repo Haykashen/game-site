@@ -15,7 +15,7 @@ test('direct HTTP edit of an active auction is rejected before writing', async (
   process.env.DATABASE_URL ??= 'postgresql://test:test@localhost:5432/discvault_ci';
   const {registerMarketRoutes} = await import('../server/src/market/routes.ts');
   const app = Fastify();
-  app.decorate('prisma', {marketEntry: {findFirst: async () => ({id: 'lot', authorId: 'owner', kind: 'auction', status: 'active', moderationStatus: 'visible', bidCount: 0, photos: []})}} as any);
+  app.decorate('prisma', {marketEntry: {findFirst: async () => ({id: 'lot', authorId: 'owner', kind: 'auction', statusReference: {code: 'active'}, bidCount: 0, photos: []})}} as any);
   const authenticate = async (request: any) => {request.user = {id: 'owner'};};
   app.decorate('authenticate', authenticate);
   app.decorate('optionalAuth', authenticate);

@@ -1,3 +1,4 @@
+import { marketStatusWhere } from '../lib/statusSource.js';
 import type { FastifyInstance } from 'fastify';
 import {
   gameSubscriptionUpdateSchema,
@@ -159,7 +160,7 @@ export function registerNotificationRoutes(app: FastifyInstance): void {
 
       const game = await app.prisma.game.findUnique({
         where: { id: gameId },
-        select: { id: true },
+        select: { statusReference: { select: { code: true } }, id: true },
       });
 
       if (!game) throw notFound('Игра не найдена.');
@@ -211,8 +212,8 @@ export function registerNotificationRoutes(app: FastifyInstance): void {
       const { entryId } = parse(subscriptionEntryParamsSchema, request.params);
 
       const entry = await app.prisma.marketEntry.findFirst({
-        where: { id: entryId, deletedAt: null, moderationStatus: 'visible' },
-        select: { id: true },
+        where: { id: entryId, deletedAt: null, ...marketStatusWhere({moderationStatus: 'visible'}) },
+        select: { statusReference: { select: { code: true } }, id: true },
       });
 
       if (!entry) throw notFound('Объявление не найдено.');

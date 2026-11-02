@@ -1,3 +1,4 @@
+import { statusWhere } from '../lib/statusSource.js';
 import type { Prisma } from '@prisma/client';
 import type { FastifyInstance } from 'fastify';
 import {
@@ -44,7 +45,7 @@ export function registerUserRoutes(app: FastifyInstance): void {
       }
 
       const user = await app.prisma.user
-        .update({
+        .update({ include: {statusReference: {select: {code: true}}},
           where: { id: sessionUser.id },
           data: {
             ...(data.displayName !== undefined ? { displayName: data.displayName } : {}),
@@ -68,7 +69,7 @@ export function registerUserRoutes(app: FastifyInstance): void {
     const { id } = request.params as { id: string };
 
     const user = await app.prisma.user.findFirst({
-      where: { id, status: 'active' },
+      where: { id, ...statusWhere('active') },
       select: publicProfileSelect,
     });
 
@@ -76,7 +77,7 @@ export function registerUserRoutes(app: FastifyInstance): void {
 
     const dealsCompleted = await app.prisma.deal.count({
       where: {
-        status: 'completed',
+        ...statusWhere('completed'),
         OR: [{ buyerId: id }, { sellerId: id }],
       },
     });
@@ -96,8 +97,8 @@ export function registerUserRoutes(app: FastifyInstance): void {
     const query = parse(paginationSchema, request.query);
 
     const user = await app.prisma.user.findFirst({
-      where: { id, status: 'active' },
-      select: { id: true },
+      where: { id, ...statusWhere('active') },
+      select: { statusReference: { select: { code: true } }, id: true },
     });
 
     if (!user) throw notFound('Пользователь не найден.');

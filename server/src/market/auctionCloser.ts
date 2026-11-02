@@ -1,3 +1,4 @@
+import { marketStatus, moderationStatus, marketStatusWhere, statusWrite, statusWhere } from '../lib/statusSource.js';
 import type { PrismaClient } from '@prisma/client';
 import { notifyAuctionClosed } from '../notifications/events.js';
 
@@ -8,11 +9,11 @@ export async function closeAuctionById(
   await prisma.$transaction(async (tx) => {
     const entry = await tx.marketEntry.findUnique({
       where: { id },
-      include: {
+      include: { statusReference: { select: { code: true } },
         bids: {
           orderBy: [{ amountMinor: 'desc' }, { createdAt: 'asc' }],
           take: 1,
-          include: { bidder: { select: { displayName: true } } },
+          include: { bidder: { select: { statusReference: { select: { code: true } }, displayName: true } } },
         },
       },
     });
@@ -20,8 +21,8 @@ export async function closeAuctionById(
     if (
       !entry ||
       entry.kind !== 'auction' ||
-      entry.status !== 'active' ||
-      entry.moderationStatus !== 'visible' ||
+      marketStatus(entry) !== 'active' ||
+      moderationStatus(entry) !== 'visible' ||
       !entry.endsAt ||
       entry.endsAt.getTime() > Date.now()
     ) {
@@ -33,8 +34,8 @@ export async function closeAuctionById(
 
     if (!topBid) {
       const closed = await tx.marketEntry.updateMany({
-        where: { id, status: 'active', version },
-        data: { status: 'closed', version: { increment: 1 } },
+        where: { id, ...marketStatusWhere({status: 'active'}), version },
+        data: { ...await statusWrite(tx, 'MarketEntry', {status: 'closed'}, id), version: { increment: 1 } },
       });
 
       if (closed.count === 0) return;
@@ -53,9 +54,9 @@ export async function closeAuctionById(
     }
 
     const updated = await tx.marketEntry.updateMany({
-      where: { id, status: 'active', version },
+      where: { id, ...marketStatusWhere({status: 'active'}), version },
       data: {
-        status: 'sold',
+        ...await statusWrite(tx, 'MarketEntry', {status: 'sold'}, id),
         winnerId: topBid.bidderId,
         currentPriceMinor: topBid.amountMinor,
         soldAt: new Date(),
@@ -65,14 +66,14 @@ export async function closeAuctionById(
 
     if (updated.count === 0) return;
 
-    await tx.deal.upsert({
+    await tx.deal.upsert({ include: {statusReference: {select: {code: true}}},
       where: { marketEntryId: id },
       create: {
         marketEntryId: id,
         buyerId: topBid.bidderId,
         sellerId: entry.authorId,
         amountMinor: topBid.amountMinor,
-        status: 'pending',
+        ...await statusWrite(tx, 'Deal', {status: 'pending'}),
       },
       update: {},
     });
@@ -97,14 +98,13 @@ export async function closeExpiredAuctions(
   const expired = await prisma.marketEntry.findMany({
     where: {
       kind: 'auction',
-      status: 'active',
+      ...marketStatusWhere({status: 'active',moderationStatus: 'visible'}),
       deletedAt: null,
-      moderationStatus: 'visible',
-      author: { status: 'active' },
+      author: { ...statusWhere('active') },
       endsAt: { lte: new Date() },
       ...(onlyId ? { id: onlyId } : {}),
     },
-    select: { id: true },
+    select: { statusReference: { select: { code: true } }, id: true },
     take: 100,
   });
 

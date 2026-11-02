@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { usePanelParams } from './usePanelParams';
 
 export interface MarketPanelState {
   /** The placement form is open. */
@@ -20,57 +20,17 @@ export interface MarketPanelState {
  * or an entity card (`item`). Links and browser history work for both.
  */
 export function useMarketPanelParam(): MarketPanelState {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { params: searchParams, update } = usePanelParams();
 
-  const openCompose = useCallback(
-    (gameId = '', editionId = '') => {
-      setSearchParams((previous) => {
-        const next = new URLSearchParams(previous);
-        next.set('compose', '1');
-        next.delete('item');
-
-        if (gameId) next.set('game', gameId);
-        else next.delete('game');
-
-        if (editionId) next.set('editionId', editionId);
-        else next.delete('editionId');
-
-        return next;
-      });
-    },
-    [setSearchParams],
-  );
-
-  const openItem = useCallback(
-    (itemId: string, options?: { replace?: boolean }) => {
-      setSearchParams(
-        (previous) => {
-          const next = new URLSearchParams(previous);
-          next.set('item', itemId);
-          next.delete('compose');
-          next.delete('game');
-          next.delete('editionId');
-          return next;
-        },
-        { replace: options?.replace ?? false },
-      );
-    },
-    [setSearchParams],
-  );
-
+  const openCompose = useCallback((gameId = '', editionId = '') => {
+    update({ compose: '1', item: null, game: gameId || null, editionId: editionId || null });
+  }, [update]);
+  const openItem = useCallback((itemId: string, options?: { replace?: boolean }) => {
+    update({ item: itemId, compose: null, game: null, editionId: null }, options?.replace ?? false);
+  }, [update]);
   const closePanel = useCallback(() => {
-    setSearchParams(
-      (previous) => {
-        const next = new URLSearchParams(previous);
-        next.delete('compose');
-        next.delete('item');
-        next.delete('game');
-        next.delete('editionId');
-        return next;
-      },
-      { replace: true },
-    );
-  }, [setSearchParams]);
+    update({ compose: null, item: null, game: null, editionId: null }, true);
+  }, [update]);
 
   return {
     isComposing: searchParams.get('compose') === '1',

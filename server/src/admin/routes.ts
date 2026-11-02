@@ -1,7 +1,7 @@
+import { statusWhere } from '../lib/statusSource.js';
 import { Prisma } from '@prisma/client';
 import { applyModeration } from '../lib/moderation.js';
-import { resolveStatus, STATUS_ENTITIES } from '../lib/statusDirectories.js';
-import { isActiveAuction } from '../../../shared/src/marketLifecycle.js';
+import { resolveStatus, STATUS_ENTITIES, recordStatus, recordModeration, scalarStatusData } from '../lib/statusDirectories.js';
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { dateOnlySchema, paginated, paginationSchema, type AdminReference, type AdminTable } from '@discvault/shared';
@@ -94,11 +94,11 @@ function checkVersion(table: AdminTable, old: Row, expected: string | null) {
 }
 
 async function protectUser(tx: Prisma.TransactionClient, adminId: string, old: Row, data: Row, deleting: boolean) {
-  if (old.id === adminId && (deleting || data.isDemo === true || (data.role !== undefined && data.role !== 'admin') || (data.status !== undefined && data.status !== 'active'))) {
+  if (old.id === adminId && (deleting || data.isDemo === true || (data.role !== undefined && data.role !== 'admin') || (data.statusId !== undefined && recordStatus(data) !== 'active'))) {
     throw forbidden('Нельзя удалить, заблокировать или понизить собственный аккаунт администратора.');
   }
-  if (old.role === 'admin' && old.status === 'active' && (deleting || data.isDemo === true || (data.role !== undefined && data.role !== 'admin') || (data.status !== undefined && data.status !== 'active'))) {
-    const count = await tx.user.count({where: {role: 'admin', status: 'active', isDemo: false}});
+  if (old.role === 'admin' && recordStatus(old) === 'active' && (deleting || data.isDemo === true || (data.role !== undefined && data.role !== 'admin') || (data.statusId !== undefined && recordStatus(data) !== 'active'))) {
+    const count = await tx.user.count({where: {role: 'admin', ...statusWhere('active'), isDemo: false}});
     if (count <= 1) throw forbidden('В системе должен оставаться активный администратор.');
   }
 }
@@ -214,17 +214,16 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
     const table = getTable(name);
     if (!table.canCreate) throw forbidden('Сессии создаются только при входе пользователя.');
     const data = parseCreateData(table, request.body);
-    if (name === 'MarketEntry' && !data.statusId) data.moderationStatus = 'draft';
     if (name === 'User') {
       data.passwordHash = await hashPassword(data.password as string);
       delete data.password;
-      if (data.status === 'suspended') data.suspendedAt = new Date();
     }
     const record = await write(app, async (tx) => {
       await resolveStatus(tx, name, data);
       applyModeration(name, data, null, admin.id);
+      if (name === 'User' && recordStatus(data) === 'suspended') data.suspendedAt = new Date();
       await validateRecord(tx, name, data, null);
-      const created = await delegate(tx, name).create({data, select: recordSelect(table)});
+      const created = await delegate(tx, name).create({data: scalarStatusData(data), select: recordSelect(table)});
       await reconcileRecords(tx, name, null, created);
       return delegate(tx, name).findFirst({where: Object.fromEntries(table.primaryKey.map((key) => [key, created[key]])), select: recordSelect(table)});
     });
@@ -249,16 +248,16 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
       if (!old) throw notFound();
       checkVersion(table, old, input.expectedUpdatedAt);
       await resolveStatus(tx, name, data, old);
-      if (name === 'MarketEntry' && isActiveAuction(old as {kind: string; status: string; moderationStatus: string}) && Object.keys(data).some(field => !['statusId', 'status', 'moderationStatus', 'moderationNote'].includes(field))) throw conflict('ACTIVE_AUCTION_LOCKED', 'Активный лот нельзя редактировать. Создайте новый на основе текущего, а этот закройте или удалите.');
+      if (name === 'MarketEntry' && old.kind === 'auction' && recordStatus(old) === 'active' && recordModeration(old) === 'visible' && Object.keys(data).some(field => !['statusId', 'statusReference', 'moderationNote'].includes(field))) throw conflict('ACTIVE_AUCTION_LOCKED', 'Активный лот нельзя редактировать. Создайте новый на основе текущего, а этот закройте или удалите.');
       applyModeration(name, data, old, admin.id);
       if (name === 'User') {
         await protectUser(tx, admin.id, old, data, false);
-        if (data.status !== undefined && data.status !== old.status) data.suspendedAt = data.status === 'suspended' ? new Date() : null;
-        if (data.passwordHash !== undefined || data.role !== undefined || data.status !== undefined || data.isDemo !== undefined) await tx.session.deleteMany({where: {userId: String(old.id)}});
+        if (data.statusId !== undefined && recordStatus(data) !== recordStatus(old)) data.suspendedAt = recordStatus(data) === 'suspended' ? new Date() : null;
+        if (data.passwordHash !== undefined || data.role !== undefined || data.statusId !== undefined || data.isDemo !== undefined) await tx.session.deleteMany({where: {userId: String(old.id)}});
       }
       await validateRecord(tx, name, {...old, ...data}, old);
       if (name === 'MarketEntry') data.version = {increment: 1};
-      const updated = await db.update({where: uniqueWhere(table, key), data, select: recordSelect(table)});
+      const updated = await db.update({where: uniqueWhere(table, key), data: scalarStatusData(data), select: recordSelect(table)});
       await reconcileRecords(tx, name, old, updated);
       return db.findFirst({where: key, select: recordSelect(table)});
     });

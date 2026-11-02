@@ -1,3 +1,4 @@
+import { statusWhere, moderationStatus, statusCode, statusWrite } from '../lib/statusSource.js';
 import type { Prisma } from '@prisma/client';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import {
@@ -43,14 +44,13 @@ async function createReportForUser(
   if (input.targetType === 'market_entry') {
     const entry = await app.prisma.marketEntry.findFirst({
       where: { id: input.targetId, deletedAt: null },
-      select: {
+      select: { statusReference: { select: { code: true } },
         id: true,
         authorId: true,
-        moderationStatus: true,
-      },
+        },
     });
 
-    if (!entry || entry.moderationStatus === 'removed') {
+    if (!entry || moderationStatus(entry) === 'removed') {
       throw notFound('Объявление не найдено.');
     }
 
@@ -63,10 +63,10 @@ async function createReportForUser(
   } else {
     const target = await app.prisma.user.findUnique({
       where: { id: input.targetId },
-      select: { id: true, status: true },
+      select: { statusReference: { select: { code: true } }, id: true, },
     });
 
-    if (!target || target.status === 'deleted') {
+    if (!target || statusCode(target) === 'deleted') {
       throw notFound('Пользователь не найден.');
     }
 
@@ -146,10 +146,10 @@ async function applyReportAction(
 
   return app.prisma.$transaction(async (tx) => {
     if (input.action === 'hide_entry' && report.marketEntryId) {
-      await tx.marketEntry.update({
+      await tx.marketEntry.update({ include: {statusReference: {select: {code: true}}},
         where: { id: report.marketEntryId },
         data: {
-          moderationStatus: 'hidden',
+          ...await statusWrite(tx, 'MarketEntry', {moderationStatus: 'hidden'}, report.marketEntryId),
           moderationNote: input.moderatorNote ?? null,
           moderatedAt: new Date(),
           moderatorId: moderator.id,
@@ -160,7 +160,7 @@ async function applyReportAction(
     if (suspendedUserId) {
       const target = await tx.user.findUnique({
         where: { id: suspendedUserId },
-        select: { role: true },
+        select: { statusReference: { select: { code: true } }, role: true },
       });
 
       if (!target) throw notFound('Пользователь не найден.');
@@ -168,10 +168,10 @@ async function applyReportAction(
         throw forbidden('Нельзя заблокировать администратора.');
       }
 
-      await tx.user.update({
+      await tx.user.update({ include: {statusReference: {select: {code: true}}},
         where: { id: suspendedUserId },
         data: {
-          status: 'suspended',
+          ...await statusWrite(tx, 'User', {status: 'suspended'}),
           suspendedAt: new Date(),
           comment: input.moderatorNote ?? null,
         },
@@ -182,7 +182,7 @@ async function applyReportAction(
     const updated = await tx.report.update({
       where: { id: reportId },
       data: {
-        status: input.status,
+        ...await statusWrite(tx, 'Report', {status: input.status}),
         action: input.action,
         moderatorId: moderator.id,
         ...(input.moderatorNote !== undefined
@@ -222,7 +222,7 @@ export function registerReportRoutes(app: FastifyInstance): void {
       const query = parse(myReportsQuerySchema, request.query);
       const where: Prisma.ReportWhereInput = {
         reporterId: user.id,
-        ...(query.status !== 'all' ? { status: query.status } : {}),
+        ...(query.status !== 'all' ? statusWhere(query.status) : {}),
       };
 
       const [total, reports] = await app.prisma.$transaction([
@@ -255,7 +255,7 @@ export function registerReportRoutes(app: FastifyInstance): void {
 
       const query = parse(adminReportsQuerySchema, request.query);
       const where: Prisma.ReportWhereInput = {
-        ...(query.status !== 'all' ? { status: query.status } : {}),
+        ...(query.status !== 'all' ? statusWhere(query.status) : {}),
         ...(query.targetType ? { targetType: query.targetType } : {}),
         ...(query.reason ? { reason: query.reason } : {}),
       };
