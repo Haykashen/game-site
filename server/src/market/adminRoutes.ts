@@ -23,6 +23,10 @@ import {
  * Public market routes still hide everything except `visible` entries.
  */
 export function registerMarketAdminRoutes(app: FastifyInstance): void {
+  app.get('/api/v1/admin/market/pending-count', {preHandler: app.authenticate}, async request => {
+    requireRoles(request);
+    return {count: await app.prisma.marketEntry.count({where:{deletedAt:null,moderationStatus:'pending'}})};
+  });
   app.get(
     '/api/v1/admin/market',
     { preHandler: app.authenticate },

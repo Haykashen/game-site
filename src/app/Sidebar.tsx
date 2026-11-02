@@ -4,6 +4,7 @@ import { BrandMark } from '../components/BrandMark';
 import { useAuth } from '../context/AuthContext';
 import { useCollection } from '../context/CollectionContext';
 import { useNotifications } from '../context/NotificationsContext';
+import { useModerationCount } from '../hooks/useModerationCount';
 import { cx } from '../lib/cx';
 import { NAV_GROUPS, NAV_ITEMS } from './navigation';
 import type { NavItem, NavSectionId } from './navigation';
@@ -49,6 +50,7 @@ export function Sidebar() {
   const { user, isModerator, isAdmin } = useAuth();
   const { ownedCount } = useCollection();
   const { unreadCount } = useNotifications();
+  const moderationCount = useModerationCount();
   const badges: Partial<Record<NavSectionId, number>> = {
     collection: ownedCount,
   };
@@ -85,7 +87,7 @@ export function Sidebar() {
           <div className="nav-group" key="administration">
             <p className="nav-group__label">Администрирование</p>
             <NavRow item={NAV_ITEMS.analytics} count={undefined} />
-            <NavRow item={NAV_ITEMS.marketReview} count={undefined} />
+            <NavRow item={NAV_ITEMS.marketReview} count={undefined} iconCount={moderationCount} iconCountLabel="на проверке" />
             <NavRow item={NAV_ITEMS.admin} count={undefined} />
             {isAdmin && <NavRow item={NAV_ITEMS.adminUsers} count={undefined} />}
             {isAdmin && <NavRow item={NAV_ITEMS.adminReference} count={undefined} />}

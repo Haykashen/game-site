@@ -1,4 +1,5 @@
 import type { ApiErrorBody } from '@discvault/shared';
+export const API_MUTATION_EVENT = 'discvault:api-mutation';
 
 export class ApiError extends Error {
   readonly status: number;
@@ -71,6 +72,7 @@ export async function apiRequest<T>(
   });
 
   if (response.status === 204) {
+    if (options.method && !['GET','HEAD'].includes(options.method.toUpperCase()) && typeof window !== 'undefined') window.dispatchEvent(new Event(API_MUTATION_EVENT));
     return undefined as T;
   }
 
@@ -87,6 +89,7 @@ export async function apiRequest<T>(
     );
   }
 
+  if (options.method && !['GET','HEAD'].includes(options.method.toUpperCase()) && typeof window !== 'undefined') window.dispatchEvent(new Event(API_MUTATION_EVENT));
   return data as T;
 }
 
