@@ -1,4 +1,4 @@
-import { Images, Star, Tag, ShoppingBag, ArrowLeftRight } from 'lucide-react';
+import { Images, Star, Tag, ShoppingBag, ArrowLeftRight, Gavel } from 'lucide-react';
 import { marketItemLabel } from '@discvault/shared';
 import type { MarketEntry, Edition } from '../../types';
 import { FallbackImage } from '../FallbackImage';
@@ -28,10 +28,10 @@ export function AuctionCard({entry,edition,isOwn,onSelect}: {entry:MarketEntry;e
     </div>
     <div className="auction-tile__content">
       <div className="auction-tile__header">
-        {auction?<span className="auction-tile__status">{status}</span>:<span className="listing-tile__kind"><KindIcon size={16} aria-hidden="true"/>{kindLabel}</span>}
+        {auction?<span className="listing-tile__kind auction-tile__kind"><Gavel size={16} aria-hidden="true"/>Аукцион</span>:<span className="listing-tile__kind"><KindIcon size={16} aria-hidden="true"/>{kindLabel}</span>}
         <div className="auction-tile__seller"><ProfileLink name={entry.seller} userId={entry.authorId}/><span className="auction-tile__rating" aria-label={rating==null?'У автора пока нет оценок':`Рейтинг автора ${rating} из 5`}><Star size={14} aria-hidden="true"/>{rating==null?'—':rating.toLocaleString('ru-RU',{maximumFractionDigits:1})}</span></div>
       </div>
-      <div className="auction-tile__main"><div className="auction-tile__subject">Предмет: <span>{marketItemLabel(entry.itemType)}</span>{isOwn && <span className="auction-tile__own">Моё</span>}</div><h2 title={entry.title}>{entry.title}</h2>{!auction&&<div className="listing-tile__spec">{[edition?.platform,edition?.region,entry.condition].filter(Boolean).join(' · ')}</div>}</div>
+      <div className="auction-tile__main"><div className="auction-tile__subject">Предмет: <span>{marketItemLabel(entry.itemType)}</span>{isOwn && <span className="auction-tile__own">Моё</span>}</div><h2 title={entry.title}>{entry.title}</h2>{auction?<span className="auction-tile__status auction-tile__status--below">{status}</span>:<div className="listing-tile__spec">{[edition?.platform,edition?.region,entry.condition].filter(Boolean).join(' · ')}</div>}</div>
       <div className="auction-tile__bottom">
         <div><div className="auction-tile__label">{auction?(entry.bids>0?'Текущая ставка':'Стартовая ставка'):exchange?(/^\s*(ищу|обменяю\s+на)/i.test(entry.description)?'Ищу взамен':'Условия обмена'):purchase?'Бюджет':'Цена'}</div><div className={exchange?'listing-tile__exchange':'auction-tile__price'}>{exchange?(exchangeText||'Обсуждаются с автором'):`${purchase?'до ':''}${formatPrice(entry.currentPrice??entry.price)}`}</div>{auction&&<div className="auction-tile__bids">{bidsLabel(entry.bids)}</div>}{!auction&&status!=='Активно'&&<span className="listing-tile__state">{status}</span>}</div>
         {auction&&<div className="auction-tile__ending"><div className="auction-tile__label">Окончание · МСК</div><time dateTime={entry.endsAt??undefined}>{validEnd?<>{endDate.format(validEnd)}<br/>{endTime.format(validEnd)}</>:'Не указано'}</time></div>}
