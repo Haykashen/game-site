@@ -1774,6 +1774,12 @@
             font-size: .76rem; line-height: 1.5;
         }
         .market-form { display: flex; flex-direction: column; gap: 1.1rem; }
+        .market-form__layout { display: grid; grid-template-columns: minmax(0,1fr) 260px; gap: 1.5rem; align-items: start; }
+        .market-form__delivery-panel { min-width: 0; display: flex; flex-direction: column; gap: 1.1rem; padding: 1.15rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; }
+        .market-form__delivery-panel h3 { font-size: 1rem; }
+        .market-form__delivery-panel .market-delivery__options { flex-direction: column; }
+        .market-form__delivery-panel .market-delivery__option { width: 100%; }
+        @media (max-width: 900px) { .market-form__layout { grid-template-columns: minmax(0,1fr); } }
         .market-form__grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));

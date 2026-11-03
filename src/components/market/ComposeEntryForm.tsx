@@ -154,10 +154,10 @@ export function ComposeEntryForm({
     entry ? [...entry.deliveryServices] : [],
   );
   const [deliveryError, setDeliveryError] = useState('');
-  const [internationalShipping, setInternationalShipping] = useState(
+  const [internationalShipping] = useState(
     entry?.internationalShipping ?? false,
   );
-  const [packagingPrice, setPackagingPrice] = useState(
+  const [packagingPrice] = useState(
     entry?.packagingPrice !== null && entry?.packagingPrice !== undefined
       ? String(entry.packagingPrice)
       : '',
@@ -342,6 +342,7 @@ export function ComposeEntryForm({
           setTitle(null);
           setPhotos(previous => previous.includes(source) ? previous : previous.length < 6 ? [...previous, source] : previous);
         }} />}
+        <div className="market-form__layout">
         <div className="market-form__grid">
           <FormField id="marketItemType" label="Что размещаете" className="market-form__full">
             <select id="marketItemType" className="form-control" value={itemType} required
@@ -356,7 +357,7 @@ export function ComposeEntryForm({
             </select>
             <p className="market-form__hint">Лут продаётся отдельно от игры: выберите предмет, который получит покупатель.</p>
           </FormField>
-          <FormField id="marketGame" label="Игра" className="market-form__full">
+          <FormField id="marketGame" label="Игра" className={isAuction ? '' : 'market-form__full'}>
             <GameCombobox id="marketGame" games={games} value={gameId}
               onChange={handleGameChange} required />
           </FormField>
@@ -385,7 +386,7 @@ export function ComposeEntryForm({
             </FormField>
           )}
 
-          <FormField id="marketEdition" label={isLoot ? 'Издание (необязательно)' : 'Издание'} className="market-form__full">
+          <FormField id="marketEdition" label={isLoot ? 'Издание (необязательно)' : 'Издание'} className={isAuction ? '' : 'market-form__full'}>
             <select
               id="marketEdition"
               className="form-control"
@@ -464,6 +465,8 @@ export function ComposeEntryForm({
             />
           </FormField>
 
+
+
           {isAuction && (
             <div className="market-form__full market-form__timing">
               <FormField id="marketBidStep" label="Шаг цены (₽)">
@@ -526,7 +529,35 @@ export function ComposeEntryForm({
             </div>
           )}
 
-          <FormField id="marketShipsFrom" label="Откуда отправляет" className={isAuction ? 'market-form__full' : ''}>
+
+
+
+
+          <FormField id="marketDescription" label="Описание" className="market-form__full">
+            <textarea
+              id="marketDescription"
+              className="form-control"
+              required
+              rows={5}
+              maxLength={600}
+              placeholder="Состояние диска, комплектность, условия отправки…"
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+            />
+          </FormField>
+
+          <div className="market-form__full">
+            <PhotoPicker
+              photos={photos}
+              onChange={setPhotos}
+              onBusyChange={setIsProcessingPhotos}
+            />
+          </div>
+        </div>
+
+        <aside className="market-form__delivery-panel" aria-label="Доставка">
+          <h3>Доставка</h3>
+          <FormField id="marketShipsFrom" label="Откуда отправляет">
             <input
               id="marketShipsFrom"
               type="text"
@@ -538,27 +569,8 @@ export function ComposeEntryForm({
               onChange={(event) => setShipsFrom(event.target.value)}
             />
           </FormField>
-
-          {!isAuction && <FormField id="marketPackagingPrice" label="Цена упаковки посылки (₽)">
-            <input
-              id="marketPackagingPrice"
-              type="number"
-              className="form-control"
-              min={0}
-              max={99_999_999}
-              step={1}
-              inputMode="numeric"
-              placeholder="0"
-              value={packagingPrice}
-              onChange={(event) => setPackagingPrice(event.target.value)}
-            />
-            <p className="market-form__hint">
-              0 — бесплатно, пусто — не указывать.
-            </p>
-          </FormField>}
-
           <fieldset
-            className="market-form__full market-delivery"
+            className="market-delivery"
             aria-required="true"
             aria-invalid={Boolean(deliveryError)}
             aria-describedby={deliveryError ? 'marketDeliveryError' : undefined}
@@ -593,41 +605,7 @@ export function ComposeEntryForm({
               </p>
             )}
           </fieldset>
-
-          {!isAuction && <label className="market-form__full market-toggle">
-            <input
-              type="checkbox"
-              checked={internationalShipping}
-              onChange={(event) => setInternationalShipping(event.target.checked)}
-            />
-            <span className="market-toggle__copy">
-              <span className="market-toggle__title">Доставка в другие страны</span>
-              <span className="market-toggle__hint">
-                Покупатели увидят, готовы ли вы отправлять за границу.
-              </span>
-            </span>
-          </label>}
-
-          <FormField id="marketDescription" label="Описание" className="market-form__full">
-            <textarea
-              id="marketDescription"
-              className="form-control"
-              required
-              rows={5}
-              maxLength={600}
-              placeholder="Состояние диска, комплектность, условия отправки…"
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-            />
-          </FormField>
-
-          <div className="market-form__full">
-            <PhotoPicker
-              photos={photos}
-              onChange={setPhotos}
-              onBusyChange={setIsProcessingPhotos}
-            />
-          </div>
+        </aside>
         </div>
 
         <FormField id="marketSubmissionStatus" label="Публикация">
