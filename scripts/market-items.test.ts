@@ -110,3 +110,11 @@ test('auction layout never depends on catalogue loading and uses actual seller r
   assert.ok(!unloaded.includes('Игра не найдена'));
   assert.ok(!unloaded.includes('coverImage'));
 });
+
+test('horizontal listings distinguish price, budget and actual exchange conditions',()=>{
+  const render=(listingType:'sale'|'purchase'|'exchange')=>renderToStaticMarkup(createElement(MemoryRouter,null,createElement(MarketCard,{entry:{...INITIAL_MARKET_ENTRIES[0]!,kind:'listing',listingType,description:'Ищу: Dark Souls III',sellerRating:4.9},game:undefined,onSelect:()=>{}})));
+  assert.match(render('sale'),/Продажа/);assert.match(render('sale'),/Цена/);
+  assert.match(render('purchase'),/Покупка/);assert.match(render('purchase'),/Бюджет/);
+  assert.match(render('exchange'),/Ищу взамен/);assert.match(render('exchange'),/Dark Souls III/);
+  for(const type of ['sale','purchase','exchange'] as const){assert.match(render(type),/listing-tile/);assert.match(render(type),/4,9/);assert.ok(!render(type).includes('Игра не найдена'));}
+});
