@@ -31,8 +31,12 @@ test('private chats: author contact, access control, history, retries and read s
   assert.equal(await app.prisma.chatMessage.count({where:{chatId:id}}),1);
   assert.equal((await call(a,'POST',`/api/v1/chats/${id}/messages`,{text:'  ',clientId:randomUUID()})).statusCode,400);
   assert.equal((await call(b,'GET','/api/v1/chats')).json()[0].unread,1);
+  assert.equal((await call(b,'GET','/api/v1/chats/unread-count')).json().count,1);
+  assert.equal((await call(a,'GET','/api/v1/chats/unread-count')).json().count,0);
+  assert.equal((await call(c,'GET','/api/v1/chats/unread-count')).json().count,0);
   await call(b,'POST',`/api/v1/chats/${id}/read`,{messageId:sent.json().id});
   assert.equal((await call(b,'GET','/api/v1/chats')).json()[0].unread,0);
+  assert.equal((await call(b,'GET','/api/v1/chats/unread-count')).json().count,0);
   await call(b,'POST',`/api/v1/chats/${id}/messages`,{text:'Здравствуйте! Да, диск в отличном состоянии. Могу отправить завтра.',clientId:randomUUID()});
   assert.equal((await call(a,'GET',`/api/v1/chats/${id}/messages`)).json().items.length,2);
   const direct=(await call(a,'POST','/api/v1/chats',{userId:b.id})).json().id;

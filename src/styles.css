@@ -3080,7 +3080,7 @@
         }
 
         /* ---------- notifications, game and lot subscriptions ---------- */
-        .topbar-notifications {
+        .topbar-shortcut {
             position: relative;
             width: 38px; height: 38px; flex: none;
             display: grid; place-items: center;
@@ -3090,7 +3090,8 @@
             text-decoration: none;
             transition: color .2s ease, background .2s ease, transform .2s ease;
         }
-        .topbar-notifications:hover { color: var(--brand); background: var(--brand-light); transform: translateY(-1px); }
+        .topbar-shortcut:hover { color: var(--brand); background: var(--brand-light); transform: translateY(-1px); }
+        .topbar-shortcut[aria-current="page"] { color: var(--brand); background: var(--brand-light); }
         .topbar-notifications__badge {
             position: absolute; top: -3px; right: -4px;
             min-width: 18px; height: 18px; padding: 0 4px;

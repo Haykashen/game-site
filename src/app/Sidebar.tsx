@@ -1,3 +1,4 @@
+import { useUnreadChatCount } from '../context/ChatsContext';
 import { Settings2, UserRound } from 'lucide-react';
 import { Link, NavLink } from 'react-router-dom';
 import { BrandMark } from '../components/BrandMark';
@@ -6,7 +7,7 @@ import { useCollection } from '../context/CollectionContext';
 import { useNotifications } from '../context/NotificationsContext';
 import { useModerationCount } from '../hooks/useModerationCount';
 import { cx } from '../lib/cx';
-import { NAV_GROUPS, NAV_ITEMS } from './navigation';
+import { NAV_GROUPS, MODERATION_NAV_GROUP, ADMINISTRATION_NAV_GROUP } from './navigation';
 import type { NavItem, NavSectionId } from './navigation';
 
 interface NavRowProps {
@@ -50,12 +51,14 @@ export function Sidebar() {
   const { user, isModerator, isAdmin } = useAuth();
   const { ownedCount } = useCollection();
   const { unreadCount } = useNotifications();
+  const unreadChats = useUnreadChatCount();
   const moderationCount = useModerationCount();
   const badges: Partial<Record<NavSectionId, number>> = {
     collection: ownedCount,
   };
   const iconBadges: Partial<Record<NavSectionId, number>> = {
     notifications: unreadCount,
+    chats: unreadChats,
   };
 
   return (
@@ -76,24 +79,21 @@ export function Sidebar() {
                 count={badges[item.id]}
                 iconCount={iconBadges[item.id]}
                 iconCountLabel={
-                  item.id === 'notifications' ? 'непрочитанных' : undefined
+                  item.id === 'chats' ? 'непрочитанных сообщений' : item.id === 'notifications' ? 'непрочитанных' : undefined
                 }
               />
             ))}
           </div>
         ))}
 
-        {isModerator && (
-          <div className="nav-group" key="administration">
-            <p className="nav-group__label">Администрирование</p>
-            <NavRow item={NAV_ITEMS.analytics} count={undefined} />
-            <NavRow item={NAV_ITEMS.marketReview} count={undefined} iconCount={moderationCount} iconCountLabel="на проверке" />
-            <NavRow item={NAV_ITEMS.admin} count={undefined} />
-            {isAdmin && <NavRow item={NAV_ITEMS.adminUsers} count={undefined} />}
-            {isAdmin && <NavRow item={NAV_ITEMS.adminReference} count={undefined} />}
-            {isAdmin && <NavRow item={NAV_ITEMS.adminData} count={undefined} />}
+        {[...(isModerator ? [MODERATION_NAV_GROUP] : []), ...(isAdmin ? [ADMINISTRATION_NAV_GROUP] : [])].map(group => (
+          <div className="nav-group" key={group.id}>
+            <p className="nav-group__label">{group.label}</p>
+            {group.items.map(item => <NavRow key={item.id} item={item} count={undefined}
+              iconCount={item.id === 'marketReview' ? moderationCount : undefined}
+              iconCountLabel={item.id === 'marketReview' ? 'на проверке' : undefined} />)}
           </div>
-        )}
+        ))}
       </div>
 
       <div className="sidebar-account">

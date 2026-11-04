@@ -1,3 +1,4 @@
+import { ChatsProvider } from './context/ChatsContext';
 import { ChatsPage } from './pages/ChatsPage';
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from './app/AppShell';
@@ -29,6 +30,7 @@ export default function App() {
       <ThemeProvider>
         <AuthProvider>
           <NotificationsProvider>
+            <ChatsProvider>
             <CollectionProvider>
               <AppShell>
                 <Routes>
@@ -67,6 +69,7 @@ export default function App() {
                 </Routes>
               </AppShell>
             </CollectionProvider>
+          </ChatsProvider>
           </NotificationsProvider>
         </AuthProvider>
       </ThemeProvider>

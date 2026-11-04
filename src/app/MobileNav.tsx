@@ -1,3 +1,4 @@
+import { useUnreadChatCount } from '../context/ChatsContext';
 import { Ellipsis } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -5,10 +6,11 @@ import { useAuth } from '../context/AuthContext';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { useEscapeKey } from '../hooks/useEscapeKey';
 import { cx } from '../lib/cx';
-import { MOBILE_ITEMS, MOBILE_MORE_ITEMS, NAV_ITEMS } from './navigation';
+import { MOBILE_ITEMS, MOBILE_MORE_ITEMS, MODERATION_NAV_GROUP, ADMINISTRATION_NAV_GROUP } from './navigation';
 
 /** Bottom tab bar with a small "more" sheet for stats, account and settings. */
 export function MobileNav() {
+  const unreadChats = useUnreadChatCount();
   const [isMoreOpen, setIsMoreOpen] = useState(false);
   const { pathname } = useLocation();
   const { isModerator, isAdmin } = useAuth();
@@ -20,13 +22,12 @@ export function MobileNav() {
   useEscapeKey(() => setIsMoreOpen(false), isMoreOpen);
   useBodyScrollLock(isMoreOpen);
 
-  const moreItems = [
-    ...MOBILE_MORE_ITEMS,
-    ...(isModerator
-      ? [NAV_ITEMS.analytics, NAV_ITEMS.marketReview, NAV_ITEMS.admin]
-      : []),
-    ...(isAdmin ? [NAV_ITEMS.adminUsers, NAV_ITEMS.adminReference, NAV_ITEMS.adminData] : []),
+  const moreGroups = [
+    {id: 'more', label: 'Ещё', items: MOBILE_MORE_ITEMS},
+    ...(isModerator ? [MODERATION_NAV_GROUP] : []),
+    ...(isAdmin ? [ADMINISTRATION_NAV_GROUP] : []),
   ];
+  const moreItems = moreGroups.flatMap(group => group.items);
   const isMoreActive = moreItems.some((item) => pathname === item.path || pathname.startsWith(`${item.path}/`));
 
   return (
@@ -69,22 +70,26 @@ export function MobileNav() {
             role="navigation"
             aria-label="Дополнительные разделы"
           >
-            <p className="mobile-sheet__label">Ещё</p>
-            {moreItems.map((item) => {
+            {moreGroups.map(group => <div key={group.id}>
+            <p className="mobile-sheet__label">{group.label}</p>
+            {group.items.map((item) => {
               const Icon = item.icon;
 
               return (
                 <NavLink
                   key={item.id}
                   to={item.path}
+                  aria-label={item.id === 'chats' && unreadChats > 0 ? `Чаты: ${unreadChats} непрочитанных сообщений` : item.label}
                   className={({ isActive }) => cx('nav-item', isActive && 'active')}
                   onClick={() => setIsMoreOpen(false)}
                 >
-                  <Icon size={18} aria-hidden="true" />
+                  <span className="nav-item__icon"><Icon size={18} aria-hidden="true" />
+                    {item.id === 'chats' && unreadChats > 0 && <span className="nav-icon-badge" aria-hidden="true">{unreadChats > 99 ? '99+' : unreadChats}</span>}
+                  </span>
                   <span className="nav-item__label">{item.label}</span>
                 </NavLink>
               );
-            })}
+            })}</div>)}
           </div>
         </>
       )}

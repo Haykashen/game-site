@@ -29,6 +29,16 @@ export function registerChatRoutes(app: FastifyInstance) {
     });
     return {id:chat.id};
   });
+  app.get('/api/v1/chats/unread-count', auth, async request => {
+    const me = request.user!.id;
+    const rows = await app.prisma.$queryRaw<{count: number}[]>`
+      SELECT count(*)::int AS count FROM chat_messages AS message
+      JOIN chat_members AS membership ON membership.chat_id = message.chat_id
+      WHERE membership.user_id = ${me}::uuid AND message.author_id <> ${me}::uuid
+        AND message.created_at > membership.read_at
+    `;
+    return {count: rows[0]?.count ?? 0};
+  });
   app.get('/api/v1/chats',auth,async request=>{
     const me=request.user!.id;
     const chats=await app.prisma.chat.findMany({where:{members:{some:{userId:me}}},include:{members:{include:{user:{select:person}}},messages:{orderBy:[{createdAt:'desc'},{id:'desc'}],take:1}},orderBy:[{updatedAt:'desc'},{id:'desc'}]});

@@ -1,4 +1,5 @@
-import { Bell, Moon, Sun, UserRound } from 'lucide-react';
+import { useUnreadChatCount } from '../context/ChatsContext';
+import { Bell, MessageCircle, Moon, Sun, UserRound } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { BrandMark } from '../components/BrandMark';
 import { IconButton } from '../components/ui/IconButton';
@@ -15,6 +16,8 @@ export function TopBar() {
   const { toggleTheme } = useThemeContext();
   const { user } = useAuth();
   const { unreadCount } = useNotifications();
+  const unreadChats = useUnreadChatCount();
+  const chatLabel = unreadChats > 0 ? `Чаты: ${unreadChats} непрочитанных сообщений` : 'Чаты';
   const section = findNavItem(pathname);
   const isProfile = pathname.startsWith('/users/');
   const banner = section ? HEADER_BANNERS[section.id] : isProfile ? PROFILE_BANNER : DEFAULT_BANNER;
@@ -48,9 +51,14 @@ export function TopBar() {
         <Link to="/settings" className="btn-lang" title="Язык и регион">
           RU
         </Link>
+        <Link to="/chats" className="topbar-shortcut" aria-label={chatLabel} title={chatLabel}
+          aria-current={pathname === '/chats' ? 'page' : undefined}>
+          <MessageCircle size={19} aria-hidden="true" />
+          {unreadChats > 0 && <span className="topbar-notifications__badge" aria-hidden="true">{unreadChats > 99 ? '99+' : unreadChats}</span>}
+        </Link>
         <Link
           to="/notifications"
-          className="topbar-notifications"
+          className="topbar-shortcut"
           aria-label={notificationLabel}
           title={notificationLabel}
         >

@@ -19,7 +19,7 @@ function ChatWorkspace({userId}:{userId?:string|undefined}){
    const list=await apiRequest<Chat[]>('/api/v1/chats',{signal});if(signal.aborted)return;setChats(list);
    if(id){const result=await apiRequest<{items:Message[];hasMore:boolean}>('/api/v1/chats/'+id+'/messages',{signal});if(signal.aborted)return;
      setMessages(old=>[...new Map([...old,...result.items].map(m=>[m.id,m])).values()].sort((a,b)=>a.createdAt.localeCompare(b.createdAt)||a.id.localeCompare(b.id)));
-     const last=result.items.at(-1);if(last&&document.visibilityState==='visible')await apiRequest('/api/v1/chats/'+id+'/read',{method:'POST',body:{messageId:last.id},signal});
+     const last=result.items.at(-1);if(last&&document.visibilityState==='visible'){await apiRequest('/api/v1/chats/'+id+'/read',{method:'POST',body:{messageId:last.id},signal});if(!signal.aborted)setChats(list=>list.map(chat=>chat.id===id?{...chat,unread:0}:chat));}
      if(!loaded.current){setMore(result.hasMore);loaded.current=true;}
    }
  },[id]);

@@ -169,9 +169,9 @@ export const NAV_ITEMS = {
   },
   marketReview: {
     id: 'marketReview',
-    label: 'Модерация',
-    pageTitle: 'Модерация',
-    shortLabel: 'Модерация',
+    label: 'Проверка',
+    pageTitle: 'Проверка',
+    shortLabel: 'Проверка',
     path: '/admin/market',
     icon: ClipboardCheck,
   },
@@ -222,19 +222,19 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
   {
     id: 'community',
     label: 'Сообщество',
-    items: [NAV_ITEMS.chats, NAV_ITEMS.discussions, NAV_ITEMS.news],
+    items: [NAV_ITEMS.news, NAV_ITEMS.discussions],
   },
   {
     id: 'shelf',
     label: 'Моя полка',
-    items: [NAV_ITEMS.collection, NAV_ITEMS.notifications, NAV_ITEMS.stats],
+    items: [NAV_ITEMS.chats, NAV_ITEMS.collection, NAV_ITEMS.notifications, NAV_ITEMS.stats],
   },
 ];
 
 export const MOBILE_MORE_ITEMS: ReadonlyArray<NavItem> = [
   NAV_ITEMS.chats,
-  NAV_ITEMS.discussions,
   NAV_ITEMS.news,
+  NAV_ITEMS.discussions,
   NAV_ITEMS.notifications,
   NAV_ITEMS.stats,
   NAV_ITEMS.account,
@@ -258,3 +258,12 @@ export function findNavItem(pathname: string): NavItem | null {
       .sort((left, right) => right.path.length - left.path.length)[0] ?? null
   );
 }
+
+export const MODERATION_NAV_GROUP: NavGroup = {
+  id: 'moderation', label: 'Модерация',
+  items: [NAV_ITEMS.analytics, NAV_ITEMS.marketReview, NAV_ITEMS.admin],
+};
+export const ADMINISTRATION_NAV_GROUP: NavGroup = {
+  id: 'administration', label: 'Администрирование',
+  items: [NAV_ITEMS.adminUsers, NAV_ITEMS.adminReference, NAV_ITEMS.adminData],
+};

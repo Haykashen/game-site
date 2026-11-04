@@ -134,7 +134,7 @@ export function AdminMarketPage() {
       <>
         <PageHeading
           eyebrow="ADMIN / MODERATION"
-          title="Модерация"
+          title="Проверка"
           description="Проверяем доступ к разделу модерации."
         />
         <div className="panel account-notice">
@@ -154,10 +154,10 @@ export function AdminMarketPage() {
       <>
         <PageHeading
           eyebrow="ADMIN / MODERATION"
-          title="Модерация"
+          title="Проверка"
           description={
             isOffline
-              ? 'Модерация новых лотов доступна в сетевом режиме, когда подключены API и база данных.'
+              ? 'Проверка новых лотов доступна в сетевом режиме, когда подключены API и база данных.'
               : 'Раздел доступен администраторам и модераторам.'
           }
         />
@@ -189,7 +189,7 @@ export function AdminMarketPage() {
     <>
       <PageHeading
         eyebrow="ADMIN / MODERATION"
-        title="Модерация"
+        title="Проверка"
         description="Новые объявления и аукционы попадают сюда до публикации. Одобрите лот или отклоните его с комментарием для автора."
         action={
           <button
