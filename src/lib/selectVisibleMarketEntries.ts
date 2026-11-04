@@ -32,10 +32,11 @@ export function selectVisibleMarketEntries(
 
   return entries.filter((entry) => {
     if (filters.statusId && entry.statusId !== filters.statusId) return false;
+    if (filters.localizationId && entry.localizationId !== filters.localizationId) return false;
     if (filters.itemType && entry.itemType !== filters.itemType) return false;
     const game = gamesById.get(entry.gameId);
     const edition = entry.editionId ? editionsById.get(entry.editionId) : undefined;
-    if (!edition && entry.itemType !== 'game' && (filters.platform || filters.region || filters.edition || filters.lang)) return false;
+    if (!edition && entry.itemType !== 'game' && (filters.platform || filters.region || filters.edition)) return false;
     const gameEditions = editionsByGame.get(entry.gameId) ?? [];
 
     if (query) {
@@ -88,12 +89,6 @@ export function selectVisibleMarketEntries(
       if (!matches) return false;
     }
 
-    if (filters.lang) {
-      const matches = edition
-        ? edition.lang.includes(filters.lang)
-        : gameEditions.some((item) => item.lang.includes(filters.lang));
-      if (!matches) return false;
-    }
 
     if (completeness && !entry.condition.toLowerCase().includes(completeness)) return false;
 

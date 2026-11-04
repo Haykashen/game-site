@@ -1,3 +1,4 @@
+import { LoadingState } from '../LoadingState';
 import { useEffect, useId, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 
@@ -56,7 +57,7 @@ export function Combobox({ id, value, options, selectedValues, label, placeholde
         }
       }} />
     {open && <div className="series-combobox__list" ref={listRef} id={listId} role="listbox" aria-label={label}>
-      {loading ? <p role="status">Загружаем…</p> : error ? <p role="alert">{error}</p> : <>
+      {loading ? <LoadingState variant="inline" message="Загружаем…" /> : error ? <p role="alert">{error}</p> : <>
         {options.map((option, index) => <button type="button" role="option" key={option.value}
           id={listId + '-' + index} aria-selected={selectedValues.includes(option.value)}
           data-active={index === active} className={index === active ? 'is-active' : ''}

@@ -1,3 +1,4 @@
+import { LoadingState } from '../components/LoadingState';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, MessageCircle, Send, CheckCheck } from 'lucide-react';
@@ -33,13 +34,14 @@ function ChatWorkspace({userId}:{userId?:string|undefined}){
  return <><header className="chat-intro"><div><h1>Чаты</h1><p>Обсудите состояние игры, доставку и детали сделки.</p></div><span>Личная переписка</span></header>
  <div className={'chat-workspace '+(id?'has-chat':'')}>
  <aside className="chat-list"><div className="chat-list-head"><strong>Сообщения</strong><span>{chats.reduce((n,c)=>n+c.unread,0)||''}</span></div><input aria-label="Поиск по чатам" placeholder="Найти собеседника или объявление" value={query} onChange={e=>setQuery(e.target.value)}/>
- {loading&&!chats.length&&<p className="chat-hint">Загружаем переписки…</p>}
+ {loading&&!chats.length&&<LoadingState variant="inline" className="chat-hint" message="Загружаем переписки…" />}
  {!loading&&!chats.length&&<p className="chat-hint">Пока нет переписок. Откройте объявление и нажмите «Написать автору».</p>}
  {chats.filter(c=>(c.title+' '+c.members.map(m=>m.user.displayName).join(' ')).toLowerCase().includes(query.toLowerCase())).map(c=>{const other=c.members.find(m=>m.user.id!==userId);return <button key={c.id} className={'chat-row '+(c.id===id?'selected':'')} onClick={()=>{setDrafts(d=>({...d,[id]:text}));setParams({chat:c.id});}}><span className="chat-avatar">{other?.user.displayName.slice(0,1)??'?'}</span><span className="chat-row-copy"><strong>{other?.user.displayName}</strong><small>{c.title}</small><span>{c.messages[0]?.text??'Начните разговор'}</span></span>{c.unread>0&&<b className="chat-unread">{c.unread}</b>}</button>;})}</aside>
  <section className="chat-conversation" aria-label="Переписка">{!id?<div className="chat-empty"><MessageCircle size={52}/><h2>Начните с разговора</h2><p>Выберите чат слева или напишите автору интересующего объявления.</p><Link className="btn-secondary" to="/listings">К объявлениям</Link></div>:<>
  <header className="chat-peer"><button className="btn-secondary" aria-label="К списку чатов" onClick={()=>setParams({})}><ArrowLeft size={18}/></button><span className="chat-avatar">{peer?.user.displayName.slice(0,1)??'?'}</span><div><Link to={'/users/'+peer?.user.id}>{peer?.user.displayName??'Переписка'}</Link><small>Личный диалог</small></div></header>
  {active?.entryId&&<Link className="chat-entry" to={(active.entryKind==='auction'?'/auctions':'/listings')+'?item='+encodeURIComponent(active.entryId)}><span>По объявлению</span><strong>{active.title}</strong><small>Открыть объявление ↗</small></Link>}
  <div className="chat-messages" role="log" aria-label="Сообщения">{more&&<button className="btn-secondary" onClick={async()=>{try{const r=await apiRequest<{items:Message[];hasMore:boolean}>('/api/v1/chats/'+id+'/messages?before='+messages[0]?.id);if(currentId.current===id){setMessages(old=>[...new Map([...r.items,...old].map(m=>[m.id,m])).values()]);setMore(r.hasMore);}}catch(e){setError(String(e));}}}>Предыдущие сообщения</button>}
+ {loading&&!messages.length&&<LoadingState variant="inline" className="chat-hint" message="Загружаем сообщения…" />}
  {!loading&&!messages.length&&<div className="chat-empty"><MessageCircle size={32}/><h3>Договоритесь о деталях</h3><p>Уточните состояние, комплектацию или способ доставки.</p><button className="btn-secondary" onClick={()=>setText('Здравствуйте! Объявление ещё актуально?')}>Объявление ещё актуально?</button></div>}
  {messages.map(m=><div key={m.id} className={'chat-bubble '+(m.authorId===userId?'own':'')}><p>{m.text}</p><small>{new Date(m.createdAt).toLocaleDateString('ru-RU')} · {time(m.createdAt)} {m.authorId===userId&&peer&&peer.readAt>=m.createdAt&&<CheckCheck size={14} aria-label="Прочитано"/>}</small></div>)}<div ref={end}/></div>
  {error&&<p role="alert" className="chat-error">{error}</p>}

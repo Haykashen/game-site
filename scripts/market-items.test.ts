@@ -1,3 +1,5 @@
+import { marketSearchSchema } from '../shared/src/market.ts';
+import { buildMarketWhere } from '../server/src/market/query.ts';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {createElement} from 'react';
@@ -117,4 +119,21 @@ test('horizontal listings distinguish price, budget and actual exchange conditio
   assert.match(render('purchase'),/Покупка/);assert.match(render('purchase'),/Бюджет/);
   assert.match(render('exchange'),/Ищу взамен/);assert.match(render('exchange'),/Dark Souls III/);
   for(const type of ['sale','purchase','exchange'] as const){assert.match(render(type),/listing-tile/);assert.match(render(type),/4,9/);assert.ok(!render(type).includes('Игра не найдена'));}
+});
+
+test('market localization filter matches the listing reference independently of edition language', () => {
+  const original = INITIAL_MARKET_ENTRIES[0]!;
+  const entries = [
+    {...original, id: 'localized', localizationId: '11111111-1111-4111-8111-111111111111'},
+    {...original, id: 'other', localizationId: '22222222-2222-4222-8222-222222222222'},
+    {...original, id: 'unspecified', localizationId: null},
+  ];
+  const filters = {query: '', itemType: '', platform: '', yearRange: '', region: '', edition: '', completeness: '', localizationId: entries[0]!.localizationId!};
+  const games = new Map(INITIAL_GAMES.map(game => [game.id, game]));
+  const editions = new Map(INITIAL_EDITIONS.map(edition => [edition.id, edition]));
+  assert.deepEqual(selectVisibleMarketEntries(entries, games, editions, INITIAL_EDITIONS, filters).map(entry => entry.id), ['localized']);
+  assert.equal(selectVisibleMarketEntries(entries, games, editions, INITIAL_EDITIONS, {...filters, localizationId: ''}).length, 3);
+  const query = marketSearchSchema.parse({localizationId: filters.localizationId});
+  assert.ok(JSON.stringify(buildMarketWhere(query, undefined)).includes(filters.localizationId));
+  assert.equal(marketSearchSchema.safeParse({localizationId: 'free-text'}).success, false);
 });

@@ -1,3 +1,4 @@
+import { LoadingState } from '../components/LoadingState';
 import {
   CheckCircle2,
   LogIn,
@@ -576,9 +577,7 @@ export function AccountPage() {
             )}
 
             {deals.length === 0 ? (
-              <p className="panel-hint">
-                {isLoadingDeals ? 'Загружаем сделки…' : 'Сделок пока нет.'}
-              </p>
+              isLoadingDeals ? <LoadingState variant="inline" message="Загружаем сделки…" /> : <p className="panel-hint">Сделок пока нет.</p>
             ) : (
               <div className="account-deals">
                 {deals.map((deal) => (

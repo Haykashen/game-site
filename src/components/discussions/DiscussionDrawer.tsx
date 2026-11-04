@@ -1,3 +1,4 @@
+import { LoadingState } from '../LoadingState';
 import { UserAvatar } from '../UserAvatar';
 import { FeedTags } from '../feed/FeedTags';
 import {
@@ -238,9 +239,7 @@ export function DiscussionDrawer({
             )}
 
             {isLoading && discussion.comments.length === 0 ? (
-              <p className="discussion-comments__empty" role="status">
-                Загружаем ответы…
-              </p>
+              <LoadingState variant="inline" className="discussion-comments__empty" message="Загружаем ответы…" />
             ) : thread.length === 0 ? (
               <p className="discussion-comments__empty">
                 Ответов пока нет. Начните обсуждение первым.

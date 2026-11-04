@@ -144,7 +144,7 @@ export const marketSearchSchema = paginationSchema.extend({
   authorId: z.union([z.literal('me'), idSchema]).optional(),
   q: z.string().trim().max(120).optional(),
   platform: z.string().trim().max(100).optional(),
-  lang: z.string().trim().max(100).optional(),
+  localizationId: z.string().uuid().optional(),
   region: z.string().trim().max(100).optional(),
   edition: z.string().trim().max(100).optional(),
   completeness: z.string().trim().max(100).optional(),

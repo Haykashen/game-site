@@ -16,6 +16,7 @@ export function buildMarketWhere(
   }
 
   if (query.status !== 'all') and.push(marketStatusWhere({status: query.status}));
+  if (query.localizationId) and.push({localizationId: query.localizationId});
   if (query.kind) and.push({ kind: query.kind });
   if (query.itemType) and.push({ itemType: query.itemType });
   if (query.listingType) and.push({ listingType: query.listingType });
@@ -27,7 +28,6 @@ export function buildMarketWhere(
   if (query.platform) editionFilter.platform = query.platform;
   if (query.region) editionFilter.region = {is:{code:query.region}};
   if (query.edition) editionFilter.name = query.edition;
-  if (query.lang) editionFilter.lang = { contains: query.lang, mode: 'insensitive' };
   if (Object.keys(editionFilter).length > 0) {
     and.push({ edition: { is: editionFilter } });
   }

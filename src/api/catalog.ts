@@ -2,7 +2,7 @@ import type { CatalogFiltersDto, CatalogQuery, EditionDto, GameDetailDto, GameDt
 import { apiRequest } from './client';
 
 export const CATALOG_PAGE_SIZE = 24;
-export type CatalogSearch = Pick<CatalogQuery, 'q' | 'platform' | 'lang' | 'region' | 'edition' | 'year' | 'statusId'>;
+export type CatalogSearch = Pick<CatalogQuery, 'q' | 'platform' | 'genre' | 'lang' | 'region' | 'edition' | 'year' | 'statusId'>;
 
 /** Exactly one server-filtered page. This must never drain the whole catalogue. */
 export function fetchCatalogPage(search: CatalogSearch, page: number, signal: AbortSignal): Promise<Paginated<GameWithStatsDto>> {

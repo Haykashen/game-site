@@ -1,3 +1,4 @@
+import { LoadingState } from '../components/LoadingState';
 import type { AdminTable } from '@discvault/shared';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { AdminAccessNotice } from '../components/admin/AdminAccessNotice';
@@ -56,7 +57,7 @@ export function AdminTablesPage({
     );
   }
 
-  if (schema.isLoading) return <p role="status">Загружаем таблицы…</p>;
+  if (schema.isLoading) return <LoadingState message="Загружаем таблицы…" />;
 
   if (!tables.length) {
     return (

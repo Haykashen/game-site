@@ -1,3 +1,4 @@
+import { LoadingState } from '../LoadingState';
 import { ReferenceCombobox } from './ReferenceCombobox';
 import { useEffect, useId, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -141,7 +142,7 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
       <div className="admin-data__editor-header"><div><small>{table.label}</small><h2 id={titleId}>{title ?? (deleting ? table.name === 'Session' ? 'Отозвать сессию' : 'Удалить запись' : creating ? 'Добавить запись' : 'Редактировать запись')}</h2></div>
         <button type="button" className="btn-secondary" aria-label="Закрыть" disabled={saving} onClick={onClose}><X size={18} /></button>
       </div>
-      {loading && <p role="status">Загружаем запись…</p>}
+      {loading && <LoadingState variant="inline" message="Загружаем запись…" />}
       {error && <div className="admin-data__error" role="alert">{error}</div>}
       {loaded && (deleting ? <div className="admin-data__delete-note">
         <p>{table.name === 'Session' ? 'Пользователю потребуется снова войти в аккаунт.' : table.name === 'Game' ? 'Игра и все её издания будут удалены без возможности восстановления. Экземпляры в коллекциях и другие связанные данные защищены: если они используются, удаление будет заблокировано.' : 'Запись будет удалена без возможности восстановления. Если на неё ссылаются другие записи, сервер укажет связанные таблицы — сначала нужно удалить или переназначить эти записи.'}</p>

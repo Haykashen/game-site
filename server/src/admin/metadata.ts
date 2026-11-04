@@ -1,3 +1,4 @@
+import { normalizeEditionLanguage } from '@discvault/shared';
 import { Prisma } from '@prisma/client';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
@@ -121,6 +122,7 @@ export function parseData(table: AdminTable, body: unknown, creating: boolean): 
   const data = parse(z.object(shape).strict(), body) as Record<string, unknown>;
   if (!Object.keys(data).length) throw badRequest('Не переданы поля для сохранения.');
   if (table.name === 'Game' && data.genres !== undefined) data.genres = {[creating ? 'connect' : 'set']: [...new Set(data.genres as string[])].map(id => ({id}))};
+  if (table.name === 'Edition' && typeof data.lang === 'string') data.lang = normalizeEditionLanguage(data.lang);
   return data;
 }
 

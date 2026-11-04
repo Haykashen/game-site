@@ -1,3 +1,4 @@
+import { LoadingState } from '../components/LoadingState';
 import {
   CheckCircle2,
   Clock3,
@@ -191,7 +192,7 @@ export function AdminReportsPage() {
         <div className="panel account-notice">
           <div>
             <strong>Проверяем доступ</strong>
-            <p>Загружаем данные аккаунта.</p>
+            <LoadingState variant="inline" message="Загружаем данные аккаунта…" />
           </div>
         </div>
       </>
@@ -289,12 +290,7 @@ export function AdminReportsPage() {
       )}
 
       {isLoading && reports.length === 0 ? (
-        <div className="panel account-notice">
-          <div>
-            <strong>Загружаем жалобы</strong>
-            <p>Получаем очередь модерации.</p>
-          </div>
-        </div>
+        <LoadingState message="Загружаем жалобы…" />
       ) : reports.length === 0 ? (
         <div className="panel account-notice">
           <div>

@@ -1,3 +1,4 @@
+import { LoadingState } from '../components/LoadingState';
 import { StartChatButton } from '../components/StartChatButton';
 import { RefreshCw, Star, UserRound } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -112,12 +113,7 @@ function PublicProfileContent({ id }: { id: string | undefined }) {
       />
 
       {isLoading && (
-        <div className="panel account-notice">
-          <div>
-            <strong>Загружаем профиль</strong>
-            <p>Получаем данные коллекционера и отзывы.</p>
-          </div>
-        </div>
+        <LoadingState message="Загружаем профиль…" />
       )}
 
       {!isLoading && error && (

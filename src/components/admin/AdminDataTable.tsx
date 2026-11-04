@@ -1,4 +1,5 @@
-import { ArrowDown, ArrowUp, ArrowUpDown, RefreshCw, X } from 'lucide-react';
+import { LoadingState } from '../LoadingState';
+import { ArrowDown, ArrowUp, ArrowUpDown, X } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 export interface AdminColumn<T, K extends string = string> {
@@ -35,7 +36,7 @@ export function AdminDataTable<T, K extends string = string>({label, columns, ro
   return <>
     <div className="panel analytics-table-panel admin-users__panel">
       <div className="admin-users__table-toolbar" aria-live="polite">
-        <span>{loading ? 'Загружаем…' : `Всего: ${total.toLocaleString('ru-RU')}`}</span>
+        <span>{loading ? (rows.length > 0 ? <LoadingState variant="inline" message="Обновляем записи…" /> : 'Записи') : `Всего: ${total.toLocaleString('ru-RU')}`}</span>
         {hasFilters && <button type="button" className="btn-secondary" onClick={onReset}><X size={14} />Сбросить фильтры</button>}
       </div>
       <div className={`analytics-table-wrap${compact ? ' admin-data__scroll--compact' : ''}`} aria-busy={loading}>
@@ -49,7 +50,7 @@ export function AdminDataTable<T, K extends string = string>({label, columns, ro
             <tr className="admin-users__column-filters">{columns.map((column) => <th key={column.key}>{column.filter}</th>)}{actions && <th className="admin-data__actions" />}</tr>
           </thead>
           <tbody>{!rows.length ? <tr><td colSpan={columns.length + (actions ? 1 : 0)}><div className="admin-users__empty-row">
-            {loading && <RefreshCw className="market-photo-spin" size={18} />}{loading ? 'Загружаем записи…' : 'По выбранным фильтрам записи не найдены.'}
+            {loading ? <LoadingState variant="inline" message="Загружаем записи…" /> : 'По выбранным фильтрам записи не найдены.'}
           </div></td></tr> : rows.map((record) => <tr key={rowKey(record)}
             className={onSelect ? `admin-data__selectable${selectedKey === rowKey(record) ? ' is-selected' : ''}` : undefined}
             aria-selected={onSelect ? selectedKey === rowKey(record) : undefined}

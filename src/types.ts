@@ -92,11 +92,12 @@ export interface GameStats {
 }
 
 export interface CatalogFilters {
+  genre?: string;
   statusId?: string;
   itemType: string;
   query: string;
   platform: string;
-  lang: string;
+  localizationId?: string;
   yearRange: string;
   region: string;
   edition: string;

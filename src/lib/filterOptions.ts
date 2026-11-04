@@ -1,7 +1,6 @@
 import {
   COMPLETENESS,
   EDITIONS,
-  LANGUAGES,
   PLATFORM_GROUPS,
   REGIONS,
   YEAR_RANGES,
@@ -34,11 +33,6 @@ export const EDITION_OPTIONS: readonly FilterOption[] = EDITIONS.map((edition) =
 export const COMPLETENESS_OPTIONS: readonly FilterOption[] = COMPLETENESS.map((value) => ({
   value,
   label: value,
-}));
-
-export const LANGUAGE_OPTIONS: readonly FilterOption[] = LANGUAGES.map((language) => ({
-  value: language,
-  label: language,
 }));
 
 export const YEAR_OPTIONS: readonly FilterOption[] = YEAR_RANGES.map((range) => ({

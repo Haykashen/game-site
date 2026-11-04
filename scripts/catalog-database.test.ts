@@ -30,6 +30,13 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
     assert.equal(games.statusCode, 200);
     assert.equal(games.json().items[0].id, id);
     assert.equal(games.json().items[0].year, null);
+    const byGenre = await app.inject({method: 'GET', url: '/api/v1/catalog/games?q=' + encodeURIComponent('PostgreSQL catalogue fixture') + '&genre=test'});
+    assert.equal(byGenre.statusCode, 200, byGenre.body);
+    assert.equal(byGenre.json().items[0].id, id);
+    const wrongGenre = await app.inject({method: 'GET', url: '/api/v1/catalog/games?q=' + encodeURIComponent('PostgreSQL catalogue fixture') + '&genre=unknown-genre'});
+    assert.equal(wrongGenre.json().total, 0);
+    const genreOptions = await app.inject({method: 'GET', url: '/api/v1/catalog/filters'});
+    assert.ok(genreOptions.json().genres.includes('Test'));
     const statusOptions = await app.inject({method:'GET',url:'/api/v1/statuses?entity=Game'});
     assert.equal(statusOptions.statusCode,200,statusOptions.body);
     const draftStatus = statusOptions.json().items.find((item: {code:string}) => item.code === 'draft');

@@ -78,6 +78,7 @@ export interface YearRangeDto {
 }
 
 export interface CatalogFiltersDto {
+  genres: string[];
   platforms: PlatformDto[];
   languages: string[];
   regions: string[];
@@ -89,6 +90,7 @@ export interface CatalogFiltersDto {
 const optionalFilter = z.string().trim().max(100).optional();
 
 export const catalogQuerySchema = paginationSchema.extend({
+  genre: optionalFilter,
   statusId: z.string().uuid().optional(),
   q: z.string().trim().max(120).optional(),
   platform: optionalFilter,
@@ -109,3 +111,10 @@ export const editionQuerySchema = paginationSchema.extend({
 
 export type CatalogQuery = z.infer<typeof catalogQuerySchema>;
 export type EditionQuery = z.infer<typeof editionQuerySchema>;
+
+/** Stable language identity: case, whitespace, separators and repeated tokens are insignificant. */
+export function normalizeEditionLanguage(value: string): string {
+  const unknown = new Set(['', 'не указан', 'не указано', 'неизвестно', 'unknown', 'n/a', '-']);
+  const tokens = [...new Set(value.toLowerCase().split(/[,;]/).map(token => token.trim().replace(/\s+/g, ' ')).filter(token => !unknown.has(token)))].sort();
+  return tokens.length ? tokens.map(token => token.charAt(0).toUpperCase() + token.slice(1)).join(', ') : 'Не указано';
+}

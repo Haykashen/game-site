@@ -1,3 +1,4 @@
+import { LoadingState } from '../components/LoadingState';
 import {
   BadgeCheck,
   Bell,
@@ -164,7 +165,7 @@ export function NotificationsPage() {
   };
 
   return (
-    <>
+    <div className="notifications-page">
       <PageHeading
         eyebrow="ACCOUNT / NOTIFICATIONS"
         title="Уведомления"
@@ -241,9 +242,7 @@ export function NotificationsPage() {
           )}
 
           {isLoading && notifications.length === 0 ? (
-            <div className="notifications-state notifications-state--loading">
-              <p>Загружаем уведомления…</p>
-            </div>
+            <LoadingState message="Загружаем уведомления…" />
           ) : notifications.length === 0 ? (
             <div className="notifications-state">
               <Bell size={28} aria-hidden="true" />
@@ -334,6 +333,6 @@ export function NotificationsPage() {
           )}
         </>
       )}
-    </>
+    </div>
   );
 }

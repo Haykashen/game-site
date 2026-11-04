@@ -1,3 +1,4 @@
+import { LoadingState } from '../components/LoadingState';
 import {
   Activity,
   ChartNoAxesCombined,
@@ -303,7 +304,7 @@ export function AdminAnalyticsPage() {
         <div className="panel account-notice">
           <div>
             <strong>Проверяем доступ</strong>
-            <p>Загружаем данные аккаунта.</p>
+            <LoadingState variant="inline" message="Загружаем данные аккаунта…" />
           </div>
         </div>
       </>
@@ -404,10 +405,7 @@ export function AdminAnalyticsPage() {
       )}
 
       {isLoading && !data && (
-        <div className="panel analytics-loading">
-          <RefreshCw className="market-photo-spin" size={18} aria-hidden="true" />
-          Собираем статистику…
-        </div>
+        <LoadingState message="Собираем статистику…" />
       )}
 
       {data && (

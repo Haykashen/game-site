@@ -3,7 +3,6 @@ import { MARKET_ITEM_OPTIONS } from '@discvault/shared';
 import {
   COMPLETENESS_OPTIONS,
   EDITION_OPTIONS,
-  LANGUAGE_OPTIONS,
   PLATFORM_OPTIONS,
   REGION_OPTIONS,
   YEAR_OPTIONS,
@@ -31,7 +30,8 @@ export const SEARCH_FILTER_PARAMS: readonly UrlFilterField<keyof CatalogFilters>
   { key: 'itemType', param: 'itemType' },
   { key: 'query', param: 'q' },
   { key: 'platform', param: 'platform' },
-  { key: 'lang', param: 'lang' },
+  { key: 'localizationId', param: 'localizationId' },
+  { key: 'genre', param: 'genre' },
   { key: 'yearRange', param: 'year' },
   { key: 'region', param: 'region' },
   { key: 'edition', param: 'edition' },
@@ -61,11 +61,11 @@ export const CATALOG_FILTER_FIELDS: readonly SearchFilterField<CatalogFilterKey>
     options: EDITION_OPTIONS,
   },
   {
-    id: 'langFilter',
-    key: 'lang',
-    label: 'Язык издания',
-    placeholder: 'Любой язык',
-    options: LANGUAGE_OPTIONS,
+    id: 'genreFilter',
+    key: 'genre',
+    label: 'Жанр',
+    placeholder: 'Все жанры',
+    options: [],
   },
   {
     id: 'yearFilter',
@@ -77,7 +77,7 @@ export const CATALOG_FILTER_FIELDS: readonly SearchFilterField<CatalogFilterKey>
 ];
 
 export const MARKET_FILTER_FIELDS: readonly SearchFilterField<CatalogFilterKey>[] = [
-  { id: 'marketItemTypeFilter', key: 'itemType', label: 'Предмет', placeholder: 'Игры и весь лут', options: MARKET_ITEM_OPTIONS },
+  { id: 'marketItemTypeFilter', key: 'itemType', label: 'Предмет', placeholder: 'Все предметы', options: MARKET_ITEM_OPTIONS },
   {
     id: 'marketPlatformFilter',
     key: 'platform',
@@ -107,11 +107,11 @@ export const MARKET_FILTER_FIELDS: readonly SearchFilterField<CatalogFilterKey>[
     options: COMPLETENESS_OPTIONS,
   },
   {
-    id: 'marketLangFilter',
-    key: 'lang',
-    label: 'Язык издания',
-    placeholder: 'Любой язык',
-    options: LANGUAGE_OPTIONS,
+    id: 'marketLocalizationFilter',
+    key: 'localizationId',
+    label: 'Локализация',
+    placeholder: 'Любая локализация',
+    options: [],
   },
   {
     id: 'marketYearFilter',

@@ -3134,6 +3134,7 @@
             margin-top: -.35rem;
         }
 
+        .notifications-page { padding-bottom: 2rem; }
         .notifications-toolbar {
             display: flex; align-items: center; justify-content: space-between;
             gap: 1rem; flex-wrap: wrap;
@@ -3956,13 +3957,6 @@
             color: var(--text-muted);
             font: 500 .68rem/1.4 'IBM Plex Mono', monospace;
         }
-        .analytics-loading {
-            display: flex;
-            align-items: center;
-            gap: .6rem;
-            color: var(--text-muted);
-            font-size: .86rem;
-        }
         .analytics-kpi-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -4443,3 +4437,9 @@ html:not(.dark) .market-detail-uniform-actions .report-section__trigger {
 .market-detail-copy .market-detail-info__left { gap:1.5rem; }
 .market-detail-copy .market-shipping__grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
 @media(max-width:640px) { .market-detail-overview { grid-template-columns:1fr; } .market-detail-uniform-actions { grid-template-columns:1fr; gap:.75rem; } .market-detail-copy .market-shipping__grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+
+/* Shared data-fetch indicator; inline rendering fits existing table/form layouts. */
+.loading-state { display: inline-flex; align-items: center; gap: .6rem; color: var(--text-muted); font-size: .86rem; line-height: 1.55; }
+.loading-state--panel { display: flex; margin-bottom: 1.1rem; }
+.loading-state__icon { flex: 0 0 auto; animation: spin .9s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .loading-state__icon { animation: none; } }
