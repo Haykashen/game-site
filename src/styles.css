@@ -4519,3 +4519,7 @@ html:not(.dark) .game-detail__actions > .btn-secondary:hover {
 html:not(.dark) .game-detail__editions button:active,
 html:not(.dark) .game-detail__actions button:active { box-shadow:0 1px 0 #839c6d; }
 html:not(.dark) .game-detail__actions button:disabled { box-shadow:none; }
+
+html:not(.dark) .game-detail__overview .gallery-caption { color:#28351f; }
+
+.api-state p { margin:0; }
