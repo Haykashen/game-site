@@ -81,6 +81,13 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
   const deleting = editor.mode === 'delete';
   const creating = editor.mode === 'create';
   const fields = table.fields.filter((field) => !field.readOnly && (creating || !field.primary) && !(table.fields.some(item => item.name === 'statusId') && ['status', 'moderationStatus'].includes(field.name)));
+  if (table.name === 'Game') {
+    const noteIndex = fields.findIndex(field => field.name === 'moderationNote');
+    const coverIndex = fields.findIndex(field => field.name === 'coverImage');
+    if (noteIndex >= 0 && coverIndex >= 0) {
+      [fields[noteIndex], fields[coverIndex]] = [fields[coverIndex]!, fields[noteIndex]!];
+    }
+  }
   useEffect(() => {
     if (!editor.key) return;
     const controller = new AbortController();

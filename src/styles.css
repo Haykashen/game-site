@@ -457,8 +457,8 @@
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
-            height: 26px;
-            min-height: 26px;
+            height: 32px;
+            min-height: 32px;
             padding: 0 .6rem;
             border: 1px solid transparent;
             white-space: nowrap;
@@ -4451,3 +4451,41 @@ html:not(.dark) .market-detail-uniform-actions .report-section__trigger {
 .market-detail-copy .market-shipping { order:-1; width:calc((100% - 1.5rem) / 2); box-sizing:border-box; }
 .market-detail-copy .market-shipping__grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
 @media(max-width:640px) { .market-detail-copy .market-shipping { width:100%; } }
+
+
+/* Raised edition selectors and game actions. Content stays in its existing order. */
+.game-detail__editions button,
+.game-detail__actions .btn-secondary,
+.game-detail__actions .game-cta__btn {
+  border:1px solid #526346; border-bottom-width:3px; border-radius:12px;
+  background:linear-gradient(#35442c,#283721); color:#f3f5ef;
+  box-shadow:0 4px 0 #0b100a,0 7px 14px #0002;
+  transition:background .16s,box-shadow .16s,transform .16s;
+}
+.game-detail__editions button { padding:10px 14px; }
+.game-detail__actions { gap:12px; padding-bottom:7px; }
+.game-detail__actions .btn-secondary,
+.game-detail__actions .game-cta__btn { min-height:48px; padding:12px 10px; }
+.game-detail__editions button:hover,
+.game-detail__actions button:hover {
+  background:linear-gradient(#435637,#34472a); border-color:#6b8558;
+  box-shadow:0 4px 0 #0b100a,0 9px 18px #0004; transform:translateY(-1px);
+}
+.game-detail__editions button[aria-pressed="true"] {
+  background:#baff50; border-color:#7baf2b; color:#172111;
+  box-shadow:0 3px 0 #526f25;
+}
+.game-detail__actions > .btn-secondary {
+  background:linear-gradient(#c5ff6c,#ace747); border-color:#88b43f; color:#172111;
+}
+.game-detail__actions > .btn-secondary:hover { background:linear-gradient(#d2ff8b,#baff50); }
+.game-detail__actions .game-cta__btn > svg,
+.game-detail__actions .game-cta__btn:hover > svg { color:inherit; }
+.game-detail__editions button:active,
+.game-detail__actions button:active { transform:translateY(3px); box-shadow:0 1px 0 #0b100a; }
+.game-detail__editions button:focus-visible,
+.game-detail__actions button:focus-visible { outline:2px solid var(--brand); outline-offset:4px; }
+.game-detail__actions button:disabled { transform:none; box-shadow:none; opacity:.5; }
+@media(prefers-reduced-motion:reduce) {
+  .game-detail__editions button,.game-detail__actions button { transition:none; }
+}
