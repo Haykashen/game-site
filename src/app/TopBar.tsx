@@ -48,9 +48,6 @@ export function TopBar() {
       </div>
 
       <div className="app-topbar__actions">
-        <Link to="/settings" className="btn-lang" title="Язык и регион">
-          RU
-        </Link>
         <Link to="/chats" className="topbar-shortcut" aria-label={chatLabel} title={chatLabel}
           aria-current={pathname === '/chats' ? 'page' : undefined}>
           <MessageCircle size={19} aria-hidden="true" />

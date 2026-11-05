@@ -29,6 +29,11 @@ function currentUserId(request: { user: { id: string } | null }): string {
 }
 
 export function registerNotificationRoutes(app: FastifyInstance): void {
+  app.delete('/api/v1/notifications', { preHandler: app.authenticate }, async (request, reply) => {
+    const userId = currentUserId(request);
+    await app.prisma.notification.deleteMany({ where: { userId } });
+    return reply.code(204).send();
+  });
   app.get(
     '/api/v1/notifications/unread-count',
     { preHandler: app.authenticate },

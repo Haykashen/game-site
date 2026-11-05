@@ -18,6 +18,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import type { LucideIcon } from 'lucide-react';
 import type { NotificationDto, NotificationType } from '@discvault/shared';
 import {
+  deleteAllNotifications,
   errorMessage,
   listNotifications,
   markAllNotificationsRead,
@@ -63,6 +64,17 @@ export function NotificationsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isMarkingAll, setIsMarkingAll] = useState(false);
+
+  const [isDeleting, setIsDeleting] = useState(false);
+  const deleteAll = async () => {
+    setIsDeleting(true);
+    setError(null);
+    try {
+      await deleteAllNotifications();
+      setNotifications([]); setTotal(0); setHasMore(false); setPage(1); applyUnreadCount(0);
+    } catch (err) { setError(errorMessage(err)); }
+    finally { setIsDeleting(false); }
+  };
 
   const isApiMode = status === 'api';
 
@@ -176,7 +188,7 @@ export function NotificationsPage() {
               type="button"
               className="btn-secondary notifications__mark-all"
               onClick={() => void markAllRead()}
-              disabled={isMarkingAll}
+              disabled={isMarkingAll || isDeleting}
             >
               <BadgeCheck size={16} aria-hidden="true" />
               {isMarkingAll ? 'Отмечаем…' : 'Прочитать всё'}
@@ -230,7 +242,7 @@ export function NotificationsPage() {
                 )}
               </button>
             </div>
-            <span className="notifications-toolbar__count">
+            <button type="button" className="btn-secondary" disabled={isDeleting || isLoading || isMarkingAll} onClick={() => void deleteAll()}>{isDeleting ? 'Удаляем…' : 'Удалить все уведомления'}</button><span className="notifications-toolbar__count">
               {total > 0 ? `${total} всего` : 'Пока пусто'}
             </span>
           </div>

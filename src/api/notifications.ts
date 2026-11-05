@@ -84,3 +84,5 @@ export function unsubscribeMarketEntry(entryId: string): Promise<void> {
     { method: 'DELETE' },
   );
 }
+
+export function deleteAllNotifications(): Promise<void> { return apiRequest<void>('/api/v1/notifications', { method: 'DELETE' }); }

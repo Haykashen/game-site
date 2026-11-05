@@ -23,8 +23,6 @@ import { formatPrice } from '../../lib/formatPrice';
 import {
   bidsLabel,
   formatMarketCondition,
-  formatAuctionEnd,
-  formatAuctionStart,
   formatMarketDate,
   formatMarketDateTime,
   isAuctionOver,
@@ -146,24 +144,8 @@ export function MarketEntryDetail({
               : listingType === 'exchange'
                 ? 'Обмен'
                 : 'В продаже';
-  const auctionTimerLabel = isUpcoming
-    ? formatAuctionStart(entry.startsAt)
-    : formatAuctionEnd(entry.endsAt);
   const bidStepLabel =
     entry.bidStep === null ? 'Не указан' : formatPrice(entry.bidStep);
-  const internationalShippingLabel =
-    entry.internationalShipping === null
-      ? 'Не указано'
-      : entry.internationalShipping
-        ? 'Да'
-        : 'Нет';
-  const packagingPriceLabel =
-    entry.packagingPrice === null
-      ? 'Не указана'
-      : entry.packagingPrice === 0
-        ? 'Бесплатно'
-        : formatPrice(entry.packagingPrice);
-
   const handleBid = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -381,7 +363,7 @@ export function MarketEntryDetail({
               <ProfileLink name={entry.seller} userId={entry.authorId} />
             }
           />
-          <SpecRow label="Размещено" value={formatMarketDate(entry.createdAt)} />
+          {!isAuction && <SpecRow label="Размещено" value={formatMarketDate(entry.createdAt)} />}
           {isAuction && <SpecRow label="Шаг цены" value={bidStepLabel} />}
           {isAuction && (
             <SpecRow label="Открытие" value={formatMarketDateTime(entry.startsAt)} />
@@ -390,7 +372,6 @@ export function MarketEntryDetail({
             <SpecRow label="Закрытие" value={formatMarketDateTime(entry.endsAt)} />
           )}
           {isAuction && <SpecRow label="Ставок" value={String(entry.bids)} />}
-          {isAuction && <SpecRow label="Срок торгов" value={auctionTimerLabel} />}
           <SpecRow label={priceLabel} value={<strong className="market-spec-price">{formatPrice(entry.price)}</strong>} />
         </div>
       </div>
@@ -531,29 +512,7 @@ export function MarketEntryDetail({
             </dd>
           </div>
 
-          <div className="market-shipping__item">
-            <dt>Доставка в другие страны</dt>
-            <dd
-              className={cx(
-                'market-shipping__value',
-                entry.internationalShipping === null && 'market-shipping__muted',
-              )}
-            >
-              {internationalShippingLabel}
-            </dd>
-          </div>
 
-          <div className="market-shipping__item">
-            <dt>Цена упаковки посылки</dt>
-            <dd
-              className={cx(
-                'market-shipping__value',
-                entry.packagingPrice === null && 'market-shipping__muted',
-              )}
-            >
-              {packagingPriceLabel}
-            </dd>
-          </div>
 
           <div className="market-shipping__item">
             <dt>Откуда отправляет</dt>
