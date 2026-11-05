@@ -4523,3 +4523,16 @@ html:not(.dark) .game-detail__actions button:disabled { box-shadow:none; }
 html:not(.dark) .game-detail__overview .gallery-caption { color:#28351f; }
 
 .api-state p { margin:0; }
+
+.app-topbar .header-icon-button {
+  position:relative; width:38px; height:38px; flex:none; padding:0;
+  border:1px solid var(--border-color); border-radius:50%;
+  background:var(--bg-input); color:var(--text-muted); text-decoration:none;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  transition:transform .2s, border-color .2s, background .2s, color .2s;
+}
+.app-topbar .header-icon-button:hover { transform:translateY(-2px); border-color:var(--brand); }
+.app-topbar .header-icon-button:active { transform:translateY(0); }
+.app-topbar .header-icon-button:focus-visible { outline:2px solid var(--brand); outline-offset:3px; }
+.app-topbar .header-icon-button--accent { color:var(--brand); }
+@media(prefers-reduced-motion:reduce) { .app-topbar .header-icon-button { transition:none; } }

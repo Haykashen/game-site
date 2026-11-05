@@ -2,7 +2,7 @@ import { useUnreadChatCount } from '../context/ChatsContext';
 import { Bell, MessageCircle, Moon, Sun, UserRound } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { BrandMark } from '../components/BrandMark';
-import { IconButton } from '../components/ui/IconButton';
+import { HeaderIconButton } from '../components/ui/HeaderIconButton';
 import { useAuth } from '../context/AuthContext';
 import { useNotifications } from '../context/NotificationsContext';
 import { useThemeContext } from '../context/ThemeContext';
@@ -48,15 +48,15 @@ export function TopBar() {
       </div>
 
       <div className="app-topbar__actions">
-        <Link to="/chats" className="topbar-shortcut" aria-label={chatLabel} title={chatLabel}
+        <HeaderIconButton to="/chats" label={chatLabel} title={chatLabel}
           aria-current={pathname === '/chats' ? 'page' : undefined}>
           <MessageCircle size={19} aria-hidden="true" />
           {unreadChats > 0 && <span className="topbar-notifications__badge" aria-hidden="true">{unreadChats > 99 ? '99+' : unreadChats}</span>}
-        </Link>
-        <Link
+        </HeaderIconButton>
+        <HeaderIconButton
           to="/notifications"
-          className="topbar-shortcut"
-          aria-label={notificationLabel}
+
+          label={notificationLabel}
           title={notificationLabel}
         >
           <Bell size={19} aria-hidden="true" />
@@ -65,19 +65,19 @@ export function TopBar() {
               {unreadCount > 99 ? '99+' : unreadCount}
             </span>
           )}
-        </Link>
-        <IconButton label="Переключить тему" onClick={toggleTheme}>
+        </HeaderIconButton>
+        <HeaderIconButton label="Переключить тему" onClick={toggleTheme}>
           <Sun size={20} className="sun-icon" />
           <Moon size={20} className="moon-icon" />
-        </IconButton>
-        <Link
+        </HeaderIconButton>
+        <HeaderIconButton
           to="/account"
-          className="topbar-avatar"
-          aria-label={user ? `Аккаунт: ${user.displayName}` : 'Аккаунт'}
+          accent
+          label={user ? `Аккаунт: ${user.displayName}` : 'Аккаунт'}
           title={user ? user.displayName : 'Гость'}
         >
           <UserRound size={18} aria-hidden="true" />
-        </Link>
+        </HeaderIconButton>
       </div>
     </div>
   );
