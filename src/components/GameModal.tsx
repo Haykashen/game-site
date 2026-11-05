@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { useCollection } from '../context/CollectionContext';
 import { getPlatformBadgeStyle, sortPlatforms } from '../data/reference';
 import { MAX_COLLECTION_QUANTITY } from '../lib/constants';
-import { editionsCountLabel } from '../lib/market';
+
 import type { Copy, CopyDetails, Edition, Game, MarketEntry } from '../types';
 import { ArtworkPanel } from './modal/ArtworkPanel';
 import { GameSubscriptionButton } from './GameSubscriptionButton';
@@ -61,7 +61,7 @@ export function GameModal({ marketLoading, marketError, onRetryMarket, onEditGam
       <div className="modal-header game-modal__header">
         <div><div className="modal-header-meta">
           {isModerator && <ModerationBadge status={game.moderationStatus} />}
-          {game.year !== null && <span className="year">{game.year}</span>}<span className="meta-chip">{editionsCountLabel(editions.length)}</span>{game.genres.slice(0, 2).map(genre => <span className="meta-chip" key={genre}>{genre}</span>)}
+          {game.year !== null && <span className="year">{game.year}</span>}<span id="game-header-ratings" />
         </div><h2 className="modal-title" id="modal-title">{game.title}</h2></div>
         <div className="game-modal__admin-actions">
           {isModerator && onEditGame && <button type="button" className="btn-secondary" onClick={onEditGame}><Pencil size={15} aria-hidden="true" />Редактировать игру</button>}

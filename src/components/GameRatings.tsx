@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import { ExternalLink } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -18,6 +19,8 @@ function RatingsContent({ gameId }: { gameId: string }) {
   const [loading, setLoading] = useState(status === 'api' || status === 'checking');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [headerTarget, setHeaderTarget] = useState<HTMLElement | null>(null);
+  useEffect(() => { setHeaderTarget(document.getElementById('game-header-ratings')); }, []);
   const critic = CRITIC_RATINGS[gameId];
   const path = `/api/v1/catalog/games/${encodeURIComponent(gameId)}/ratings`;
 
@@ -46,8 +49,10 @@ function RatingsContent({ gameId }: { gameId: string }) {
 
   return <div className="game-detail__ratings">
     <dl className="game-detail__facts">
-      <div><dt>Metacritic</dt><dd>{critic ? <a className="game-detail__critic" href={critic.url} target="_blank" rel="noopener noreferrer" title={`Metacritic · ${critic.platform}`}><span>{critic.score}/100</span><ExternalLink size={12} aria-hidden="true" /></a> : '—'}</dd></div>
-      <div><dt>DiscVault</dt><dd title={remote ? `Голосов: ${remote.count}` : undefined}>{loading ? '…' : remote?.average?.toFixed(1) ?? '—'} / 10</dd></div>
+      {headerTarget && createPortal(<>
+        <span className="meta-chip">Metacritic {critic ? <a href={critic.url} target="_blank" rel="noopener noreferrer">{critic.score}/100 <ExternalLink size={12} aria-hidden="true" /></a> : '—'}</span>
+        <span className="meta-chip" title={remote ? `Голосов: ${remote.count}` : undefined}>DiscVault {loading ? '…' : remote?.average?.toFixed(1) ?? '—'} / 10</span>
+      </>, headerTarget)}
       <div><dt><label htmlFor="game-user-score">Ваша оценка</label></dt><dd>{user && status === 'api' ? <><input id="game-user-score" className="game-detail__score" type="number" min={0} max={10} step={1} inputMode="numeric" placeholder="—" value={draft} disabled={loading || saving} aria-label="Ваша оценка от 0 до 10" onChange={event => setDraft(event.target.value)} onBlur={event => void save(event.currentTarget)} onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); void save(event.currentTarget); } }} /> / 10</> : <Link className="spec-link" to="/account">Войдите, чтобы оценить</Link>}</dd></div>
     </dl>
     {error && <p className="market-form__error" role="alert">{error}</p>}

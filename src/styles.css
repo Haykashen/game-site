@@ -4307,7 +4307,7 @@
 .game-detail__editions button:hover,.game-detail__editions button:focus-visible {border-color:var(--brand);}
 .game-detail__actions {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
 .game-detail__actions .game-cta {display:contents;}
-.game-detail__actions .btn-secondary,.game-detail__actions .game-cta__btn {display:flex;align-items:center;justify-content:center;gap:6px;min-width:0;min-height:40px;margin:0;padding:9px 6px;border:1px solid var(--border-color);border-radius:7px;background:var(--bg-main);color:var(--text-main);box-shadow:none;font:600 11px/1.25 Arial,sans-serif;white-space:nowrap;cursor:pointer;}
+.game-detail__actions .btn-secondary,.game-detail__actions .game-cta__btn {display:flex;align-items:center;justify-content:center;gap:6px;min-width:0;min-height:40px;margin:0;padding:9px 6px;border:1px solid var(--border-color);border-radius:7px;background:var(--bg-main);color:var(--text-main);box-shadow:none;font-family:inherit;font-size:1rem;font-weight:600;line-height:1.25;white-space:nowrap;cursor:pointer;}
 .game-detail__actions button:hover {border-color:var(--brand);background:var(--bg-main);transform:none;box-shadow:none;}
 .game-detail__actions button:disabled {opacity:.5;cursor:default;}
 .game-detail .desc-text p {font-size:13px;line-height:1.7;}
@@ -4489,3 +4489,6 @@ html:not(.dark) .market-detail-uniform-actions .report-section__trigger {
 @media(prefers-reduced-motion:reduce) {
   .game-detail__editions button,.game-detail__actions button { transition:none; }
 }
+
+#game-header-ratings { display:contents; }
+#game-header-ratings .meta-chip a { display:inline-flex; align-items:center; gap:4px; }
