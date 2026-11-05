@@ -17,7 +17,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { marketItemLabel } from '@discvault/shared';
-import { ProfileLink } from '../ProfileLink';
+import { MarketAuthor } from './MarketAuthor';
 import { deliveryLabel } from '../../lib/delivery';
 import { formatPrice } from '../../lib/formatPrice';
 import {
@@ -360,7 +360,7 @@ export function MarketEntryDetail({
           <SpecRow
             label="Автор"
             value={
-              <ProfileLink name={entry.seller} userId={entry.authorId} />
+              <MarketAuthor entry={entry} />
             }
           />
           {!isAuction && <SpecRow label="Размещено" value={formatMarketDate(entry.createdAt)} />}

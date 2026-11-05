@@ -127,7 +127,7 @@ export async function notifyEntryModerated(
   ]);
 }
 
-/** Notifies the seller, the previous leader and everyone following the lot. */
+/** Notifies the seller, all previous bidders and everyone following the lot. */
 export async function notifyNewBid(
   db: Db,
   params: {
@@ -179,6 +179,25 @@ export async function notifyNewBid(
     });
   }
 
+  const bidders = await db.bid.findMany({
+    where: { marketEntryId: params.entryId },
+    select: { bidderId: true },
+    distinct: ['bidderId'],
+  });
+  const excluded = new Set([params.authorId, params.bidder.id, params.previousBidderId]);
+  for (const { bidderId } of bidders) {
+    if (excluded.has(bidderId)) continue;
+    rows.push({
+      userId: bidderId,
+      type: 'bid_placed',
+      title: 'Новая ставка в лоте, где вы участвовали',
+      message: `${params.bidder.displayName} поставил ${amount} на лот «${params.entryTitle}».`,
+      marketEntryId: params.entryId,
+      gameId: params.gameId,
+      actorId: params.bidder.id,
+      dedupeKey: `bid:${params.bidId}:${bidderId}`,
+    });
+  }
   for (const userId of followers) {
     rows.push({
       userId,

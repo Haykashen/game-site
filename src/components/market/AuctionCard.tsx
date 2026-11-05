@@ -1,8 +1,8 @@
-import { Images, Star, Tag, ShoppingBag, ArrowLeftRight, Gavel } from 'lucide-react';
+import { Images, Tag, ShoppingBag, ArrowLeftRight, Gavel } from 'lucide-react';
 import { marketItemLabel } from '@discvault/shared';
 import type { MarketEntry, Edition } from '../../types';
 import { FallbackImage } from '../FallbackImage';
-import { ProfileLink } from '../ProfileLink';
+import { MarketAuthor } from './MarketAuthor';
 import { formatPrice } from '../../lib/formatPrice';
 import { bidsLabel } from '../../lib/market';
 
@@ -20,7 +20,7 @@ export function AuctionCard({entry,edition,onSelect}: {entry:MarketEntry;edition
   const status = entry.moderationStatus === 'draft' ? 'Черновик' : entry.status === 'sold' ? 'Продано' : entry.status === 'closed' ? 'Закрыто' : entry.moderationStatus === 'pending' ? 'На проверке' : entry.moderationStatus === 'hidden' ? 'Отклонено' : entry.moderationStatus === 'removed' ? 'Удалено' : 'Активно';
   const end = entry.endsAt ? new Date(entry.endsAt) : null;
   const validEnd = end && Number.isFinite(end.getTime()) ? end : null;
-  const rating = entry.sellerRating;
+
   return <article className={`auction-tile${auction?'':` listing-tile listing-tile--${entry.listingType??'sale'}`}`} role="button" tabIndex={0} aria-label={`Открыть ${auction?'лот':'объявление'}: ${entry.title}`} onClick={()=>onSelect(entry.id)} onKeyDown={event=>{if(event.target===event.currentTarget && (event.key==='Enter'||event.key===' ')){event.preventDefault();onSelect(entry.id);}}}>
     <div className="auction-tile__photo">
       <div className="auction-tile__placeholder"><Images size={28} aria-hidden="true"/><span>{entry.photos.length ? 'Фотография недоступна' : 'Фотографии не добавлены'}</span></div>
@@ -29,7 +29,7 @@ export function AuctionCard({entry,edition,onSelect}: {entry:MarketEntry;edition
     <div className="auction-tile__content">
       <div className="auction-tile__header">
         {auction?<span className="listing-tile__kind auction-tile__kind"><Gavel size={16} aria-hidden="true"/>Аукцион</span>:<span className="listing-tile__kind"><KindIcon size={16} aria-hidden="true"/>{kindLabel}</span>}
-        <div className="auction-tile__seller"><ProfileLink name={entry.seller} userId={entry.authorId}/><span className="auction-tile__rating" aria-label={rating==null?'У автора пока нет оценок':`Рейтинг автора ${rating} из 5`}><Star size={14} aria-hidden="true"/>{rating==null?'—':rating.toLocaleString('ru-RU',{maximumFractionDigits:1})}</span></div>
+        <div className="auction-tile__seller"><MarketAuthor entry={entry} /></div>
       </div>
       <div className="auction-tile__main"><div className="auction-tile__subject">Предмет: <span>{marketItemLabel(entry.itemType)}</span></div><h2 title={entry.title}>{entry.title}</h2>{auction?<span className="auction-tile__status auction-tile__status--below">{status}</span>:<div className="listing-tile__spec">{[edition?.platform,edition?.region,entry.condition].filter(Boolean).join(' · ')}</div>}</div>
       <div className="auction-tile__bottom">
