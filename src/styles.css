@@ -4492,3 +4492,30 @@ html:not(.dark) .market-detail-uniform-actions .report-section__trigger {
 
 #game-header-ratings { display:contents; }
 #game-header-ratings .meta-chip a { display:inline-flex; align-items:center; gap:4px; }
+
+/* Light-theme raised controls use dark text and softer depth. */
+html:not(.dark) .game-detail__editions button,
+html:not(.dark) .game-detail__actions .btn-secondary,
+html:not(.dark) .game-detail__actions .game-cta__btn {
+  background:linear-gradient(#f4f7eb,#e5edda);
+  color:#28351f; border-color:#a5b494;
+  box-shadow:0 3px 0 #a5b494,0 5px 10px #33442112;
+}
+html:not(.dark) .game-detail__editions button:hover,
+html:not(.dark) .game-detail__actions button:hover {
+  background:linear-gradient(#eaf3dd,#d7e7c6);
+  color:#1e3014; border-color:#839c6d;
+  box-shadow:0 3px 0 #839c6d,0 6px 12px #33442118;
+}
+html:not(.dark) .game-detail__editions button[aria-pressed="true"],
+html:not(.dark) .game-detail__actions > .btn-secondary {
+  background:linear-gradient(#caff79,#b0ed4f);
+  color:#1b2b10; border-color:#82ac44;
+  box-shadow:0 3px 0 #82ac44,0 5px 10px #33442112;
+}
+html:not(.dark) .game-detail__actions > .btn-secondary:hover {
+  background:linear-gradient(#d4ff91,#bdf566); color:#1b2b10;
+}
+html:not(.dark) .game-detail__editions button:active,
+html:not(.dark) .game-detail__actions button:active { box-shadow:0 1px 0 #839c6d; }
+html:not(.dark) .game-detail__actions button:disabled { box-shadow:none; }
