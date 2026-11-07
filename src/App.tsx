@@ -14,6 +14,7 @@ import { AdminUsersPage } from './pages/AdminUsersPage';
 import { AdminDataPage } from './pages/AdminDataPage';
 import { AdminReferencePage } from './pages/AdminReferencePage';
 import { AuctionsPage } from './pages/AuctionsPage';
+import { CollectionCopyPage } from './pages/CollectionCopyPage';
 import { CollectionPage } from './pages/CollectionPage';
 import { DiscussionsPage } from './pages/DiscussionsPage';
 import { GamesPage } from './pages/GamesPage';
@@ -54,6 +55,7 @@ export default function App() {
                   <Route path="/discussions" element={<DiscussionsPage />} />
                   <Route path="/news" element={<NewsPage />} />
                   <Route path="/collection" element={<CollectionPage />} />
+                  <Route path="/collection/:editionId" element={<CollectionCopyPage />} />
                   <Route path="/stats" element={<StatsPage />} />
                   <Route path="/notifications" element={<NotificationsPage />} />
                   <Route path="/account" element={<AccountPage />} />

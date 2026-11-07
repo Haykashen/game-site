@@ -11,7 +11,7 @@ import {
   Trash2,
   Wallet,
 } from 'lucide-react';
-import { FallbackImage } from '../FallbackImage';
+import { PhotoPreviewGallery } from '../ui/PhotoPreviewGallery';
 import { formatPurchaseDetails } from '../../lib/collection';
 import { MAX_COLLECTION_QUANTITY } from '../../lib/constants';
 import { editionContentsLabel, editionLabel, formatEditionDate } from '../../lib/editions';
@@ -51,7 +51,7 @@ export function CopyCard({
     <article className="copy-card">
       <div className="copy-card__cover">
         {images.length > 0 ? (
-          <FallbackImage images={images} alt={`Фотография экземпляра ${game.title}`} loading="lazy" />
+          <PhotoPreviewGallery photos={images} title={`Фотография экземпляра ${game.title}`} />
         ) : (
           <div className="copy-card__placeholder">
             <ImageIcon size={28} aria-hidden="true" />
@@ -121,7 +121,7 @@ export function CopyCard({
         <div className="copy-card__actions">
           <button type="button" className="copy-card__open" onClick={onOpen}>
             <ExternalLink size={14} aria-hidden="true" />
-            Открыть игру
+            Открыть экземпляр
           </button>
           <button
             type="button"

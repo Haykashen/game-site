@@ -1,10 +1,9 @@
 import { Trophy } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import shelfArt from '../assets/discvault-shelf.svg';
 import { PageHeading } from '../components/PageHeading';
 import { CopyCard } from '../components/collection/CopyCard';
-import { CopyEditDrawer } from '../components/collection/CopyEditDrawer';
 import { useCollection } from '../context/CollectionContext';
 import { useAuth } from '../context/AuthContext';
 import { ApiState } from '../components/ApiState';
@@ -41,7 +40,6 @@ export function CollectionPage() {
     editionById,
     games,
     setEditionQuantity,
-    updateEdition,
     removeEdition,
     isSyncing,
     syncError,
@@ -50,7 +48,6 @@ export function CollectionPage() {
     refresh,
   } = useCollection();
   const navigate = useNavigate();
-  const [editingEditionId, setEditingEditionId] = useState<string | null>(null);
 
   const gamesById = useMemo(() => new Map(games.map((game) => [game.id, game])), [games]);
 
@@ -94,9 +91,6 @@ export function CollectionPage() {
     return [...byEdition.values()].sort((a, b) => b.latestAt - a.latestAt);
   }, [copies, editionById, gamesById]);
 
-  const editingItem = editingEditionId
-    ? (items.find((item) => item.edition.id === editingEditionId) ?? null)
-    : null;
 
   return (
     <>
@@ -153,12 +147,8 @@ export function CollectionPage() {
               edition={edition}
               game={game}
               quantity={quantity}
-              onOpen={() =>
-                navigate(
-                  `/games?game=${encodeURIComponent(game.id)}&editionId=${encodeURIComponent(edition.id)}`,
-                )
-              }
-              onEdit={() => setEditingEditionId(edition.id)}
+              onOpen={() => navigate(`/collection/${encodeURIComponent(edition.id)}`)}
+              onEdit={() => navigate(`/collection/${encodeURIComponent(edition.id)}?edit=1`)}
               onQuantityChange={(nextQuantity) => setEditionQuantity(edition.id, nextQuantity)}
               onRemove={() => removeEdition(edition.id)}
             />
@@ -166,17 +156,6 @@ export function CollectionPage() {
         </section>
       )}
 
-      <CopyEditDrawer
-        isOpen={editingItem !== null}
-        copy={editingItem?.copy ?? null}
-        edition={editingItem?.edition ?? null}
-        game={editingItem?.game ?? null}
-        quantity={editingItem?.quantity ?? 1}
-        onClose={() => setEditingEditionId(null)}
-        onSave={async (details) => {
-          if (editingItem && await updateEdition(editingItem.edition.id, details)) setEditingEditionId(null);
-        }}
-      />
     </>
   );
 }

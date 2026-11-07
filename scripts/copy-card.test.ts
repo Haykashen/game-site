@@ -23,3 +23,17 @@ test('a grouped card can use photos attached to another copy of the edition', ()
   assert.ok(grouped.includes('src="https://example.com/second-copy.jpg"'));
   assert.ok(!grouped.includes('catalogue.jpg'));
 });
+
+
+test('multiple collection photos have one selector per unique photo and the first selected', () => {
+  const html = render(copy, ['https://example.com/first.jpg', 'https://example.com/second.jpg', 'https://example.com/first.jpg']);
+  assert.equal((html.match(/aria-pressed=/g) ?? []).length, 2);
+  assert.equal((html.match(/aria-pressed="true"/g) ?? []).length, 1);
+  assert.ok(html.includes('Показать фото 2 из 2'));
+  assert.ok(html.includes('src="https://example.com/first.jpg"'));
+});
+
+test('a single collection photo does not show gallery selectors', () => {
+  const html = render(copy, ['https://example.com/first.jpg']);
+  assert.ok(!html.includes('aria-pressed='));
+});

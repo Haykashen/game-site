@@ -33,7 +33,8 @@ export function useGameCollection(): GameCollection {
   // Games use pagination; collection uses its owned-edition lookup.
   // Other tools still need the full catalogue for edition selectors.
   const catalogPath = pathname.replace(/\/+$/, '').toLowerCase();
-  const routeNeedsFullCatalog = !['', '/games', '/collection'].includes(catalogPath);
+  const isCollectionRoute = catalogPath === '/collection' || catalogPath.startsWith('/collection/');
+  const routeNeedsFullCatalog = !isCollectionRoute && !['', '/games'].includes(catalogPath);
   const { status, user } = useAuth();
   const userId = user?.id;
   const owner = useRef(userId);
@@ -57,7 +58,7 @@ export function useGameCollection(): GameCollection {
   const loadOwnedCatalog = useCallback((signal: AbortSignal) => userId && editionKey
     ? fetchCollectionCatalog(signal) : Promise.resolve(EMPTY_CATALOG), [userId, editionKey]);
   const ownedCatalog = useApiResource('collection-catalog:' + scope + ':' + editionKey, loadOwnedCatalog, EMPTY_CATALOG);
-  const catalog = catalogPath === '/collection' || !needsFullCatalog ? ownedCatalog : fullCatalog;
+  const catalog = isCollectionRoute || !needsFullCatalog ? ownedCatalog : fullCatalog;
   const {games, editions} = catalog.data;
   const editionById = useMemo(() => {
     const map = new Map(editions.map((edition) => [edition.id, edition]));

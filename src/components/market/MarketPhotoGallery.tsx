@@ -1,3 +1,4 @@
+import { PhotoLightbox } from '../ui/PhotoLightbox';
 import { ChevronLeft, ChevronRight, Images } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { MAX_MARKET_PHOTOS } from '../../lib/constants';
@@ -6,14 +7,17 @@ import { cx } from '../../lib/cx';
 interface MarketPhotoGalleryProps {
   photos: readonly string[];
   title: string;
+  expandable?: boolean;
 }
 
 /** Entity-card gallery: a carousel with thumbnails, or a slot prompt when empty. */
-export function MarketPhotoGallery({ photos, title }: MarketPhotoGalleryProps) {
+export function MarketPhotoGallery({ photos, title, expandable = false }: MarketPhotoGalleryProps) {
   const [index, setIndex] = useState(0);
+  const [lightbox, setLightbox] = useState(false);
 
   useEffect(() => {
     setIndex(0);
+    setLightbox(false);
   }, [photos]);
 
   if (photos.length === 0) {
@@ -22,8 +26,7 @@ export function MarketPhotoGallery({ photos, title }: MarketPhotoGalleryProps) {
         <Images size={24} aria-hidden="true" />
         <span className="market-photo-empty__title">Фотографии не добавлены</span>
         <p>
-          При размещении автор может приложить до {MAX_MARKET_PHOTOS} фото — они появятся
-          здесь каруселью.
+          {expandable ? 'Добавьте фотографии в режиме редактирования экземпляра.' : `Можно приложить до ${MAX_MARKET_PHOTOS} фото — они появятся здесь каруселью.`}
         </p>
       </div>
     );
@@ -38,7 +41,9 @@ export function MarketPhotoGallery({ photos, title }: MarketPhotoGalleryProps) {
 
   return (
     <figure className="market-carousel">
+      {lightbox && <PhotoLightbox photos={photos} title={title} initialIndex={safeIndex} onClose={() => setLightbox(false)} />}
       <div className="market-carousel__stage">
+        {expandable && <button type="button" className="market-carousel__expand" aria-label="Открыть фотографию крупно" onClick={() => setLightbox(true)} />}
         <img
           src={photos[safeIndex]}
           alt={`Фото ${safeIndex + 1} из ${photos.length}: ${title}`}

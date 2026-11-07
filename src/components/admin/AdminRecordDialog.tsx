@@ -70,7 +70,9 @@ function LegacyReferenceInput({field, value, onChange, required, inputId, select
 
 export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDelete}: {table: AdminTable; editor: AdminEditor; onClose: () => void; onSaved: (record?: AdminRecord) => void | Promise<void>; title?: string; onDelete?: () => void}) {
   const [record, setRecord] = useState<AdminRecord>({});
-  const [values, setValues] = useState<Record<string, string>>({});
+  const [values, setValues] = useState<Record<string, string>>(() =>
+    editor.mode === 'create' && table.name === 'Game' ? {year: String(new Date().getFullYear())} : {},
+  );
   const [loading, setLoading] = useState(editor.mode !== 'create');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');

@@ -18,6 +18,7 @@ interface CopyEditFormProps {
   quantity: number;
   titleId: string;
   mode?: 'create' | 'edit';
+  showHeader?: boolean;
   isSaving?: boolean;
   onSubmit: (details: CopyDetails) => void;
   onCancel: () => void;
@@ -36,6 +37,7 @@ export function CopyEditForm({
   onSubmit,
   onCancel,
   mode = 'edit',
+  showHeader = true,
   isSaving = false,
 }: CopyEditFormProps) {
   const [condition, setCondition] = useState(copy.condition);
@@ -75,7 +77,7 @@ export function CopyEditForm({
 
   return (
     <>
-      <div className="modal-header">
+      {showHeader && <><div className="modal-header">
         <div>
           <div className="modal-header-meta">
             <span className="market-kind">
@@ -97,6 +99,7 @@ export function CopyEditForm({
         {game.title} • {editionLabel(edition)}
       </p>
 
+      </>}
       {quantity > 1 && (
         <p className="copy-form__notice">
           Изменения применятся ко всем {quantity} экземплярам этого издания.
