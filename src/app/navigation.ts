@@ -209,20 +209,19 @@ export interface NavGroup {
 
 export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
   {
+    id: 'community',
+    label: 'Сообщество',
+    items: [NAV_ITEMS.games, NAV_ITEMS.news, NAV_ITEMS.discussions],
+  },
+  {
     id: 'market',
     label: 'Маркет',
     items: [
-      NAV_ITEMS.games,
       NAV_ITEMS.auctions,
       NAV_ITEMS.sales,
       NAV_ITEMS.purchases,
       NAV_ITEMS.exchange,
     ],
-  },
-  {
-    id: 'community',
-    label: 'Сообщество',
-    items: [NAV_ITEMS.news, NAV_ITEMS.discussions],
   },
   {
     id: 'shelf',

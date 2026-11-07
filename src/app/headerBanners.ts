@@ -15,7 +15,7 @@ export interface HeaderBannerMeta {
 }
 
 export const HEADER_BANNERS: Record<NavSectionId, HeaderBannerMeta> = {
-  games: { kicker: 'MARKET / CATALOG', tone: 'lime' },
+  games: { kicker: 'COMMUNITY / CATALOG', tone: 'lime' },
   auctions: { kicker: 'MARKET / AUCTIONS', tone: 'amber' },
   listings: { kicker: 'MARKET / LISTINGS', tone: 'pink' },
   sales: { kicker: 'MARKET / SALES', tone: 'pink' },

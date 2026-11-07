@@ -1,15 +1,17 @@
+import type { GameDto, EditionDto } from './catalog.js';
 import { z } from 'zod';
 import {
   emptyOrDateOnlySchema,
   idSchema,
-  nonNegativeRubleAmountSchema,
+  MAX_RUBLE_AMOUNT,
   photoReferenceSchema,
 } from './common.js';
 
 export const copyDetailsSchema = z.object({
   condition: z.string().trim().min(1).max(60).optional(),
   completeness: z.string().trim().min(1).max(60).optional(),
-  purchasePrice: nonNegativeRubleAmountSchema.nullable().optional(),
+  purchasePrice: z.coerce.number().min(0).max(MAX_RUBLE_AMOUNT)
+    .refine(value => Math.abs(value * 100 - Math.round(value * 100)) < 0.000001, 'Укажите не более двух знаков после запятой.').nullable().optional(),
   purchaseDate: emptyOrDateOnlySchema.optional(),
   notes: z.string().trim().max(2000).optional(),
   photos: z.array(photoReferenceSchema).max(6).optional(),
@@ -52,3 +54,5 @@ export interface CollectionStatsDto {
 export type CopyDetailsInput = z.infer<typeof copyDetailsSchema>;
 export type CreateCopyInput = z.infer<typeof createCopySchema>;
 export type UpdateCopyInput = z.infer<typeof updateCopySchema>;
+
+export interface CollectionCatalogDto { games: GameDto[]; editions: EditionDto[] }

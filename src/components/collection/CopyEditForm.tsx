@@ -1,7 +1,10 @@
+import { CompletenessCombobox } from './CompletenessCombobox';
+import { copyDetailsSchema } from '@discvault/shared';
+import { MoneyInput } from '../ui/MoneyInput';
+import { parseMoneyInput } from '../../lib/moneyInput';
 import { Package, X } from 'lucide-react';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { COMPLETENESS } from '../../data/reference';
 import { editionLabel } from '../../lib/editions';
 import type { Copy, CopyDetails, Edition, Game } from '../../types';
 import { FormField } from '../ui/FormField';
@@ -40,6 +43,7 @@ export function CopyEditForm({
   const [purchasePrice, setPurchasePrice] = useState(
     copy.purchasePrice === null ? '' : String(copy.purchasePrice),
   );
+  const [priceError, setPriceError] = useState('');
   const [purchaseDate, setPurchaseDate] = useState(copy.purchaseDate);
   const [notes, setNotes] = useState(copy.notes);
   const [photos, setPhotos] = useState<string[]>([...copy.photos]);
@@ -49,13 +53,12 @@ export function CopyEditForm({
     event.preventDefault();
     if (isProcessingPhotos || isSaving) return;
 
-    const parsedPrice = purchasePrice.trim() === '' ? null : Number(purchasePrice);
-    const normalizedPrice =
-      parsedPrice !== null &&
-      Number.isSafeInteger(parsedPrice) &&
-      parsedPrice >= 0
-        ? parsedPrice
-        : null;
+    const normalizedPrice = parseMoneyInput(purchasePrice);
+    if (!copyDetailsSchema.safeParse({purchasePrice: normalizedPrice}).success) {
+      setPriceError('Укажите цену от 0 до 10 000 000 ₽ с точностью до копеек.');
+      return;
+    }
+    setPriceError('');
     const normalizedDate = /^\d{4}-\d{2}-\d{2}$/.test(purchaseDate.trim())
       ? purchaseDate.trim()
       : '';
@@ -115,35 +118,14 @@ export function CopyEditForm({
           </FormField>
 
           <FormField id="copyCompleteness" label="Комплектность">
-            <input
-              id="copyCompleteness"
-              type="text"
-              className="form-control"
-              list="copyCompletenessOptions"
-              maxLength={60}
-              placeholder="Например, CIB"
-              value={completeness}
-              onChange={(event) => setCompleteness(event.target.value)}
-            />
-            <datalist id="copyCompletenessOptions">
-              {COMPLETENESS.map((value) => (
-                <option key={value} value={value} />
-              ))}
-            </datalist>
+            <CompletenessCombobox id="copyCompleteness" value={completeness} onChange={setCompleteness} />
           </FormField>
 
           <FormField id="copyPurchasePrice" label="Цена покупки, ₽">
-            <input
-              id="copyPurchasePrice"
-              type="number"
-              className="form-control"
-              min={0}
-              step={1}
-              inputMode="numeric"
-              placeholder="Например, 4990"
-              value={purchasePrice}
-              onChange={(event) => setPurchasePrice(event.target.value)}
-            />
+            <MoneyInput id="copyPurchasePrice" value={purchasePrice}
+              onChange={value => {setPurchasePrice(value); setPriceError('');}}
+              invalid={Boolean(priceError)} describedBy="copyPurchasePriceError" />
+            {priceError && <p id="copyPurchasePriceError" className="market-form__error" role="alert">{priceError}</p>}
           </FormField>
 
           <FormField id="copyPurchaseDate" label="Дата покупки">

@@ -1,4 +1,5 @@
 import type {
+  CollectionCatalogDto,
   CopyDetailsInput,
   CopyDto,
   CollectionStatsDto,
@@ -45,4 +46,8 @@ export function deleteEditionRequest(editionId: string): Promise<void> {
 
 export function fetchCollectionStats(): Promise<CollectionStatsDto> {
   return apiRequest<CollectionStatsDto>('/api/v1/collection/stats');
+}
+
+export function fetchCollectionCatalog(signal: AbortSignal): Promise<CollectionCatalogDto> {
+  return apiRequest('/api/v1/collection/catalog', {signal});
 }

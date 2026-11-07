@@ -2444,17 +2444,6 @@
             font: 600 .68rem/1.3 'IBM Plex Mono', monospace;
             letter-spacing: .07em;
         }
-        .copy-card__badge { position: absolute; top: .55rem; left: .55rem; }
-        .copy-card__count {
-            position: absolute; top: .55rem; right: .55rem;
-            display: inline-flex; align-items: center; justify-content: center;
-            min-width: 2.1rem; padding: .25rem .42rem;
-            border-radius: 5px;
-            background: var(--brand);
-            color: #172013;
-            font: 700 .66rem/1 'IBM Plex Mono', monospace;
-            box-shadow: 0 4px 10px rgba(0,0,0,.14);
-        }
         .copy-card__body {
             display: flex; flex-direction: column; gap: .55rem;
             flex: 1;
@@ -2477,10 +2466,13 @@
             display: -webkit-box;
             overflow: hidden;
             color: var(--text-muted); font-size: .72rem; line-height: 1.45;
-            -webkit-line-clamp: 3;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            overflow-wrap: anywhere;
             -webkit-box-orient: vertical;
         }
         .copy-card__quantity {
+            margin-top: auto;
             display: flex; align-items: center; justify-content: space-between; gap: .6rem;
             padding: .48rem .52rem;
             border: 1px solid var(--border-color);
@@ -2519,7 +2511,7 @@
         }
         .copy-card__actions {
             display: flex; align-items: center; gap: .45rem;
-            margin-top: auto; padding-top: .65rem;
+            margin-top: 0; padding-top: .65rem;
             border-top: 1px dashed var(--border-color);
         }
         .copy-card__open {
@@ -4343,9 +4335,9 @@
 .game-card .card-market-stat--exchange{color:#d77eaa;background:rgba(215,126,170,.13);}
 .game-card .card-market-stat--empty{color:var(--text-muted);background:transparent;}
 .game-card .card-market-stat:hover,.game-card .card-market-stat:focus-visible{border-color:var(--brand-ink);filter:brightness(1.15);}
-.game-card .badge-owned{display:flex;align-items:center;gap:5px;}
+.badge-owned{display:flex;align-items:center;gap:5px;}
 .market-game-filter{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:12px 0;color:var(--text-muted);font-size:13px;}
-.game-card .badge-owned{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:13px;line-height:1;white-space:nowrap}.game-card .badge-owned svg{display:block;flex:none}.game-card .badge-owned span{display:block;line-height:1}
+.badge-owned{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:13px;line-height:1;white-space:nowrap}.badge-owned svg{display:block;flex:none}.badge-owned span{display:block;line-height:1}
 /* Decorative artwork is only a fallback while no image has loaded. */
 .game-card .card-cover__image[data-image-loaded="false"]{opacity:0;}
 .game-card .card-cover:has(.card-cover__image[data-image-loaded="true"]) .cover-art,
@@ -4551,3 +4543,7 @@ html:not(.dark) .eyebrow-dot {
 .market-author__rating svg { color:#7864d8; fill:currentColor; }
 html:not(.dark) .market-author > .spec-link { color:#4d7818; }
 html:not(.dark) .market-shipping__icon { color:var(--brand-ink); }
+
+.money-input { position: relative; }
+.money-input .form-control { padding-right: 2.75rem; }
+.money-input__currency { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }

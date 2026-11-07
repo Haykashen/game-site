@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { createCopyRequest, deleteEditionRequest, errorMessage, listCopies, mapCopy, setEditionQuantityRequest, updateCopyEditionRequest } from '../api';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { fetchCollectionCatalog, createCopyRequest, deleteEditionRequest, errorMessage, listCopies, mapCopy, setEditionQuantityRequest, updateCopyEditionRequest } from '../api';
 import { fetchCatalog } from '../api/catalog';
 import { useAuth } from '../context/AuthContext';
 import type { Copy, CopyDetails, Edition, Game } from '../types';
@@ -30,23 +30,35 @@ const EMPTY_EDITIONS: readonly Edition[] = [];
 
 export function useGameCollection(): GameCollection {
   const {pathname} = useLocation();
-  // The games page has its own paged resource. Other existing tools still need
-  // complete lookup lists for edition selectors and collection joins.
+  // Games use pagination; collection uses its owned-edition lookup.
+  // Other tools still need the full catalogue for edition selectors.
   const catalogPath = pathname.replace(/\/+$/, '').toLowerCase();
-  const needsFullCatalog = catalogPath !== '' && catalogPath !== '/games';
+  const routeNeedsFullCatalog = !['', '/games', '/collection'].includes(catalogPath);
   const { status, user } = useAuth();
   const userId = user?.id;
   const owner = useRef(userId);
   owner.current = userId;
   const isRemote = status === 'api' && Boolean(userId);
+  // Retain an already requested full lookup across route changes for this account.
+  const scope = userId ?? 'guest';
+  const [fullRequest, setFullRequest] = useState({scope, needed: false});
+  const needsFullCatalog = routeNeedsFullCatalog || (fullRequest.scope === scope && fullRequest.needed);
+  useEffect(() => {
+    if (routeNeedsFullCatalog) setFullRequest(previous => previous.scope === scope && previous.needed ? previous : {scope, needed: true});
+  }, [scope, routeNeedsFullCatalog]);
   const loadCatalog = useCallback((signal: AbortSignal) => needsFullCatalog ? fetchCatalog(signal) : Promise.resolve(EMPTY_CATALOG), [needsFullCatalog]);
-  const catalog = useApiResource('catalog:' + (needsFullCatalog ? 'full' : 'paged'), loadCatalog, EMPTY_CATALOG);
+  const fullCatalog = useApiResource('catalog:' + scope, loadCatalog, EMPTY_CATALOG);
   const loadCopies = useCallback(async (signal: AbortSignal) =>
     userId ? (await listCopies(signal)).map(mapCopy) : EMPTY_COPIES, [userId]);
   const shelf = useApiResource('copies:' + (userId ?? 'guest'), loadCopies, EMPTY_COPIES);
   const [mutationError, setMutationError] = useState<{ owner: string | undefined; message: string } | null>(null);
-  const { games, editions } = catalog.data;
   const copies = shelf.data;
+  const editionKey = [...new Set(copies.map(copy => copy.editionId))].sort().join(',');
+  const loadOwnedCatalog = useCallback((signal: AbortSignal) => userId && editionKey
+    ? fetchCollectionCatalog(signal) : Promise.resolve(EMPTY_CATALOG), [userId, editionKey]);
+  const ownedCatalog = useApiResource('collection-catalog:' + scope + ':' + editionKey, loadOwnedCatalog, EMPTY_CATALOG);
+  const catalog = catalogPath === '/collection' || !needsFullCatalog ? ownedCatalog : fullCatalog;
+  const {games, editions} = catalog.data;
   const editionById = useMemo(() => {
     const map = new Map(editions.map((edition) => [edition.id, edition]));
     for (const edition of editions) for (const variant of edition.variants ?? []) map.set(variant.id, edition);

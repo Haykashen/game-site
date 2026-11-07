@@ -69,7 +69,7 @@ export function getTable(name: string): AdminTable {
       type: field.isList ? 'list' : field.kind === 'enum' ? 'enum' : field.type === 'Int' ? 'number' : field.type === 'Boolean' ? 'boolean' : field.type === 'DateTime' ? 'date' : 'string',
       required: !generatedId && field.isRequired && !field.hasDefaultValue && !field.isUpdatedAt && !field.isList,
       nullable: !field.isRequired, generated: Boolean(generatedId || field.hasDefaultValue || field.isUpdatedAt),
-      primary: primaryKey.includes(field.name), readOnly: generatedId || READ_ONLY.has(field.name) || name === 'Session' || (name.endsWith('Status') && ['code','entity'].includes(field.name)),
+      primary: primaryKey.includes(field.name), readOnly: generatedId || (name === 'Game' && field.name === 'createdAt') || READ_ONLY.has(field.name) || name === 'Session' || (name.endsWith('Status') && ['code','entity'].includes(field.name)),
       options: Prisma.dmmf.datamodel.enums.find((item) => item.name === field.type)?.values.map((value) => value.name) ?? [],
       reference: name === 'Game' && field.name === 'genres' ? 'GameGenre' : relation?.type ?? null,
       multiline: ['description', 'body', 'excerpt', 'text', 'message', 'notes', 'comment', 'moderatorNote', 'moderationNote'].includes(field.name),

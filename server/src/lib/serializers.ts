@@ -136,7 +136,7 @@ export function serializeCopy(copy: CopyWithPhotos): CopyDto {
     condition: copy.condition,
     completeness: copy.completeness,
     purchasePrice:
-      copy.purchasePriceMinor === null ? null : fromMinorUnits(copy.purchasePriceMinor),
+      copy.purchasePriceMinor === null ? null : copy.purchasePriceMinor / 100,
     purchaseDate: copy.purchaseDate
       ? copy.purchaseDate.toISOString().slice(0, 10)
       : '',

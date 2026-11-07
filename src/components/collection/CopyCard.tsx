@@ -1,3 +1,6 @@
+import { PlatformBadge } from '../ui/PlatformBadge';
+import { CollectionCountBadge } from '../ui/CollectionCountBadge';
+import { formatMarketCondition } from '../../lib/market';
 import {
   ExternalLink,
   Image as ImageIcon,
@@ -19,6 +22,7 @@ interface CopyCardProps {
   edition: Edition;
   game: Game;
   quantity: number;
+  photos?: readonly string[];
   onOpen: () => void;
   onEdit: () => void;
   onQuantityChange: (quantity: number) => void;
@@ -31,34 +35,31 @@ export function CopyCard({
   edition,
   game,
   quantity,
+  photos = copy.photos,
   onOpen,
   onEdit,
   onQuantityChange,
   onRemove,
 }: CopyCardProps) {
-  const cover = edition.coverImages[0];
+  const images = [...new Set(photos.filter(Boolean))];
   const purchase = formatPurchaseDetails(copy.purchasePrice, copy.purchaseDate);
-  const chips = [copy.condition, copy.completeness].filter(
+  const chips = [formatMarketCondition(copy.condition), copy.completeness].filter(
     (value, index, all) => value.length > 0 && all.indexOf(value) === index,
   );
 
   return (
     <article className="copy-card">
       <div className="copy-card__cover">
-        {cover ? (
-          <FallbackImage images={edition.coverImages} alt="" loading="lazy" />
+        {images.length > 0 ? (
+          <FallbackImage images={images} alt={`Фотография экземпляра ${game.title}`} loading="lazy" />
         ) : (
           <div className="copy-card__placeholder">
             <ImageIcon size={28} aria-hidden="true" />
             <span>{edition.platform}</span>
           </div>
         )}
-        <span className="badge-platform badge-platform--static copy-card__badge">
-          {edition.platform}
-        </span>
-        <span className="copy-card__count" aria-label={`Количество: ${quantity}`}>
-          ×{quantity}
-        </span>
+        <div className="card-platforms"><PlatformBadge platform={edition.platform} /></div>
+        <CollectionCountBadge count={quantity} />
       </div>
 
       <div className="copy-card__body">

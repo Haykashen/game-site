@@ -1,3 +1,4 @@
+import { completenessLabel } from './collection';
 import {
   COMPLETENESS,
   EDITIONS,
@@ -32,7 +33,7 @@ export const EDITION_OPTIONS: readonly FilterOption[] = EDITIONS.map((edition) =
 
 export const COMPLETENESS_OPTIONS: readonly FilterOption[] = COMPLETENESS.map((value) => ({
   value,
-  label: value,
+  label: completenessLabel(value),
 }));
 
 export const YEAR_OPTIONS: readonly FilterOption[] = YEAR_RANGES.map((range) => ({

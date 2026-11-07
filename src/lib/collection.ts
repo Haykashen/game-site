@@ -23,3 +23,12 @@ export function formatPurchaseDetails(price: number | null, date: string): strin
   const priceLabel = formatPrice(price);
   return dateLabel ? `${priceLabel} · ${dateLabel}` : priceLabel;
 }
+
+const COMPLETENESS_LABELS: Readonly<Record<string, string>> = {
+  Sealed: 'Sealed (Запечатано)',
+  CIB: 'CIB (Полный комплект)',
+  Loose: 'Loose (Только диск или картридж)',
+};
+export function completenessLabel(value: string): string {
+  return COMPLETENESS_LABELS[value] ?? value;
+}

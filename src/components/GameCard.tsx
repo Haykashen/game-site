@@ -1,9 +1,11 @@
+import { PlatformBadge } from './ui/PlatformBadge';
+import { CollectionCountBadge } from './ui/CollectionCountBadge';
 import { Link } from 'react-router-dom';
 import { memo } from 'react';
 import { FallbackImage } from './FallbackImage';
 import type { KeyboardEvent } from 'react';
-import { Library, Disc, Eye } from 'lucide-react';
-import { getPlatformBadgeStyle, sortPlatforms } from '../data/reference';
+import { Disc, Eye } from 'lucide-react';
+import { sortPlatforms } from '../data/reference';
 import { NAV_ITEMS } from '../app/navigation';
 import { cx } from '../lib/cx';
 import type { Game, GameStats } from '../types';
@@ -60,14 +62,7 @@ function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
 
         <div className="card-platforms">
           {visiblePlatforms.map((platform) => (
-            <span
-              key={platform}
-              className="badge-platform badge-platform--static"
-              data-platform={platform}
-              style={getPlatformBadgeStyle(platform)}
-            >
-              {platform}
-            </span>
+            <PlatformBadge key={platform} platform={platform} />
           ))}
           {hiddenPlatforms > 0 && (
             <span className="badge-platform badge-platform--static badge-platform--more">
@@ -97,11 +92,7 @@ function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
           </span>
         </div>
 
-        {stats.ownedCount > 0 && (
-          <span className="badge-owned" title={`В коллекции: ${stats.ownedCount} экз.`} aria-label={`В коллекции: ${stats.ownedCount} экз.`}>
-            <Library size={16} aria-hidden="true" /><span>× {stats.ownedCount}</span>
-          </span>
-        )}
+        <CollectionCountBadge count={stats.ownedCount} />
       </div>
 
       <div className="card-info">

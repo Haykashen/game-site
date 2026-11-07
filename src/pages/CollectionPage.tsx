@@ -12,6 +12,7 @@ import type { Copy, Edition, Game } from '../types';
 
 interface CopyItem {
   copy: Copy;
+  photos: string[];
   edition: Edition;
   game: Game;
   quantity: number;
@@ -68,6 +69,7 @@ export function CollectionPage() {
 
       if (existing) {
         existing.quantity += 1;
+        existing.photos = createdAt < existing.firstAt ? [...copy.photos, ...existing.photos] : [...existing.photos, ...copy.photos];
         if (createdAt > existing.latestAt) {
           existing.latestAt = createdAt;
         }
@@ -79,6 +81,7 @@ export function CollectionPage() {
       }
 
       byEdition.set(edition.id, {
+        photos: [...copy.photos],
         copy,
         edition,
         game,
@@ -142,10 +145,11 @@ export function CollectionPage() {
         </div>
       ) : (
         <section className="collection-copy-grid" aria-label="Издания в коллекции">
-          {items.map(({ copy, edition, game, quantity }) => (
+          {items.map(({ copy, photos, edition, game, quantity }) => (
             <CopyCard
               key={edition.id}
               copy={copy}
+              photos={photos}
               edition={edition}
               game={game}
               quantity={quantity}

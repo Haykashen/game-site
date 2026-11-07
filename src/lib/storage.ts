@@ -126,7 +126,7 @@ export function parseEditions(value: unknown): Edition[] | null {
 
 /** Purchase price is an optional non-negative integer in rubles. */
 function readPurchasePrice(value: unknown): number | null {
-  return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0
+  return typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 10_000_000 && Math.abs(value * 100 - Math.round(value * 100)) < 0.000001
     ? value
     : null;
 }

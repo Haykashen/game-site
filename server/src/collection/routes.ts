@@ -4,7 +4,6 @@ import { resolveEditionId } from '../lib/editionIdentity.js';
 import {
   createCopySchema,
   editionQuantitySchema,
-  fromMinorUnits,
   toMinorUnits,
   updateCopySchema,
   type CollectionStatsDto,
@@ -12,7 +11,7 @@ import {
   type CopyDto,
 } from '@discvault/shared';
 import { conflict, notFound, unauthorized } from '../errors.js';
-import { serializeCopy } from '../lib/serializers.js';
+import { serializeGame, serializeEdition, serializeCopy } from '../lib/serializers.js';
 import { storePhotoReferences } from '../lib/storage.js';
 import { parse } from '../lib/validation.js';
 
@@ -69,6 +68,17 @@ async function getEditionCopies(
 }
 
 export function registerCollectionRoutes(app: FastifyInstance): void {
+  app.get('/api/v1/collection/catalog', {preHandler: app.authenticate}, async request => {
+    if (!request.user) throw unauthorized();
+    const userId = request.user.id;
+    const editions = await app.prisma.edition.findMany({
+      where: {canonicalId: null, OR: [{copies: {some: {userId}}}, {variants: {some: {copies: {some: {userId}}}}}]},
+      include: {statusReference: {select: {code: true}}, region: true,
+        variants: {include: {statusReference: {select: {code: true}}, region: true}},
+        game: {include: {statusReference: {select: {code: true}}, genres: true, series: true}}},
+    });
+    return {games: [...new Map(editions.map(edition => [edition.gameId, serializeGame(edition.game)])).values()], editions: editions.map(serializeEdition)};
+  });
   app.get(
     '/api/v1/collection/copies',
     { preHandler: app.authenticate },
@@ -387,7 +397,7 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
         copiesCount: copies.length,
         editionsCount: editionIds.length,
         gamesCount: new Set(editions.map((edition) => edition.gameId)).size,
-        totalSpent: fromMinorUnits(totalSpentMinor),
+        totalSpent: totalSpentMinor / 100,
         averagePrice:
           priced.length > 0
             ? Math.round((totalSpentMinor / priced.length / 100) * 100) / 100
