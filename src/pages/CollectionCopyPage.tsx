@@ -1,4 +1,5 @@
-import { ArrowLeft, ExternalLink, Library, Minus, Pencil, Plus, X } from 'lucide-react';
+import { QuantityControl } from '../components/collection/QuantityControl';
+import { ArrowLeft, ExternalLink, Pencil, X } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ApiState } from '../components/ApiState';
@@ -16,7 +17,6 @@ import { REGIONS } from '../data/reference';
 import { completenessLabel, formatPurchaseDate } from '../lib/collection';
 import { copyEditorDetails, copyEditorDirty, copyEditorValues } from '../lib/copyEditor';
 import type { CopyEditorValues } from '../lib/copyEditor';
-import { MAX_COLLECTION_QUANTITY } from '../lib/constants';
 import { formatMarketCondition } from '../lib/market';
 import { formatMoneyInput } from '../lib/moneyInput';
 import type { Copy, Edition, Game } from '../types';
@@ -128,13 +128,10 @@ export function CollectionCopyDetail({copy, group, edition, game, initiallyEditi
             <div><dt>{editing ? <label htmlFor="copy-price">Цена покупки</label> : 'Цена покупки'}</dt><dd>{editing ? <fieldset disabled={saving} className="copy-detail__inline-fieldset"><MoneyInput id="copy-price" value={values.purchasePrice} onChange={next => update('purchasePrice', next)} /></fieldset> : <span className="copy-detail__price">{copy.purchasePrice === null ? 'Не указана' : `${formatMoneyInput(String(copy.purchasePrice))} ₽`}</span>}</dd></div>
           </dl>
           <section className="copy-detail__contents"><h3>Состав комплекта</h3><div>{edition.contents.length ? edition.contents.map((item, index) => <span key={`${index}:${item}`}>{item}</span>) : <span>Комплект не указан</span>}</div></section>
-          <section className="copy-detail__shelf"><div><h3>На полке: {edition.name} ({edition.platform})</h3><div className="copy-detail__quantity"><button type="button" aria-label="Уменьшить количество" disabled={busy || values.quantity <= 1} onClick={() => {
-            if (editing) update('quantity', values.quantity - 1);
-            else {setSession({initial: current, draft: {...current, quantity: values.quantity - 1}}); setNotice('');}
-          }}><Minus size={13} /></button><strong aria-live="polite">×{values.quantity}</strong><button type="button" aria-label="Увеличить количество" disabled={busy || values.quantity >= MAX_COLLECTION_QUANTITY} onClick={() => {
-            if (editing) update('quantity', values.quantity + 1);
-            else {setSession({initial: current, draft: {...current, quantity: values.quantity + 1}}); setNotice('');}
-          }}><Plus size={13} /></button></div></div><Library size={27} aria-hidden="true" /></section>
+          <QuantityControl quantity={values.quantity} disabled={busy} onChange={quantity => {
+            if (editing) update('quantity', quantity);
+            else {setSession({initial: current, draft: {...current, quantity}}); setNotice('');}
+          }} />
           {editing && group.length > 1 && <p className="copy-detail__hint">Реквизиты и фотографии применятся ко всем экземплярам этого издания.</p>}
         </div>
       </div>

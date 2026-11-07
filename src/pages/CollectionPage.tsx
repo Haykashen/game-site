@@ -39,7 +39,6 @@ export function CollectionPage() {
     copies,
     editionById,
     games,
-    setEditionQuantity,
     removeEdition,
     isSyncing,
     syncError,
@@ -149,7 +148,6 @@ export function CollectionPage() {
               quantity={quantity}
               onOpen={() => navigate(`/collection/${encodeURIComponent(edition.id)}`)}
               onEdit={() => navigate(`/collection/${encodeURIComponent(edition.id)}?edit=1`)}
-              onQuantityChange={(nextQuantity) => setEditionQuantity(edition.id, nextQuantity)}
               onRemove={() => removeEdition(edition.id)}
             />
           ))}

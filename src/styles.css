@@ -2471,7 +2471,7 @@
             overflow-wrap: anywhere;
             -webkit-box-orient: vertical;
         }
-        .copy-card__quantity {
+        .collection-quantity {
             margin-top: auto;
             display: flex; align-items: center; justify-content: space-between; gap: .6rem;
             padding: .48rem .52rem;
@@ -2479,14 +2479,14 @@
             border-radius: 8px;
             background: var(--bg-main);
         }
-        .copy-card__quantity-label {
+        .collection-quantity__label {
             color: var(--text-muted);
             font: 600 .62rem/1.2 'IBM Plex Mono', monospace;
             letter-spacing: .06em;
             text-transform: uppercase;
         }
-        .copy-card__stepper { display: inline-flex; align-items: center; gap: .18rem; }
-        .copy-card__stepper button {
+        .collection-quantity__stepper { display: inline-flex; align-items: center; gap: .18rem; }
+        .collection-quantity__stepper button {
             display: grid; place-items: center;
             width: 28px; height: 28px;
             padding: 0;
@@ -2497,13 +2497,13 @@
             cursor: pointer;
             transition: border-color .16s ease, color .16s ease, background .16s ease;
         }
-        .copy-card__stepper button:hover:not(:disabled) {
+        .collection-quantity__stepper button:hover:not(:disabled) {
             border-color:var(--brand-ink);
             color:var(--brand-ink);
             background: var(--brand-light);
         }
-        .copy-card__stepper button:disabled { opacity: .35; cursor: not-allowed; }
-        .copy-card__quantity-value {
+        .collection-quantity__stepper button:disabled { opacity: .35; cursor: not-allowed; }
+        .collection-quantity__value {
             min-width: 2.1ch;
             color: var(--text-main);
             font: 700 .86rem/1 'IBM Plex Mono', monospace;
@@ -4597,7 +4597,6 @@ html:not(.dark) .market-shipping__icon { color:var(--brand-ink); }
 .copy-detail__facts>div{display:grid;grid-template-columns:42% minmax(0,1fr);align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border-color);font-size:13px;line-height:1.55;min-height:48px}
 .copy-detail__facts dt{color:var(--text-muted)}
 .copy-detail__facts dd{margin:0;min-width:0;overflow-wrap:anywhere}
-.copy-detail__facts .badge-platform{position:static;display:inline-block}
 .copy-detail__facts .form-control,.copy-detail__facts .filter-select{font-size:13px;min-height:38px;padding:9px 10px}
 .copy-detail__inline-fieldset{border:0;margin:0;padding:0;min-width:0}
 .copy-detail__condition{color:var(--brand-ink);font-size:18px;font-weight:700}
@@ -4606,13 +4605,6 @@ html:not(.dark) .market-shipping__icon { color:var(--brand-ink); }
 .copy-detail h3{font:600 12px/1.5 'IBM Plex Mono',monospace;letter-spacing:.7px;text-transform:uppercase;color:var(--text-muted);margin:0}
 .copy-detail__contents>div{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .copy-detail__contents span{border:1px solid var(--border-color);background:var(--bg-main);border-radius:6px;padding:6px 10px;font-size:12px;color:var(--text-muted)}
-.copy-detail__shelf{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:24px;padding:15px 18px;border:1px solid var(--border-color);border-radius:10px;background:var(--brand-light)}
-.copy-detail__shelf h3{font-size:13px;font-weight:600;line-height:1.5;letter-spacing:0;text-transform:none;color:var(--text-main)}
-.copy-detail__shelf>svg{color:var(--brand-ink);opacity:.5;flex-shrink:0}
-.copy-detail__quantity{display:flex;align-items:center;gap:8px;margin-top:9px}
-.copy-detail__quantity button{display:grid;place-items:center;width:26px;height:26px;padding:0;border:1px solid var(--border-color);border-radius:5px;background:var(--bg-main);color:var(--text-main);cursor:pointer}
-.copy-detail__quantity button:disabled{opacity:.35;cursor:default}
-.copy-detail__quantity strong{font-size:15px}
 .copy-detail__actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .copy-detail__actions .game-cta{display:contents}
 .copy-detail__actions .game-cta__btn,.copy-detail__actions>.btn-primary{min-width:0;min-height:52px;font-size:15px;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:7px;margin:0;padding:10px;border-radius:10px}
@@ -4653,5 +4645,9 @@ html:not(.dark) .market-shipping__icon { color:var(--brand-ink); }
 .photo-lightbox__frame{height:calc(100dvh - 4rem)}
 .photo-lightbox__stage{flex:1 1 0}
 @media(max-width:750px){.copy-detail-modal{padding:24px}.copy-detail__overview{gap:18px}.copy-detail__facts>div{grid-template-columns:40% minmax(0,1fr);gap:10px;font-size:12px}.copy-detail__actions .game-cta__btn,.copy-detail__actions>.btn-primary{font-size:12px;gap:5px}}
-@media(max-width:540px){.copy-detail-modal{padding:22px 18px}.copy-detail{gap:24px}.copy-detail__overview{grid-template-columns:minmax(0,1fr);margin-top:-8px}.copy-detail__header .modal-title{font-size:25px}.copy-detail__edit{font-size:0;gap:0;width:38px;padding:8px}.copy-detail__header-actions{gap:5px}.copy-detail__header-actions .btn-icon{width:38px;height:38px;min-width:38px}.copy-detail__facts>div{grid-template-columns:44% minmax(0,1fr);font-size:13px}.copy-detail__actions{grid-template-columns:1fr 1fr}.copy-detail__actions>.btn-primary{grid-column:1/-1}.copy-detail__actions .game-cta__btn,.copy-detail__actions>.btn-primary{font-size:14px;min-height:46px}.copy-detail__eyebrow{font-size:9px}.copy-detail__shelf{padding:14px}.photo-lightbox__frame{height:calc(100dvh - 2rem)}}
+@media(max-width:540px){.copy-detail-modal{padding:22px 18px}.copy-detail{gap:24px}.copy-detail__overview{grid-template-columns:minmax(0,1fr);margin-top:-8px}.copy-detail__header .modal-title{font-size:25px}.copy-detail__edit{font-size:0;gap:0;width:38px;padding:8px}.copy-detail__header-actions{gap:5px}.copy-detail__header-actions .btn-icon{width:38px;height:38px;min-width:38px}.copy-detail__facts>div{grid-template-columns:44% minmax(0,1fr);font-size:13px}.copy-detail__actions{grid-template-columns:1fr 1fr}.copy-detail__actions>.btn-primary{grid-column:1/-1}.copy-detail__actions .game-cta__btn,.copy-detail__actions>.btn-primary{font-size:14px;min-height:46px}.copy-detail__eyebrow{font-size:9px}.photo-lightbox__frame{height:calc(100dvh - 2rem)}}
 .copy-detail__header{margin:0;flex-wrap:nowrap;flex-direction:row}
+
+.copy-detail__specs>.collection-quantity{margin-top:24px}
+.copy-card{cursor:pointer}
+.copy-card__actions{margin-top:auto}

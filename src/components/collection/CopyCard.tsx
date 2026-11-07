@@ -4,16 +4,13 @@ import { formatMarketCondition } from '../../lib/market';
 import {
   ExternalLink,
   Image as ImageIcon,
-  Minus,
   Package,
   Pencil,
-  Plus,
   Trash2,
   Wallet,
 } from 'lucide-react';
 import { PhotoPreviewGallery } from '../ui/PhotoPreviewGallery';
 import { formatPurchaseDetails } from '../../lib/collection';
-import { MAX_COLLECTION_QUANTITY } from '../../lib/constants';
 import { editionContentsLabel, editionLabel, formatEditionDate } from '../../lib/editions';
 import type { Copy, Edition, Game } from '../../types';
 
@@ -25,7 +22,6 @@ interface CopyCardProps {
   photos?: readonly string[];
   onOpen: () => void;
   onEdit: () => void;
-  onQuantityChange: (quantity: number) => void;
   onRemove: () => void;
 }
 
@@ -38,7 +34,6 @@ export function CopyCard({
   photos = copy.photos,
   onOpen,
   onEdit,
-  onQuantityChange,
   onRemove,
 }: CopyCardProps) {
   const images = [...new Set(photos.filter(Boolean))];
@@ -49,7 +44,13 @@ export function CopyCard({
   );
 
   return (
-    <article className="copy-card">
+    <article className="copy-card" onClick={event => {
+      const target = event.target;
+      if (!(target instanceof Element) || target.closest('button, a, input, select, textarea, [role="button"], [role="link"]')) return;
+      const selection = window.getSelection();
+      if (selection && !selection.isCollapsed && event.currentTarget.contains(selection.anchorNode)) return;
+      onOpen();
+    }}>
       <div className="copy-card__cover">
         {images.length > 0 ? (
           <PhotoPreviewGallery photos={images} title={`Фотография экземпляра ${game.title}`} />
@@ -93,31 +94,6 @@ export function CopyCard({
         )}
 
         {copy.notes && <p className="copy-card__notes">{copy.notes}</p>}
-
-        <div className="copy-card__quantity">
-          <span className="copy-card__quantity-label">Количество</span>
-          <div className="copy-card__stepper">
-            <button
-              type="button"
-              aria-label="Уменьшить количество"
-              disabled={quantity <= 1}
-              onClick={() => onQuantityChange(quantity - 1)}
-            >
-              <Minus size={14} aria-hidden="true" />
-            </button>
-            <span className="copy-card__quantity-value" aria-live="polite">
-              {quantity}
-            </span>
-            <button
-              type="button"
-              aria-label="Увеличить количество"
-              disabled={quantity >= MAX_COLLECTION_QUANTITY}
-              onClick={() => onQuantityChange(quantity + 1)}
-            >
-              <Plus size={14} aria-hidden="true" />
-            </button>
-          </div>
-        </div>
 
         <div className="copy-card__actions">
           <button type="button" className="copy-card__open" onClick={onOpen}>
