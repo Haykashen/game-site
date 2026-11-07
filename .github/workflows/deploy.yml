@@ -140,9 +140,12 @@ jobs:
           incoming="$DEPLOY_PATH/.deploy/incoming/$GITHUB_SHA-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
           ssh_options=(-i "$key_dir/key" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o "UserKnownHostsFile=$key_dir/known_hosts" -o ConnectTimeout=15 -o ServerAliveInterval=15 -o ServerAliveCountMax=8)
           ssh -p "$port" "${ssh_options[@]}" "$remote" "umask 077; mkdir -p '$incoming'"
-          scp -P "$port" "${ssh_options[@]}" release.tar.gz release.tar.gz.sha256 "$remote:$incoming/"
+          echo "Transferring release archive ($(stat -c %s release.tar.gz) bytes), timeout 300 seconds"
+          timeout --signal=TERM --kill-after=15s 300 scp -O -v -P "$port" "${ssh_options[@]}" release.tar.gz release.tar.gz.sha256 "$remote:$incoming/"
+          echo "Transfer completed; verifying remote archive"
           ssh -p "$port" "${ssh_options[@]}" "$remote" "cd '$incoming' && sha256sum -c release.tar.gz.sha256 && tar -xzf release.tar.gz"
           if [[ -n "$GEMINI_API_KEY" ]]; then
             printf '%s\n' "$GEMINI_API_KEY" | ssh -p "$port" "${ssh_options[@]}" "$remote" "bash '$incoming/configure-recognition.sh' '$DEPLOY_PATH'"
           fi
+          echo "Starting remote deployment"
           ssh -p "$port" "${ssh_options[@]}" "$remote" "cd '$incoming' && bash deploy.sh '$DEPLOY_PATH' '$GITHUB_SHA' '$APPLY_MIGRATIONS'"
