@@ -23,6 +23,7 @@ export function PhotoLightbox({photos, title, initialIndex, onClose}: Props) {
   return createPortal(<dialog ref={dialog} className="photo-lightbox" aria-label={`Фотографии: ${title}`} onCancel={event => {event.preventDefault(); onClose();}}
     onClick={event => {if (event.target === event.currentTarget) onClose();}}
     onKeyDown={event => {
+      if (event.key === 'Escape') event.stopPropagation();
       if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {event.preventDefault(); select(active + (event.key === 'ArrowRight' ? 1 : -1));}
     }}>
     <div className="photo-lightbox__frame" style={{width: `min(100%, 1100px, max(320px, calc((100dvh - 180px) * ${aspect})))`}}>

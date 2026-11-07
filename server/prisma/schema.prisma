@@ -270,6 +270,7 @@ model Copy {
   editionId          String    @map("edition_id")
   condition          String    @default("Не указано")
   completeness       String    @default("Не указано")
+  region             String?   @map("region_override")
   purchasePriceMinor Int?      @map("purchase_price_minor")
   purchaseDate       DateTime? @map("purchase_date") @db.Date
   notes              String    @default("") @db.Text

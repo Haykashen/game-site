@@ -8,6 +8,7 @@ import {
 } from './common.js';
 
 export const copyDetailsSchema = z.object({
+  region: z.string().trim().max(40).nullable().optional(),
   condition: z.string().trim().min(1).max(60).optional(),
   completeness: z.string().trim().min(1).max(60).optional(),
   purchasePrice: z.coerce.number().min(0).max(MAX_RUBLE_AMOUNT)
@@ -21,7 +22,7 @@ export const createCopySchema = copyDetailsSchema.extend({
   editionId: idSchema,
 });
 
-export const updateCopySchema = copyDetailsSchema;
+export const updateCopySchema = copyDetailsSchema.extend({quantity: z.number().int().min(1).max(99).optional()});
 
 export const editionQuantitySchema = z.object({
   quantity: z.coerce.number().int().min(0).max(99),
@@ -32,6 +33,7 @@ export interface CopyDto {
   editionId: string;
   condition: string;
   completeness: string;
+  region?: string | null;
   /** Price paid in rubles; `null` when not recorded. */
   purchasePrice: number | null;
   /** `YYYY-MM-DD` or an empty string. */

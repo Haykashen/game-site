@@ -12,6 +12,7 @@ interface ModalShellProps {
   /** Change this to move focus back to the dialog after its content is swapped. */
   focusKey?: string;
   children: ReactNode;
+  contentClassName?: string;
 }
 
 /**
@@ -24,6 +25,7 @@ export function ModalShell({
   labelledBy,
   focusKey,
   children,
+  contentClassName,
 }: ModalShellProps) {
   const { isMounted, isActive } = useAnimatedPresence(isOpen);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -91,7 +93,7 @@ export function ModalShell({
     <div className={cx('modal-fixed', isActive && 'active')} style={{ display: 'block' }}>
       <div className="modal-backdrop" onClick={onClose} aria-hidden="true" />
       <div
-        className="modal-content"
+        className={cx('modal-content', contentClassName)}
         role="dialog"
         aria-modal="true"
         aria-labelledby={labelledBy}

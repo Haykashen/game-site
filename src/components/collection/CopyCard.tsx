@@ -42,6 +42,7 @@ export function CopyCard({
   onRemove,
 }: CopyCardProps) {
   const images = [...new Set(photos.filter(Boolean))];
+  const displayEdition = {...edition, region: copy.region ?? edition.region};
   const purchase = formatPurchaseDetails(copy.purchasePrice, copy.purchaseDate);
   const chips = [formatMarketCondition(copy.condition), copy.completeness].filter(
     (value, index, all) => value.length > 0 && all.indexOf(value) === index,
@@ -65,7 +66,7 @@ export function CopyCard({
       <div className="copy-card__body">
         <div>
           <h3 className="copy-card__title">{game.title}</h3>
-          <p className="copy-card__edition">{editionLabel(edition)}</p>
+          <p className="copy-card__edition">{editionLabel(displayEdition)}</p>
         </div>
 
         <div className="copy-card__chips">
@@ -126,7 +127,7 @@ export function CopyCard({
           <button
             type="button"
             className="copy-card__edit"
-            aria-label={`Редактировать ${game.title} (${editionLabel(edition)})`}
+            aria-label={`Редактировать ${game.title} (${editionLabel(displayEdition)})`}
             onClick={onEdit}
           >
             <Pencil size={15} aria-hidden="true" />
@@ -134,7 +135,7 @@ export function CopyCard({
           <button
             type="button"
             className="copy-card__remove"
-            aria-label={`Убрать ${game.title} (${editionLabel(edition)}) с полки`}
+            aria-label={`Убрать ${game.title} (${editionLabel(displayEdition)}) с полки`}
             onClick={onRemove}
           >
             <Trash2 size={15} aria-hidden="true" />

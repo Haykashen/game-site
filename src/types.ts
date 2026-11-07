@@ -56,6 +56,8 @@ export interface Edition {
  * collection UI groups rows by edition and shows the resulting quantity.
  */
 export interface Copy {
+  /** null/undefined inherits the edition region; empty string means unknown. */
+  region?: string | null;
   id: string;
   editionId: string;
   condition: string;
@@ -77,6 +79,8 @@ export type CopyDetails = Pick<
   Copy,
   'condition' | 'completeness' | 'purchasePrice' | 'purchaseDate' | 'notes' | 'photos'
 >;
+
+export type CopyUpdateDetails = Omit<CopyDetails, 'photos'> & {photos?: string[]; region?: string | null; quantity?: number};
 
 /** Precomputed per-game numbers and badges used by catalogue cards. */
 export interface GameStats {

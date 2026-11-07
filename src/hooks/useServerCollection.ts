@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchCollectionCatalog, createCopyRequest, deleteEditionRequest, errorMessage, listCopies, mapCopy, setEditionQuantityRequest, updateCopyEditionRequest } from '../api';
 import { fetchCatalog } from '../api/catalog';
 import { useAuth } from '../context/AuthContext';
-import type { Copy, CopyDetails, Edition, Game } from '../types';
+import type { Copy, CopyDetails, CopyUpdateDetails, Edition, Game } from '../types';
 import { MAX_COLLECTION_QUANTITY } from '../lib/constants';
 import { useApiResource } from './useApiResource';
 import { useLocation } from 'react-router-dom';
@@ -18,7 +18,7 @@ export interface GameCollection {
   getEditionCopies: (editionId: string) => Copy[];
   addCopy: (editionId: string, details?: CopyDetails) => Promise<boolean>;
   setEditionQuantity: (editionId: string, quantity: number) => Promise<boolean>;
-  updateEdition: (editionId: string, details: CopyDetails) => Promise<boolean>;
+  updateEdition: (editionId: string, details: CopyUpdateDetails) => Promise<boolean>;
   removeEdition: (editionId: string) => Promise<boolean>;
   refresh: () => Promise<void>;
   isRemote: boolean; isSyncing: boolean; syncError: string | null;

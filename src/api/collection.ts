@@ -19,7 +19,7 @@ export function createCopyRequest(editionId: string, details?: CopyDetailsInput)
 
 export function updateCopyEditionRequest(
   editionId: string,
-  details: CopyDetailsInput,
+  details: CopyDetailsInput & {quantity?: number},
 ): Promise<CopyDto[]> {
   return apiRequest<CopyDto[]>(
     `/api/v1/collection/editions/${encodeURIComponent(editionId)}`,

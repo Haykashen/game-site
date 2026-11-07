@@ -32,6 +32,7 @@ function dateFromInput(value: string | undefined): Date | null | undefined {
 function sharedDetailsData(details: CopyDetailsInput): Prisma.CopyUpdateManyMutationInput {
   const data: Prisma.CopyUpdateManyMutationInput = {};
 
+  if (details.region !== undefined) data.region = details.region;
   if (details.condition !== undefined) data.condition = details.condition;
   if (details.completeness !== undefined) data.completeness = details.completeness;
   if (details.purchasePrice !== undefined) {
@@ -133,6 +134,7 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
         data: {
           userId: user.id,
           editionId: input.editionId,
+          region: input.region !== undefined ? input.region : representative?.region ?? null,
           condition: input.condition ?? representative?.condition ?? DEFAULT_CONDITION,
           completeness:
             input.completeness ?? representative?.completeness ?? DEFAULT_COMPLETENESS,
@@ -259,6 +261,7 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
               data: Array.from({ length: quantity - copies.length }, () => ({
                 userId: user.id,
                 editionId,
+                region: representative?.region ?? null,
                 condition: representative?.condition ?? DEFAULT_CONDITION,
                 completeness: representative?.completeness ?? DEFAULT_COMPLETENESS,
                 purchasePriceMinor: representative?.purchasePriceMinor ?? null,
@@ -309,32 +312,29 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
           : undefined;
 
       await app.prisma.$transaction(async (tx) => {
-        await tx.copy.updateMany({
-          where: { userId: user.id, editionId },
-          data: shared,
-        });
-
-        if (photos === undefined) return;
-
-        const representative = copies[0];
-        if (!representative) return;
-
-        await tx.copy.update({
-          where: { id: representative.id },
-          data: {
-            photos: {
-              deleteMany: {},
-              create: photoCreateData(photos),
-            },
-          },
-        });
-
-        const otherIds = copies.slice(1).map((copy) => copy.id);
-
-        if (otherIds.length > 0) {
-          await tx.copyPhoto.deleteMany({ where: { copyId: { in: otherIds } } });
+        const current = await tx.copy.findMany({where: {userId: user.id, editionId}, orderBy: {createdAt: 'asc'}});
+        const representative = current[0];
+        if (!representative) throw notFound('В коллекции нет этого издания.');
+        await tx.copy.updateMany({where: {userId: user.id, editionId}, data: shared});
+        if (photos !== undefined) {
+          await tx.copy.update({where: {id: representative.id}, data: {photos: {deleteMany: {}, create: photoCreateData(photos)}}});
+          const otherIds = current.slice(1).map(copy => copy.id);
+          if (otherIds.length) await tx.copyPhoto.deleteMany({where: {copyId: {in: otherIds}}});
         }
-      });
+        if (input.quantity !== undefined && input.quantity !== current.length) {
+          if (input.quantity < current.length) {
+            await tx.copy.deleteMany({where: {userId: user.id, id: {in: current.slice(input.quantity).map(copy => copy.id)}}});
+          } else {
+            const base = await tx.copy.findUniqueOrThrow({where: {id: representative.id}});
+            await tx.copy.createMany({data: Array.from({length: input.quantity - current.length}, () => ({
+              userId: user.id, editionId,
+              condition: base.condition, completeness: base.completeness,
+              region: base.region, purchasePriceMinor: base.purchasePriceMinor,
+              purchaseDate: base.purchaseDate, notes: base.notes,
+            }))});
+          }
+        }
+      }, {isolationLevel: 'Serializable'});
 
       return reply.send(await getEditionCopies(app, user.id, editionId));
     },

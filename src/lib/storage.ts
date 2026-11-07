@@ -154,6 +154,7 @@ function normalizeCopy(value: unknown): Copy | null {
   }
 
   return {
+    region: typeof value.region === 'string' ? value.region : null,
     id,
     editionId,
     condition: readString(value.condition) ?? 'Не указано',

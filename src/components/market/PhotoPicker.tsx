@@ -1,123 +1,95 @@
 import { ImagePlus, Loader2, X } from 'lucide-react';
-import { useState } from 'react';
-import type { ChangeEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { ChangeEvent, PointerEvent } from 'react';
 import { MAX_MARKET_PHOTOS } from '../../lib/constants';
 import { cx } from '../../lib/cx';
 import { prepareMarketPhoto } from '../../lib/photos';
+import { reorderPhoto } from '../../lib/copyEditor';
 
 interface PhotoPickerProps {
   photos: readonly string[];
   onChange: (photos: string[]) => void;
-  /** Lets the form block submission while images are still being compressed. */
   onBusyChange?: (isBusy: boolean) => void;
+  readOnly?: boolean;
+  disabled?: boolean;
+  selectedIndex?: number;
+  onSelect?: (index: number) => void;
+  sortable?: boolean;
 }
 
-/** Uploads and previews seller photos; files are compressed before being stored. */
-export function PhotoPicker({ photos, onChange, onBusyChange }: PhotoPickerProps) {
+/** One upload/thumbnail component for forms and the editable collection gallery. */
+export function PhotoPicker({ photos, onChange, onBusyChange, readOnly = false, disabled = false, selectedIndex, onSelect, sortable = false }: PhotoPickerProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState('');
-
-  const updateProcessing = (isBusy: boolean) => {
-    setIsProcessing(isBusy);
-    onBusyChange?.(isBusy);
-  };
+  const [dropIndex, setDropIndex] = useState<number | null>(null);
+  const drag = useRef<{index: number; x: number; y: number; moved: boolean; target: number} | null>(null);
+  const suppressClick = useRef(0);
+  const mounted = useRef(true);
+  useEffect(() => {mounted.current = true; return () => {mounted.current = false;};}, []);
+  const locked = disabled || isProcessing;
+  const canSort = sortable && !readOnly && !locked;
 
   const handleFiles = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files ?? []);
     event.target.value = '';
-    if (files.length === 0) return;
-
+    if (readOnly || locked || !files.length) return;
     const remaining = MAX_MARKET_PHOTOS - photos.length;
-
-    if (remaining <= 0) {
-      setError(`Можно приложить не больше ${MAX_MARKET_PHOTOS} фото.`);
-      return;
-    }
-
-    const selectedFiles = files.slice(0, remaining);
-    let nextError =
-      files.length > remaining
-        ? `Лимит — ${MAX_MARKET_PHOTOS} фото. Лишние файлы не добавлены.`
-        : '';
-
-    updateProcessing(true);
+    if (remaining <= 0) {setError(`Можно приложить не больше ${MAX_MARKET_PHOTOS} фото.`); return;}
+    let nextError = files.length > remaining ? `Лимит — ${MAX_MARKET_PHOTOS} фото. Лишние файлы не добавлены.` : '';
+    setIsProcessing(true); onBusyChange?.(true);
     const prepared: string[] = [];
-
-    for (const file of selectedFiles) {
-      try {
-        prepared.push(await prepareMarketPhoto(file));
-      } catch (cause) {
-        if (!nextError) {
-          nextError = cause instanceof Error ? cause.message : 'Не удалось обработать фото.';
-        }
+    try {
+      for (const file of files.slice(0, remaining)) {
+        try {prepared.push(await prepareMarketPhoto(file));}
+        catch (cause) {nextError ||= cause instanceof Error ? cause.message : 'Не удалось обработать фото.';}
       }
-    }
-
-    updateProcessing(false);
-    setError(nextError);
-
-    if (prepared.length > 0) {
-      onChange([...photos, ...prepared]);
-    }
+      if (mounted.current) {
+        if (prepared.length) onChange([...photos, ...prepared]);
+        setError(nextError);
+      }
+    } finally {if (mounted.current) {setIsProcessing(false); onBusyChange?.(false);}}
   };
-
-  const removePhoto = (index: number) => {
-    onChange(photos.filter((_, photoIndex) => photoIndex !== index));
-    setError('');
+  const finishDrag = (event: PointerEvent<HTMLButtonElement>) => {
+    const current = drag.current; drag.current = null; setDropIndex(null);
+    if (!current?.moved) return;
+    suppressClick.current = Date.now() + 350;
+    if (event.type !== 'pointercancel' && canSort) onChange(reorderPhoto(photos, current.index, current.target));
   };
-
-  return (
-    <div className="market-photo-picker" aria-busy={isProcessing}>
-      <div className="market-photo-picker__head">
-        <span className="form-label">Фотографии</span>
-        <span className="market-photo-picker__count">
-          {photos.length} / {MAX_MARKET_PHOTOS}
-        </span>
-      </div>
-
-      <div className="market-photo-picker__grid">
-        {photos.map((photo, index) => (
-          <div className="market-photo-tile" key={`${index}-${photo.slice(-24)}`}>
-            <img src={photo} alt={`Фото ${index + 1}`} />
-            <button
-              type="button"
-              aria-label={`Удалить фото ${index + 1}`}
-              disabled={isProcessing}
-              onClick={() => removePhoto(index)}
-            >
-              <X size={14} aria-hidden="true" />
-            </button>
-          </div>
-        ))}
-
-        {photos.length < MAX_MARKET_PHOTOS && (
-          <label className={cx('market-photo-add', isProcessing && 'is-disabled')}>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              disabled={isProcessing}
-              onChange={handleFiles}
-            />
-            {isProcessing ? (
-              <Loader2 className="market-photo-spin" size={20} aria-hidden="true" />
-            ) : (
-              <ImagePlus size={20} aria-hidden="true" />
-            )}
-            <span>{isProcessing ? 'Обработка…' : 'Добавить фото'}</span>
-          </label>
-        )}
-      </div>
-
-      <p className="market-photo-picker__hint">
-        До {MAX_MARKET_PHOTOS} фото, каждое до 10 МБ. Изображения сжимаются автоматически.
-      </p>
-
-      {error && (
-        <p className="market-photo-picker__error" role="alert">
-          {error}
-        </p>
-      )}
+  return <div className={cx('market-photo-picker', onSelect && 'photo-strip', readOnly && 'photo-strip--readonly')} aria-busy={isProcessing}>
+    <div className="market-photo-picker__head"><span className="form-label">Фотографии</span><span className="market-photo-picker__count">{photos.length}{!readOnly && ` / ${MAX_MARKET_PHOTOS}`}</span></div>
+    <div className="market-photo-picker__grid" role="group" aria-label="Фотографии экземпляра">
+      {photos.map((photo, index) => <div className={cx('market-photo-tile', index === selectedIndex && 'is-selected', index === dropIndex && 'is-drop-target')} data-photo-index={index} key={`${index}-${photo.slice(-24)}`}>
+        {onSelect ? <button type="button" className={cx('photo-strip__select', canSort && 'is-sortable')} aria-label={`Показать фото ${index + 1}`} aria-pressed={index === selectedIndex}
+          onClick={() => {if (Date.now() > suppressClick.current) onSelect(index);}}
+          onKeyDown={event => {
+            if (!canSort || !event.altKey || !['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+            event.preventDefault(); onChange(reorderPhoto(photos, index, index + (event.key === 'ArrowRight' ? 1 : -1)));
+          }}
+          onPointerDown={event => {
+            if (!canSort || event.button !== 0) return;
+            drag.current = {index, x: event.clientX, y: event.clientY, moved: false, target: index};
+            event.currentTarget.setPointerCapture(event.pointerId);
+          }}
+          onPointerMove={event => {
+            const current = drag.current;
+            if (!current || !canSort || (!current.moved && Math.hypot(event.clientX - current.x, event.clientY - current.y) < 8)) return;
+            current.moved = true;
+            const target = document.elementFromPoint(event.clientX, event.clientY)?.closest<HTMLElement>('[data-photo-index]');
+            // Only reorder tiles within this picker, never those in another open form.
+            const row = event.currentTarget.closest('.market-photo-picker__grid');
+            const targetIndex = target && row?.contains(target) ? Number(target.dataset.photoIndex) : index;
+            current.target = targetIndex; setDropIndex(targetIndex);
+          }} onPointerUp={finishDrag} onPointerCancel={finishDrag}>
+          <img src={photo} alt="" draggable={false} />
+        </button> : <img src={photo} alt={`Фото ${index + 1}`} />}
+        {!readOnly && <button type="button" className="photo-strip__remove" aria-label={`Удалить фото ${index + 1}`} disabled={locked} onClick={() => {onChange(photos.filter((_, position) => position !== index)); setError('');}}><X size={14} aria-hidden="true" /></button>}
+      </div>)}
+      {!readOnly && photos.length < MAX_MARKET_PHOTOS && <label className={cx('market-photo-add', locked && 'is-disabled')}>
+        <input type="file" accept="image/*" multiple disabled={locked} aria-label="Добавить фотографии" onChange={handleFiles} />
+        {isProcessing ? <Loader2 className="market-photo-spin" size={20} aria-hidden="true" /> : <ImagePlus size={20} aria-hidden="true" />}<span>{isProcessing ? 'Обработка…' : 'Добавить фото'}</span>
+      </label>}
     </div>
-  );
+    {!readOnly && <p className="market-photo-picker__hint">До {MAX_MARKET_PHOTOS} фото, каждое до 10 МБ. Изображения сжимаются автоматически.{sortable && ' Перетащите миниатюры, чтобы изменить порядок. С клавиатуры: Alt + ← / →.'}</p>}
+    {!readOnly && error && <p className="market-photo-picker__error" role="alert">{error}</p>}
+  </div>;
 }
