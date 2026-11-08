@@ -62,6 +62,7 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
     assert.equal((await prisma.gameRating.findUniqueOrThrow({where: {userId_gameId: {userId: buyerId, gameId}}})).score, 0);
     const copy = await create('Copy', {userId: buyerId, editionId, purchasePriceMinor: 12345});
     await create('CopyPhoto', {copyId: copy.id, url: 'https://example.com/copy.jpg'});
+    await create('CopyShare', {copyId: copy.id, caption: 'Public copy', photos: ['https://example.com/copy.jpg'], condition: '9', completeness: 'CIB', region: 'EUR'});
     const listing = await create('MarketEntry', {authorId: sellerId, kind: 'listing', listingType: 'sale', gameId, editionId, title: 'CI listing', condition: 'New', priceMinor: 10000, description: 'CI', deliveryServices: ['cdek'], shipsFrom: 'Москва'});
     await create('MarketPhoto', {entryId: listing.id, url: 'https://example.com/market.jpg'});
     const auction = await create('MarketEntry', {authorId: sellerId, kind: 'auction', gameId, editionId, title: 'CI auction', condition: 'New', priceMinor: 10000, bidStepMinor: 1000, endsAt: '2099-01-01T00:00:00.000Z', description: 'CI', deliveryServices: ['russian_post'], shipsFrom: 'Москва'});

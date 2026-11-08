@@ -13,7 +13,7 @@ export const PRIVATE_MODELS = ['Chat', 'ChatMember', 'ChatMessage'] as const;
 export const TABLE_LABELS: Record<string, string> = {
   Status: 'Статусы',
   User: 'Пользователи', Session: 'Сессии', Game: 'Игры', GameGenre: 'Жанры игр', GameSeries: 'Серии игр', Region: 'Регионы', Localization: 'Локализации', GameRating: 'Оценки игр',
-  Edition: 'Издания', Copy: 'Экземпляры коллекций', CopyPhoto: 'Фото экземпляров',
+  Edition: 'Издания', Copy: 'Экземпляры коллекций', CopyPhoto: 'Фото экземпляров', CopyShare: 'Публикации коллекций',
   MarketEntry: 'Объявления и аукционы', MarketPhoto: 'Фото объявлений', Bid: 'Ставки',
   Deal: 'Сделки', Review: 'Отзывы', Report: 'Жалобы', Notification: 'Уведомления',
   GameSubscription: 'Подписки на игры', MarketEntrySubscription: 'Подписки на объявления',
@@ -32,7 +32,7 @@ const FIELD_LABELS: Record<string, string> = {
   barcode: 'Штрихкод', dnsProductId: 'ID товара DNS', dnsProductCode: 'Код товара DNS', canonicalId: 'Основное издание',
   editionId: 'Издание', condition: 'Состояние', completeness: 'Комплектность',
   purchasePriceMinor: 'Цена покупки, коп.', purchaseDate: 'Дата покупки', notes: 'Заметки',
-  copyId: 'Экземпляр', url: 'URL фотографии', sortOrder: 'Порядок', entryId: 'Объявление',
+  caption: 'Подпись', photos: 'Фотографии', copyId: 'Экземпляр', url: 'URL фотографии', sortOrder: 'Порядок', entryId: 'Объявление',
   authorId: 'Автор', kind: 'Вид', itemType: 'Предмет', listingType: 'Тип объявления',
   priceMinor: 'Цена, коп.', deliveryServices: 'Службы доставки', internationalShipping: 'Международная доставка',
   packagingPriceMinor: 'Упаковка, коп.', shipsFrom: 'Город отправки', bidStepMinor: 'Шаг ставки, коп.',
@@ -72,7 +72,7 @@ export function getTable(name: string): AdminTable {
       primary: primaryKey.includes(field.name), readOnly: generatedId || (name === 'Game' && field.name === 'createdAt') || READ_ONLY.has(field.name) || name === 'Session' || (name.endsWith('Status') && ['code','entity'].includes(field.name)),
       options: Prisma.dmmf.datamodel.enums.find((item) => item.name === field.type)?.values.map((value) => value.name) ?? [],
       reference: name === 'Game' && field.name === 'genres' ? 'GameGenre' : relation?.type ?? null,
-      multiline: ['description', 'body', 'excerpt', 'text', 'message', 'notes', 'comment', 'moderatorNote', 'moderationNote'].includes(field.name),
+      multiline: ['caption', 'description', 'body', 'excerpt', 'text', 'message', 'notes', 'comment', 'moderatorNote', 'moderationNote'].includes(field.name),
       dateOnly: field.nativeType?.[0] === 'Date',
     };
   });
