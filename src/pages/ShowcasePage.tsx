@@ -1,4 +1,7 @@
-import type {CopyShareDto, Paginated} from '@discvault/shared';
+import {ShowcaseReactions} from '../components/community/ShowcaseReactions';
+import {ShowcaseDiscussion} from '../components/community/ShowcaseDiscussion';
+import {AuthorRating} from '../components/ui/AuthorRating';
+import type {CopyShareDto, Paginated, ShowcaseSocialDto} from '@discvault/shared';
 import {useCallback, useState} from 'react';
 import {Link, useSearchParams} from 'react-router-dom';
 import {Plus, Share2} from 'lucide-react';
@@ -20,7 +23,7 @@ export function ShowcasePage() {
   const {copies, editionById, games, isSyncing, isCatalogLoading} = useCollection();
   const [page, setPage] = useState(1);
   const load = useCallback((signal: AbortSignal) => apiRequest<Paginated<CopyShareDto>>(`/api/v1/community/showcase?page=${page}&pageSize=24`, {signal}), [page]);
-  const feed = useApiResource('showcase', load, EMPTY);
+  const feed = useApiResource(`showcase:${user?.id ?? 'guest'}`, load, EMPTY);
   const [params, setParams] = useSearchParams();
   const [composing, setComposing] = useState(Boolean(params.get('copyId')));
   const [copyId, setCopyId] = useState(params.get('copyId') ?? '');
@@ -31,6 +34,10 @@ export function ShowcasePage() {
   const [notice, setNotice] = useState('');
   const options = copies.filter(copy => copy.photos.length && editionById.has(copy.editionId));
   const chosen = options.find(copy => copy.id === copyId) ?? options[0];
+  const updateSocial = (id: string, social: ShowcaseSocialDto) => {
+    feed.setData(previous => ({...previous, items: previous.items.map(item => item.id === id ? {...item, ...social} : item)}));
+    setOpened(previous => previous?.id === id ? {...previous, ...social} : previous);
+  };
   const closeCompose = () => {if (!busy) {setComposing(false); setParams({}, {replace: true}); setError('');}};
   const describe = (id: string) => {const edition = editionById.get(id); return edition ? `${games.find(game => game.id === edition.gameId)?.title ?? 'Игра'} · ${edition.name} · ${edition.platform}` : '';};
   async function unpublish(share: CopyShareDto) {
@@ -48,7 +55,7 @@ export function ShowcasePage() {
     {!feed.isLoading && !feed.error && !feed.data.items.length && <div className="panel showcase-empty"><Share2 size={30} /><h2>Пока никто не поделился экземпляром</h2><p>Опубликуйте фотографии своей находки — она появится здесь.</p></div>}
     <section className="showcase-grid" aria-label="Публикации коллекционеров">{feed.data.items.map(share => <article className="panel showcase-card" key={share.id}>
       <div className="copy-card__cover"><PhotoPreviewGallery photos={share.photos} title={share.game.title} /><div className="card-platforms"><PlatformBadge platform={share.edition.platform} /></div></div>
-      <div className="showcase-card__body"><Link to={`/users/${encodeURIComponent(share.author.id)}`} className="showcase-author">{share.author.displayName}</Link><h2>{share.game.title}</h2><p className="panel-hint">{share.edition.name} · {share.region || 'Регион не указан'}</p>{share.caption && <p className="showcase-caption">{share.caption}</p>}<time dateTime={share.createdAt}>{new Date(share.createdAt).toLocaleDateString('ru-RU')}</time><button type="button" className="btn-secondary" onClick={() => {setError(''); setOpened(share);}}>Смотреть экземпляр</button></div>
+      <div className="showcase-card__body"><AuthorRating name={share.author.displayName} userId={share.author.id} rating={share.author.rating} /><h2>{share.game.title}</h2><p className="panel-hint">{share.edition.name} · {share.region || 'Регион не указан'}</p>{share.caption && <p className="showcase-caption">{share.caption}</p>}<ShowcaseReactions post={share} onChange={social => updateSocial(share.id, social)} onComments={() => {setError(''); setOpened(share);}}/><time dateTime={share.createdAt}>{new Date(share.createdAt).toLocaleDateString('ru-RU')}</time><button type="button" className="btn-secondary" onClick={() => {setError(''); setOpened(share);}}>Смотреть экземпляр</button></div>
     </article>)}</section>
     {(page > 1 || feed.data.hasMore) && <div className="showcase-pagination"><button className="btn-secondary" disabled={page <= 1 || feed.isLoading} onClick={() => setPage(value => value - 1)}>Назад</button><span>Страница {page}</span><button className="btn-secondary" disabled={!feed.data.hasMore || feed.isLoading} onClick={() => setPage(value => value + 1)}>Далее</button></div>}
     <ModalShell isOpen={composing} onClose={closeCompose} labelledBy="share-copy-title">
@@ -66,7 +73,7 @@ export function ShowcasePage() {
       {!options.length && <button type="button" className="btn-secondary" onClick={closeCompose}>Закрыть</button>}
     </ModalShell>
     <ModalShell isOpen={opened !== null} onClose={() => {if (!busy) setOpened(null);}} labelledBy="showcase-copy-title">
-      {opened && <><h2 className="modal-title" id="showcase-copy-title">{opened.game.title}</h2><Link to={`/users/${encodeURIComponent(opened.author.id)}`} className="showcase-author">{opened.author.displayName}</Link><MarketPhotoGallery photos={opened.photos} title={opened.game.title} expandable /><p>{opened.edition.name} · {opened.edition.platform} · {opened.region}</p><p>{formatMarketCondition(opened.condition)} · {completenessLabel(opened.completeness)}</p><p className="showcase-caption">{opened.caption}</p><Link className="btn-secondary" to={`/games?game=${encodeURIComponent(opened.game.id)}&editionId=${encodeURIComponent(opened.edition.id)}`}>Открыть игру</Link>{opened.author.id === user?.id && <button type="button" className="btn-secondary" disabled={busy} onClick={() => void unpublish(opened)}>Снять с публикации</button>}{error && <p role="alert">{error}</p>}<button className="btn-secondary" type="button" disabled={busy} onClick={() => setOpened(null)}>Закрыть</button></>}
+      {opened && <><h2 className="modal-title" id="showcase-copy-title">{opened.game.title}</h2><AuthorRating name={opened.author.displayName} userId={opened.author.id} rating={opened.author.rating} /><MarketPhotoGallery photos={opened.photos} title={opened.game.title} expandable /><p>{opened.edition.name} · {opened.edition.platform} · {opened.region}</p><p>{formatMarketCondition(opened.condition)} · {completenessLabel(opened.completeness)}</p><p className="showcase-caption">{opened.caption}</p><ShowcaseDiscussion key={opened.id} post={opened} onChange={social => updateSocial(opened.id, social)}/><Link className="btn-secondary" to={`/games?game=${encodeURIComponent(opened.game.id)}&editionId=${encodeURIComponent(opened.edition.id)}`}>Открыть игру</Link>{opened.author.id === user?.id && <button type="button" className="btn-secondary" disabled={busy} onClick={() => void unpublish(opened)}>Снять с публикации</button>}{error && <p role="alert">{error}</p>}<button className="btn-secondary" type="button" disabled={busy} onClick={() => setOpened(null)}>Закрыть</button></>}
     </ModalShell>
   </>;
 }

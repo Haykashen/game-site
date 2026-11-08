@@ -1,3 +1,4 @@
+import {registerShowcaseReactions} from './collection/showcaseReactions.js';
 import {registerShowcaseRoutes} from './collection/showcase.js';
 import { registerChatRoutes } from './chats/routes.js';
 import { registerRecognitionRoutes } from './recognition/routes.js';
@@ -254,6 +255,7 @@ export async function buildApp() {
   registerGameRatingRoutes(app);
   registerCollectionRoutes(app);
   registerShowcaseRoutes(app);
+  registerShowcaseReactions(app);
   registerMarketRoutes(app);
   registerMarketAdminRoutes(app);
   registerBidRoutes(app);

@@ -13,7 +13,7 @@ export const PRIVATE_MODELS = ['Chat', 'ChatMember', 'ChatMessage'] as const;
 export const TABLE_LABELS: Record<string, string> = {
   Status: 'Статусы',
   User: 'Пользователи', Session: 'Сессии', Game: 'Игры', GameGenre: 'Жанры игр', GameSeries: 'Серии игр', Region: 'Регионы', Localization: 'Локализации', GameRating: 'Оценки игр',
-  Edition: 'Издания', Copy: 'Экземпляры коллекций', CopyPhoto: 'Фото экземпляров', CopyShare: 'Публикации коллекций',
+  Edition: 'Издания', Copy: 'Экземпляры коллекций', CopyPhoto: 'Фото экземпляров', CopyShare: 'Публикации коллекций', CopyShareLike: 'Лайки публикаций', CopyShareComment: 'Комментарии публикаций',
   MarketEntry: 'Объявления и аукционы', MarketPhoto: 'Фото объявлений', Bid: 'Ставки',
   Deal: 'Сделки', Review: 'Отзывы', Report: 'Жалобы', Notification: 'Уведомления',
   GameSubscription: 'Подписки на игры', MarketEntrySubscription: 'Подписки на объявления',
@@ -32,7 +32,7 @@ const FIELD_LABELS: Record<string, string> = {
   barcode: 'Штрихкод', dnsProductId: 'ID товара DNS', dnsProductCode: 'Код товара DNS', canonicalId: 'Основное издание',
   editionId: 'Издание', condition: 'Состояние', completeness: 'Комплектность',
   purchasePriceMinor: 'Цена покупки, коп.', purchaseDate: 'Дата покупки', notes: 'Заметки',
-  caption: 'Подпись', photos: 'Фотографии', copyId: 'Экземпляр', url: 'URL фотографии', sortOrder: 'Порядок', entryId: 'Объявление',
+  shareId: 'Публикация', caption: 'Подпись', photos: 'Фотографии', copyId: 'Экземпляр', url: 'URL фотографии', sortOrder: 'Порядок', entryId: 'Объявление',
   authorId: 'Автор', kind: 'Вид', itemType: 'Предмет', listingType: 'Тип объявления',
   priceMinor: 'Цена, коп.', deliveryServices: 'Службы доставки', internationalShipping: 'Международная доставка',
   packagingPriceMinor: 'Упаковка, коп.', shipsFrom: 'Город отправки', bidStepMinor: 'Шаг ставки, коп.',

@@ -89,6 +89,8 @@ enum NewsCategory {
 }
 
 model User {
+  showcaseLikes CopyShareLike[]
+  showcaseComments CopyShareComment[]
   statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
   statusReference Status @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   @@index([statusId])
@@ -684,6 +686,8 @@ model Status {
 }
 
 model CopyShare {
+  likes CopyShareLike[]
+  comments CopyShareComment[]
   id String @id @default(uuid()) @db.Uuid
   copyId String @unique @map("copy_id") @db.Uuid
   caption String @default("") @db.Text
@@ -696,4 +700,27 @@ model CopyShare {
   copy Copy @relation(fields: [copyId], references: [id], onDelete: Cascade)
   @@index([createdAt, id])
   @@map("copy_shares")
+}
+
+model CopyShareLike {
+  shareId String @map("share_id") @db.Uuid
+  userId String @map("user_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+  share CopyShare @relation(fields: [shareId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@id([shareId, userId])
+  @@index([userId])
+  @@map("copy_share_likes")
+}
+model CopyShareComment {
+  id String @id @default(uuid()) @db.Uuid
+  shareId String @map("share_id") @db.Uuid
+  userId String @map("user_id") @db.Uuid
+  body String @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  share CopyShare @relation(fields: [shareId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([shareId, createdAt, id])
+  @@index([userId])
+  @@map("copy_share_comments")
 }

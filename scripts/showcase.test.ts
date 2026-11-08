@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import Fastify from 'fastify';
 import {registerShowcaseRoutes, publicCopyShare} from '../server/src/collection/showcase.ts';
 import {AppError} from '../server/src/errors.ts';
-const row = {id:'share', caption:'Find', photos:['https://example.com/public.jpg'], condition:'9', completeness:'CIB', region:'EUR', createdAt:new Date(), copy:{notes:'SECRET NOTES', purchasePriceMinor:12345,purchaseDate:new Date(),user:{id:'owner',displayName:'Collector',email:'PRIVATE EMAIL'},edition:{id:'edition',name:'Standard',platform:'PS5',game:{id:'game',title:'Test',moderationNote:'PRIVATE'}}}};
+const row = {id:'share', caption:'Find', photos:['https://example.com/public.jpg'], condition:'9', completeness:'CIB', region:'EUR', createdAt:new Date(), copy:{notes:'SECRET NOTES', purchasePriceMinor:12345,purchaseDate:new Date(),user:{id:'owner',displayName:'Collector',ratingSum:0,ratingCount:0,email:'PRIVATE EMAIL'},edition:{id:'edition',name:'Standard',platform:'PS5',game:{id:'game',title:'Test',moderationNote:'PRIVATE'}}}};
 test('public copy shares contain no personal copy data or account fields',()=>{
   const dto=publicCopyShare(row as any),text=JSON.stringify(dto);
-  assert.ok(!text.includes('SECRET'));assert.ok(!text.includes('PRIVATE'));assert.ok(!('purchasePriceMinor' in dto));assert.ok(!('purchaseDate' in dto));assert.deepEqual(dto.author,{id:'owner',displayName:'Collector'});
+  assert.ok(!text.includes('SECRET'));assert.ok(!text.includes('PRIVATE'));assert.ok(!('purchasePriceMinor' in dto));assert.ok(!('purchaseDate' in dto));assert.deepEqual(dto.author,{id:'owner',displayName:'Collector',rating:null});
 });
 test('publishing and unpublishing enforce ownership; snapshots ignore later private photos',async()=>{
   const app=Fastify();let stored: any,allowed=false;
@@ -23,4 +23,11 @@ test('publishing and unpublishing enforce ownership; snapshots ignore later priv
     allowed=false;assert.equal((await app.inject({method:'DELETE',url:'/api/v1/community/showcase/share',headers:{'x-owner':'yes'}})).statusCode,404);
     allowed=true;assert.equal((await app.inject({method:'DELETE',url:'/api/v1/community/showcase/share',headers:{'x-owner':'yes'}})).statusCode,204);
   }finally{await app.close();}
+});
+
+
+test('showcase author uses the same current rating as marketplace authors',()=>{
+  const rated={...row,copy:{...row.copy,user:{...row.copy.user,ratingSum:45,ratingCount:10}}};
+  assert.equal(publicCopyShare(rated as any).author.rating,4.5);
+  assert.equal(publicCopyShare(row as any).author.rating,null);
 });
