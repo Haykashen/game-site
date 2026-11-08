@@ -15,6 +15,7 @@ export interface HeaderBannerMeta {
 }
 
 export const HEADER_BANNERS: Record<NavSectionId, HeaderBannerMeta> = {
+  showcase: {kicker: 'COMMUNITY / COLLECTION SHOWCASE', tone: 'emerald'},
   games: { kicker: 'COMMUNITY / CATALOG', tone: 'lime' },
   auctions: { kicker: 'MARKET / AUCTIONS', tone: 'amber' },
   listings: { kicker: 'MARKET / LISTINGS', tone: 'pink' },

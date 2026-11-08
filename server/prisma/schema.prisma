@@ -279,6 +279,7 @@ model Copy {
 
   user    User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   edition Edition     @relation(fields: [editionId], references: [id], onDelete: Restrict)
+  share   CopyShare?
   photos  CopyPhoto[]
 
   @@index([userId, editionId])
@@ -680,4 +681,19 @@ model Status {
   reportRecords Report[]
   @@unique([entity, code])
   @@map("statuses")
+}
+
+model CopyShare {
+  id String @id @default(uuid()) @db.Uuid
+  copyId String @unique @map("copy_id") @db.Uuid
+  caption String @default("") @db.Text
+  photos String[]
+  condition String
+  completeness String
+  region String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  copy Copy @relation(fields: [copyId], references: [id], onDelete: Cascade)
+  @@index([createdAt, id])
+  @@map("copy_shares")
 }

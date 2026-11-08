@@ -12,3 +12,4 @@ export * from './marketItems.js';
 export * from './analytics.js';
 export * from './users.js';
 export * from './adminData.js';
+export * from './showcase.js';

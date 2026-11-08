@@ -1,3 +1,4 @@
+import {registerShowcaseRoutes} from './collection/showcase.js';
 import { registerChatRoutes } from './chats/routes.js';
 import { registerRecognitionRoutes } from './recognition/routes.js';
 import cookie from '@fastify/cookie';
@@ -252,6 +253,7 @@ export async function buildApp() {
   registerRecognitionRoutes(app);
   registerGameRatingRoutes(app);
   registerCollectionRoutes(app);
+  registerShowcaseRoutes(app);
   registerMarketRoutes(app);
   registerMarketAdminRoutes(app);
   registerBidRoutes(app);

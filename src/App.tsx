@@ -1,3 +1,4 @@
+import {ShowcasePage} from './pages/ShowcasePage';
 import { ChatsProvider } from './context/ChatsContext';
 import { ChatsPage } from './pages/ChatsPage';
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
@@ -54,6 +55,7 @@ export default function App() {
                   <Route path="/chats" element={<ChatsPage />} />
                   <Route path="/discussions" element={<DiscussionsPage />} />
                   <Route path="/news" element={<NewsPage />} />
+                  <Route path="/community/showcase" element={<ShowcasePage />} />
                   <Route path="/collection" element={<CollectionPage />} />
                   <Route path="/collection/:editionId" element={<CollectionCopyPage />} />
                   <Route path="/stats" element={<StatsPage />} />

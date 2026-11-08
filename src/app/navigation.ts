@@ -31,6 +31,7 @@ export type NavSectionId =
   | 'chats'
   | 'discussions'
   | 'news'
+  | 'showcase'
   | 'collection'
   | 'notifications'
   | 'stats'
@@ -53,6 +54,7 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS = {
+  showcase: {id: 'showcase', label: 'Витрина коллекций', pageTitle: 'Витрина коллекций', shortLabel: 'Витрина', path: '/community/showcase', icon: Library},
   games: {
     id: 'games',
     label: 'Игры',
@@ -211,7 +213,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
   {
     id: 'community',
     label: 'Сообщество',
-    items: [NAV_ITEMS.games, NAV_ITEMS.news, NAV_ITEMS.discussions],
+    items: [NAV_ITEMS.games, NAV_ITEMS.news, NAV_ITEMS.discussions, NAV_ITEMS.showcase],
   },
   {
     id: 'market',
@@ -231,6 +233,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
 ];
 
 export const MOBILE_MORE_ITEMS: ReadonlyArray<NavItem> = [
+  NAV_ITEMS.showcase,
   NAV_ITEMS.chats,
   NAV_ITEMS.news,
   NAV_ITEMS.discussions,

@@ -136,6 +136,7 @@ export function CollectionCopyDetail({copy, group, edition, game, initiallyEditi
         </div>
       </div>
       <div className="copy-detail__actions"><button type="button" className="btn-primary" disabled={busy} onClick={() => requestExit(gameUrl)}><ExternalLink size={17} />Открыть игру</button><GameActions onPlaceListing={() => requestExit(composeUrl('listing'))} onPlaceAuction={() => requestExit(composeUrl('auction'))} /></div>
+      <button type="button" className="btn-secondary" disabled={busy} onClick={() => requestExit(`/community/showcase?copyId=${encodeURIComponent(copy.id)}`)}>Поделиться экземпляром</button>
       <section className="copy-detail__notes"><h3>{editing ? <label htmlFor="copy-notes">Заметки</label> : 'Заметки'}</h3>{editing ? <textarea id="copy-notes" className="form-control" rows={3} maxLength={2000} disabled={saving} value={values.notes} onChange={event => update('notes', event.target.value)} /> : <p>{copy.notes || 'Заметки пока не добавлены.'}</p>}</section>
       {(error || syncError) && <p className="market-form__error" role="alert">{error || syncError}</p>}
       {notice && <p role="status">{notice}</p>}

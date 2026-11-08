@@ -1,0 +1,72 @@
+import type {CopyShareDto, Paginated} from '@discvault/shared';
+import {useCallback, useState} from 'react';
+import {Link, useSearchParams} from 'react-router-dom';
+import {Plus, Share2} from 'lucide-react';
+import {apiRequest, errorMessage} from '../api/client';
+import {useApiResource} from '../hooks/useApiResource';
+import {useAuth} from '../context/AuthContext';
+import {useCollection} from '../context/CollectionContext';
+import {PageHeading} from '../components/PageHeading';
+import {ApiState} from '../components/ApiState';
+import {ModalShell} from '../components/ui/ModalShell';
+import {PlatformBadge} from '../components/ui/PlatformBadge';
+import {PhotoPreviewGallery} from '../components/ui/PhotoPreviewGallery';
+import {MarketPhotoGallery} from '../components/market/MarketPhotoGallery';
+import {completenessLabel} from '../lib/collection';
+import {formatMarketCondition} from '../lib/market';
+const EMPTY: Paginated<CopyShareDto> = {items: [], total: 0, page: 1, pageSize: 24, hasMore: false};
+export function ShowcasePage() {
+  const {user} = useAuth();
+  const {copies, editionById, games, isSyncing, isCatalogLoading} = useCollection();
+  const [page, setPage] = useState(1);
+  const load = useCallback((signal: AbortSignal) => apiRequest<Paginated<CopyShareDto>>(`/api/v1/community/showcase?page=${page}&pageSize=24`, {signal}), [page]);
+  const feed = useApiResource('showcase', load, EMPTY);
+  const [params, setParams] = useSearchParams();
+  const [composing, setComposing] = useState(Boolean(params.get('copyId')));
+  const [copyId, setCopyId] = useState(params.get('copyId') ?? '');
+  const [caption, setCaption] = useState('');
+  const [opened, setOpened] = useState<CopyShareDto | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
+  const options = copies.filter(copy => copy.photos.length && editionById.has(copy.editionId));
+  const chosen = options.find(copy => copy.id === copyId) ?? options[0];
+  const closeCompose = () => {if (!busy) {setComposing(false); setParams({}, {replace: true}); setError('');}};
+  const describe = (id: string) => {const edition = editionById.get(id); return edition ? `${games.find(game => game.id === edition.gameId)?.title ?? 'Игра'} · ${edition.name} · ${edition.platform}` : '';};
+  async function unpublish(share: CopyShareDto) {
+    if (busy || share.author.id !== user?.id) return;
+    setBusy(true); setError('');
+    try {await apiRequest(`/api/v1/community/showcase/${encodeURIComponent(share.id)}`, {method: 'DELETE'}); setOpened(null); setNotice('Публикация снята. Экземпляр остался в коллекции.'); await feed.refresh();}
+    catch (cause) {setError(errorMessage(cause));} finally {setBusy(false);}
+  }
+  return <>
+    <PageHeading eyebrow="COMMUNITY / COLLECTION SHOWCASE" title="Витрина коллекций" description="Экземпляры с историей: делитесь находками, показывайте редкие издания и знакомьтесь с коллекциями других пользователей."
+      action={user ? <button type="button" className="btn-primary" onClick={() => {setError(''); setComposing(true);}}><Plus size={17} />Поделиться экземпляром</button> : <Link className="btn-secondary" to="/account">Войти, чтобы поделиться</Link>} />
+    <ApiState loading={feed.isLoading} error={feed.error} onRetry={feed.refresh} />
+    {!composing && error && <p className="market-form__error" role="alert">{error}</p>}
+    {notice && <p role="status">{notice}</p>}
+    {!feed.isLoading && !feed.error && !feed.data.items.length && <div className="panel showcase-empty"><Share2 size={30} /><h2>Пока никто не поделился экземпляром</h2><p>Опубликуйте фотографии своей находки — она появится здесь.</p></div>}
+    <section className="showcase-grid" aria-label="Публикации коллекционеров">{feed.data.items.map(share => <article className="panel showcase-card" key={share.id}>
+      <div className="copy-card__cover"><PhotoPreviewGallery photos={share.photos} title={share.game.title} /><div className="card-platforms"><PlatformBadge platform={share.edition.platform} /></div></div>
+      <div className="showcase-card__body"><Link to={`/users/${encodeURIComponent(share.author.id)}`} className="showcase-author">{share.author.displayName}</Link><h2>{share.game.title}</h2><p className="panel-hint">{share.edition.name} · {share.region || 'Регион не указан'}</p>{share.caption && <p className="showcase-caption">{share.caption}</p>}<time dateTime={share.createdAt}>{new Date(share.createdAt).toLocaleDateString('ru-RU')}</time><button type="button" className="btn-secondary" onClick={() => {setError(''); setOpened(share);}}>Смотреть экземпляр</button></div>
+    </article>)}</section>
+    {(page > 1 || feed.data.hasMore) && <div className="showcase-pagination"><button className="btn-secondary" disabled={page <= 1 || feed.isLoading} onClick={() => setPage(value => value - 1)}>Назад</button><span>Страница {page}</span><button className="btn-secondary" disabled={!feed.data.hasMore || feed.isLoading} onClick={() => setPage(value => value + 1)}>Далее</button></div>}
+    <ModalShell isOpen={composing} onClose={closeCompose} labelledBy="share-copy-title">
+      <h2 className="modal-title" id="share-copy-title">Поделиться экземпляром</h2>
+      {!user ? <Link to="/account" className="btn-primary">Войти</Link> : isSyncing || isCatalogLoading ? <p role="status">Загружаем коллекцию…</p> : !options.length ? <p>Добавьте к экземпляру фотографии в <Link to="/collection">своей коллекции</Link>, чтобы опубликовать его здесь.</p> : <form className="market-form" onSubmit={async event => {
+        event.preventDefault(); if (!chosen || busy) return;
+        setBusy(true); setError('');
+        try {await apiRequest('/api/v1/community/showcase', {method: 'POST', body: {copyId: chosen.id, caption}}); setComposing(false); setParams({}, {replace: true}); setCaption(''); setNotice('Ваш экземпляр опубликован на витрине.'); if (page === 1) await feed.refresh(); else setPage(1);}
+        catch (cause) {setError(errorMessage(cause));} finally {setBusy(false);}
+      }}><fieldset disabled={busy} className="copy-form__fields"><label className="form-label" htmlFor="share-copy">Экземпляр из моей коллекции</label><select id="share-copy" className="form-control" value={chosen?.id ?? ''} onChange={event => setCopyId(event.target.value)}>{options.map((copy, index) => <option key={copy.id} value={copy.id}>{describe(copy.editionId)} · экземпляр {index + 1}</option>)}</select>
+        {chosen && <MarketPhotoGallery photos={chosen.photos} title={describe(chosen.editionId)} expandable />}
+        <label className="form-label" htmlFor="share-caption">Подпись к публикации</label><textarea id="share-caption" rows={4} className="form-control" maxLength={1000} value={caption} onChange={event => setCaption(event.target.value)} placeholder="Расскажите о находке или истории экземпляра…" />
+        <p className="panel-hint">Фотографии, состояние, комплектность, регион и подпись будут видны всем. Цена, дата покупки и личные заметки не публикуются. Повторная публикация обновит фото и подпись.</p>
+        {error && <p role="alert" className="market-form__error">{error}</p>}<div className="market-form__actions"><button type="button" className="btn-secondary" onClick={closeCompose}>Отмена</button><button type="submit" className="btn-primary">{busy ? 'Публикуем…' : 'Опубликовать'}</button></div></fieldset></form>}
+      {!options.length && <button type="button" className="btn-secondary" onClick={closeCompose}>Закрыть</button>}
+    </ModalShell>
+    <ModalShell isOpen={opened !== null} onClose={() => {if (!busy) setOpened(null);}} labelledBy="showcase-copy-title">
+      {opened && <><h2 className="modal-title" id="showcase-copy-title">{opened.game.title}</h2><Link to={`/users/${encodeURIComponent(opened.author.id)}`} className="showcase-author">{opened.author.displayName}</Link><MarketPhotoGallery photos={opened.photos} title={opened.game.title} expandable /><p>{opened.edition.name} · {opened.edition.platform} · {opened.region}</p><p>{formatMarketCondition(opened.condition)} · {completenessLabel(opened.completeness)}</p><p className="showcase-caption">{opened.caption}</p><Link className="btn-secondary" to={`/games?game=${encodeURIComponent(opened.game.id)}&editionId=${encodeURIComponent(opened.edition.id)}`}>Открыть игру</Link>{opened.author.id === user?.id && <button type="button" className="btn-secondary" disabled={busy} onClick={() => void unpublish(opened)}>Снять с публикации</button>}{error && <p role="alert">{error}</p>}<button className="btn-secondary" type="button" disabled={busy} onClick={() => setOpened(null)}>Закрыть</button></>}
+    </ModalShell>
+  </>;
+}
