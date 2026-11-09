@@ -1,3 +1,4 @@
+import { Plus } from 'lucide-react';
 
 import { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -96,7 +97,7 @@ export function CollectionPage() {
       <PageHeading
         eyebrow="MY SHELF / COLLECTION"
         title="Моя коллекция"
-        action={user ? <button type="button" className="btn-primary" onClick={() => navigate('/collection/new')}>＋ Пополнить коллекцию</button> : undefined}
+        action={user ? <button type="button" className="btn-primary" onClick={() => navigate('/collection/new')}><Plus size={16} aria-hidden="true" />Пополнить коллекцию</button> : undefined}
         description={
           items.length > 0
             ? `${copiesOnShelf(copies.length)}. Одна карточка — одно издание; количество экземпляров можно менять.`
