@@ -4708,3 +4708,13 @@ html:not(.dark) .game-detail__editions button:hover { background:#eaf2d9; border
 html:not(.dark) .game-detail__editions button[aria-pressed="true"] {
   background:#eaf2d9; border-color:var(--brand-ink); color:var(--brand-ink); box-shadow:inset 0 0 0 1px #4d781822;
 }
+
+/* Shared icon-button interaction contract, including disabled controls. */
+.btn-icon {
+  transition:transform .2s ease, border-color .2s ease, background-color .2s ease;
+}
+.btn-icon:hover:not(:disabled) { transform:translateY(-2px); border-color:var(--brand-ink); }
+.btn-icon:active:not(:disabled) { transform:translateY(0); }
+.btn-icon:focus-visible { outline:2px solid var(--brand-ink); outline-offset:3px; }
+.btn-icon:disabled { transform:none; box-shadow:none; opacity:.45; cursor:default; }
+@media(prefers-reduced-motion:reduce) { .btn-icon { transition:none; } }

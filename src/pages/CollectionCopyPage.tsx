@@ -128,10 +128,10 @@ export function CollectionCopyDetail({copy, group, game: initialGame, edition: i
     <form className={`copy-detail${editing ? ' is-editing' : ''}`} onSubmit={event => {event.preventDefault(); void save();}}>
       <header className="copy-detail__header">
         <div><div className="modal-header-meta"><span className="copy-detail__eyebrow"><span className="eyebrow-dot" />ЭКЗЕМПЛЯР</span><span className="meta-chip">Моя коллекция</span></div><h2 className="modal-title" id="copy-detail-title">{creating ? 'Добавить экземпляр' : game.title}</h2></div>
-        <div className="copy-detail__header-actions"><button type="button" className="btn-secondary copy-detail__edit" title={editing ? 'Завершить редактирование' : 'Редактировать экземпляр'} aria-label={editing ? 'Завершить редактирование' : 'Редактировать экземпляр'} aria-pressed={editing} disabled={busy} onClick={() => {
+        <div className="copy-detail__header-actions"><IconButton className="copy-detail__edit" label={editing ? 'Завершить редактирование' : 'Редактировать экземпляр'} title={editing ? 'Завершить редактирование' : 'Редактировать экземпляр'} aria-label={editing ? 'Завершить редактирование' : 'Редактировать экземпляр'} aria-pressed={editing} disabled={busy} onClick={() => {
           if (editing) requestExit(null);
           else {setSession({initial: current, draft: {...current, photos: [...current.photos]}}); setNotice(''); setError('');}
-        }}><Pencil size={17} aria-hidden="true" /></button><IconButton label="Сохранить изменения" title="Сохранить изменения" disabled={!dirty || busy} onClick={() => void save()}><Save size={17} aria-hidden="true" /></IconButton><IconButton label="Закрыть экземпляр" transparent disabled={busy} onClick={() => requestExit('/collection')}><X size={20} /></IconButton></div>
+        }}><Pencil size={20} aria-hidden="true" /></IconButton><IconButton label="Сохранить изменения" title="Сохранить изменения" disabled={!dirty || busy} onClick={() => void save()}><Save size={17} aria-hidden="true" /></IconButton><IconButton label="Закрыть экземпляр" title="Закрыть экземпляр" disabled={busy} onClick={() => requestExit('/collection')}><X size={20} /></IconButton></div>
       </header>
       <div className="copy-detail__overview">
         <CopyPhotoGallery photos={values.photos} title={game.title} caption={`${edition.name} · ${edition.platform}`} editing={editing} disabled={saving} onBusyChange={setProcessingPhotos} onChange={next => update('photos', next)} />
