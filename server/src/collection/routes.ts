@@ -305,7 +305,8 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
 
       if (copies.length === 0) throw notFound('В коллекции нет этого издания.');
 
-      const shared = sharedDetailsData(input);
+      const targetEditionId = input.editionId ? await resolveEditionId(app.prisma, input.editionId) : editionId;
+      const shared = {...sharedDetailsData(input), editionId: targetEditionId};
       const photos =
         input.photos !== undefined
           ? await storePhotoReferences(input.photos, 'collection')
@@ -336,7 +337,7 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
         }
       }, {isolationLevel: 'Serializable'});
 
-      return reply.send(await getEditionCopies(app, user.id, editionId));
+      return reply.send(await getEditionCopies(app, user.id, targetEditionId));
     },
   );
 

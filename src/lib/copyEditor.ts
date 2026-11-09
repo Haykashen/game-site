@@ -3,7 +3,7 @@ import { cleanMoneyInput, parseMoneyInput } from './moneyInput';
 import { updateCopySchema } from '@discvault/shared';
 export interface CopyEditorValues {condition: string; completeness: string; region: string; purchasePrice: string; purchaseDate: string; notes: string; photos: string[]; quantity: number}
 export function copyEditorValues(copy: Copy, edition: Edition, photos: readonly string[], quantity: number): CopyEditorValues {
-  return {condition: copy.condition, completeness: copy.completeness, region: copy.region ?? edition.region, purchasePrice: copy.purchasePrice === null ? '' : String(copy.purchasePrice), purchaseDate: copy.purchaseDate, notes: copy.notes, photos: [...photos], quantity};
+  return {condition: copy.condition, completeness: copy.completeness, region: copy.region ?? edition.region, purchasePrice: copy.purchasePrice === null ? '' : String(copy.purchasePrice), purchaseDate: copy.purchaseDate, notes: copy.notes, photos: [...photos], quantity: Math.max(1, quantity)};
 }
 function normalized(values: CopyEditorValues) {
   return {...values, condition: values.condition.trim(), notes: values.notes.trim(), purchasePrice: cleanMoneyInput(values.purchasePrice) === null ? values.purchasePrice : parseMoneyInput(values.purchasePrice)};

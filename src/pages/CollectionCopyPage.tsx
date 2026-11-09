@@ -1,3 +1,5 @@
+import { GameCombobox } from '../components/ui/GameCombobox';
+import { Combobox } from '../components/ui/Combobox';
 import { QuantityControl } from '../components/collection/QuantityControl';
 import { ArrowLeft, ExternalLink, Pencil, Save, X } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -43,12 +45,19 @@ export function CollectionCopyPage() {
   </>;
 }
 
-interface DetailProps {copy: Copy; group: Copy[]; edition: Edition; game: Game; initiallyEditing: boolean}
+interface DetailProps {copy: Copy; group: Copy[]; edition: Edition; game: Game; initiallyEditing: boolean; creating?: boolean}
 /** Data comes exclusively from the signed-in owner's collection, never the public catalog. */
-export function CollectionCopyDetail({copy, group, edition, game, initiallyEditing}: DetailProps) {
+export function CollectionCopyDetail({copy, group, game: initialGame, edition: initialEdition, initiallyEditing, creating = false}: DetailProps) {
   const navigate = useNavigate();
   const [, setSearch] = useSearchParams();
-  const {updateEdition, syncError} = useCollection();
+  const {updateEdition, addCopy, setEditionQuantity, copies, games, editions, syncError} = useCollection();
+  const [selectedGame, setSelectedGame] = useState(creating ? '' : initialGame.id);
+  const [selectedEdition, setSelectedEdition] = useState(creating ? '' : initialEdition.id);
+  const [editionQuery, setEditionQuery] = useState('');
+  const [editionOpen, setEditionOpen] = useState(false);
+  const game = games.find(item => item.id === selectedGame) ?? initialGame;
+  const edition = editions.find(item => item.id === selectedEdition) ?? initialEdition;
+  const editionOptions = editions.filter(item => item.gameId === selectedGame && (item.name+' '+item.platform+' '+item.region).toLowerCase().includes(editionQuery.toLowerCase())).map(item => ({value:item.id,label:item.name+' · '+item.platform+' · '+item.region}));
   const photos = useMemo(() => [...new Set(group.flatMap(item => item.photos).filter(Boolean))], [group]);
   const current = useMemo(() => copyEditorValues(copy, edition, photos, group.length), [copy, edition, photos, group.length]);
   const [session, setSession] = useState<{initial: CopyEditorValues; draft: CopyEditorValues} | null>(() => initiallyEditing ? {initial: current, draft: {...current, photos: [...current.photos]}} : null);
@@ -58,7 +67,7 @@ export function CollectionCopyDetail({copy, group, edition, game, initiallyEditi
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const editing = session !== null;
-  const dirty = session !== null && copyEditorDirty(session.initial, session.draft);
+  const dirty = session !== null && (copyEditorDirty(session.initial, session.draft) || selectedEdition !== initialEdition.id || creating && Boolean(selectedEdition));
   const values = session?.draft ?? current;
   const busy = saving || processingPhotos;
   const regions = useMemo(() => [...new Set([...REGIONS, 'EUR', 'USA', 'JPN', 'KOR', 'ASIA', 'WORLD', edition.region, values.region])].filter(Boolean), [edition.region, values.region]);
@@ -93,13 +102,17 @@ export function CollectionCopyDetail({copy, group, edition, game, initiallyEditi
 
   async function save(target: string | null = null) {
     if (!session || !dirty || busy) return;
+    if (!selectedGame || !selectedEdition) {setError('Выберите игру и издание.');return;}
     setError('');
     let details;
     try {details = copyEditorDetails(session.initial, session.draft);}
     catch (cause) {setPending(null); setError(cause instanceof Error ? cause.message : 'Проверьте реквизиты.'); return;}
     setSaving(true);
     try {
-      if (await updateEdition(edition.id, details)) {endEditing(target); setNotice('Изменения сохранены.');}
+      const existingQuantity = copies.filter(item => item.editionId === edition.id).length;
+      const saved = creating ? await addCopy(edition.id, {...details, photos: values.photos}) : await updateEdition(initialEdition.id, {...details, editionId: edition.id});
+      if (saved && creating && values.quantity > 1) await setEditionQuantity(edition.id, existingQuantity + values.quantity);
+      if (saved) {endEditing(target ?? (creating || edition.id !== initialEdition.id ? `/collection/${encodeURIComponent(edition.id)}` : null)); setNotice('Изменения сохранены.');}
       else setPending(null);
     } finally {setSaving(false);}
   }
@@ -108,7 +121,7 @@ export function CollectionCopyDetail({copy, group, edition, game, initiallyEditi
   return <ModalShell isOpen onClose={() => requestExit('/collection')} labelledBy="copy-detail-title" contentClassName="copy-detail-modal">
     <form className={`copy-detail${editing ? ' is-editing' : ''}`} onSubmit={event => {event.preventDefault(); void save();}}>
       <header className="copy-detail__header">
-        <div><div className="modal-header-meta"><span className="copy-detail__eyebrow"><span className="eyebrow-dot" />ЭКЗЕМПЛЯР</span><span className="meta-chip">Моя коллекция</span></div><h2 className="modal-title" id="copy-detail-title">{game.title}</h2></div>
+        <div><div className="modal-header-meta"><span className="copy-detail__eyebrow"><span className="eyebrow-dot" />ЭКЗЕМПЛЯР</span><span className="meta-chip">Моя коллекция</span></div><h2 className="modal-title" id="copy-detail-title">{creating ? 'Добавить экземпляр' : game.title}</h2></div>
         <div className="copy-detail__header-actions"><button type="button" className="btn-secondary copy-detail__edit" title={editing ? 'Завершить редактирование' : 'Редактировать экземпляр'} aria-label={editing ? 'Завершить редактирование' : 'Редактировать экземпляр'} aria-pressed={editing} disabled={busy} onClick={() => {
           if (editing) requestExit(null);
           else {setSession({initial: current, draft: {...current, photos: [...current.photos]}}); setNotice(''); setError('');}
@@ -118,10 +131,11 @@ export function CollectionCopyDetail({copy, group, edition, game, initiallyEditi
         <CopyPhotoGallery photos={values.photos} title={game.title} caption={`${edition.name} · ${edition.platform}`} editing={editing} disabled={saving} onBusyChange={setProcessingPhotos} onChange={next => update('photos', next)} />
         <div className="copy-detail__specs">
           <dl className="copy-detail__facts">
-            <div><dt>Игра</dt><dd><button type="button" className="market-game-link" disabled={busy} onClick={() => requestExit(`/games?game=${encodeURIComponent(game.id)}&editionId=${encodeURIComponent(edition.id)}`)}>{game.title}</button></dd></div>
-            <div><dt>Предмет</dt><dd>Игра / издание</dd></div>
+            <div><dt>Игра</dt><dd>{editing ? <GameCombobox id="copy-game" games={games} value={selectedGame} onChange={id => {setSelectedGame(id);setSelectedEdition('');}} /> : <button type="button" className="market-game-link" onClick={() => requestExit(`/games?game=${encodeURIComponent(game.id)}`)}>{game.title}</button>}</dd></div>
+            <div><dt>Издание</dt><dd>{editing ? <Combobox id="copy-edition" value={editionOpen ? editionQuery : selectedEdition ? edition.name+' · '+edition.platform : ''} options={editionOptions} selectedValues={[selectedEdition]} label="Издания" placeholder="Выберите издание игры…" open={editionOpen} onOpen={() => {setEditionOpen(true);setEditionQuery('');}} onClose={() => setEditionOpen(false)} onQueryChange={setEditionQuery} onSelect={item => {setSelectedEdition(item.value);setEditionOpen(false);}} emptyText="Выберите игру или уточните поиск" /> : edition.name}</dd></div>
+            <div><dt>Предмет</dt><dd>{editing ? <select className="form-control" aria-label="Предмет"><option value="game">Игра / издание</option></select> : 'Игра / издание'}</dd></div>
             <div><dt>Платформа</dt><dd><PlatformBadge platform={edition.platform} /></dd></div>
-            <div><dt>Издание</dt><dd>{edition.name}</dd></div>
+
             <div><dt>{editing ? <label htmlFor="copy-region">Регион</label> : 'Регион'}</dt><dd>{editing ? <select id="copy-region" className="form-control" value={values.region} disabled={saving} onChange={event => update('region', event.target.value)}><option value="">Не указан</option>{regions.map(region => <option key={region}>{region}</option>)}</select> : (copy.region ?? edition.region) || 'Не указан'}</dd></div>
             <div><dt>{editing ? <label htmlFor="copy-condition">Состояние</label> : 'Состояние'}</dt><dd>{editing ? <input id="copy-condition" className="form-control" value={values.condition} maxLength={60} placeholder="Например, 9/10" disabled={saving} onChange={event => update('condition', event.target.value)} /> : <span className="copy-detail__condition">{condition || 'Не указано'}</span>}</dd></div>
             <div><dt>{editing ? <label htmlFor="copy-completeness">Комплектность</label> : 'Комплектность'}</dt><dd>{editing ? <fieldset disabled={saving} className="copy-detail__inline-fieldset"><CompletenessCombobox id="copy-completeness" value={values.completeness} onChange={next => update('completeness', next)} /></fieldset> : completenessLabel(copy.completeness) || 'Не указана'}</dd></div>

@@ -80,7 +80,7 @@ export type CopyDetails = Pick<
   'condition' | 'completeness' | 'purchasePrice' | 'purchaseDate' | 'notes' | 'photos'
 >;
 
-export type CopyUpdateDetails = Omit<CopyDetails, 'photos'> & {photos?: string[]; region?: string | null; quantity?: number};
+export type CopyUpdateDetails = Omit<CopyDetails, 'photos'> & {photos?: string[]; region?: string | null; quantity?: number; editionId?: string};
 
 /** Precomputed per-game numbers and badges used by catalogue cards. */
 export interface GameStats {

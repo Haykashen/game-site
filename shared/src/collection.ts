@@ -22,7 +22,7 @@ export const createCopySchema = copyDetailsSchema.extend({
   editionId: idSchema,
 });
 
-export const updateCopySchema = copyDetailsSchema.extend({quantity: z.number().int().min(1).max(99).optional()});
+export const updateCopySchema = copyDetailsSchema.extend({editionId: idSchema.optional(), quantity: z.number().int().min(1).max(99).optional()});
 
 export const editionQuantitySchema = z.object({
   quantity: z.coerce.number().int().min(0).max(99),
