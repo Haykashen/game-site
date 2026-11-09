@@ -1,4 +1,4 @@
-import { Trophy } from 'lucide-react';
+
 import { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import shelfArt from '../assets/discvault-shelf.svg';
@@ -96,6 +96,7 @@ export function CollectionPage() {
       <PageHeading
         eyebrow="MY SHELF / COLLECTION"
         title="Моя коллекция"
+        action={user ? <button type="button" className="btn-primary" onClick={() => navigate('/collection/new')}>＋ Пополнить коллекцию</button> : undefined}
         description={
           items.length > 0
             ? `${copiesOnShelf(copies.length)}. Одна карточка — одно издание; количество экземпляров можно менять.`
@@ -107,18 +108,7 @@ export function CollectionPage() {
       {status === 'api' && !user && <div className="panel account-notice"><p>Войдите, чтобы увидеть свою коллекцию.</p><Link to="/account" className="btn-secondary">Войти</Link></div>}
 
 
-      <div className="panel achievements-panel">
-        <div className="achievements-icon">
-          <Trophy size={22} aria-hidden="true" />
-        </div>
-        <div className="achievements-copy">
-          <p className="panel-title">Достижения</p>
-          <p className="panel-hint">
-            Награды за серии, регионы и коллекционные издания появятся здесь.
-          </p>
-        </div>
-        <span className="placeholder-chip">Скоро</span>
-      </div>
+
 
       {items.length === 0 && (isSyncing || isCatalogLoading || syncError || catalogError || !user) ? null : items.length === 0 ? (
         <div className="market-empty collection-empty">

@@ -1,3 +1,5 @@
+import { CollectionAddPage } from './pages/CollectionAddPage';
+import { AchievementsPage } from './pages/AchievementsPage';
 import {ShowcasePage} from './pages/ShowcasePage';
 import { ChatsProvider } from './context/ChatsContext';
 import { ChatsPage } from './pages/ChatsPage';
@@ -57,7 +59,9 @@ export default function App() {
                   <Route path="/news" element={<NewsPage />} />
                   <Route path="/community/showcase" element={<ShowcasePage />} />
                   <Route path="/collection" element={<CollectionPage />} />
+                  <Route path="/collection/new" element={<CollectionAddPage />} />
                   <Route path="/collection/:editionId" element={<CollectionCopyPage />} />
+                  <Route path="/achievements" element={<AchievementsPage />} />
                   <Route path="/stats" element={<StatsPage />} />
                   <Route path="/notifications" element={<NotificationsPage />} />
                   <Route path="/account" element={<AccountPage />} />

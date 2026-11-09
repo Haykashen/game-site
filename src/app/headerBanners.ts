@@ -27,6 +27,7 @@ export const HEADER_BANNERS: Record<NavSectionId, HeaderBannerMeta> = {
   news: { kicker: 'COMMUNITY / NEWS', tone: 'amber' },
   collection: { kicker: 'SHELF / COLLECTION', tone: 'emerald' },
   notifications: { kicker: 'SHELF / NOTIFICATIONS', tone: 'violet' },
+  achievements: { kicker: 'SHELF / ACHIEVEMENTS', tone: 'lime' },
   stats: { kicker: 'SHELF / STATISTICS', tone: 'lime' },
   account: { kicker: 'PROFILE / ACCOUNT', tone: 'violet' },
   settings: { kicker: 'SYSTEM / SETTINGS', tone: 'muted' },

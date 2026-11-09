@@ -33,7 +33,7 @@ export function useGameCollection(): GameCollection {
   // Games use pagination; collection uses its owned-edition lookup.
   // Other tools still need the full catalogue for edition selectors.
   const catalogPath = pathname.replace(/\/+$/, '').toLowerCase();
-  const isCollectionRoute = catalogPath === '/community/showcase' || catalogPath === '/collection' || catalogPath.startsWith('/collection/');
+  const isCollectionRoute = catalogPath !== '/collection/new' && (catalogPath === '/community/showcase' || catalogPath === '/collection' || catalogPath.startsWith('/collection/'));
   const routeNeedsFullCatalog = !isCollectionRoute && !['', '/games'].includes(catalogPath);
   const { status, user } = useAuth();
   const userId = user?.id;

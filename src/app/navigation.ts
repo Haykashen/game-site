@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   ShoppingBag,
   Tag,
+  Trophy,
   UserRound,
   Users,
 } from 'lucide-react';
@@ -34,6 +35,7 @@ export type NavSectionId =
   | 'showcase'
   | 'collection'
   | 'notifications'
+  | 'achievements'
   | 'stats'
   | 'account'
   | 'settings'
@@ -137,6 +139,7 @@ export const NAV_ITEMS = {
     path: '/notifications',
     icon: Bell,
   },
+  achievements: { id: 'achievements', label: 'Достижения', pageTitle: 'Достижения', shortLabel: 'Достижения', path: '/achievements', icon: Trophy },
   stats: {
     id: 'stats',
     label: 'Статистика',
@@ -228,7 +231,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
   {
     id: 'shelf',
     label: 'Моя полка',
-    items: [NAV_ITEMS.chats, NAV_ITEMS.collection, NAV_ITEMS.notifications, NAV_ITEMS.stats],
+    items: [NAV_ITEMS.chats, NAV_ITEMS.collection, NAV_ITEMS.achievements, NAV_ITEMS.notifications, NAV_ITEMS.stats],
   },
 ];
 
