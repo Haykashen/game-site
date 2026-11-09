@@ -56,7 +56,7 @@ export function PhotoPicker({ photos, onChange, onBusyChange, readOnly = false, 
     if (event.type !== 'pointercancel' && canSort) onChange(reorderPhoto(photos, current.index, current.target));
   };
   return <div className={cx('market-photo-picker', onSelect && 'photo-strip', readOnly && 'photo-strip--readonly')} aria-busy={isProcessing}>
-    <div className="market-photo-picker__head"><span className="form-label">Фотографии</span><span className="market-photo-picker__count">{photos.length}{!readOnly && ` / ${MAX_MARKET_PHOTOS}`}</span></div>
+    <div className="market-photo-picker__head"><span className="form-label">Фотографии</span><span className="market-photo-picker__count" aria-live="polite" aria-atomic="true" aria-label={onSelect ? `Фото ${photos.length ? Math.min(Math.max(selectedIndex ?? 0, 0), photos.length - 1) + 1 : 0} из ${photos.length}` : `Фотографий: ${photos.length}`} >{onSelect ? `${photos.length ? Math.min(Math.max(selectedIndex ?? 0, 0), photos.length - 1) + 1 : 0} / ${photos.length}` : <>{photos.length}{!readOnly && ` / ${MAX_MARKET_PHOTOS}`}</>}</span></div>
     <div className="market-photo-picker__grid" role="group" aria-label="Фотографии экземпляра">
       {photos.map((photo, index) => <div className={cx('market-photo-tile', index === selectedIndex && 'is-selected', index === dropIndex && 'is-drop-target')} data-photo-index={index} key={`${index}-${photo.slice(-24)}`}>
         {onSelect ? <button type="button" className={cx('photo-strip__select', canSort && 'is-sortable')} aria-label={`Показать фото ${index + 1}`} aria-pressed={index === selectedIndex}

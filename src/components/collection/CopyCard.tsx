@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { PlatformBadge } from '../ui/PlatformBadge';
 import { CollectionCountBadge } from '../ui/CollectionCountBadge';
 import { formatMarketCondition } from '../../lib/market';
@@ -36,6 +37,7 @@ export function CopyCard({
   onEdit,
   onRemove,
 }: CopyCardProps) {
+  const navigate = useNavigate();
   const images = [...new Set(photos.filter(Boolean))];
   const displayEdition = {...edition, region: copy.region ?? edition.region};
   const purchase = formatPurchaseDetails(copy.purchasePrice, copy.purchaseDate);
@@ -96,9 +98,9 @@ export function CopyCard({
         {copy.notes && <p className="copy-card__notes">{copy.notes}</p>}
 
         <div className="copy-card__actions">
-          <button type="button" className="copy-card__open" onClick={onOpen}>
+          <button type="button" className="copy-card__open" onClick={() => navigate(`/community/showcase?copyId=${encodeURIComponent(copy.id)}`)}>
             <ExternalLink size={14} aria-hidden="true" />
-            Открыть экземпляр
+            Поделиться
           </button>
           <button
             type="button"

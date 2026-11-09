@@ -12,7 +12,7 @@ export function CopyPhotoGallery({photos, title, caption, editing, disabled, onC
   const photo = photos[index];
   return <div className="copy-gallery">
     {photo ? <button type="button" className="copy-gallery__stage" aria-label="Открыть фотографию крупно" onClick={() => setExpanded(true)}>
-      <img src={photo} alt={`Фото ${index + 1}: ${title}`} /><span className="copy-gallery__counter">{index + 1} / {photos.length}</span><span className="copy-gallery__zoom"><ZoomIn size={19} /></span>
+      <img src={photo} alt={`Фото ${index + 1}: ${title}`} /><span className="copy-gallery__zoom"><ZoomIn size={19} /></span>
     </button> : <div className="copy-gallery__empty"><ImageIcon size={32} aria-hidden="true" />Фотографии пока не добавлены</div>}
     <p className="copy-gallery__caption">{caption}</p>
     <PhotoPicker photos={photos} readOnly={!editing} disabled={disabled} sortable selectedIndex={index} onSelect={position => setSelected(photos[position])} onChange={onChange} onBusyChange={onBusyChange} />
