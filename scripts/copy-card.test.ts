@@ -1,3 +1,4 @@
+import {MemoryRouter} from 'react-router-dom';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createElement} from 'react';
@@ -7,9 +8,9 @@ import type {Copy, Edition, Game} from '../src/types.ts';
 const copy: Copy = {id: 'copy', editionId: 'edition', condition: 'New', completeness: 'CIB', purchasePrice: null, purchaseDate: '', notes: '', photos: [], createdAt: ''};
 const edition = {id: 'edition', gameId: 'game', name: 'Standard', platform: 'PS5', region: 'EUR', coverImages: ['https://example.com/catalogue.jpg'], contents: []} as unknown as Edition;
 const game = {id: 'game', title: 'Test game'} as Game;
-const render = (item: Copy, photos?: string[]) => renderToStaticMarkup(createElement(CopyCard, {
+const render = (item: Copy, photos?: string[]) => renderToStaticMarkup(createElement(MemoryRouter, null, createElement(CopyCard, {
   copy: item, edition, game, quantity: 1, ...(photos ? {photos} : {}), onOpen() {}, onEdit() {}, onRemove() {},
-}));
+})));
 test('collection cards display user photos and never substitute edition artwork', () => {
   const uploaded = render({...copy, photos: ['https://example.com/my-copy.jpg']});
   assert.ok(uploaded.includes('src="https://example.com/my-copy.jpg"'));
@@ -43,5 +44,5 @@ test('collection shelf cards leave quantity changes to the copy detail', () => {
   const html = render(copy);
   assert.ok(!html.includes('Увеличить количество'));
   assert.ok(!html.includes('Уменьшить количество'));
-  assert.ok(html.includes('Открыть экземпляр'));
+  assert.ok(html.includes('Поделиться'));
 });
