@@ -1,3 +1,4 @@
+import { IconButton } from '../ui/IconButton';
 import { LoadingState } from '../LoadingState';
 import { FeedTags } from '../feed/FeedTags';
 import { Plus, ShieldCheck, UserRound, X, CheckCircle2 } from 'lucide-react';
@@ -50,6 +51,7 @@ function CommunityActionsInner({ kind, onPublished, isModerator, authenticated }
   const close = () => { if (!busy) { setMode(null); setError(''); setSent(false); } };
   const open = (next: Mode) => {
     if (!authenticated) { navigate('/account'); return; }
+    if (next === 'pending' && !isModerator) return;
     if (next === 'create' && searchParams.get('game')) setGame(searchParams.get('game')!);
     setItems([]); setPage(1); setHasMore(false); setError(''); setSent(false); setMode(next);
   };
@@ -91,8 +93,8 @@ function CommunityActionsInner({ kind, onPublished, isModerator, authenticated }
     finally { setBusy(false); }
   }
   return <>
-    {authenticated && <button type="button" className="btn-secondary" onClick={() => open('mine')}><UserRound size={17} />{news ? 'Мои новости' : 'Мои темы'}</button>}
-    {isModerator && <button type="button" className="btn-secondary" onClick={() => open('pending')}><ShieldCheck size={17} />На модерации</button>}
+    {authenticated && <IconButton label={news ? 'Мои новости' : 'Мои темы'} title={news ? 'Мои новости' : 'Мои темы'} onClick={() => open('mine')}><UserRound size={18} aria-hidden="true" /></IconButton>}
+    {isModerator && <IconButton label="На модерации" title="На модерации" onClick={() => open('pending')}><ShieldCheck size={18} aria-hidden="true" /></IconButton>}
     <button type="button" className="market-compose-btn market-compose-btn--toolbar" onClick={() => open('create')}><Plus size={18} strokeWidth={2.5} />{news ? 'Создать новость' : 'Создать обсуждение'}</button>
     <ModalShell isOpen={mode !== null} onClose={close} labelledBy="community-compose-title" focusKey={mode ?? ''}>
       <div className="community-editor">

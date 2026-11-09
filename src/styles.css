@@ -4722,7 +4722,7 @@ html:not(.dark) .game-detail__editions button[aria-pressed="true"] {
 @media(prefers-reduced-motion:reduce) { .btn-icon { transition:none; } }
 
 /* Anchor the whole action footer, rather than only the publication date. */
-.showcase-card__body > .showcase-reactions { margin-top:auto; }
+.showcase-card__body > .showcase-reactions-block { margin-top:auto; }
 .showcase-card__body > time { margin-top:0; }
 
 /* Consistent heavier plus in all button variants and themes. */
@@ -4744,3 +4744,8 @@ button svg.lucide-plus, a.btn-primary svg.lucide-plus { stroke-width:3; }
 .page-controls :is(.btn-primary,.btn-secondary,.market-compose-btn) > svg { width:18px; height:18px; flex-shrink:0; }
 .page-controls .catalog-search input { font-family:inherit; font-size:1rem; line-height:1.5; }
 .page-controls .catalog-results { font:600 .68rem/1.4 'IBM Plex Mono',monospace; }
+
+.showcase-card { cursor:pointer; }
+.showcase-card:focus-visible { outline:2px solid var(--brand-ink); outline-offset:4px; }
+
+.page-controls .catalog-toolbar__actions > .btn-icon { width:46px; min-width:46px; height:46px; }

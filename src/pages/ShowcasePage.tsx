@@ -53,9 +53,17 @@ export function ShowcasePage() {
     {!composing && error && <p className="market-form__error" role="alert">{error}</p>}
     {notice && <p role="status">{notice}</p>}
     {!feed.isLoading && !feed.error && !feed.data.items.length && <div className="panel showcase-empty"><Share2 size={30} /><h2>Пока никто не поделился экземпляром</h2><p>Опубликуйте фотографии своей находки — она появится здесь.</p></div>}
-    <section className="showcase-grid" aria-label="Публикации коллекционеров">{feed.data.items.map(share => <article className="panel showcase-card" key={share.id}>
+    <section className="showcase-grid" aria-label="Публикации коллекционеров">{feed.data.items.map(share => <article className="panel showcase-card" key={share.id} tabIndex={0} aria-label={`Открыть экземпляр: ${share.game.title}`}
+      onClick={event => {
+        const target = event.target;
+        if (target instanceof Element && target.closest('button,a,input,select,textarea,[role="button"]')) return;
+        const selection = window.getSelection();
+        if (selection && !selection.isCollapsed && event.currentTarget.contains(selection.anchorNode)) return;
+        setError(''); setOpened(share);
+      }}
+      onKeyDown={event => { if (event.target === event.currentTarget && (event.key === 'Enter' || event.key === ' ')) {event.preventDefault(); setError(''); setOpened(share);} }}>
       <div className="copy-card__cover"><PhotoPreviewGallery photos={share.photos} title={share.game.title} /><div className="card-platforms"><PlatformBadge platform={share.edition.platform} /></div></div>
-      <div className="showcase-card__body"><AuthorRating name={share.author.displayName} userId={share.author.id} rating={share.author.rating} /><h2>{share.game.title}</h2><p className="panel-hint">{share.edition.name} · {share.region || 'Регион не указан'}</p>{share.caption && <p className="showcase-caption">{share.caption}</p>}<ShowcaseReactions post={share} onChange={social => updateSocial(share.id, social)} onComments={() => {setError(''); setOpened(share);}}/><time dateTime={share.createdAt}>{new Date(share.createdAt).toLocaleDateString('ru-RU')}</time><button type="button" className="btn-secondary" onClick={() => {setError(''); setOpened(share);}}>Смотреть экземпляр</button></div>
+      <div className="showcase-card__body"><AuthorRating name={share.author.displayName} userId={share.author.id} rating={share.author.rating} /><h2>{share.game.title}</h2><p className="panel-hint">{share.edition.name} · {share.region || 'Регион не указан'}</p>{share.caption && <p className="showcase-caption">{share.caption}</p>}<ShowcaseReactions post={share} onChange={social => updateSocial(share.id, social)} onComments={() => {setError(''); setOpened(share);}}/><time dateTime={share.createdAt}>{new Date(share.createdAt).toLocaleDateString('ru-RU')}</time></div>
     </article>)}</section>
     {(page > 1 || feed.data.hasMore) && <div className="showcase-pagination"><button className="btn-secondary" disabled={page <= 1 || feed.isLoading} onClick={() => setPage(value => value - 1)}>Назад</button><span>Страница {page}</span><button className="btn-secondary" disabled={!feed.data.hasMore || feed.isLoading} onClick={() => setPage(value => value + 1)}>Далее</button></div>}
     <ModalShell isOpen={composing} onClose={closeCompose} labelledBy="share-copy-title">

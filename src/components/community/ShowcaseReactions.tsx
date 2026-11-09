@@ -7,7 +7,7 @@ import {apiRequest, errorMessage} from '../../api/client';
 interface Props {post: CopyShareDto; onChange: (social: ShowcaseSocialDto) => void; onComments?: () => void}
 export function ShowcaseReactions({post, onChange, onComments}: Props) {
   const {user} = useAuth(); const [busy, setBusy] = useState(false); const [error, setError] = useState('');
-  return <div><div className="showcase-reactions">
+  return <div className="showcase-reactions-block"><div className="showcase-reactions">
     {user ? <button type="button" className="btn-secondary showcase-like" aria-label={post.likedByMe ? 'Снять лайк' : 'Поставить лайк'} aria-pressed={post.likedByMe} disabled={busy} onClick={async () => {
       if (busy) return; setBusy(true); setError('');
       try {onChange(await apiRequest<ShowcaseSocialDto>(`/api/v1/community/showcase/${post.id}/like`, {method: post.likedByMe ? 'DELETE' : 'PUT'}));}
