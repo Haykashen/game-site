@@ -4672,7 +4672,7 @@ html:not(.dark) .game-cta .game-cta__btn:hover { background:var(--bg-input); bor
 
 /* One plus icon size for shared primary action buttons. */
 .btn-primary > svg.lucide-plus {
-  width:16px; height:16px; flex-shrink:0; stroke-width:2;
+  width:16px; height:16px; flex-shrink:0;
 }
 
 .copy-detail__header-actions > button {
@@ -4688,7 +4688,9 @@ html:not(.dark) .game-cta .game-cta__btn:hover { background:var(--bg-input); bor
 
 /* Edition selection: outlined controls with a checked active state. */
 .game-detail__editions button {
-  border:1px solid #56644d; border-radius:9px; padding:12px 18px;
+  border:1px solid #56644d; border-radius:9px; padding:0 .6rem;
+  height:32px; min-height:32px; box-sizing:border-box;
+  display:inline-flex; align-items:center; justify-content:center;
   background:transparent; color:var(--text-main); box-shadow:none;
   font-size:14px; font-weight:700; line-height:1.25;
 }
@@ -4718,3 +4720,27 @@ html:not(.dark) .game-detail__editions button[aria-pressed="true"] {
 .btn-icon:focus-visible { outline:2px solid var(--brand-ink); outline-offset:3px; }
 .btn-icon:disabled { transform:none; box-shadow:none; opacity:.45; cursor:default; }
 @media(prefers-reduced-motion:reduce) { .btn-icon { transition:none; } }
+
+/* Anchor the whole action footer, rather than only the publication date. */
+.showcase-card__body > .showcase-reactions { margin-top:auto; }
+.showcase-card__body > time { margin-top:0; }
+
+/* Consistent heavier plus in all button variants and themes. */
+button svg.lucide-plus, a.btn-primary svg.lucide-plus { stroke-width:3; }
+
+/* Shared typography contract for page headings and toolbar actions. */
+:root {
+  --page-action-font-size:1rem;
+  --page-action-font-weight:700;
+  --page-control-line-height:1.25;
+  --page-control-height:46px;
+}
+.page-controls :is(.btn-primary,.btn-secondary,.market-compose-btn),
+:is(.notifications-toolbar,.analytics-toolbar,.admin-data__toolbar,.admin-reports__filters) :is(.btn-primary,.btn-secondary) {
+  font-family:inherit; font-size:var(--page-action-font-size);
+  font-weight:var(--page-action-font-weight); line-height:var(--page-control-line-height);
+  letter-spacing:normal; min-height:var(--page-control-height);
+}
+.page-controls :is(.btn-primary,.btn-secondary,.market-compose-btn) > svg { width:18px; height:18px; flex-shrink:0; }
+.page-controls .catalog-search input { font-family:inherit; font-size:1rem; line-height:1.5; }
+.page-controls .catalog-results { font:600 .68rem/1.4 'IBM Plex Mono',monospace; }

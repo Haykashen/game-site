@@ -12,7 +12,7 @@ interface PageHeadingProps {
 /** Compact heading shared by every page that is not the catalogue. */
 export function PageHeading({ eyebrow, title, description, action }: PageHeadingProps) {
   return (
-    <div className={cx('page-heading', Boolean(action) && 'page-heading--with-action')}>
+    <div className={cx('page-heading', 'page-controls', Boolean(action) && 'page-heading--with-action')}>
       <div className="page-heading__copy">
         <div className="eyebrow">
           <span className="eyebrow-dot" />

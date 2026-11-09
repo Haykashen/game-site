@@ -1,3 +1,4 @@
+import { PageHeading } from '../components/PageHeading';
 import { LoadingState } from '../components/LoadingState';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -31,7 +32,7 @@ function ChatWorkspace({userId}:{userId?:string|undefined}){
  useEffect(()=>{end.current?.scrollIntoView({block:'nearest'});},[messages.at(-1)?.id]);
  useEffect(()=>{setText(drafts[id]??'');pending.current=null;},[id]);
  if(!userId)return <section className="chat-guest"><MessageCircle size={44}/><h2>Ваши разговоры — здесь</h2><p>Войдите, чтобы написать автору объявления и продолжить переписку.</p><Link className="btn-primary" to="/account">Войти в аккаунт</Link></section>;
- return <><header className="chat-intro"><div><h1>Чаты</h1><p>Обсудите состояние игры, доставку и детали сделки.</p></div><span>Личная переписка</span></header>
+ return <><PageHeading eyebrow="MY SHELF / CHATS" title="Чаты" description="Обсудите состояние игры, доставку и детали сделки." />
  <div className={'chat-workspace '+(id?'has-chat':'')}>
  <aside className="chat-list"><div className="chat-list-head"><strong>Сообщения</strong><span>{chats.reduce((n,c)=>n+c.unread,0)||''}</span></div><input aria-label="Поиск по чатам" placeholder="Найти собеседника или объявление" value={query} onChange={e=>setQuery(e.target.value)}/>
  {loading&&!chats.length&&<LoadingState variant="inline" className="chat-hint" message="Загружаем переписки…" />}

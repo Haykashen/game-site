@@ -88,6 +88,7 @@ export function SearchToolbar<Key extends string>({
     <section
       className={cx(
         'catalog-toolbar',
+        'page-controls',
         Boolean(actions || leadingActions) && 'catalog-toolbar--with-actions',
       )}
       aria-label={ariaLabel}
