@@ -58,8 +58,11 @@ export function useGameCollection(): GameCollection {
   const loadOwnedCatalog = useCallback((signal: AbortSignal) => userId && editionKey
     ? fetchCollectionCatalog(signal) : Promise.resolve(EMPTY_CATALOG), [userId, editionKey]);
   const ownedCatalog = useApiResource('collection-catalog:' + scope + ':' + editionKey, loadOwnedCatalog, EMPTY_CATALOG);
-  const catalog = isCollectionRoute || !needsFullCatalog ? ownedCatalog : fullCatalog;
-  const {games, editions} = catalog.data;
+  const useOwnedWhileLoading = catalogPath.startsWith('/collection/') && catalogPath !== '/collection/new';
+  const catalog = isCollectionRoute || !needsFullCatalog || (useOwnedWhileLoading && (fullCatalog.isLoading || fullCatalog.error)) ? ownedCatalog : fullCatalog;
+  // Keep the shelf visible while its full editor lookup loads in the background.
+  const games = useMemo(() => [...new Map([...ownedCatalog.data.games, ...catalog.data.games].map(item => [item.id, item])).values()], [ownedCatalog.data.games, catalog.data.games]);
+  const editions = useMemo(() => [...new Map([...ownedCatalog.data.editions, ...catalog.data.editions].map(item => [item.id, item])).values()], [ownedCatalog.data.editions, catalog.data.editions]);
   const editionById = useMemo(() => {
     const map = new Map(editions.map((edition) => [edition.id, edition]));
     for (const edition of editions) for (const variant of edition.variants ?? []) map.set(variant.id, edition);

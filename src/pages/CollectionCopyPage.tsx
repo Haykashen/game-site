@@ -11,7 +11,7 @@ import { GameActions } from '../components/modal/GameActions';
 import { IconButton } from '../components/ui/IconButton';
 import { ModalShell } from '../components/ui/ModalShell';
 import { MoneyInput } from '../components/ui/MoneyInput';
-import { PlatformBadge } from '../components/ui/PlatformBadge';
+
 import { UnsavedChangesDialog } from '../components/ui/UnsavedChangesDialog';
 import { useCollection } from '../context/CollectionContext';
 import { useAuth } from '../context/AuthContext';
@@ -51,13 +51,19 @@ export function CollectionCopyDetail({copy, group, game: initialGame, edition: i
   const navigate = useNavigate();
   const [, setSearch] = useSearchParams();
   const {updateEdition, addCopy, setEditionQuantity, copies, games, editions, syncError} = useCollection();
+  const platformLabel = (value: string) => value.replace(/^ps([1-5])$/i, 'PlayStation $1').replace(/^psp$/i, 'PlayStation Portable').replace(/^ps vita$/i, 'PlayStation Vita');
+  const [platform, setPlatform] = useState(creating ? '' : initialEdition.platform.toLowerCase());
+  const [platformQuery, setPlatformQuery] = useState('');
+  const [platformOpen, setPlatformOpen] = useState(false);
+  const platformOptions = [...new Set(editions.map(item => item.platform.toLowerCase()))].sort().map(value => ({value,label:platformLabel(value)})).filter(item => item.label.toLowerCase().includes(platformQuery.toLowerCase()));
+  const platformGames = games.filter(item => !platform || editions.some(ed => ed.gameId === item.id && ed.platform.toLowerCase() === platform));
   const [selectedGame, setSelectedGame] = useState(creating ? '' : initialGame.id);
   const [selectedEdition, setSelectedEdition] = useState(creating ? '' : initialEdition.id);
   const [editionQuery, setEditionQuery] = useState('');
   const [editionOpen, setEditionOpen] = useState(false);
   const game = games.find(item => item.id === selectedGame) ?? initialGame;
   const edition = editions.find(item => item.id === selectedEdition) ?? initialEdition;
-  const editionOptions = editions.filter(item => item.gameId === selectedGame && (item.name+' '+item.platform+' '+item.region).toLowerCase().includes(editionQuery.toLowerCase())).map(item => ({value:item.id,label:item.name+' · '+item.platform+' · '+item.region}));
+  const editionOptions = editions.filter(item => item.gameId === selectedGame && (!platform || item.platform.toLowerCase() === platform) && (item.name+' '+item.platform+' '+item.region).toLowerCase().includes(editionQuery.toLowerCase())).map(item => ({value:item.id,label:item.name+' · '+item.platform+' · '+item.region}));
   const photos = useMemo(() => [...new Set(group.flatMap(item => item.photos).filter(Boolean))], [group]);
   const current = useMemo(() => copyEditorValues(copy, edition, photos, group.length), [copy, edition, photos, group.length]);
   const [session, setSession] = useState<{initial: CopyEditorValues; draft: CopyEditorValues} | null>(() => initiallyEditing ? {initial: current, draft: {...current, photos: [...current.photos]}} : null);
@@ -131,10 +137,11 @@ export function CollectionCopyDetail({copy, group, game: initialGame, edition: i
         <CopyPhotoGallery photos={values.photos} title={game.title} caption={`${edition.name} · ${edition.platform}`} editing={editing} disabled={saving} onBusyChange={setProcessingPhotos} onChange={next => update('photos', next)} />
         <div className="copy-detail__specs">
           <dl className="copy-detail__facts">
-            <div><dt>Игра</dt><dd>{editing ? <GameCombobox id="copy-game" games={games} value={selectedGame} onChange={id => {setSelectedGame(id);setSelectedEdition('');}} /> : <button type="button" className="market-game-link" onClick={() => requestExit(`/games?game=${encodeURIComponent(game.id)}`)}>{game.title}</button>}</dd></div>
+            <div><dt>Платформа</dt><dd>{editing ? <Combobox id="copy-platform" value={platformOpen ? platformQuery : platformLabel(platform)} options={platformOptions} selectedValues={[platform]} label="Платформы" placeholder="Найти платформу…" open={platformOpen} onOpen={() => {setPlatformOpen(true);setPlatformQuery('');}} onClose={() => setPlatformOpen(false)} onQueryChange={setPlatformQuery} onSelect={item => {setPlatform(item.value);setSelectedGame('');setSelectedEdition('');setPlatformOpen(false);}} emptyText="Платформы не найдены" /> : platformLabel(edition.platform)}</dd></div>
+            <div><dt>Игра</dt><dd>{editing ? <GameCombobox id="copy-game" games={platformGames} value={selectedGame} onChange={id => {setSelectedGame(id);setSelectedEdition('');}} /> : <button type="button" className="market-game-link" onClick={() => requestExit(`/games?game=${encodeURIComponent(game.id)}`)}>{game.title}</button>}</dd></div>
             <div><dt>Издание</dt><dd>{editing ? <Combobox id="copy-edition" value={editionOpen ? editionQuery : selectedEdition ? edition.name+' · '+edition.platform : ''} options={editionOptions} selectedValues={[selectedEdition]} label="Издания" placeholder="Выберите издание игры…" open={editionOpen} onOpen={() => {setEditionOpen(true);setEditionQuery('');}} onClose={() => setEditionOpen(false)} onQueryChange={setEditionQuery} onSelect={item => {setSelectedEdition(item.value);setEditionOpen(false);}} emptyText="Выберите игру или уточните поиск" /> : edition.name}</dd></div>
             <div><dt>Предмет</dt><dd>{editing ? <select className="form-control" aria-label="Предмет"><option value="game">Игра / издание</option></select> : 'Игра / издание'}</dd></div>
-            <div><dt>Платформа</dt><dd><PlatformBadge platform={edition.platform} /></dd></div>
+
 
             <div><dt>{editing ? <label htmlFor="copy-region">Регион</label> : 'Регион'}</dt><dd>{editing ? <select id="copy-region" className="form-control" value={values.region} disabled={saving} onChange={event => update('region', event.target.value)}><option value="">Не указан</option>{regions.map(region => <option key={region}>{region}</option>)}</select> : (copy.region ?? edition.region) || 'Не указан'}</dd></div>
             <div><dt>{editing ? <label htmlFor="copy-condition">Состояние</label> : 'Состояние'}</dt><dd>{editing ? <input id="copy-condition" className="form-control" value={values.condition} maxLength={60} placeholder="Например, 9/10" disabled={saving} onChange={event => update('condition', event.target.value)} /> : <span className="copy-detail__condition">{condition || 'Не указано'}</span>}</dd></div>
