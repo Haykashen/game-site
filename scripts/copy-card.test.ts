@@ -46,3 +46,11 @@ test('collection shelf cards leave quantity changes to the copy detail', () => {
   assert.ok(!html.includes('Уменьшить количество'));
   assert.ok(html.includes('Поделиться'));
 });
+
+test('edition cover is used only when the owner enables it', () => {
+  const html = render({...copy, useEditionCover: true, photos: ['https://example.com/personal.jpg']});
+  assert.ok(html.includes('src="https://example.com/catalogue.jpg"'));
+  assert.ok(!html.includes('src="https://example.com/personal.jpg"'));
+  const restored = render({...copy, useEditionCover: false, photos: ['https://example.com/personal.jpg']});
+  assert.ok(restored.includes('src="https://example.com/personal.jpg"'));
+});

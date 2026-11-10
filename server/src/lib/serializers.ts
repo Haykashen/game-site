@@ -134,6 +134,7 @@ export function serializeCopy(copy: CopyWithPhotos): CopyDto {
     id: copy.id,
     editionId: copy.editionId,
     region: copy.region ?? null,
+    useEditionCover: copy.useEditionCover,
     condition: copy.condition,
     completeness: copy.completeness,
     purchasePrice:

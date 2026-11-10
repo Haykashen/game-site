@@ -8,6 +8,7 @@ import {
 } from './common.js';
 
 export const copyDetailsSchema = z.object({
+  useEditionCover: z.boolean().optional(),
   region: z.string().trim().max(40).nullable().optional(),
   condition: z.string().trim().min(1).max(60).optional(),
   completeness: z.string().trim().min(1).max(60).optional(),
@@ -29,6 +30,7 @@ export const editionQuantitySchema = z.object({
 });
 
 export interface CopyDto {
+  useEditionCover?: boolean;
   id: string;
   editionId: string;
   condition: string;

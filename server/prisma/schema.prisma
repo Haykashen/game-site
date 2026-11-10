@@ -267,6 +267,7 @@ model Edition {
 }
 
 model Copy {
+  useEditionCover Boolean @default(false) @map("use_edition_cover")
   id                 String    @id @default(uuid()) @db.Uuid
   userId             String    @map("user_id") @db.Uuid
   editionId          String    @map("edition_id")

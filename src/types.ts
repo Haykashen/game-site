@@ -56,6 +56,7 @@ export interface Edition {
  * collection UI groups rows by edition and shows the resulting quantity.
  */
 export interface Copy {
+  useEditionCover?: boolean;
   /** null/undefined inherits the edition region; empty string means unknown. */
   region?: string | null;
   id: string;
@@ -77,7 +78,7 @@ export type CopyDraft = Omit<Copy, 'id' | 'createdAt'>;
 /** Editable physical details; shared by every copy of one edition. */
 export type CopyDetails = Pick<
   Copy,
-  'condition' | 'completeness' | 'purchasePrice' | 'purchaseDate' | 'notes' | 'photos'
+  'condition' | 'completeness' | 'purchasePrice' | 'purchaseDate' | 'notes' | 'photos' | 'useEditionCover'
 >;
 
 export type CopyUpdateDetails = Omit<CopyDetails, 'photos'> & {photos?: string[]; region?: string | null; quantity?: number; editionId?: string};

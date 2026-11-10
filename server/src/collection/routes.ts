@@ -31,6 +31,7 @@ function dateFromInput(value: string | undefined): Date | null | undefined {
 
 function sharedDetailsData(details: CopyDetailsInput): Prisma.CopyUpdateManyMutationInput {
   const data: Prisma.CopyUpdateManyMutationInput = {};
+  if (details.useEditionCover !== undefined) data.useEditionCover = details.useEditionCover;
 
   if (details.region !== undefined) data.region = details.region;
   if (details.condition !== undefined) data.condition = details.condition;
@@ -134,6 +135,7 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
         data: {
           userId: user.id,
           editionId: input.editionId,
+          useEditionCover: input.useEditionCover ?? representative?.useEditionCover ?? false,
           region: input.region !== undefined ? input.region : representative?.region ?? null,
           condition: input.condition ?? representative?.condition ?? DEFAULT_CONDITION,
           completeness:
@@ -262,6 +264,7 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
                 userId: user.id,
                 editionId,
                 region: representative?.region ?? null,
+                useEditionCover: representative?.useEditionCover ?? false,
                 condition: representative?.condition ?? DEFAULT_CONDITION,
                 completeness: representative?.completeness ?? DEFAULT_COMPLETENESS,
                 purchasePriceMinor: representative?.purchasePriceMinor ?? null,
@@ -330,7 +333,7 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
             await tx.copy.createMany({data: Array.from({length: input.quantity - current.length}, () => ({
               userId: user.id, editionId,
               condition: base.condition, completeness: base.completeness,
-              region: base.region, purchasePriceMinor: base.purchasePriceMinor,
+              useEditionCover: base.useEditionCover, region: base.region, purchasePriceMinor: base.purchasePriceMinor,
               purchaseDate: base.purchaseDate, notes: base.notes,
             }))});
           }

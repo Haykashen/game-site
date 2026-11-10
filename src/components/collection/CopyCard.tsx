@@ -38,7 +38,7 @@ export function CopyCard({
   onRemove,
 }: CopyCardProps) {
   const navigate = useNavigate();
-  const images = [...new Set(photos.filter(Boolean))];
+  const images = [...new Set((copy.useEditionCover ? edition.coverImages : photos).filter(Boolean))];
   const displayEdition = {...edition, region: copy.region ?? edition.region};
   const purchase = formatPurchaseDetails(copy.purchasePrice, copy.purchaseDate);
   const chips = [formatMarketCondition(copy.condition), copy.completeness].filter(

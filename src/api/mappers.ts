@@ -61,6 +61,7 @@ export function mapCopy(dto: CopyDto): Copy {
     id: dto.id,
     editionId: dto.editionId,
     region: dto.region ?? null,
+    useEditionCover: dto.useEditionCover ?? false,
     condition: dto.condition,
     completeness: dto.completeness,
     purchasePrice: dto.purchasePrice,
