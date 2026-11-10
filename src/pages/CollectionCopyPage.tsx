@@ -1,3 +1,4 @@
+import { ConditionInput } from '../components/collection/ConditionInput';
 import { GameCombobox } from '../components/ui/GameCombobox';
 import { Combobox } from '../components/ui/Combobox';
 import { QuantityControl } from '../components/collection/QuantityControl';
@@ -144,7 +145,7 @@ export function CollectionCopyDetail({copy, group, game: initialGame, edition: i
 
 
             <div><dt>{editing ? <label htmlFor="copy-region">Регион</label> : 'Регион'}</dt><dd>{editing ? <select id="copy-region" className="form-control" value={values.region} disabled={saving} onChange={event => update('region', event.target.value)}><option value="">Не указан</option>{regions.map(region => <option key={region}>{region}</option>)}</select> : (copy.region ?? edition.region) || 'Не указан'}</dd></div>
-            <div><dt>{editing ? <label htmlFor="copy-condition">Состояние</label> : 'Состояние'}</dt><dd>{editing ? <input id="copy-condition" className="form-control" value={values.condition} maxLength={60} placeholder="Например, 9/10" disabled={saving} onChange={event => update('condition', event.target.value)} /> : <span className="copy-detail__condition">{condition || 'Не указано'}</span>}</dd></div>
+            <div><dt>{editing ? <label htmlFor="copy-condition">Состояние</label> : 'Состояние'}</dt><dd>{editing ? <ConditionInput id="copy-condition" value={values.condition} disabled={saving} onChange={next => update('condition', next)} /> : <span className="copy-detail__condition">{condition || 'Не указано'}</span>}</dd></div>
             <div><dt>{editing ? <label htmlFor="copy-completeness">Комплектность</label> : 'Комплектность'}</dt><dd>{editing ? <fieldset disabled={saving} className="copy-detail__inline-fieldset"><CompletenessCombobox id="copy-completeness" value={values.completeness} onChange={next => update('completeness', next)} /></fieldset> : completenessLabel(copy.completeness) || 'Не указана'}</dd></div>
             <div><dt>{editing ? <label htmlFor="copy-date">Дата покупки</label> : 'Дата покупки'}</dt><dd>{editing ? <input id="copy-date" type="date" className="form-control" disabled={saving} value={values.purchaseDate} onChange={event => update('purchaseDate', event.target.value)} /> : formatPurchaseDate(copy.purchaseDate) || 'Не указана'}</dd></div>
             <div><dt>{editing ? <label htmlFor="copy-price">Цена покупки</label> : 'Цена покупки'}</dt><dd>{editing ? <fieldset disabled={saving} className="copy-detail__inline-fieldset"><MoneyInput id="copy-price" value={values.purchasePrice} onChange={next => update('purchasePrice', next)} /></fieldset> : <span className="copy-detail__price">{copy.purchasePrice === null ? 'Не указана' : `${formatMoneyInput(String(copy.purchasePrice))} ₽`}</span>}</dd></div>

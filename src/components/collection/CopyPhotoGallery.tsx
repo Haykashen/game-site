@@ -16,8 +16,8 @@ export function CopyPhotoGallery({photos, title, caption, editing, disabled, onC
       <img src={photo} alt={`Фото ${index + 1}: ${title}`} /><span className="copy-gallery__zoom"><ZoomIn size={19} /></span>
     </button> : <div className="copy-gallery__empty"><ImageIcon size={32} aria-hidden="true" />Фотографии пока не добавлены</div>}
     <p className="copy-gallery__caption">{caption}</p>
-    {editing && <label className="copy-gallery__cover-option"><input type="checkbox" checked={useEditionCover} disabled={disabled} onChange={event => onUseEditionCoverChange?.(event.target.checked)} /> Выводить обложку издания игры</label>}
     <PhotoPicker photos={photos} readOnly={!editing} disabled={disabled} sortable selectedIndex={index} onSelect={position => setSelected(photos[position])} onChange={onChange} onBusyChange={onBusyChange} />
+    {editing && <label className="copy-gallery__cover-option"><input type="checkbox" checked={useEditionCover} disabled={disabled} onChange={event => onUseEditionCoverChange?.(event.target.checked)} /> Выводить обложку издания игры</label>}
     {expanded && displayPhotos.length > 0 && <PhotoLightbox photos={displayPhotos} title={title} initialIndex={index} onClose={() => setExpanded(false)} />}
   </div>;
 }

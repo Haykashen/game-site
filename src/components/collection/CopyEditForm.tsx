@@ -1,3 +1,4 @@
+import { ConditionInput } from './ConditionInput';
 import { CompletenessCombobox } from './CompletenessCombobox';
 import { copyDetailsSchema } from '@discvault/shared';
 import { MoneyInput } from '../ui/MoneyInput';
@@ -109,15 +110,7 @@ export function CopyEditForm({
       <form className="market-form" onSubmit={handleSubmit}><fieldset className="copy-form__fields" disabled={isSaving}>
         <div className="market-form__grid">
           <FormField id="copyCondition" label="Состояние">
-            <input
-              id="copyCondition"
-              type="text"
-              className="form-control"
-              maxLength={60}
-              placeholder="Например, 9/10"
-              value={condition}
-              onChange={(event) => setCondition(event.target.value)}
-            />
+            <ConditionInput id="copyCondition" value={condition} disabled={isSaving} onChange={setCondition} />
           </FormField>
 
           <FormField id="copyCompleteness" label="Комплектность">

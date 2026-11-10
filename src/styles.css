@@ -4749,3 +4749,6 @@ button svg.lucide-plus, a.btn-primary svg.lucide-plus { stroke-width:3; }
 .showcase-card:focus-visible { outline:2px solid var(--brand-ink); outline-offset:4px; }
 
 .page-controls .catalog-toolbar__actions > .btn-icon { width:46px; min-width:46px; height:46px; }
+
+.condition-input { display:inline-flex; align-items:center; gap:4px; color:var(--text-main); }
+.condition-input .game-detail__score { flex:none; }
