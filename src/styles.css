@@ -4809,3 +4809,17 @@ html:not(.dark) .showcase-feed-page { --feed-card:#fffdf6; --feed-border:#d9d2be
 
 .showcase-publication-heading { position:relative; padding-right:100px; }
 .showcase-publication-heading__actions { position:absolute; top:0; right:0; display:flex; align-items:center; gap:8px; }
+
+
+.showcase-publication-overview__photos { min-width:0; }
+.showcase-publication-overview__photos .market-carousel { margin:0; }
+.showcase-publication-specs { margin:0; }
+.showcase-publication-specs > .spec-row { align-items:baseline; gap:16px; line-height:1.5; }
+.showcase-publication-specs > div:last-child { border-bottom:0; }
+.showcase-publication-specs dt { color:var(--text-muted); flex-shrink:0; }
+.showcase-publication-specs dd { margin:0; text-align:right; overflow-wrap:anywhere; font-weight:600; }
+.showcase-publication-specs__condition { color:var(--brand-ink); }
+.showcase-publication-story { display:grid; gap:12px; }
+.showcase-publication-story h2 { margin:0; font-size:22px; line-height:1.35; }
+.showcase-publication-story p { margin:0; line-height:1.7; }
+@media(max-width:640px) { .showcase-publication-overview { grid-template-columns:1fr; gap:16px; }  }
