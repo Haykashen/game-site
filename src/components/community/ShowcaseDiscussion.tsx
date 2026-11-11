@@ -6,7 +6,7 @@ import {useAuth} from '../../context/AuthContext';
 import {useApiResource} from '../../hooks/useApiResource';
 import {ApiState} from '../ApiState';
 import {AuthorRating} from '../ui/AuthorRating';
-import {ShowcaseReactions} from './ShowcaseReactions';
+
 const EMPTY: Paginated<ShowcaseCommentDto> = {items: [], total: 0, page: 1, pageSize: 20, hasMore: false};
 export function ShowcaseDiscussion({post, onChange}: {post: CopyShareDto; onChange: (social: ShowcaseSocialDto) => void}) {
   const {user, isModerator} = useAuth();
@@ -15,7 +15,7 @@ export function ShowcaseDiscussion({post, onChange}: {post: CopyShareDto; onChan
   const load = useCallback((signal: AbortSignal) => apiRequest<Paginated<ShowcaseCommentDto>>(`${base}/comments?page=${page}&pageSize=20`, {signal}), [base, page]);
   const comments = useApiResource(`showcase-comments:${post.id}`, load, EMPTY);
   return <section className="showcase-discussion" aria-labelledby="showcase-comments-title">
-    <ShowcaseReactions post={post} onChange={onChange}/><h3 id="showcase-comments-title">Комментарии</h3>
+    <h3 id="showcase-comments-title">Комментарии <span className="showcase-discussion__count">{post.commentsCount}</span></h3>
     <ApiState loading={comments.isLoading} error={comments.error} onRetry={comments.refresh}/>
     {!comments.isLoading && !comments.error && !comments.data.total && <p className="panel-hint">Комментариев пока нет. Начните обсуждение.</p>}
     <div className="showcase-comments">{comments.data.items.map(comment => <article key={comment.id} className="showcase-comment"><AuthorRating name={comment.author.displayName} userId={comment.author.id} rating={comment.author.rating}/><p>{comment.body}</p><time dateTime={comment.createdAt}>{new Date(comment.createdAt).toLocaleString('ru-RU')}</time>
