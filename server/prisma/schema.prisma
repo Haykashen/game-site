@@ -687,6 +687,7 @@ model Status {
 }
 
 model CopyShare {
+  topic String @default("") @db.VarChar(200)
   likes CopyShareLike[]
   comments CopyShareComment[]
   id String @id @default(uuid()) @db.Uuid

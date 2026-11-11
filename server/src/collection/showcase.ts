@@ -9,7 +9,7 @@ type Share = Prisma.CopyShareGetPayload<{include: typeof include}>;
 /** Whitelist public fields: never spread the private copy or user record into the feed. */
 export function publicCopyShare(share: Share, likedByMe = false): CopyShareDto {
   const {copy} = share;
-  return {likesCount: share._count?.likes ?? 0, commentsCount: share._count?.comments ?? 0, likedByMe, id: share.id, caption: share.caption, photos: share.photos, condition: share.condition, completeness: share.completeness, region: share.region, createdAt: share.createdAt.toISOString(), author: {id: copy.user.id, displayName: copy.user.displayName, rating: ratingFrom(copy.user.ratingSum, copy.user.ratingCount)}, game: {id: copy.edition.game.id, title: copy.edition.game.title}, edition: {id: copy.edition.id, name: copy.edition.name, platform: copy.edition.platform}};
+  return {likesCount: share._count?.likes ?? 0, commentsCount: share._count?.comments ?? 0, likedByMe, id: share.id, topic: share.topic, caption: share.caption, photos: share.photos, condition: share.condition, completeness: share.completeness, region: share.region, createdAt: share.createdAt.toISOString(), author: {id: copy.user.id, displayName: copy.user.displayName, rating: ratingFrom(copy.user.ratingSum, copy.user.ratingCount)}, game: {id: copy.edition.game.id, title: copy.edition.game.title}, edition: {id: copy.edition.id, name: copy.edition.name, platform: copy.edition.platform}};
 }
 export function registerShowcaseRoutes(app: FastifyInstance) {
   app.get('/api/v1/community/showcase', {preHandler: app.optionalAuth}, async request => {
@@ -28,7 +28,7 @@ export function registerShowcaseRoutes(app: FastifyInstance) {
     if (!copy) throw notFound('Экземпляр не найден в вашей коллекции.');
     if (!copy.photos.length) throw badRequest('Добавьте к экземпляру хотя бы одну фотографию.');
     // Public photos are a snapshot: later private edits must not publish new images silently.
-    const data = {caption: input.caption, photos: copy.photos.map(photo => photo.url), condition: copy.condition, completeness: copy.completeness, region: copy.region ?? copy.edition.region.code};
+    const data = {topic: input.topic, caption: input.caption, photos: copy.photos.map(photo => photo.url), condition: copy.condition, completeness: copy.completeness, region: copy.region ?? copy.edition.region.code};
     const share = await app.prisma.copyShare.upsert({where: {copyId: copy.id}, create: {copyId: copy.id, ...data}, update: data, include});
     return reply.code(201).send(publicCopyShare(share));
   });

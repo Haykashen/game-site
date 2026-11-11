@@ -1,8 +1,8 @@
 import {z} from 'zod';
 import {idSchema} from './common.js';
-export const shareCopySchema = z.object({copyId: idSchema, caption: z.string().trim().max(1000).default('')});
+export const shareCopySchema = z.object({copyId: idSchema, topic: z.string().trim().max(200).default(''), caption: z.string().trim().max(1000).default('')});
 export interface CopyShareDto {
-  id: string; caption: string; photos: string[]; condition: string; completeness: string; region: string; createdAt: string;
+  id: string; topic?: string; caption: string; photos: string[]; condition: string; completeness: string; region: string; createdAt: string;
   likesCount: number; commentsCount: number; likedByMe: boolean;
   author: {id: string; displayName: string; rating: number | null};
   game: {id: string; title: string};

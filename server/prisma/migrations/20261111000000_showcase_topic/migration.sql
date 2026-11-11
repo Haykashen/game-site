@@ -1,0 +1,1 @@
+ALTER TABLE "copy_shares" ADD COLUMN "topic" VARCHAR(200) NOT NULL DEFAULT '';

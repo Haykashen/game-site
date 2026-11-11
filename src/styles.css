@@ -4796,3 +4796,16 @@ html:not(.dark) .showcase-feed-page { --feed-card:#fffdf6; --feed-border:#d9d2be
 
 .showcase-post__header .market-author > .spec-link,
 .showcase-post__passport strong { color:var(--text-main); }
+
+.showcase-compose-fields { display:flex; flex-direction:column; gap:12px; }
+.showcase-compose-fields > .form-label { margin:8px 0 -4px; }
+.showcase-compose-fields > .market-carousel { margin:8px 0; }
+.showcase-compose-fields > textarea { min-height:0; }
+
+.showcase-publication-heading { display:grid; gap:16px; }
+.showcase-publication-heading .showcase-post__header { padding:0; }
+.showcase-publication-heading h2 { margin:0; font-size:22px; font-weight:700; line-height:1.35; }
+.showcase-publication-heading .market-author > .spec-link { color:var(--text-main); }
+
+.showcase-publication-heading { position:relative; padding-right:52px; }
+.showcase-publication-heading__close { position:absolute; top:0; right:0; }
