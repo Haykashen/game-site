@@ -4764,9 +4764,9 @@ html:not(.dark) .showcase-feed-page { --feed-card:#fffdf6; --feed-border:#d9d2be
 .showcase-post { background:var(--feed-card); border:1px solid var(--feed-border); border-radius:18px; overflow:hidden; cursor:pointer; transition:border-color .2s; }
 .showcase-post:hover { border-color:#455249; }
 .showcase-post:focus-visible { outline:2px solid var(--brand-ink); outline-offset:4px; }
-.showcase-post__header { display:flex; align-items:center; gap:12px; padding:16px 20px 12px; }
+.showcase-post__header { display:flex; align-items:center; justify-content:flex-start; flex-wrap:nowrap; gap:12px; padding:16px 20px 12px; margin:0; }
 .showcase-post__avatar { width:38px; height:38px; flex:none; display:grid; place-items:center; border-radius:50%; background:var(--feed-elevated); border:1px solid var(--feed-border); color:var(--brand-ink); font-weight:700; font-size:14px; }
-.showcase-post__header > div { display:flex; flex-direction:column; gap:2px; min-width:0; }
+.showcase-post__header > div { display:flex; flex-direction:column; align-items:flex-start; gap:2px; min-width:0; margin:0; }
 .showcase-post__header time { color:var(--text-muted); font-size:12px; }
 .showcase-post__story { padding:0 20px 14px; }
 .showcase-post__story h2 { font-size:18px; font-weight:700; line-height:1.5; margin:0 0 6px; }
