@@ -4,7 +4,7 @@ import {AuthorRating} from '../components/ui/AuthorRating';
 import type {CopyShareDto, Paginated, ShowcaseSocialDto} from '@discvault/shared';
 import {useCallback, useEffect, useState} from 'react';
 import {Link, useSearchParams} from 'react-router-dom';
-import {Plus, Share2} from 'lucide-react';
+import {Gamepad2, Plus, Share2} from 'lucide-react';
 import {apiRequest, errorMessage} from '../api/client';
 import {useApiResource} from '../hooks/useApiResource';
 import {useAuth} from '../context/AuthContext';
@@ -71,7 +71,7 @@ export function ShowcasePage() {
       <header className="showcase-post__header"><span className="showcase-post__avatar" aria-hidden="true">{share.author.displayName.slice(0,2).toLocaleUpperCase('ru-RU')}</span><div><AuthorRating name={share.author.displayName} userId={share.author.id} rating={share.author.rating} /><time dateTime={share.createdAt}>{new Date(share.createdAt).toLocaleString('ru-RU', {day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})}</time></div></header>
       <div className="showcase-post__story"><h2>{share.game.title}</h2>{share.caption && <p>{share.caption}</p>}</div>
       <div className="showcase-post__media"><PhotoPreviewGallery photos={share.photos} title={share.game.title} /><div className="card-platforms"><PlatformBadge platform={share.edition.platform} /></div></div>
-      <div className="showcase-post__passport"><strong>{share.game.title} · {share.edition.name}</strong><div><span className="edition-chip">{share.region || 'Регион не указан'}</span><span className="edition-chip">{completenessLabel(share.completeness) || 'Комплектность не указана'}</span><span className="edition-chip showcase-post__condition">{formatMarketCondition(share.condition) || 'Состояние не указано'}</span></div></div>
+      <div className="showcase-post__passport"><strong><Gamepad2 size={16} aria-hidden="true" />{share.game.title} · {share.edition.name}</strong><div><span className="edition-chip">{share.region || 'Регион не указан'}</span><span className="edition-chip">{completenessLabel(share.completeness) || 'Комплектность не указана'}</span><span className="edition-chip showcase-post__condition">{formatMarketCondition(share.condition) || 'Состояние не указано'}</span></div></div>
       <footer className="showcase-post__footer"><ShowcaseReactions post={share} onChange={social => updateSocial(share.id, social)} onComments={() => {setError(''); setOpened(share);}}/><button type="button" className="btn-secondary showcase-post__share" onClick={async () => {try {await navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}#/community/showcase?post=${encodeURIComponent(share.id)}`);setNotice('Ссылка на публикацию скопирована.');}catch{setNotice('Не удалось скопировать ссылку.');}}}><Share2 size={17} aria-hidden="true" />Поделиться</button></footer>
     </article>)}</section>
     {(page > 1 || feed.data.hasMore) && <div className="showcase-pagination"><button className="btn-secondary" disabled={page <= 1 || feed.isLoading} onClick={() => setPage(value => value - 1)}>Назад</button><span>Страница {page}</span><button className="btn-secondary" disabled={!feed.data.hasMore || feed.isLoading} onClick={() => setPage(value => value + 1)}>Далее</button></div>}

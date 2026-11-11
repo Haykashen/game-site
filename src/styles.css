@@ -4790,3 +4790,9 @@ html:not(.dark) .showcase-feed-page { --feed-card:#fffdf6; --feed-border:#d9d2be
  .showcase-post__footer { padding:14px 16px; }
 }
 @media(prefers-reduced-motion:reduce) { .showcase-post { transition:none; } }
+
+.showcase-post__passport strong { display:inline-flex; align-items:center; gap:8px; min-width:0; }
+.showcase-post__passport strong > svg { flex-shrink:0; }
+
+.showcase-post__header .market-author > .spec-link,
+.showcase-post__passport strong { color:var(--text-main); }
