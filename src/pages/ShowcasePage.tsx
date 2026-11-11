@@ -2,7 +2,7 @@ import {ShowcaseReactions} from '../components/community/ShowcaseReactions';
 import {ShowcaseDiscussion} from '../components/community/ShowcaseDiscussion';
 import {AuthorRating} from '../components/ui/AuthorRating';
 import type {CopyShareDto, Paginated, ShowcaseSocialDto} from '@discvault/shared';
-import {useCallback, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {Link, useSearchParams} from 'react-router-dom';
 import {Plus, Share2} from 'lucide-react';
 import {apiRequest, errorMessage} from '../api/client';
@@ -29,6 +29,11 @@ export function ShowcasePage() {
   const [copyId, setCopyId] = useState(params.get('copyId') ?? '');
   const [caption, setCaption] = useState('');
   const [opened, setOpened] = useState<CopyShareDto | null>(null);
+  useEffect(() => {
+    const id = params.get('post');
+    const post = feed.data.items.find(item => item.id === id);
+    if (post) setOpened(post);
+  }, [params, feed.data.items]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
@@ -46,14 +51,15 @@ export function ShowcasePage() {
     try {await apiRequest(`/api/v1/community/showcase/${encodeURIComponent(share.id)}`, {method: 'DELETE'}); setOpened(null); setNotice('Публикация снята. Экземпляр остался в коллекции.'); await feed.refresh();}
     catch (cause) {setError(errorMessage(cause));} finally {setBusy(false);}
   }
-  return <>
+  return <><div className="showcase-feed-page">
     <PageHeading eyebrow="COMMUNITY / COLLECTION SHOWCASE" title="Витрина коллекций" description="Экземпляры с историей: делитесь находками, показывайте редкие издания и знакомьтесь с коллекциями других пользователей."
-      action={user ? <button type="button" className="btn-primary" onClick={() => {setError(''); setComposing(true);}}><Plus size={17} />Поделиться экземпляром</button> : <Link className="btn-secondary" to="/account">Войти, чтобы поделиться</Link>} />
+      />
+    <div className="showcase-create-bar"><span>Поделитесь находкой из вашей коллекции…</span>{user ? <button type="button" className="btn-primary" onClick={() => {setError('');setComposing(true);}}><Plus size={17} aria-hidden="true" />Поделиться экземпляром</button> : <Link className="btn-secondary" to="/account">Войти, чтобы поделиться</Link>}</div>
     <ApiState loading={feed.isLoading} error={feed.error} onRetry={feed.refresh} />
     {!composing && error && <p className="market-form__error" role="alert">{error}</p>}
     {notice && <p role="status">{notice}</p>}
     {!feed.isLoading && !feed.error && !feed.data.items.length && <div className="panel showcase-empty"><Share2 size={30} /><h2>Пока никто не поделился экземпляром</h2><p>Опубликуйте фотографии своей находки — она появится здесь.</p></div>}
-    <section className="showcase-feed" aria-label="Публикации коллекционеров">{feed.data.items.map(share => <article className="panel showcase-card showcase-post" key={share.id} tabIndex={0} aria-label={`Открыть экземпляр: ${share.game.title}`}
+    <section className="showcase-feed" aria-label="Публикации коллекционеров">{feed.data.items.map(share => <article className="showcase-post" key={share.id} tabIndex={0} aria-label={`Открыть экземпляр: ${share.game.title}`}
       onClick={event => {
         const target = event.target;
         if (target instanceof Element && target.closest('button,a,input,select,textarea,[role="button"]')) return;
@@ -64,11 +70,12 @@ export function ShowcasePage() {
       onKeyDown={event => { if (event.target === event.currentTarget && (event.key === 'Enter' || event.key === ' ')) {event.preventDefault(); setError(''); setOpened(share);} }}>
       <header className="showcase-post__header"><span className="showcase-post__avatar" aria-hidden="true">{share.author.displayName.slice(0,2).toLocaleUpperCase('ru-RU')}</span><div><AuthorRating name={share.author.displayName} userId={share.author.id} rating={share.author.rating} /><time dateTime={share.createdAt}>{new Date(share.createdAt).toLocaleString('ru-RU', {day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})}</time></div></header>
       <div className="showcase-post__story"><h2>{share.game.title}</h2>{share.caption && <p>{share.caption}</p>}</div>
-      <div className="copy-card__cover showcase-post__media"><PhotoPreviewGallery photos={share.photos} title={share.game.title} /><div className="card-platforms"><PlatformBadge platform={share.edition.platform} /></div></div>
+      <div className="showcase-post__media"><PhotoPreviewGallery photos={share.photos} title={share.game.title} /><div className="card-platforms"><PlatformBadge platform={share.edition.platform} /></div></div>
       <div className="showcase-post__passport"><strong>{share.game.title} · {share.edition.name}</strong><div><span className="edition-chip">{share.region || 'Регион не указан'}</span><span className="edition-chip">{completenessLabel(share.completeness) || 'Комплектность не указана'}</span><span className="edition-chip showcase-post__condition">{formatMarketCondition(share.condition) || 'Состояние не указано'}</span></div></div>
-      <footer className="showcase-post__footer"><ShowcaseReactions post={share} onChange={social => updateSocial(share.id, social)} onComments={() => {setError(''); setOpened(share);}}/></footer>
+      <footer className="showcase-post__footer"><ShowcaseReactions post={share} onChange={social => updateSocial(share.id, social)} onComments={() => {setError(''); setOpened(share);}}/><button type="button" className="btn-secondary showcase-post__share" onClick={async () => {try {await navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}#/community/showcase?post=${encodeURIComponent(share.id)}`);setNotice('Ссылка на публикацию скопирована.');}catch{setNotice('Не удалось скопировать ссылку.');}}}><Share2 size={17} aria-hidden="true" />Поделиться</button></footer>
     </article>)}</section>
     {(page > 1 || feed.data.hasMore) && <div className="showcase-pagination"><button className="btn-secondary" disabled={page <= 1 || feed.isLoading} onClick={() => setPage(value => value - 1)}>Назад</button><span>Страница {page}</span><button className="btn-secondary" disabled={!feed.data.hasMore || feed.isLoading} onClick={() => setPage(value => value + 1)}>Далее</button></div>}
+    </div>
     <ModalShell isOpen={composing} onClose={closeCompose} labelledBy="share-copy-title">
       <h2 className="modal-title" id="share-copy-title">Поделиться экземпляром</h2>
       {!user ? <Link to="/account" className="btn-primary">Войти</Link> : isSyncing || isCatalogLoading ? <p role="status">Загружаем коллекцию…</p> : !options.length ? <p>Добавьте к экземпляру фотографии в <Link to="/collection">своей коллекции</Link>, чтобы опубликовать его здесь.</p> : <form className="market-form" onSubmit={async event => {
