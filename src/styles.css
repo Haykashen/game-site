@@ -4851,3 +4851,7 @@ html:not(.dark) .showcase-feed-page { --feed-card:#fffdf6; --feed-border:#d9d2be
  .showcase-publication-heading__actions .showcase-like,
  .showcase-publication-heading__actions .showcase-reactions > a { transition:none; }
 }
+
+.showcase-discussion h3 { display:flex; align-items:center; gap:10px; }
+.showcase-discussion__count { display:inline-flex; align-items:center; gap:6px; }
+.showcase-comment-form textarea.form-control { min-height:72px; height:72px; resize:vertical; }

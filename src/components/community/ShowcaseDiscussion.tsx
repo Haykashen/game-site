@@ -1,3 +1,4 @@
+import { MessageCircle } from 'lucide-react';
 import {useCallback, useState} from 'react';
 import {Link} from 'react-router-dom';
 import type {CopyShareDto, Paginated, ShowcaseCommentDto, ShowcaseSocialDto} from '@discvault/shared';
@@ -15,7 +16,7 @@ export function ShowcaseDiscussion({post, onChange}: {post: CopyShareDto; onChan
   const load = useCallback((signal: AbortSignal) => apiRequest<Paginated<ShowcaseCommentDto>>(`${base}/comments?page=${page}&pageSize=20`, {signal}), [base, page]);
   const comments = useApiResource(`showcase-comments:${post.id}`, load, EMPTY);
   return <section className="showcase-discussion" aria-labelledby="showcase-comments-title">
-    <h3 id="showcase-comments-title">Комментарии <span className="showcase-discussion__count">{post.commentsCount}</span></h3>
+    <h3 id="showcase-comments-title">Комментарии <span className="showcase-discussion__count"><MessageCircle size={18} aria-hidden="true" />{post.commentsCount}</span></h3>
     <ApiState loading={comments.isLoading} error={comments.error} onRetry={comments.refresh}/>
     {!comments.isLoading && !comments.error && !comments.data.total && <p className="panel-hint">Комментариев пока нет. Начните обсуждение.</p>}
     <div className="showcase-comments">{comments.data.items.map(comment => <article key={comment.id} className="showcase-comment"><AuthorRating name={comment.author.displayName} userId={comment.author.id} rating={comment.author.rating}/><p>{comment.body}</p><time dateTime={comment.createdAt}>{new Date(comment.createdAt).toLocaleString('ru-RU')}</time>
@@ -30,7 +31,7 @@ export function ShowcaseDiscussion({post, onChange}: {post: CopyShareDto; onChan
       event.preventDefault(); if (busy || !body.trim()) return; setBusy(true); setError('');
       try {const next = await apiRequest<ShowcaseSocialDto>(`${base}/comments`, {method:'POST',body:{body}}); onChange(next); setBody(''); const lastPage = Math.max(1, Math.ceil(next.commentsCount / 20)); if (lastPage !== page) setPage(lastPage); else await comments.refresh();}
       catch (cause) {setError(errorMessage(cause));} finally {setBusy(false);}
-    }}><label htmlFor="showcase-comment">Ваш комментарий</label><textarea id="showcase-comment" className="form-control" rows={3} maxLength={2000} required value={body} disabled={busy} onChange={event => setBody(event.target.value)} placeholder="Что вам понравилось в этом экземпляре?"/><button className="btn-primary" type="submit" disabled={busy || !body.trim()}>{busy ? 'Отправляем…' : 'Отправить комментарий'}</button></form> : <Link className="btn-secondary" to="/account">Войти, чтобы комментировать</Link>}
+    }}><textarea id="showcase-comment" aria-label="Комментарий" className="form-control" rows={2} maxLength={2000} required value={body} disabled={busy} onChange={event => setBody(event.target.value)} placeholder="Что вам понравилось в этом экземпляре?"/><button className="btn-primary" type="submit" disabled={busy || !body.trim()}>{busy ? 'Отправляем…' : 'Отправить'}</button></form> : <Link className="btn-secondary" to="/account">Войти, чтобы комментировать</Link>}
     {error && <p className="market-form__error" role="alert">{error}</p>}
   </section>;
 }
