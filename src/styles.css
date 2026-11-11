@@ -4807,5 +4807,5 @@ html:not(.dark) .showcase-feed-page { --feed-card:#fffdf6; --feed-border:#d9d2be
 .showcase-publication-heading h2 { margin:0; font-size:22px; font-weight:700; line-height:1.35; }
 .showcase-publication-heading .market-author > .spec-link { color:var(--text-main); }
 
-.showcase-publication-heading { position:relative; padding-right:52px; }
-.showcase-publication-heading__close { position:absolute; top:0; right:0; }
+.showcase-publication-heading { position:relative; padding-right:100px; }
+.showcase-publication-heading__actions { position:absolute; top:0; right:0; display:flex; align-items:center; gap:8px; }
