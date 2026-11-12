@@ -20,6 +20,7 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
   const pagingIds = [id + '-page-game-1', id + '-page-game-2', id + '-page-game-3'];
   const ownerId=randomUUID();
   try {
+    await app.prisma.platform.upsert({where:{code:'CI Platform'},update:{},create:{code:'CI Platform',name:'CI Platform'}});
     await app.prisma.game.create({ data: {
       id, title: 'PostgreSQL catalogue fixture', publisher: 'Test', year: null,
       genres: {connectOrCreate: {where:{name:'Test'},create:{name:'Test'}}}, description: 'Database-only fixture, never deployed to production.',
