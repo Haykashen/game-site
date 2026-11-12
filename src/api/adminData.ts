@@ -32,3 +32,7 @@ export function deleteAdminRecord(table: string, key: string, expectedUpdatedAt:
 export function fetchAdminDependencies(table: string, key: string, signal: AbortSignal) {
   return apiRequest<{dependencies: string[]; autoDeleteEditions: number}>(`${recordPath(table, key)}/dependencies`, {signal});
 }
+
+export function createGameWithEditions(game: AdminRecord, editions: AdminRecord[]) {
+  return apiRequest<{record: AdminRecord}>(tablePath('Game') + '/records', {method: 'POST', body: {game, editions}});
+}

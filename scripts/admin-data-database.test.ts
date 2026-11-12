@@ -48,6 +48,16 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
     await patch('User', {id: buyerId}, {city: 'Москва', comment: 'Admin note'});
     const regionRecord = await create('Region', {code: 'CI-' + suffix, name: 'CI region ' + suffix, description: 'Fixture'});
     await patch('Region', {id: regionRecord.id}, {description: 'Edited region'});
+    const editionDraft = {name: 'Bundle edition', platform: 'PS5', regionId: regionRecord.id, lang: 'Русский', contents: [], coverImages: []};
+    const bundle = await create('Game', {game: {title: 'Bundle ' + suffix, publisher: 'CI', description: 'Fixture'}, editions: [editionDraft, {...editionDraft, name: 'Second edition'}]});
+    const bundleEditions = await prisma.edition.findMany({where: {gameId: bundle.id}});
+    assert.equal(bundleEditions.length, 2);
+    assert.equal(new Set(bundleEditions.map(edition => edition.id)).size, 2);
+    const failedTitle = 'Failed bundle ' + suffix;
+    const failedBundle = await app.inject({method:'POST', url:path('Game'), payload:{game:{title:failedTitle,publisher:'CI',description:'Fixture'},editions:[editionDraft,{...editionDraft,platform:'missing-platform-' + suffix}]}});
+    assert.equal(failedBundle.statusCode, 400, failedBundle.body);
+    assert.equal(await prisma.game.count({where:{title:failedTitle}}), 0);
+    assert.equal(await prisma.edition.count({where:{game:{title:failedTitle}}}), 0);
     const seriesRecord = await create('GameSeries', {name: 'CI series ' + suffix});
     const genreRecord = await create('GameGenre', {name: 'CI RPG ' + suffix});
     const gameId = (await create('Game', {title: 'Admin fixture ' + suffix, publisher: 'CI', description: 'Fixture', genres: [genreRecord.id]})).id;

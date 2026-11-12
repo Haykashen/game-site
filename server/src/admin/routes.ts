@@ -230,7 +230,10 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
     const {table: name} = request.params as {table: string};
     const table = getTable(name);
     if (!table.canCreate) throw forbidden('Сессии создаются только при входе пользователя.');
-    const data = parseCreateData(table, request.body);
+    const bundle = name === 'Game' && request.body && typeof request.body === 'object' && 'game' in request.body
+      ? parse(z.object({game: z.record(z.unknown()), editions: z.array(z.record(z.unknown())).max(200)}).strict(), request.body) : null;
+    const data = parseCreateData(table, bundle ? bundle.game : request.body);
+    const editions = bundle?.editions.map(edition => parseCreateData(getTable('Edition'), {...edition, gameId: data.id})) ?? [];
     if (name === 'User') {
       data.passwordHash = await hashPassword(data.password as string);
       delete data.password;
@@ -241,6 +244,12 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
       if (name === 'User' && recordStatus(data) === 'suspended') data.suspendedAt = new Date();
       await validateRecord(tx, name, data, null);
       const created = await delegate(tx, name).create({data: scalarStatusData(data), select: recordSelect(table)});
+      for (const edition of editions) {
+        await resolveStatus(tx, 'Edition', edition);
+        applyModeration('Edition', edition, null, admin.id);
+        await validateRecord(tx, 'Edition', edition, null);
+        await delegate(tx, 'Edition').create({data: scalarStatusData(edition), select: recordSelect(getTable('Edition'))});
+      }
       await reconcileRecords(tx, name, null, created);
       return delegate(tx, name).findFirst({where: Object.fromEntries(table.primaryKey.map((key) => [key, created[key]])), select: recordSelect(table)});
     });

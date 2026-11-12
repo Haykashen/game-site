@@ -6,8 +6,9 @@ import { Trash2, X } from 'lucide-react';
 import type { AdminField, AdminRecord, AdminReference, AdminTable, AdminValue } from '@discvault/shared';
 import { adminOptionLabel } from '@discvault/shared';
 import { ApiError, errorMessage } from '../../api/client';
-import { createAdminRecord, deleteAdminRecord, fetchAdminDependencies, fetchAdminRecord, fetchAdminReferences, updateAdminRecord } from '../../api/adminData';
+import { createAdminRecord, createGameWithEditions, deleteAdminRecord, fetchAdminDependencies, fetchAdminRecord, fetchAdminReferences, updateAdminRecord } from '../../api/adminData';
 import { useDebouncedValue } from '../../hooks/useDebouncedValue';
+import { DraftGameEditions } from './DraftGameEditions';
 import { AdminRecords } from './AdminRecords';
 import { useAdminTables } from '../../hooks/useAdminTables';
 import { IconButton } from '../ui/IconButton';
@@ -71,12 +72,13 @@ function LegacyReferenceInput({field, value, onChange, required, inputId, select
   </div>;
 }
 
-export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDelete, fixedValues = {}}: {fixedValues?: Record<string,string>; table: AdminTable; editor: AdminEditor; onClose: () => void; onSaved: (record?: AdminRecord) => void | Promise<void>; title?: string; onDelete?: () => void}) {
+export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDelete, fixedValues = {}, initialRecord, onSubmitRecord}: {initialRecord?: AdminRecord; onSubmitRecord?: (record: AdminRecord) => void; fixedValues?: Record<string,string>; table: AdminTable; editor: AdminEditor; onClose: () => void; onSaved: (record?: AdminRecord) => void | Promise<void>; title?: string; onDelete?: () => void}) {
   const tables = useAdminTables();
   const editionTable = tables.data.find(item => item.name === 'Edition');
+  const [draftEditions, setDraftEditions] = useState<AdminRecord[]>([]);
   const [record, setRecord] = useState<AdminRecord>({});
   const [values, setValues] = useState<Record<string, string>>(() =>
-    editor.mode === 'create' && table.name === 'Game' ? {year: String(new Date().getFullYear()), ...fixedValues} : {...fixedValues},
+    editor.mode === 'create' && table.name === 'Game' ? {year: String(new Date().getFullYear()), ...fixedValues} : {...Object.fromEntries(table.fields.map(field => [field.name, toInput(field, initialRecord?.[field.name])])), ...fixedValues},
   );
   const [loading, setLoading] = useState(editor.mode !== 'create');
   const [saving, setSaving] = useState(false);
@@ -142,7 +144,8 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
           data[field.name] = parsed;
         }
         if (!Object.keys(data).length) {onClose(); return;}
-        if (creating) savedRecord = (await createAdminRecord(table.name, data)).record;
+        if (onSubmitRecord) {onSubmitRecord(data); onClose(); return;}
+        if (creating) savedRecord = (await (table.name === 'Game' ? createGameWithEditions(data, draftEditions) : createAdminRecord(table.name, data))).record;
         else savedRecord = (await updateAdminRecord(table.name, editor.key!, data, version)).record;
       }
       await onSaved(savedRecord);
@@ -152,7 +155,7 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
   }
 
   return <ModalShell isOpen onClose={() => {if (!saving) onClose();}} labelledBy={titleId}>
-    <form className="admin-data__editor" onSubmit={(event) => {event.preventDefault(); void submit();}}>
+    <form id={titleId + "-form"} className="admin-data__editor" onSubmit={(event) => {event.preventDefault(); void submit();}}>
       <div className="admin-data__editor-header"><div><small>{table.label}</small><h2 id={titleId}>{title ?? (deleting ? table.name === 'Session' ? 'Отозвать сессию' : 'Удалить запись' : creating ? 'Добавить запись' : 'Редактировать запись')}</h2></div>
         <IconButton label="Закрыть" title="Закрыть" disabled={saving} onClick={onClose}><X size={20} /></IconButton>
       </div>
@@ -182,12 +185,13 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
       {!creating && loaded && !deleting && <details className="admin-data__readonly"><summary>Служебные поля и статистика — только чтение</summary>
         <dl>{table.fields.filter((field) => field.readOnly || field.primary).map((field) => <div key={field.name}><dt>{field.label}</dt><dd>{String(record[field.name] ?? '—')}</dd></div>)}</dl>
       </details>}
-      <div className="admin-data__editor-footer">{onDelete && editor.mode === 'edit' && table.canDelete && <button type="button" className="btn-secondary admin-data__danger" style={{marginRight: 'auto'}} disabled={saving || loading || !loaded} onClick={onDelete}><Trash2 size={16} aria-hidden="true" />Удалить игру</button>}<button type="button" className="btn-secondary" disabled={saving} onClick={onClose}>Отмена</button>
-        <button type="submit" className={deleting ? 'btn-secondary admin-data__danger' : 'btn-primary'} disabled={saving || loading || !loaded || (deleting && (dependencies === null || dependencies.length > 0))}>{saving ? 'Сохраняем…' : deleting ? table.name === 'Session' ? 'Отозвать' : 'Удалить' : 'Сохранить'}</button>
-      </div>
     </form>
-    {table.name === 'Game' && !deleting && loaded && <section aria-label="Издания игры"><h3>Издания игры</h3>
-      {editor.key && editionTable ? <AdminRecords table={editionTable} gameId={editor.key} /> : <p className="panel-hint">Сохраните игру, чтобы добавлять и настраивать её издания.</p>}
+    {table.name === 'Game' && !deleting && loaded && editionTable && <section aria-label="Издания игры"><h3>Издания игры</h3>
+      {editor.key ? <AdminRecords table={editionTable} gameId={editor.key} /> : <DraftGameEditions table={editionTable} rows={draftEditions} onChange={setDraftEditions} />}
     </section>}
+      <div className="admin-data__editor-footer">{onDelete && editor.mode === 'edit' && table.canDelete && <button type="button" className="btn-secondary admin-data__danger" style={{marginRight: 'auto'}} disabled={saving || loading || !loaded} onClick={onDelete}><Trash2 size={16} aria-hidden="true" />Удалить игру</button>}<button type="button" className="btn-secondary" disabled={saving} onClick={onClose}>Отмена</button>
+        <button form={titleId + "-form"} type="submit" className={deleting ? 'btn-secondary admin-data__danger' : 'btn-primary'} disabled={saving || loading || !loaded || (deleting && (dependencies === null || dependencies.length > 0))}>{saving ? 'Сохраняем…' : deleting ? table.name === 'Session' ? 'Отозвать' : 'Удалить' : 'Сохранить'}</button>
+      </div>
+
   </ModalShell>;
 }
