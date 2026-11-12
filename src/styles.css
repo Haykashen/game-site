@@ -4865,3 +4865,7 @@ html:not(.dark) .showcase-feed-page { --feed-card:#fffdf6; --feed-border:#d9d2be
 .admin-table-columns { display:flex; flex-wrap:wrap; gap:12px 20px; margin:0 0 16px; padding:16px; border:1px solid var(--border-color); border-radius:10px; }
 .admin-table-columns label { display:inline-flex; align-items:center; gap:8px; color:var(--text-main); }
 .admin-table-columns input { accent-color:var(--brand-ink); }
+.game-editions-heading { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:16px; }
+.game-editions-heading h3 { margin:0; }
+.game-editions-cell { min-width:180px; }
+.game-editions-cell .form-control { width:100%; }

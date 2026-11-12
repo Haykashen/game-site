@@ -9,7 +9,6 @@ import { ApiError, errorMessage } from '../../api/client';
 import { createAdminRecord, createGameWithEditions, deleteAdminRecord, fetchAdminDependencies, fetchAdminRecord, fetchAdminReferences, updateAdminRecord } from '../../api/adminData';
 import { useDebouncedValue } from '../../hooks/useDebouncedValue';
 import { DraftGameEditions } from './DraftGameEditions';
-import { AdminRecords } from './AdminRecords';
 import { useAdminTables } from '../../hooks/useAdminTables';
 import { IconButton } from '../ui/IconButton';
 import { ModalShell } from '../ui/ModalShell';
@@ -186,8 +185,8 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
         <dl>{table.fields.filter((field) => field.readOnly || field.primary).map((field) => <div key={field.name}><dt>{field.label}</dt><dd>{String(record[field.name] ?? '—')}</dd></div>)}</dl>
       </details>}
     </form>
-    {table.name === 'Game' && !deleting && loaded && editionTable && <section aria-label="Издания игры"><h3>Издания игры</h3>
-      {editor.key ? <AdminRecords table={editionTable} gameId={editor.key} /> : <DraftGameEditions table={editionTable} rows={draftEditions} onChange={setDraftEditions} />}
+    {table.name === 'Game' && !deleting && loaded && editionTable && <section aria-label="Издания игры">
+      <DraftGameEditions table={editionTable} rows={draftEditions} onChange={setDraftEditions} {...(editor.key ? {gameId: editor.key} : {})} />
     </section>}
       <div className="admin-data__editor-footer">{onDelete && editor.mode === 'edit' && table.canDelete && <button type="button" className="btn-secondary admin-data__danger" style={{marginRight: 'auto'}} disabled={saving || loading || !loaded} onClick={onDelete}><Trash2 size={16} aria-hidden="true" />Удалить игру</button>}<button type="button" className="btn-secondary" disabled={saving} onClick={onClose}>Отмена</button>
         <button form={titleId + "-form"} type="submit" className={deleting ? 'btn-secondary admin-data__danger' : 'btn-primary'} disabled={saving || loading || !loaded || (deleting && (dependencies === null || dependencies.length > 0))}>{saving ? 'Сохраняем…' : deleting ? table.name === 'Session' ? 'Отозвать' : 'Удалить' : 'Сохранить'}</button>
