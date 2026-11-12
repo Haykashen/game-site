@@ -101,9 +101,6 @@ function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
           <p className="card-meta">
             {[game.publisher, game.year].filter(value => value !== null && value !== '').join(' • ') || 'Сведения об игре уточняются'}
           </p>
-          <p className="card-genres">
-            {game.genres.length > 0 ? game.genres.slice(0, 2).join(' · ') : 'Жанры не указаны'}
-          </p>
         </div>
         <div className="card-footer">
           <div className="card-market-stats" aria-label="Активные предложения по игре">

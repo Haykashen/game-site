@@ -1,7 +1,8 @@
+import { createPortal } from 'react-dom';
 import { IconButton } from '../ui/IconButton';
 import { LoadingState } from '../LoadingState';
 import { FeedTags } from '../feed/FeedTags';
-import { Plus, ShieldCheck, UserRound, X, CheckCircle2 } from 'lucide-react';
+import { Plus, UserRound, X, CheckCircle2 } from 'lucide-react';
 import { useStatusFilter } from '../../hooks/useStatusFilter';
 import { useEffect, useState, type SubmitEvent } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -48,12 +49,12 @@ function CommunityActionsInner({ kind, onPublished, isModerator, authenticated }
   const [submissionStatus, setSubmissionStatus] = useState<'draft' | 'pending'>('pending');
   const [sent, setSent] = useState(false);
   const news = kind === 'news';
-  const close = () => { if (!busy) { setMode(null); setError(''); setSent(false); } };
+  const close = () => { if (!busy) { setMode(null); window.dispatchEvent(new CustomEvent('community-own-change', { detail: false })); setError(''); setSent(false); } };
   const open = (next: Mode) => {
     if (!authenticated) { navigate('/account'); return; }
     if (next === 'pending' && !isModerator) return;
     if (next === 'create' && searchParams.get('game')) setGame(searchParams.get('game')!);
-    setItems([]); setPage(1); setHasMore(false); setError(''); setSent(false); setMode(next);
+    setItems([]); setPage(1); setHasMore(false); setError(''); setSent(false); setMode(next); window.dispatchEvent(new CustomEvent('community-own-change', { detail: next === 'mine' }));
   };
   useEffect(() => {
     if (!mode || mode === 'create') return;
@@ -93,10 +94,9 @@ function CommunityActionsInner({ kind, onPublished, isModerator, authenticated }
     finally { setBusy(false); }
   }
   return <>
-    {authenticated && <IconButton label={news ? 'Мои новости' : 'Мои темы'} title={news ? 'Мои новости' : 'Мои темы'} onClick={() => open('mine')}><UserRound size={18} aria-hidden="true" /></IconButton>}
-    {isModerator && <IconButton label="На модерации" title="На модерации" onClick={() => open('pending')}><ShieldCheck size={18} aria-hidden="true" /></IconButton>}
+    {authenticated && <IconButton label={news ? 'Мои новости' : 'Мои темы'} title={news ? 'Мои новости' : 'Мои темы'} className={'filter-icon-btn market-own-toggle' + (mode === 'mine' ? ' is-active' : '')} aria-pressed={mode === 'mine'} onClick={() => mode === 'mine' ? close() : open('mine')}><UserRound size={17} aria-hidden="true" /></IconButton>}
     <button type="button" className="market-compose-btn market-compose-btn--toolbar" onClick={() => open('create')}><Plus size={18} strokeWidth={2.5} />{news ? 'Создать новость' : 'Создать обсуждение'}</button>
-    <ModalShell isOpen={mode !== null} onClose={close} labelledBy="community-compose-title" focusKey={mode ?? ''}>
+    <CommunityPanel inline={mode === 'mine'} isOpen={mode !== null} onClose={close} labelledBy="community-compose-title" focusKey={mode ?? ''}>
       <div className="community-editor">
         <div className="modal-header"><div><div className="eyebrow">СООБЩЕСТВО / {news ? 'НОВОСТИ' : 'ОБСУЖДЕНИЯ'}</div><h2 id="community-compose-title" className="modal-title">{mode === 'create' ? (news ? 'Новая новость' : 'Новое обсуждение') : mode === 'mine' ? 'Мои публикации' : 'Ожидают модерации'}</h2></div><button type="button" className="btn-icon" aria-label="Закрыть" onClick={close} disabled={busy}><X size={20} /></button></div>
         {error && <p className="community-error" role="alert">{error}</p>}
@@ -119,6 +119,12 @@ function CommunityActionsInner({ kind, onPublished, isModerator, authenticated }
           {hasMore && !loading && <button type="button" className="btn-secondary" onClick={() => setPage(value => value + 1)}>Показать ещё</button>}
         </div>}
       </div>
-    </ModalShell>
+    </CommunityPanel>
   </>;
+}
+
+function CommunityPanel({ inline, children, ...props }: React.ComponentProps<typeof ModalShell> & { inline: boolean }) {
+  const target = document.getElementById('community-own-feed');
+  if (inline && target) return createPortal(children, target);
+  return <ModalShell {...props}>{children}</ModalShell>;
 }

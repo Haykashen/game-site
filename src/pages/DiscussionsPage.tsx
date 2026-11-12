@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useStatusFilter } from '../hooks/useStatusFilter';
 import { CommunityActions } from '../components/community/CommunityActions';
 import { MessagesSquare } from 'lucide-react';
@@ -26,6 +27,12 @@ const DISCUSSION_FILTER_PARAMS: readonly UrlFilterField<DiscussionFilterKey>[] =
 
 /** Community feed with URL-backed search, game filter and a discussion drawer. */
 export function DiscussionsPage() {
+  const [showOwn, setShowOwn] = useState(false);
+  useEffect(() => {
+    const change = (event: Event) => setShowOwn(Boolean((event as CustomEvent).detail));
+    window.addEventListener('community-own-change', change);
+    return () => window.removeEventListener('community-own-change', change);
+  }, []);
   const statusField = useStatusFilter('Discussion');
   const { games } = useCollection();
   const gameById = useMemo(() => new Map(games.map((game) => [game.id, game])), [games]);
@@ -115,6 +122,8 @@ export function DiscussionsPage() {
         onReset={handleReset}
       />
 
+      <div id="community-own-feed" />
+      <div hidden={showOwn}>
       <ApiState loading={isLoading} error={error} onRetry={refresh} />
 
       {isLoading || error ? null : discussions.length === 0 ? (
@@ -151,6 +160,7 @@ export function DiscussionsPage() {
         onReply={reply}
         onClose={closeItem}
       />
+      </div>
     </>
   );
 }

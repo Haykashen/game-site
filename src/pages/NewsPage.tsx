@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useStatusFilter } from '../hooks/useStatusFilter';
 import { CommunityActions } from '../components/community/CommunityActions';
 import { Newspaper } from 'lucide-react';
@@ -37,6 +38,12 @@ const NEWS_FILTER_FIELDS: readonly SearchFilterField<NewsFilterKey>[] = [
 
 /** Editorial feed with URL-backed search, category filter and a news drawer. */
 export function NewsPage() {
+  const [showOwn, setShowOwn] = useState(false);
+  useEffect(() => {
+    const change = (event: Event) => setShowOwn(Boolean((event as CustomEvent).detail));
+    window.addEventListener('community-own-change', change);
+    return () => window.removeEventListener('community-own-change', change);
+  }, []);
   const statusField = useStatusFilter('NewsPost');
   const { games } = useCollection();
   const gameById = useMemo(() => new Map(games.map((game) => [game.id, game])), [games]);
@@ -97,6 +104,8 @@ export function NewsPage() {
         onReset={handleReset}
       />
 
+      <div id="community-own-feed" />
+      <div hidden={showOwn}>
       <ApiState loading={isLoading} error={error} onRetry={refresh} />
 
       {isLoading || error ? null : news.length === 0 ? (
@@ -124,6 +133,7 @@ export function NewsPage() {
       )}
 
       <NewsDrawer post={selectedNews} game={selectedGame} onClose={closeItem} />
+      </div>
     </>
   );
 }

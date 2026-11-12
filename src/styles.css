@@ -457,15 +457,15 @@
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
-            height: 32px;
-            min-height: 32px;
-            padding: 0 .6rem;
+            height: calc(16px + .6rem);
+            min-height: calc(16px + .6rem);
+            padding: 0 .48rem;
             border: 1px solid transparent;
             white-space: nowrap;
             background: var(--brand);
             color: #172013;
             border-radius: 5px;
-            font: 700 .65rem/1 'IBM Plex Mono', monospace;
+            font: 700 .52rem/1 'IBM Plex Mono', monospace;
             letter-spacing: .02em;
             box-shadow: 2px 2px 0 rgba(0,0,0,.2), inset 0 0 0 1px rgba(255,255,255,.14);
         }
@@ -4324,7 +4324,7 @@
 /* Catalog game tiles: artwork, metadata and four linked market counters. */
 .game-card .card-cover{aspect-ratio:4/4.45;padding:12px;border-radius:16px 16px 0 0;}
 .game-card .card-cover__image{inset:12px;width:calc(100% - 24px);height:calc(100% - 24px);object-fit:contain;border-radius:7px;}
-.game-card .card-info{padding:20px;gap:18px;}
+.game-card .card-info{padding:16px 20px 20px;gap:18px;}
 .game-card .card-footer{display:flex;flex-direction:column;align-items:stretch;gap:12px;border-top:1px solid var(--border-color);padding-top:16px;}
 .game-card .card-market-stats{gap:7px;}
 .game-card .card-market-stat{display:grid;grid-template-columns:auto auto;justify-content:center;align-content:center;gap:5px;padding:12px 3px 9px;border:1px solid var(--border-color);border-top:3px solid currentColor;border-radius:7px;text-decoration:none;min-height:68px;}
@@ -4350,9 +4350,9 @@
 .game-card .card-market-stat:active{transform:translateY(0);box-shadow:none;}
 @media(prefers-reduced-motion:reduce){.game-card .card-market-stat{transition:none;}.game-card .card-market-stat:hover,.game-card .card-market-stat:active{transform:none;}}
 .game-card .card-info{gap:0}.game-card .card-footer{margin-top:16px;padding-top:16px;gap:0}
-.game-card .card-info > div:first-child{display:grid;grid-template-rows:auto 1.5em 1.5em;gap:4px;min-width:0;}
+.game-card .card-info > div:first-child{display:grid;grid-template-rows:auto 1.5em;gap:4px;min-width:0;}
 .game-card .card-info h3{display:block;min-width:0;margin:0;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.game-card .card-meta,.game-card .card-genres{margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.5;}
+.game-card .card-meta{margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.5;}
 .game-card .card-market-stat{min-height:68px;min-width:44px;}
 .game-card .card-market-stat:focus-visible{outline:2px solid var(--brand-ink);outline-offset:2px;}
 @media(max-width:540px){.games-grid{grid-template-columns:minmax(0,1fr);}.game-card .card-info{padding:16px;}.game-card .card-market-stat__label{font-size:9px;}}
