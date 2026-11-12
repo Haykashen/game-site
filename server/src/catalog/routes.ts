@@ -15,7 +15,7 @@ import { STATUS_ENTITIES } from '../lib/statusDirectories.js';
 import { z } from 'zod';
 import { parse as parseInput } from '../lib/validation.js';
 import { resolveEditionId } from '../lib/editionIdentity.js';
-import { resolveYearRange, seedFilters, seedPlatforms } from '../lib/catalogData.js';
+import { resolveYearRange, seedFilters } from '../lib/catalogData.js';
 import { serializeEdition, serializeGame } from '../lib/serializers.js';
 import { parse } from '../lib/validation.js';
 
@@ -25,7 +25,7 @@ function buildEditionFilter(query: {
   region?: string | undefined;
   edition?: string | undefined;
 }): Prisma.EditionWhereInput {
-  const filter: Prisma.EditionWhereInput = {canonicalId: null};
+  const filter: Prisma.EditionWhereInput = {};
 
   if (query.platform) filter.platform = query.platform;
   if (query.region) filter.region = {is:{code:query.region}};
@@ -101,8 +101,8 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
           skip,
           take: query.pageSize,
           include: { statusReference: { select: { code: true } }, series: true, genres: true,
-            editions: { where: {canonicalId:null, ...statusWhere({notIn: ['hidden', 'removed']})}, select: { statusReference: { select: { code: true } }, id: true, platform: true, coverImages: true }, orderBy: {id: 'asc'} },
-            _count: { select: { editions: {where: {canonicalId:null}} } },
+            editions: { where: {...statusWhere({notIn: ['hidden', 'removed']})}, select: { statusReference: { select: { code: true } }, id: true, platform: true, coverImages: true }, orderBy: {id: 'asc'} },
+            _count: { select: { editions: {where: {}} } },
           },
         }),
       ]);
@@ -182,8 +182,8 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
       where: { id },
       include: { statusReference: { select: { code: true } }, series: true, genres: true,
         editions: {
-          where: {canonicalId:null, ...statusWhere({notIn: ['hidden', 'removed']})},
-          include: { statusReference: { select: { code: true } },region:true, variants:{include:{ statusReference: { select: { code: true } },region:true}}},
+          where: {...statusWhere({notIn: ['hidden', 'removed']})},
+          include: { statusReference: { select: { code: true } },region:true},
           orderBy: [{ platform: 'asc' }, { name: 'asc' }, { id: 'asc' }],
         },
       },
@@ -201,7 +201,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
 
   app.get('/api/v1/catalog/editions', async (request, reply) => {
     const query = parse(editionQuerySchema, request.query);
-    const and: Prisma.EditionWhereInput[] = [{canonicalId:null}, statusWhere({notIn: ['hidden', 'removed']}), {game: statusWhere({notIn: ['hidden', 'removed']})}];
+    const and: Prisma.EditionWhereInput[] = [{}, statusWhere({notIn: ['hidden', 'removed']}), {game: statusWhere({notIn: ['hidden', 'removed']})}];
 
     if (query.gameId) and.push({ gameId: query.gameId });
     if (query.platform) and.push({ platform: query.platform });
@@ -229,7 +229,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
       app.prisma.edition.count({ where }),
       app.prisma.edition.findMany({
         where,
-        include: { statusReference: { select: { code: true } },region:true, variants:{include:{ statusReference: { select: { code: true } },region:true}}},
+        include: { statusReference: { select: { code: true } },region:true},
         orderBy: [{ gameId: 'asc' }, { platform: 'asc' }, { name: 'asc' }, { id: 'asc' }],
         skip,
         take: query.pageSize,
@@ -246,7 +246,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
 
     const edition = await app.prisma.edition.findUnique({
       where: { id: await resolveEditionId(app.prisma,id) },
-      include: { statusReference: { select: { code: true } }, region:true, game: {include: { statusReference: { select: { code: true } },series: true, genres: true}}, variants:{include:{ statusReference: { select: { code: true } },region:true}} },
+      include: { statusReference: { select: { code: true } }, region:true, game: {include: { statusReference: { select: { code: true } },series: true, genres: true}} },
     });
 
     if (!edition || ['hidden', 'removed'].includes(moderationStatus(edition)) || ['hidden', 'removed'].includes(moderationStatus(edition.game))) throw notFound('Издание не найдено.');
@@ -260,13 +260,13 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
   });
 
   app.get('/api/v1/catalog/filters', async (_request, reply) => {
-    const releases = await app.prisma.edition.findMany({ where: {canonicalId:null, ...statusWhere({notIn: ['hidden', 'removed']})}, select: { statusReference: { select: { code: true } }, platform: true, lang: true, region: {select:{code:true}}, name: true } });
+    const releases = await app.prisma.edition.findMany({ where: {...statusWhere({notIn: ['hidden', 'removed']})}, select: { statusReference: { select: { code: true } }, platform: true, lang: true, region: {select:{code:true}}, name: true } });
     const unique = (key: 'platform' | 'lang' | 'name') => [...new Set(releases.map((edition) => edition[key]))].filter(Boolean).sort();
     const genres = await app.prisma.gameGenre.findMany({where: {games: {some: statusWhere({notIn: ['hidden', 'removed']})}}, select: {name: true}, orderBy: {name: 'asc'}});
+    const platformRecords = await app.prisma.platform.findMany({where: {code: {in: unique('platform')}}, orderBy: {name: 'asc'}});
     const body: CatalogFiltersDto = {
       genres: genres.map(genre => genre.name),
-      platforms: unique('platform').map((name) => seedPlatforms.find((platform) => platform.name === name)
-        ?? { name, group: 'Другие', color: '#64748b', textColor: '#ffffff' }),
+      platforms: platformRecords.map(platform => ({name: platform.code, group: platform.group, color: platform.color, textColor: platform.textColor})),
       languages: unique('lang'),
       regions: [...new Set(releases.map(edition=>edition.region.code))].sort(),
       editions: unique('name'),

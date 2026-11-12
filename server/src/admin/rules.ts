@@ -13,13 +13,9 @@ function changed(old: Row, next: Row, fields: string[]): boolean {
 
 /** Domain checks supplement database foreign keys and the strict scalar schema. */
 export async function validateRecord(tx: Prisma.TransactionClient, name: string, next: Row, old: Row | null): Promise<void> {
-  if (name === 'Edition' && next.canonicalId) {
-    const canonical = await tx.edition.findUnique({ include: {statusReference: {select: {code: true}}},where: {id: String(next.canonicalId)}});
-    requireRule(canonical && canonical.id !== next.id && !canonical.canonicalId && canonical.gameId === next.gameId, 'Основное издание должно относиться к той же игре и не быть вариантом другого издания.');
-    if (old) requireRule(await tx.edition.count({where: {canonicalId: String(old.id)}}) === 0, 'У этого издания есть варианты. Сначала переназначьте их.');
-  }
+
   if (name === 'Edition' && old && changed(old, next, ['gameId'])) {
-    const used = await tx.copy.count({where: {editionId: String(old.id)}}) + await tx.marketEntry.count({where: {editionId: String(old.id)}}) + await tx.edition.count({where: {canonicalId: String(old.id)}});
+    const used = await tx.copy.count({where: {editionId: String(old.id)}}) + await tx.marketEntry.count({where: {editionId: String(old.id)}});
     requireRule(!used, 'Нельзя менять игру у издания, используемого в коллекции, маркете или вариантах.');
   }
   if (name === 'MarketEntry') {
@@ -31,7 +27,7 @@ export async function validateRecord(tx: Prisma.TransactionClient, name: string,
     const itemType = next.itemType ?? 'game';
     if (next.editionId) {
       const edition = await tx.edition.findUnique({ include: {statusReference: {select: {code: true}}},where: {id: String(next.editionId)}});
-      requireRule(edition && edition.gameId === next.gameId && !edition.canonicalId, 'Выберите основное издание указанной игры.');
+      requireRule(edition && edition.gameId === next.gameId, 'Выберите издание указанной игры.');
     }
     requireRule(itemType !== 'game' || (kind === 'listing' && next.listingType === 'purchase') || next.editionId, 'Для игры в продаже, обмене или аукционе обязательно издание.');
     if (kind === 'auction') {
@@ -53,7 +49,7 @@ export async function validateRecord(tx: Prisma.TransactionClient, name: string,
   }
   if (name === 'Copy') {
     const edition = await tx.edition.findUnique({ include: {statusReference: {select: {code: true}}},where: {id: String(next.editionId)}});
-    requireRule(edition && !edition.canonicalId, 'Для экземпляра выберите основное издание.');
+    requireRule(edition, 'Выберите издание для экземпляра.');
   }
   if (name === 'Bid') {
     for (const id of new Set([next.marketEntryId, old?.marketEntryId].filter(Boolean))) {

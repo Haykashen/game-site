@@ -43,12 +43,12 @@ export function GameModal({ marketLoading, marketError, onRetryMarket, onEditGam
   const { syncError } = useCollection();
   const { isModerator } = useAuth();
   const [activeMarketTab, setActiveMarketTab] = useState<GameMarketTab>('lots');
-  const [selectedEditionId, setSelectedEditionId] = useState(() => editions.find(edition => edition.id === initialEditionId || edition.variants?.some(variant => variant.id === initialEditionId))?.id ?? editions[0]?.id ?? '');
+  const [selectedEditionId, setSelectedEditionId] = useState(() => editions.find(edition => edition.id === initialEditionId)?.id ?? editions[0]?.id ?? '');
   const [copyFormOpen, setCopyFormOpen] = useState(false);
   const [savingCopy, setSavingCopy] = useState(false);
   const platforms = useMemo(() => sortPlatforms(editions.map(edition => edition.platform)), [editions]);
   const selectedEdition = editions.find(edition => edition.id === selectedEditionId) ?? editions[0];
-  const selectedEditionCopies = selectedEdition ? copies.filter(copy => copy.editionId === selectedEdition.id || selectedEdition.variants?.some(variant => variant.id === copy.editionId)) : [];
+  const selectedEditionCopies = selectedEdition ? copies.filter(copy => copy.editionId === selectedEdition.id) : [];
   const closeCopyForm = () => { if (!savingCopy) setCopyFormOpen(false); };
   const blankCopy: Copy = { id: 'new-copy', editionId: selectedEdition?.id ?? '', condition: '', completeness: '', purchasePrice: null, purchaseDate: '', notes: '', photos: [], createdAt: '' };
 

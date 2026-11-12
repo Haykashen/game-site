@@ -1,5 +1,5 @@
 const { createHash } = require('node:crypto');
-const {expandProducts,planEditionDedup}=require('./edition-dedup.cjs');
+const {expandProducts}=require('./edition-dedup.cjs');
 const {prioritizeImages}=require('./cover-images.cjs');
 const titleKey = title => title.normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase().replace(/[’‘`']/g, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 const existingAliases = new Map(Object.entries({
@@ -25,7 +25,6 @@ function same(a,b) { return JSON.stringify(a) === JSON.stringify(b); }
 
 function planCatalog(document, games, editions) {
   document=expandProducts(document);
-  editions=[...new Map(editions.flatMap(e=>[e,...(e.variants??[]).map(v=>({...v,canonicalId:e.id}))]).map(e=>[e.id,e])).values()];
   if (!Array.isArray(document.games) || !document.games.length || document.warnings?.length) throw Error('Invalid or unresolved source catalogue');
   const gamesByKey = new Map(), gamesById = new Map(games.map(g=>[g.id,g]));
   for (const game of games) {
@@ -85,28 +84,12 @@ function planCatalog(document, games, editions) {
       }
     }
   }
-  // Refresh canonical galleries too when an already grouped supplier gains art.
-  const updates=new Map(updateEditions.map(u=>[u.id,u.data]));
-  const planned=[...editions.map(e=>({...e,...(updates.get(e.id)??{})})),...createEditions];
-  for(const canonical of planned.filter(e=>!e.canonicalId)){
-    const variants=planned.filter(e=>e.canonicalId===canonical.id);
-    if(!variants.length)continue;
-    const combined=prioritizeImages([...canonical.coverImages,...variants.flatMap(e=>e.coverImages)]);
-    if(!same(canonical.coverImages,combined)){
-      canonical.coverImages=combined;
-      const update=updateEditions.find(u=>u.id===canonical.id);
-      if(update)update.data.coverImages=combined;
-      else updateEditions.push({id:canonical.id,data:{coverImages:combined}});
-    }
-  }
-  const dedup=planEditionDedup(planned);
-  const plan = { createGames, updateGames, createEditions, updateEditions, mappings, dedup };
+  const plan = { createGames, updateGames, createEditions, updateEditions, mappings };
   const hash = createHash('sha256').update(JSON.stringify(plan)).digest('hex');
   return { ...plan, hash, summary: { sourceGames: document.games.length, matchedGames: mappings.filter(m=>m.matched).length,
     createGames: createGames.length, updateGameCovers: updateGames.length, createEditions: createEditions.length, updateEditions: updateEditions.length,
     beforeGames: games.length, afterGames: games.length + createGames.length, beforeEditions: editions.length, afterEditions: editions.length + createEditions.length,
     sourceProducts: new Set(document.games.flatMap(g=>g.productIds)).size,
-    duplicateGroups:dedup.length,mergeVariants:dedup.reduce((n,g)=>n+g.variantIds.length,0),
-    afterActiveEditions:editions.filter(e=>!e.canonicalId).length+createEditions.length-dedup.reduce((n,g)=>n+g.variantIds.filter(id=>!editions.find(e=>e.id===id)?.canonicalId).length,0) } };
+    } };
 }
 module.exports = { titleKey, coverImages, planCatalog };

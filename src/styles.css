@@ -2163,9 +2163,6 @@
             overflow: hidden;
             background: linear-gradient(135deg, #26372a, #111713 72%);
         }
-        .edition-variants { font-size: .72rem; color: var(--text-muted); line-height: 1.5; }
-        .edition-variants summary { cursor: pointer; color:var(--brand-ink); }
-        .edition-variants p { margin-top: .4rem; }
         .edition-card__cover > img {
             position: absolute; inset: 0;
             display: block; width: 100%; height: 100%;
@@ -4863,3 +4860,7 @@ html:not(.dark) .showcase-feed-page { --feed-card:#fffdf6; --feed-border:#d9d2be
 .showcase-discussion { gap: 9px; padding-top: 10px; }
 .showcase-discussion > h3,
 .showcase-discussion > .panel-hint { margin: 0; }
+
+.admin-table-columns { display:flex; flex-wrap:wrap; gap:12px 20px; margin:0 0 16px; padding:16px; border:1px solid var(--border-color); border-radius:10px; }
+.admin-table-columns label { display:inline-flex; align-items:center; gap:8px; color:var(--text-main); }
+.admin-table-columns input { accent-color:var(--brand-ink); }

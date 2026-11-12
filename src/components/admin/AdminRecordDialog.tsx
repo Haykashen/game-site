@@ -8,6 +8,9 @@ import { adminOptionLabel } from '@discvault/shared';
 import { ApiError, errorMessage } from '../../api/client';
 import { createAdminRecord, deleteAdminRecord, fetchAdminDependencies, fetchAdminRecord, fetchAdminReferences, updateAdminRecord } from '../../api/adminData';
 import { useDebouncedValue } from '../../hooks/useDebouncedValue';
+import { AdminRecords } from './AdminRecords';
+import { useAdminTables } from '../../hooks/useAdminTables';
+import { IconButton } from '../ui/IconButton';
 import { ModalShell } from '../ui/ModalShell';
 
 export interface AdminEditor { mode: 'create' | 'edit' | 'delete'; key: string | null }
@@ -32,7 +35,7 @@ function formatError(cause: unknown): string {
 }
 
 function ReferenceInput(props: Parameters<typeof LegacyReferenceInput>[0]) {
-  if (props.field.reference === 'GameSeries' || props.field.reference === 'GameGenre' || props.field.reference === 'Region' || props.field.reference?.endsWith('Status')) return <ReferenceCombobox {...props} reference={props.field.reference} entity={props.entity} multiple={props.field.type === 'list'} />;
+  if (props.field.reference === 'GameSeries' || props.field.reference === 'GameGenre' || props.field.reference === 'Region' || props.field.reference === 'Platform' || props.field.reference?.endsWith('Status')) return <ReferenceCombobox {...props} reference={props.field.reference} entity={props.entity} multiple={props.field.type === 'list'} />;
   return <LegacyReferenceInput {...props} />;
 }
 function LegacyReferenceInput({field, value, onChange, required, inputId, selectedNames = {}}: {entity?: string | undefined; selectedNames?: Record<string,string>; field: AdminField; value: string; onChange: (value: string) => void; required: boolean; inputId: string}) {
@@ -68,10 +71,12 @@ function LegacyReferenceInput({field, value, onChange, required, inputId, select
   </div>;
 }
 
-export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDelete}: {table: AdminTable; editor: AdminEditor; onClose: () => void; onSaved: (record?: AdminRecord) => void | Promise<void>; title?: string; onDelete?: () => void}) {
+export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDelete, fixedValues = {}}: {fixedValues?: Record<string,string>; table: AdminTable; editor: AdminEditor; onClose: () => void; onSaved: (record?: AdminRecord) => void | Promise<void>; title?: string; onDelete?: () => void}) {
+  const tables = useAdminTables();
+  const editionTable = tables.data.find(item => item.name === 'Edition');
   const [record, setRecord] = useState<AdminRecord>({});
   const [values, setValues] = useState<Record<string, string>>(() =>
-    editor.mode === 'create' && table.name === 'Game' ? {year: String(new Date().getFullYear())} : {},
+    editor.mode === 'create' && table.name === 'Game' ? {year: String(new Date().getFullYear()), ...fixedValues} : {...fixedValues},
   );
   const [loading, setLoading] = useState(editor.mode !== 'create');
   const [saving, setSaving] = useState(false);
@@ -82,7 +87,7 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
   const titleId = useId();
   const deleting = editor.mode === 'delete';
   const creating = editor.mode === 'create';
-  const fields = table.fields.filter((field) => !field.readOnly && (creating || !field.primary) && !(table.fields.some(item => item.name === 'statusId') && ['status', 'moderationStatus'].includes(field.name)));
+  const fields = table.fields.filter((field) => !Object.hasOwn(fixedValues, field.name) && !field.readOnly && (creating || !field.primary) && !(table.fields.some(item => item.name === 'statusId') && ['status', 'moderationStatus'].includes(field.name)));
   if (table.name === 'Game') {
     const noteIndex = fields.findIndex(field => field.name === 'moderationNote');
     const coverIndex = fields.findIndex(field => field.name === 'coverImage');
@@ -119,7 +124,7 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
       const version = typeof record.updatedAt === 'string' ? record.updatedAt : null;
       if (deleting) await deleteAdminRecord(table.name, editor.key!, version);
       else {
-        const data: AdminRecord = {};
+        const data: AdminRecord = creating ? {...fixedValues} : {};
         for (const field of fields) {
           const value = values[field.name] ?? '';
           if (!creating && value === toInput(field, record[field.name])) continue;
@@ -149,7 +154,7 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
   return <ModalShell isOpen onClose={() => {if (!saving) onClose();}} labelledBy={titleId}>
     <form className="admin-data__editor" onSubmit={(event) => {event.preventDefault(); void submit();}}>
       <div className="admin-data__editor-header"><div><small>{table.label}</small><h2 id={titleId}>{title ?? (deleting ? table.name === 'Session' ? 'Отозвать сессию' : 'Удалить запись' : creating ? 'Добавить запись' : 'Редактировать запись')}</h2></div>
-        <button type="button" className="btn-secondary" aria-label="Закрыть" disabled={saving} onClick={onClose}><X size={18} /></button>
+        <IconButton label="Закрыть" title="Закрыть" disabled={saving} onClick={onClose}><X size={20} /></IconButton>
       </div>
       {loading && <LoadingState variant="inline" message="Загружаем запись…" />}
       {error && <div className="admin-data__error" role="alert">{error}</div>}
@@ -181,5 +186,8 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
         <button type="submit" className={deleting ? 'btn-secondary admin-data__danger' : 'btn-primary'} disabled={saving || loading || !loaded || (deleting && (dependencies === null || dependencies.length > 0))}>{saving ? 'Сохраняем…' : deleting ? table.name === 'Session' ? 'Отозвать' : 'Удалить' : 'Сохранить'}</button>
       </div>
     </form>
+    {table.name === 'Game' && !deleting && loaded && <section aria-label="Издания игры"><h3>Издания игры</h3>
+      {editor.key && editionTable ? <AdminRecords table={editionTable} gameId={editor.key} /> : <p className="panel-hint">Сохраните игру, чтобы добавлять и настраивать её издания.</p>}
+    </section>}
   </ModalShell>;
 }

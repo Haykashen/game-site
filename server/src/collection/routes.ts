@@ -74,9 +74,8 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
     if (!request.user) throw unauthorized();
     const userId = request.user.id;
     const editions = await app.prisma.edition.findMany({
-      where: {canonicalId: null, OR: [{copies: {some: {userId}}}, {variants: {some: {copies: {some: {userId}}}}}]},
+      where: {copies: {some: {userId}}},
       include: {statusReference: {select: {code: true}}, region: true,
-        variants: {include: {statusReference: {select: {code: true}}, region: true}},
         game: {include: {statusReference: {select: {code: true}}, genres: true, series: true}}},
     });
     return {games: [...new Map(editions.map(edition => [edition.gameId, serializeGame(edition.game)])).values()], editions: editions.map(serializeEdition)};

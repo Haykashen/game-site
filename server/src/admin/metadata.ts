@@ -11,7 +11,7 @@ import { parse } from '../lib/validation.js';
 // Private conversations are accessible only through participant-checked chat routes.
 export const PRIVATE_MODELS = ['Chat', 'ChatMember', 'ChatMessage'] as const;
 export const TABLE_LABELS: Record<string, string> = {
-  Status: 'Статусы',
+  Platform: 'Платформы', Status: 'Статусы',
   User: 'Пользователи', Session: 'Сессии', Game: 'Игры', GameGenre: 'Жанры игр', GameSeries: 'Серии игр', Region: 'Регионы', Localization: 'Локализации', GameRating: 'Оценки игр',
   Edition: 'Издания', Copy: 'Экземпляры коллекций', CopyPhoto: 'Фото экземпляров', CopyShare: 'Публикации коллекций', CopyShareLike: 'Лайки публикаций', CopyShareComment: 'Комментарии публикаций',
   MarketEntry: 'Объявления и аукционы', MarketPhoto: 'Фото объявлений', Bid: 'Ставки',
@@ -20,7 +20,7 @@ export const TABLE_LABELS: Record<string, string> = {
   Discussion: 'Обсуждения', DiscussionComment: 'Комментарии', NewsPost: 'Новости',
 };
 const FIELD_LABELS: Record<string, string> = {
-  localizationId: 'Локализация', code: 'Код', id: 'ID', email: 'Почта', displayName: 'Имя', password: 'Пароль', phone: 'Телефон',
+  group: 'Семейство', color: 'Цвет фона', textColor: 'Цвет текста', localizationId: 'Локализация', code: 'Код', id: 'ID', email: 'Почта', displayName: 'Имя', password: 'Пароль', phone: 'Телефон',
   city: 'Город', avatarUrl: 'Аватар', isDemo: 'Демо-аккаунт', role: 'Роль', status: 'Статус',
   suspendedAt: 'Дата блокировки', comment: 'Комментарий', ratingSum: 'Сумма оценок',
   ratingCount: 'Количество отзывов', createdAt: 'Создано', updatedAt: 'Обновлено', lastSeenAt: 'Последнее посещение',
@@ -29,7 +29,7 @@ const FIELD_LABELS: Record<string, string> = {
   year: 'Год', genres: 'Жанры', description: 'Описание', coverImage: 'Обложка', gameId: 'Игра',
   entity: 'Сущность', statusId: 'Статус', score: 'Оценка', name: 'Название', platform: 'Платформа', region: 'Регион', regionId: 'Регион', lang: 'Язык',
   media: 'Носитель', releaseDate: 'Дата выхода', contents: 'Комплектация', coverImages: 'Обложки',
-  barcode: 'Штрихкод', dnsProductId: 'ID товара DNS', dnsProductCode: 'Код товара DNS', canonicalId: 'Основное издание',
+  barcode: 'Штрихкод', dnsProductId: 'ID товара DNS', dnsProductCode: 'Код товара DNS',
   editionId: 'Издание', condition: 'Состояние', completeness: 'Комплектность',
   purchasePriceMinor: 'Цена покупки, коп.', purchaseDate: 'Дата покупки', notes: 'Заметки',
   shareId: 'Публикация', caption: 'Подпись', photos: 'Фотографии', copyId: 'Экземпляр', url: 'URL фотографии', sortOrder: 'Порядок', entryId: 'Объявление',
@@ -49,6 +49,7 @@ const FIELD_LABELS: Record<string, string> = {
   category: 'Категория', publishedAt: 'Опубликовано',
 };
 const HIDDEN = new Set(['passwordHash', 'tokenHash']);
+const INTERNAL_EDITION_FIELDS = new Set(['dnsProductCode', 'media', 'releaseDate']);
 const READ_ONLY = new Set(['updatedAt', 'lastSeenAt', 'ratingSum', 'ratingCount', 'bidCount', 'currentPriceMinor', 'winnerId', 'version', 'views', 'activeKey', 'moderatorId', 'moderatedAt']);
 export const models = Prisma.dmmf.datamodel.models.filter((model) => Object.hasOwn(TABLE_LABELS, model.name));
 
@@ -61,9 +62,9 @@ export function getModel(name: string) {
 export function getTable(name: string): AdminTable {
   const model = getModel(name);
   const primaryKey = [...(model.primaryKey?.fields ?? model.fields.filter((field) => field.isId).map((field) => field.name))];
-  const fields: AdminField[] = model.fields.filter((field) => (field.kind !== 'object' || (name === 'Game' && field.name === 'genres')) && !HIDDEN.has(field.name)).map((field) => {
+  const fields: AdminField[] = model.fields.filter((field) => (field.kind !== 'object' || (name === 'Game' && field.name === 'genres')) && !HIDDEN.has(field.name) && !(name === 'Edition' && INTERNAL_EDITION_FIELDS.has(field.name))).map((field) => {
     const relation = model.fields.find((candidate) => candidate.kind === 'object' && candidate.relationFromFields?.includes(field.name));
-    const generatedId = field.isId && !relation;
+    const generatedId = field.isId && !relation && name !== 'Platform';
     return {
       name: field.name, label: FIELD_LABELS[field.name] ?? field.name,
       type: field.isList ? 'list' : field.kind === 'enum' ? 'enum' : field.type === 'Int' ? 'number' : field.type === 'Boolean' ? 'boolean' : field.type === 'DateTime' ? 'date' : 'string',
@@ -81,7 +82,7 @@ export function getTable(name: string): AdminTable {
 }
 
 export function recordSelect(table: AdminTable): Record<string, unknown> {
-  return {...Object.fromEntries(table.fields.filter(field => field.type !== 'password').map(field => [field.name, true])),
+  return {...(table.name === 'Edition' ? Object.fromEntries([...INTERNAL_EDITION_FIELDS].map(name => [name, true])) : {}), ...Object.fromEntries(table.fields.filter(field => field.type !== 'password').map(field => [field.name, true])),
     ...(table.fields.some(field => field.name === 'statusId') ? {statusReference: {select: {code: true}}} : {})};
 }
 
@@ -129,8 +130,9 @@ export function parseData(table: AdminTable, body: unknown, creating: boolean): 
 /** Prisma generates most IDs; text IDs for games and editions need a server default. */
 export function parseCreateData(table: AdminTable, body: unknown): Record<string, unknown> {
   const data = parseData(table, body, true);
+  if (table.name === 'Edition') data.media = 'Не указано';
   const id = getModel(table.name).fields.find((field) => field.isId);
-  if (id && !id.hasDefaultValue) data[id.name] = randomUUID();
+  if (id && !id.hasDefaultValue && table.name !== 'Platform') data[id.name] = randomUUID();
   return data;
 }
 

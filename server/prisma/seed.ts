@@ -72,6 +72,9 @@ async function seedCatalog(): Promise<void> {
     });
   }
 
+  for (const platform of new Set(editions.map(edition => edition.platform))) {
+    await prisma.platform.upsert({where: {code: platform}, update: {}, create: {code: platform, name: /^PS[1-5]$/.test(platform) ? 'PlayStation ' + platform.slice(2) : platform}});
+  }
   for (const edition of editions) {
     const data = {
       gameId: edition.gameId,

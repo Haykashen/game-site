@@ -118,7 +118,7 @@ test('all database models are covered and credentials never enter public metadat
   for (const key of ['ratingSum', 'ratingCount']) assert.equal(getTable('User').fields.find((field) => field.name === key)?.readOnly, true);
   assert.equal(getTable('Session').canCreate, false);
   assert.equal(getTable('Session').canEdit, false);
-  assert.equal(getTable('Edition').fields.find((field) => field.name === 'releaseDate')?.dateOnly, true);
+  assert.equal(getTable('Edition').fields.some(field => ['releaseDate','media','dnsProductCode','canonicalId'].includes(field.name)), false);
 });
 
 test('strict write schemas reject statistics, secrets, primary key changes, nested writes and invalid values', () => {
@@ -154,7 +154,7 @@ test('server supplies distinct game and edition UUIDs; Prisma defaults and compo
   const body = {title: 'Game', publisher: 'Test', description: 'Description', genres: []};
   const first = parseCreateData(getTable('Game'), body);
   const second = parseCreateData(getTable('Game'), body);
-  const edition = parseCreateData(getTable('Edition'), {gameId: first.id, name: 'Standard', platform: 'PS5', regionId: otherId, lang: 'Русский', media: 'Disc', contents: [], coverImages: []});
+  const edition = parseCreateData(getTable('Edition'), {gameId: first.id, name: 'Standard', platform: 'PS5', regionId: otherId, lang: 'Русский', contents: [], coverImages: []});
   const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
   for (const data of [first, second, edition]) assert.match(String(data.id), uuid);
   assert.notEqual(first.id, second.id);
@@ -368,7 +368,7 @@ test('review corrections rebuild cached ratings for both previous and new recipi
 
 test('domain validation prevents wrong edition/game links, self-deals, review spoofing and cyclic comments', async () => {
   const tx = {
-    edition: {findUnique: async () => ({gameId: 'other-game', canonicalId: null})},
+    edition: {findUnique: async () => ({gameId: 'other-game'})},
     deal: {findUnique: async () => ({statusReference: {code: 'completed'}, buyerId: adminId, sellerId: otherId})},
     discussionComment: {findUnique: async () => ({discussionId: 'thread', parentId: 'self'})},
   } as unknown as Prisma.TransactionClient;
@@ -525,4 +525,15 @@ test('directory status changes cannot suspend the last admin and revoke regular-
     assert.ok(!('status' in (update.args.data as Row)));
     assert.ok(!('statusReference' in (update.args.data as Row)));
   } finally {await app.close();}
+});
+
+test('edition platform uses the platform directory and platform codes remain stable', () => {
+  const field = getTable('Edition').fields.find(field => field.name === 'platform');
+  assert.equal(field?.reference, 'Platform');
+  assert.equal(field?.required, true);
+  const directory = getTable('Platform');
+  assert.deepEqual(directory.primaryKey, ['code']);
+  assert.equal(directory.fields.find(field => field.name === 'code')?.readOnly, false);
+  assert.deepEqual(parseCreateData(directory, {code: 'PS6', name: 'PlayStation 6'}), {code: 'PS6', name: 'PlayStation 6'});
+  assert.throws(() => parseData(directory, {code: 'changed'}, false));
 });

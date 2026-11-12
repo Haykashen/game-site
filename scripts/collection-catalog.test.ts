@@ -4,7 +4,7 @@ import Fastify from 'fastify';
 import { registerCollectionRoutes } from '../server/src/collection/routes.ts';
 import { fetchCollectionCatalog } from '../src/api/collection.ts';
 
-test('collection catalog needs a session and scopes its lookup to owned canonical editions', async () => {
+test('collection catalog needs a session and scopes its lookup to owned editions', async () => {
   const app = Fastify();
   const owner = '11111111-1111-4111-8111-111111111111';
   let requests = 0;
@@ -14,9 +14,9 @@ test('collection catalog needs a session and scopes its lookup to owned canonica
   });
   app.decorate('prisma', {edition: {findMany: async (args: any) => {
     requests++;
-    assert.deepEqual(args.where, {canonicalId: null, OR: [{copies: {some: {userId: owner}}}, {variants: {some: {copies: {some: {userId: owner}}}}}]});
+    assert.deepEqual(args.where, {copies: {some: {userId: owner}}});
     const game = {id: 'owned-game', statusReference: {code: 'visible'}, statusId: 'game-status', title: 'Owned', publisher: '', developer: '', series: null, year: null, genres: [], description: '', coverImage: ''};
-    return ['first', 'second'].map(id => ({id, gameId: game.id, game, statusReference: {code: 'visible'}, statusId: 'edition-status', region: {code: 'EUR'}, variants: [], name: id, platform: 'PS5', lang: 'Русский', media: 'Disc', releaseDate: null, description: '', contents: [], coverImages: [], barcode: '', dnsProductId: '', dnsProductCode: ''}));
+    return ['first', 'second'].map(id => ({id, gameId: game.id, game, statusReference: {code: 'visible'}, statusId: 'edition-status', region: {code: 'EUR'}, name: id, platform: 'PS5', lang: 'Русский', media: 'Disc', releaseDate: null, description: '', contents: [], coverImages: [], barcode: '', dnsProductId: '', dnsProductCode: ''}));
   }}} as any);
   registerCollectionRoutes(app);
   try {

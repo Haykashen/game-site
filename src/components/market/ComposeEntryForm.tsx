@@ -93,7 +93,7 @@ export function ComposeEntryForm({
 
   const defaultEditionId = (gameId: string) => {
     const gameEditions = editionsForGame(gameId);
-    const preferred = gameEditions.find((edition) => edition.id === initialEditionId || edition.variants?.some(variant => variant.id === initialEditionId));
+    const preferred = gameEditions.find((edition) => edition.id === initialEditionId);
     return preferred?.id ?? gameEditions[0]?.id ?? '';
   };
 

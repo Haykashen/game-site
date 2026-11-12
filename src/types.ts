@@ -48,7 +48,6 @@ export interface Edition {
   dnsProductId: string;
   /** DNS article / `data-code`; useful for search and cross-checks. */
   dnsProductCode: string;
-  variants?: { id: string; lang: string; description: string; dnsProductCode: string; coverImages: string[] }[];
 }
 
 /**

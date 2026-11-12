@@ -17,7 +17,7 @@ function ColumnFilter({field, value, onChange}: {field: AdminField; value: strin
   return <input className="form-control admin-users__column-input" aria-label={`Фильтр: ${field.label}`} type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'search'} step={field.type === 'number' ? 1 : undefined} value={value} placeholder={field.reference ? 'ID записи' : 'Фильтр…'} onChange={(event) => onChange(event.target.value)} />;
 }
 
-export function AdminRecords({table, relatedUserId}: {table: AdminTable; relatedUserId?: string}) {
+export function AdminRecords({table, relatedUserId, gameId}: {table: AdminTable; relatedUserId?: string; gameId?: string}) {
   const {user} = useAuth();
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState<Record<string, string>>({});
@@ -30,7 +30,7 @@ export function AdminRecords({table, relatedUserId}: {table: AdminTable; related
   const debounced = useDebouncedValue(queryDraft);
   const [applied, setApplied] = useState(debounced);
   useEffect(() => {setApplied(debounced); setPage(1);}, [debounced]);
-  const load = useCallback((signal: AbortSignal) => fetchAdminRecords(table.name, {...applied, ...(relatedUserId ? {relatedUserId} : {}), sortBy, sortDir, page, pageSize: 20}, signal), [table.name, applied, relatedUserId, sortBy, sortDir, page]);
+  const load = useCallback((signal: AbortSignal) => fetchAdminRecords(table.name, {...applied, filters: {...applied.filters, ...(gameId ? {gameId} : {})}, ...(relatedUserId ? {relatedUserId} : {}), sortBy, sortDir, page, pageSize: 20}, signal), [table.name, applied, gameId, relatedUserId, sortBy, sortDir, page]);
   const result = useApiResource(`admin:${user?.id}:${table.name}:${relatedUserId ?? 'all'}`, load, EMPTY);
   useEffect(() => {
     if (!result.isLoading && !result.error && page > 1 && !result.data.items.length) setPage(Math.max(1, Math.ceil(result.data.total / 20)));
@@ -50,11 +50,11 @@ export function AdminRecords({table, relatedUserId}: {table: AdminTable; related
     {table.name === 'Session' && <p className="admin-data__help">Сессии создаются при входе. Здесь можно проверить активность и отозвать доступ.</p>}
     {notice && <p role="status" className="admin-data__help">{notice}</p>}
     {result.error && <div className="admin-data__error" role="alert">{result.error}<button className="btn-secondary" type="button" onClick={() => void result.refresh()}>Повторить</button></div>}
-    <AdminDataTable label={table.label} columns={columns} rows={result.error ? [] : result.data.items} rowKey={(record) => adminRecordKey(table, record)} sortBy={sortBy} sortDir={sortDir} onSort={(key) => {setSortBy(key); setSortDir(key === sortBy && sortDir === 'asc' ? 'desc' : 'asc'); setPage(1);}} loading={result.isLoading} total={result.data.total} page={page} pageSize={20} onPage={setPage} hasFilters={Boolean(search || Object.values(filters).some(Boolean))} onReset={() => {setSearch(''); setFilters({}); setPage(1);}} actions={(record) => <>
+    <AdminDataTable storageKey={table.name + (gameId ? ":game" : ":data")} label={table.label} columns={columns} rows={result.error ? [] : result.data.items} rowKey={(record) => adminRecordKey(table, record)} sortBy={sortBy} sortDir={sortDir} onSort={(key) => {setSortBy(key); setSortDir(key === sortBy && sortDir === 'asc' ? 'desc' : 'asc'); setPage(1);}} loading={result.isLoading} total={result.data.total} page={page} pageSize={20} onPage={setPage} hasFilters={Boolean(search || Object.values(filters).some(Boolean))} onReset={() => {setSearch(''); setFilters({}); setPage(1);}} actions={(record) => <>
       {table.canEdit && <button type="button" className="btn-secondary" aria-label="Редактировать запись" onClick={() => setEditor({mode: 'edit', key: adminRecordKey(table, record)})}><Pencil size={15} /></button>}
       {table.canDelete && <button type="button" className="btn-secondary admin-data__danger" aria-label={table.name === 'Session' ? 'Отозвать сессию' : 'Удалить запись'} onClick={() => setEditor({mode: 'delete', key: adminRecordKey(table, record)})}><Trash2 size={15} /></button>}
     </>} />
-    {editor && <AdminRecordDialog key={`${editor.mode}:${editor.key}`} table={table} editor={editor} onClose={() => setEditor(null)} onSaved={saved} />}
+    {editor && <AdminRecordDialog key={`${editor.mode}:${editor.key}`} table={table} editor={editor} {...(gameId ? {fixedValues: {gameId}} : {})} onClose={() => setEditor(null)} onSaved={saved} />}
   </>;
 }
 

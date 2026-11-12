@@ -1,6 +1,6 @@
 import { AdminTablesPage } from './AdminTablesPage';
 
-const REFERENCE_TABLES = ['GameGenre', 'GameSeries', 'Region', 'Localization', 'Status'] as const;
+const REFERENCE_TABLES = ['GameGenre', 'GameSeries', 'Region', 'Platform', 'Localization', 'Status'] as const;
 
 export function AdminReferencePage() {
   return (
@@ -11,7 +11,7 @@ export function AdminReferencePage() {
       title="Справочники"
       heading={() => 'Справочники'}
       eyebrow="ADMIN / REFERENCE"
-      description="Жанры, серии игр, регионы выпуска и локализации: поиск по таблице, фильтры по столбцам и управление записями."
+      description="Жанры, серии игр, платформы, регионы выпуска и локализации: поиск по таблице, фильтры по столбцам и управление записями."
       navLabel="Справочники игр"
     />
   );

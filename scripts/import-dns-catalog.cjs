@@ -18,7 +18,6 @@ const fs = require('node:fs');
 const { createRequire } = require('node:module');
 const { resolve } = require('node:path');
 const { planCatalog } = require('./lib/dns-catalog.cjs');
-const {applyEditionDedup}=require('./lib/edition-dedup.cjs');
 const { PrismaClient } = createRequire(resolve(process.cwd(),'package.json'))('@prisma/client');
 const input = process.argv[2];
 const apply = process.argv.includes('--apply');
@@ -41,6 +40,7 @@ async function main() {
       if (apply) {
         for (const game of plan.createGames) {const data=await linkedSeries(tx,game);if(data.genres) data.genres={connect:data.genres.set};await tx.game.create({data});}
         for (const update of plan.updateGames) await tx.game.update({where:{id:update.id},data:await linkedSeries(tx, update.data)});
+        for (const code of new Set(plan.createEditions.map(edition=>edition.platform))) await tx.platform.upsert({where:{code},update:{},create:{code,name:code}});
         for (let i=0;i<plan.createEditions.length;i+=200) await tx.edition.createMany({data:await Promise.all(plan.createEditions.slice(i,i+200).map(edition=>linkedRegion(tx,edition)))});
         for (const update of plan.updateEditions) await tx.edition.update({where:{id:update.id},data:await linkedRegion(tx, update.data)});
         const protectedGame = game=>{const {coverImage,updatedAt,...rest}=game;return rest;};
@@ -50,11 +50,10 @@ async function main() {
           const mutable = new Set(['coverImages','dnsProductId','dnsProductCode','updatedAt']);
           for(const field of Object.keys(old)) if (!mutable.has(field) && JSON.stringify(old[field])!==JSON.stringify(current[field])) throw Error('Existing edition metadata changed; rollback');
         }
-        reassigned=await applyEditionDedup(tx,plan.dedup);
       }
       const after = await counts();
       if (JSON.stringify(before)!==JSON.stringify(after)) throw Error('Related data changed during import; rollback');
-      return {mode:apply?'applied':'preview',hash:plan.hash,...plan.summary,relatedTables:after,existingMetadataPreserved:true,reassigned,duplicates:plan.dedup,mappings:plan.mappings};
+      return {mode:apply?'applied':'preview',hash:plan.hash,...plan.summary,relatedTables:after,existingMetadataPreserved:true,reassigned,mappings:plan.mappings};
     }, {timeout:120000,isolationLevel:'Serializable'});
     console.log(JSON.stringify(result,null,2));
   } finally {await prisma.$disconnect();}

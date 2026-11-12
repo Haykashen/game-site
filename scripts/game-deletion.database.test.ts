@@ -27,7 +27,7 @@ test('game deletion removes its editions and variants atomically, protecting col
     const game = await prisma.game.create({data:{id,title:id,publisher:'',description:''}});
     await prisma.game.create({data:{id:otherId,title:otherId,publisher:'',description:''}});
     const edition = await prisma.edition.create({data:{id:randomUUID(),gameId:id,name:'Standard',platform:'PS5',regionId,lang:'',media:'Disc'}});
-    const variant = await prisma.edition.create({data:{id:randomUUID(),gameId:id,name:'Variant',platform:'PS5',regionId,lang:'',media:'Disc',canonicalId:edition.id}});
+    const variant = await prisma.edition.create({data:{id:randomUUID(),gameId:id,name:'Variant',platform:'PS5',regionId,lang:'',media:'Disc'}});
     await prisma.edition.create({data:{id:randomUUID(),gameId:otherId,name:'Other',platform:'PS5',regionId,lang:'',media:'Disc'}});
     await prisma.copy.create({data:{userId,editionId:edition.id}});
     const payload = {expectedUpdatedAt:game.updatedAt.toISOString()};
@@ -38,7 +38,6 @@ test('game deletion removes its editions and variants atomically, protecting col
     const blocked = await app.inject({method:'DELETE',url,payload});
     assert.equal(blocked.statusCode,409,blocked.body);
     assert.equal(await prisma.edition.count({where:{gameId:id}}),2);
-    assert.equal((await prisma.edition.findUniqueOrThrow({where:{id:variant.id}})).canonicalId,edition.id);
     await prisma.copy.deleteMany({where:{userId}});
     const entry = await prisma.marketEntry.create({data:{authorId:userId,gameId:id,editionId:edition.id,kind:'listing',listingType:'sale',title:'Test',description:'',condition:'New',priceMinor:100,shipsFrom:'Москва',deliveryServices:[]}});
     assert.equal((await app.inject({method:'DELETE',url,payload})).statusCode,409);
@@ -57,7 +56,6 @@ test('game deletion removes its editions and variants atomically, protecting col
   } finally {
     await prisma.copy.deleteMany({where:{userId}});
     await prisma.marketEntry.deleteMany({where:{authorId:userId}});
-    await prisma.edition.updateMany({where:{gameId:{in:[id,otherId]}},data:{canonicalId:null}});
     await prisma.game.deleteMany({where:{id:{in:[id,otherId]}}});
     await prisma.region.deleteMany({where:{id:regionId}});
     await prisma.user.deleteMany({where:{id:userId}});

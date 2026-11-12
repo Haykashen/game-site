@@ -121,10 +121,8 @@ async function listDependencies(tx: Prisma.TransactionClient, table: AdminTable,
     if (ids.length) {
       const copies = await tx.copy.count({where: {editionId: {in: ids}}});
       const entries = await tx.marketEntry.count({where: {editionId: {in: ids}, gameId: {not: String(old.id)}}});
-      const externalVariants = await tx.edition.count({where: {canonicalId: {in: ids}, gameId: {not: String(old.id)}}});
       if (copies) dependencies.push(`Экземпляры в коллекциях: ${copies}`);
       if (entries) dependencies.push(`Объявления, использующие издания игры: ${entries}`);
-      if (externalVariants) dependencies.push(`Варианты изданий других игр: ${externalVariants}`);
     }
   }
   return dependencies;
@@ -181,7 +179,26 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
     const result = await app.prisma.$transaction(async (tx) => {
       const db = delegate(tx, name);
       const total = await db.count({where});
-      const items = await db.findMany({where, select: recordSelect(table), orderBy, skip: (query.page - 1) * query.pageSize, take: query.pageSize});
+      const referenceFields = table.fields.flatMap(field => {
+        if (!field.reference || !Object.hasOwn(TABLE_LABELS, field.reference) || field.type === 'list') return [];
+        const relation = getModel(name).fields.find(candidate => candidate.kind === 'object' && candidate.relationFromFields?.length === 1 && candidate.relationFromFields[0] === field.name);
+        if (!relation) return [];
+        const related = getTable(field.reference);
+        const label = ['displayName', 'title', 'name', 'code'].find(key => related.fields.some(item => item.name === key));
+        return label ? [{field: field.name, relation: relation.name, label}] : [];
+      });
+      const select = recordSelect(table);
+      for (const reference of referenceFields) select[reference.relation] = {select: {[reference.label]: true}};
+      const records = await db.findMany({where, select, orderBy, skip: (query.page - 1) * query.pageSize, take: query.pageSize});
+      const items = records.map(row => {
+        const result = {...row};
+        for (const reference of referenceFields) {
+          const related = row[reference.relation] as Record<string, unknown> | null;
+          result['__reference_' + reference.field] = related?.[reference.label] ?? null;
+          delete result[reference.relation];
+        }
+        return result;
+      });
       return paginated(items, total, query.page, query.pageSize);
     }, {isolationLevel: 'RepeatableRead'});
     return result;
@@ -279,7 +296,6 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
       await checkDependencies(tx, table, old);
       if (name === 'Game') {
         // Break only internal canonical links, then remove all editions atomically with the game.
-        await tx.edition.updateMany({where: {gameId: String(old.id)}, data: {canonicalId: null}});
         await tx.edition.deleteMany({where: {gameId: String(old.id)}});
       }
       if (name === 'User') await tx.session.deleteMany({where: {userId: String(old.id)}});

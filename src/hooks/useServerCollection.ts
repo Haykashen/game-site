@@ -65,7 +65,6 @@ export function useGameCollection(): GameCollection {
   const editions = useMemo(() => [...new Map([...ownedCatalog.data.editions, ...catalog.data.editions].map(item => [item.id, item])).values()], [ownedCatalog.data.editions, catalog.data.editions]);
   const editionById = useMemo(() => {
     const map = new Map(editions.map((edition) => [edition.id, edition]));
-    for (const edition of editions) for (const variant of edition.variants ?? []) map.set(variant.id, edition);
     return map;
   }, [editions]);
   const editionsByGame = useMemo(() => {

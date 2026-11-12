@@ -38,7 +38,7 @@ export function GameBrowser({games, gameId, editionId = '', onOpenGame, onCloseG
 
   useEffect(() => {if (gameId) setSelectedId(gameId);}, [gameId]);
   useEffect(() => {
-    if (detail.data) editionIds.current.set(detail.data.id, new Set(detail.data.editions.flatMap((edition) => [edition.id, ...(edition.variants ?? []).map((variant) => variant.id)])));
+    if (detail.data) editionIds.current.set(detail.data.id, new Set(detail.data.editions.map(edition => edition.id)));
     if (isSyncing) return;
     setOwnedCounts((previous) => {
       let next = previous;

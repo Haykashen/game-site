@@ -29,12 +29,10 @@ test('Showgames variants retain existing DNS IDs and do not pretend to be DNS SK
   assert.equal(plan.createGames.length,0);
   assert.equal(plan.createEditions[0].id,'showgames-10-ps5');
   assert.equal(plan.createEditions[0].dnsProductId,'');
-  assert.equal(plan.dedup[0].canonicalId,'sku');
-  assert.deepEqual(plan.dedup[0].coverImages,[scan,dns]);
-  const editions=[{...initial.createEditions[0],coverImages:[scan,dns]}, {...plan.createEditions[0],canonicalId:'sku'}];
   const games=initial.createGames.map(g=>({...g,coverImage:scan}));
+  const editions=[...initial.createEditions, ...plan.createEditions];
   const again=planCatalog(document,games,editions);
-  assert.equal(again.createGames.length+again.createEditions.length+again.updateGames.length+again.updateEditions.length+again.dedup.length,0);
+  assert.equal(again.createGames.length+again.createEditions.length+again.updateGames.length+again.updateEditions.length,0);
 });
 test('partial localisation joins only a unique compatible release without losing source facts',()=>{
   const make=(id,languages,provider)=>({id,sourceProvider:provider,sourceTitle:id,name:'Standard',platforms:['PS5'],interfaceLanguages:languages,images:[provider?scan:dns]});

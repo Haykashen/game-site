@@ -237,6 +237,7 @@ model Edition {
   gameId         String    @map("game_id")
   name           String
   platform       String
+  platformReference Platform @relation(fields: [platform], references: [code], onDelete: Restrict, onUpdate: Cascade)
   regionId       String @default(dbgenerated("default_region_id()")) @map("region_id") @db.Uuid
   region         Region @relation(fields: [regionId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   lang           String
@@ -248,18 +249,14 @@ model Edition {
   barcode        String    @default("")
   dnsProductId   String    @default("") @map("dns_product_id")
   dnsProductCode String    @default("") @map("dns_product_code")
-  canonicalId    String?   @map("canonical_id")
   createdAt      DateTime  @default(now()) @map("created_at")
   updatedAt      DateTime  @updatedAt @map("updated_at")
 
   game          Game          @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  canonical     Edition?      @relation("EditionVariants", fields: [canonicalId], references: [id], onDelete: Restrict)
-  variants      Edition[]     @relation("EditionVariants")
   copies        Copy[]
   marketEntries MarketEntry[]
 
   @@index([gameId])
-  @@index([canonicalId])
   @@index([platform])
   @@index([regionId])
   @@index([lang])
@@ -725,4 +722,17 @@ model CopyShareComment {
   @@index([shareId, createdAt, id])
   @@index([userId])
   @@map("copy_share_comments")
+}
+
+model Platform {
+  code String @id
+  name String
+  group String @default("Другие")
+  color String @default("#64748b")
+  textColor String @default("#ffffff") @map("text_color")
+  description String @default("") @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  editions Edition[]
+  @@map("platforms")
 }

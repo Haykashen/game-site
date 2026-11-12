@@ -99,7 +99,7 @@ export function serializeGame(game: Game & StatusRecord & {series?: {name: strin
   };
 }
 
-export function serializeEdition(edition: Edition & StatusRecord & {region?: {code:string}; variants?: (Edition & StatusRecord & {region?: {code:string}})[]}): EditionDto {
+export function serializeEdition(edition: Edition & StatusRecord & {region?: {code:string}}): EditionDto {
   return {
     moderationStatus: moderationStatus(edition),
     moderationNote: edition.moderationNote,
@@ -120,10 +120,6 @@ export function serializeEdition(edition: Edition & StatusRecord & {region?: {co
     barcode: edition.barcode,
     dnsProductId: edition.dnsProductId,
     dnsProductCode: edition.dnsProductCode,
-    variants: (edition.variants ?? []).map(variant=>{
-      const {variants:_ignored,...record}=serializeEdition(variant);
-      return record;
-    }),
   };
 }
 
