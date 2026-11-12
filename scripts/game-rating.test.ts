@@ -37,7 +37,7 @@ test('zero is a saved score, contributes to the average, and differs from a dele
     assert.deepEqual(removed.json(), {average: null, count: 0, myScore: null});
   } finally {await app.close();}
 });
-test('market data follows the selected release, including its language variants', async () => {
+test('market data follows only the selected independent release', async () => {
   const {gameEditionEntries} = await import('../src/lib/gameMarket.ts');
   type Entry = import('../src/types.ts').MarketEntry;
   type Edition = import('../src/types.ts').Edition;
@@ -49,6 +49,6 @@ test('market data follows the selected release, including its language variants'
     {id: 'other-game', gameId: 'other', editionId: 'ps5'},
     {id: 'unbound', gameId: 'game', editionId: null},
   ] as Entry[];
-  assert.deepEqual(gameEditionEntries(entries, 'game', {id: 'ps5', variants: [{id: 'ps5-ru'}]} as Edition).map(entry => entry.id), ['selected', 'variant']);
+  assert.deepEqual(gameEditionEntries(entries, 'game', {id: 'ps5'} as Edition).map(entry => entry.id), ['selected']);
   assert.deepEqual(gameEditionEntries(entries, 'game', {id: 'ps4'} as Edition).map(entry => entry.id), ['other-platform']);
 });
