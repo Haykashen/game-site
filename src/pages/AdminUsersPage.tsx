@@ -1,6 +1,6 @@
 import { Pencil, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+
 import type { AdminUserDto, AdminUserSortField, Paginated, UserRole, UserStatus } from '@discvault/shared';
 import { listAdminUsers } from '../api';
 import { PageHeading } from '../components/PageHeading';
@@ -99,7 +99,7 @@ function UsersTable() {
   ];
   return <>
     <PageHeading eyebrow="ADMIN / USERS" title="Пользователи" description="Выберите строку пользователя, чтобы посмотреть связанные данные ниже. Поиск, фильтры и сортировка доступны по столбцам."
-      action={<div className="admin-data__row-actions"><Link className="btn-secondary" to="/admin/data">Все таблицы</Link><button className="btn-secondary" disabled={result.isLoading} onClick={() => void result.refresh()}><RefreshCw size={15} />Обновить</button><button className="btn-primary" disabled={!table} onClick={() => setEditor({mode: 'create', key: null})}><Plus size={15} />Добавить пользователя</button></div>} />
+      action={<div className="admin-data__row-actions"><button className="btn-secondary" disabled={result.isLoading} onClick={() => void result.refresh()}><RefreshCw size={15} />Обновить</button><button className="btn-primary" disabled={!table} onClick={() => setEditor({mode: 'create', key: null})}><Plus size={15} />Добавить пользователя</button></div>} />
     {notice && <p role="status" className="admin-data__help">{notice}</p>}
     {(schema.error || result.error) && <div className="admin-data__error" role="alert">{schema.error || result.error}<button className="btn-secondary" onClick={() => {void schema.refresh(); void result.refresh();}}>Повторить</button></div>}
     <p className="admin-data__help">«В сети» — активная сессия с обращением к сайту за последние 2 минуты. Обновляется каждые 30 секунд.</p>

@@ -99,7 +99,7 @@ function GameCardComponent({ game, stats, onSelect }: GameCardProps) {
         <div>
           <h3 title={game.title}>{game.title}</h3>
           <p className="card-meta">
-            {[game.publisher, game.year].filter(value => value !== null && value !== '').join(' • ') || 'Сведения об игре уточняются'}
+            {[game.year, game.developer].filter(value => value !== null && value !== '').join(' • ') || 'Сведения об игре уточняются'}
           </p>
         </div>
         <div className="card-footer">
