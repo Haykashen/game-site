@@ -154,7 +154,7 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
     finally {setSaving(false);}
   }
 
-  return <ModalShell isOpen onClose={() => {if (!saving) onClose();}} labelledBy={titleId}>
+  return <ModalShell contentClassName="admin-record-dialog" isOpen onClose={() => {if (!saving) onClose();}} labelledBy={titleId}>
     <form id={titleId + "-form"} className="admin-data__editor" onSubmit={(event) => {event.preventDefault(); void submit();}}>
       <div className="admin-data__editor-header"><div><small>{table.label}</small><h2 id={titleId}>{title ?? (deleting ? table.name === 'Session' ? 'Отозвать сессию' : 'Удалить запись' : creating ? 'Добавить запись' : 'Редактировать запись')}</h2></div>
         <IconButton label="Закрыть" title="Закрыть" disabled={saving} onClick={onClose}><X size={20} /></IconButton>
