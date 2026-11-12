@@ -1249,7 +1249,7 @@
         .auction-tile:hover { transform: translateY(-2px); border-color: var(--amber); }
         .auction-tile:focus-visible { outline: 2px solid var(--brand-ink); outline-offset: 3px; }
         .auction-tile__photo { position: relative; min-width: 0; overflow: hidden; border-radius: 10px; background: var(--bg-card); }
-        .auction-tile__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: var(--bg-card); opacity: 0; }
+        .auction-tile__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: 8px center; background: var(--bg-card); opacity: 0; }
         .auction-tile__photo img[data-image-loaded="true"] { opacity: 1; }
         .auction-tile__placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 12px; text-align: center; font-size: .8rem; color: var(--text-muted); }
         .auction-tile__content { min-width: 0; padding: 10px 8px 8px 20px; display: grid; grid-template-rows: 42px minmax(0, 1fr) 94px; gap: 10px; }
@@ -4325,9 +4325,9 @@
 
 .reference-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.reference-tags__item{display:inline-flex;align-items:center;gap:8px;padding:5px 8px;background:var(--brand-light);border:1px solid var(--border-color);border-radius:6px;font-size:12px}.reference-tags__item button{display:inline-flex;align-items:center;justify-content:center;padding:2px;background:transparent;border:0;color:var(--text-main);cursor:pointer}.reference-tags__item button:hover{color:var(--brand-ink)}
 /* Catalog game tiles: artwork, metadata and four linked market counters. */
-.game-card .card-cover{aspect-ratio:4/4.45;padding:12px;border-radius:16px 16px 0 0;}
-.game-card .card-cover__image{inset:12px;width:calc(100% - 24px);height:calc(100% - 24px);object-fit:contain;border-radius:7px;}
-.game-card .card-info{padding:16px 20px 20px;gap:18px;}
+.game-card .card-cover{aspect-ratio:4/4.45;padding:0;border-radius:16px 16px 0 0;}
+.game-card .card-cover__image{inset:0;width:100%;height:100%;object-fit:contain;border-radius:0;}
+.game-card .card-info{padding:8px 20px 20px;gap:18px;}
 .game-card .card-footer{display:flex;flex-direction:column;align-items:stretch;gap:12px;border-top:1px solid var(--border-color);padding-top:16px;}
 .game-card .card-market-stats{gap:7px;}
 .game-card .card-market-stat{display:grid;grid-template-columns:auto auto;justify-content:center;align-content:center;gap:5px;padding:12px 3px 9px;border:1px solid var(--border-color);border-top:3px solid currentColor;border-radius:7px;text-decoration:none;min-height:68px;}
@@ -4352,13 +4352,13 @@
 @media(hover:hover){.game-card .card-market-stat:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.16);}}
 .game-card .card-market-stat:active{transform:translateY(0);box-shadow:none;}
 @media(prefers-reduced-motion:reduce){.game-card .card-market-stat{transition:none;}.game-card .card-market-stat:hover,.game-card .card-market-stat:active{transform:none;}}
-.game-card .card-info{gap:0}.game-card .card-footer{margin-top:16px;padding-top:16px;gap:0}
+.game-card .card-info{gap:0}.game-card .card-footer{margin-top:8px;padding-top:8px;gap:0}
 .game-card .card-info > div:first-child{display:grid;grid-template-rows:auto 1.5em;gap:4px;min-width:0;}
 .game-card .card-info h3{display:block;min-width:0;margin:0;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .game-card .card-meta{margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.5;}
 .game-card .card-market-stat{min-height:68px;min-width:44px;}
 .game-card .card-market-stat:focus-visible{outline:2px solid var(--brand-ink);outline-offset:2px;}
-@media(max-width:540px){.games-grid{grid-template-columns:minmax(0,1fr);}.game-card .card-info{padding:16px;}.game-card .card-market-stat__label{font-size:9px;}}
+@media(max-width:540px){.games-grid{grid-template-columns:minmax(0,1fr);}.game-card .card-info{padding:8px 16px 16px;}.game-card .card-market-stat__label{font-size:9px;}}
 /* Compact listing actions: follow in the title bar; deal and chat beside price. */
 .market-detail-header-actions { display:flex; align-items:center; gap:.65rem; flex-shrink:0; }
 .market-detail-header-actions .entry-subscribe-wrap { position:relative; }
@@ -4811,7 +4811,7 @@ html:not(.dark) .showcase-feed-page { --feed-card:#fffdf6; --feed-border:#d9d2be
 .showcase-publication-heading .market-author > .spec-link { color:var(--text-main); }
 
 .showcase-publication-heading { position:relative; padding-right:100px; }
-.showcase-publication-heading__actions { position:absolute; top:0; right:0; display:flex; align-items:center; gap:8px; }
+.showcase-publication-heading__actions { position:absolute; top:0; right:0; display:flex; align-items:center; gap:0.4rem; }
 
 
 .showcase-publication-overview__photos { min-width:0; }
@@ -4860,3 +4860,10 @@ html:not(.dark) .showcase-feed-page { --feed-card:#fffdf6; --feed-border:#d9d2be
 .showcase-comment-form textarea.form-control { min-height:72px; height:72px; resize:vertical; }
 
 .community-own-action-slot { display:contents; }
+
+/* Compact spacing in the opened showcase publication. */
+.modal-content:has(> .showcase-publication-story) { gap: .75rem; }
+.showcase-publication-story { gap: 6px; }
+.showcase-discussion { gap: 9px; padding-top: 10px; }
+.showcase-discussion > h3,
+.showcase-discussion > .panel-hint { margin: 0; }

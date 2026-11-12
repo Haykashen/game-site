@@ -34,7 +34,6 @@ interface MarketCopy {
   title: string;
   description: string;
   cta: string;
-  hint: string;
   ownLabel: string;
   empty: string;
   searchPlaceholder: string;
@@ -47,7 +46,6 @@ const COPY: Record<MarketKind | MarketListingType, MarketCopy> = {
     title: 'Объявления',
     description: 'Продажа, покупка и обмен играми и лутом между коллекционерами.',
     cta: 'Разместить объявление',
-    hint: 'Фиксированные цены и прямые предложения',
     ownLabel: 'Мои объявления',
     empty: 'Объявлений пока нет — разместите первое.',
     searchPlaceholder: 'Найти объявление, игру или продавца',
@@ -58,7 +56,6 @@ const COPY: Record<MarketKind | MarketListingType, MarketCopy> = {
     title: 'Продажи',
     description: 'Игры, издания и лут для вашей коллекции.',
     cta: 'Разместить продажу',
-    hint: 'Фиксированные цены и прямые предложения',
     ownLabel: 'Мои продажи',
     empty: 'Продаж пока нет — разместите первое объявление.',
     searchPlaceholder: 'Найти продажу, игру или продавца',
@@ -69,7 +66,6 @@ const COPY: Record<MarketKind | MarketListingType, MarketCopy> = {
     title: 'Покупки',
     description: 'Запросы на покупку игр и лута: найдите нужный предмет или предложите свой.',
     cta: 'Разместить покупку',
-    hint: 'Игры, издания и отдельные предметы',
     ownLabel: 'Мои покупки',
     empty: 'Покупок пока нет — разместите первый запрос.',
     searchPlaceholder: 'Найти покупку, игру или покупателя',
@@ -80,7 +76,6 @@ const COPY: Record<MarketKind | MarketListingType, MarketCopy> = {
     title: 'Обмен',
     description: 'Обмен играми и лутом между коллекционерами.',
     cta: 'Предложить обмен',
-    hint: 'Прямой обмен играми и лутом по договорённости',
     ownLabel: 'Мои обмены',
     empty: 'Обменных предложений пока нет — разместите первое.',
     searchPlaceholder: 'Найти обмен, игру или коллекционера',
@@ -91,7 +86,6 @@ const COPY: Record<MarketKind | MarketListingType, MarketCopy> = {
     title: 'Аукционы',
     description: 'Торги за игры, редкие издания и лут: ставки и время до закрытия лота.',
     cta: 'Разместить аукцион',
-    hint: 'Ставки принимаются до окончания таймера',
     ownLabel: 'Мои лоты',
     empty: 'Аукционов пока нет — запустите первый.',
     searchPlaceholder: 'Найти аукцион, игру или продавца',
@@ -267,7 +261,6 @@ export function MarketPage({ kind, listingType }: MarketPageProps) {
         onQueryChange={(query) => setValue('query', query)}
         onFilterChange={setValue}
         onReset={resetFilters}
-        hint={showOwn ? `${copy.ownLabel}, включая проданные и снятые` : copy.hint}
         leadingActions={
           <button
             type="button"
