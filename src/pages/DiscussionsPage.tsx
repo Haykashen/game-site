@@ -118,6 +118,7 @@ export function DiscussionsPage() {
         resultCountLabel={topicsCountLabel(discussions.length)}
         onQueryChange={(query) => setValue('query', query)}
         onFilterChange={(key, value) => setValue(key, value)}
+        leadingActions={<span id="community-own-action" className="community-own-action-slot" />}
         actions={<CommunityActions kind="discussions" onPublished={refresh} />}
         onReset={handleReset}
       />

@@ -100,6 +100,7 @@ export function NewsPage() {
         resultCountLabel={newsCountLabel(news.length)}
         onQueryChange={(query) => setValue('query', query)}
         onFilterChange={(key, value) => setValue(key, value)}
+        leadingActions={<span id="community-own-action" className="community-own-action-slot" />}
         actions={<CommunityActions kind="news" onPublished={refresh} />}
         onReset={handleReset}
       />

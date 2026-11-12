@@ -12,6 +12,7 @@ import {
   Tag,
   TrendingDown,
   Trophy,
+  Trash2,
 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -24,6 +25,7 @@ import {
   markAllNotificationsRead,
   markNotificationRead,
 } from '../api';
+import { IconButton } from '../components/ui/IconButton';
 import { PageHeading } from '../components/PageHeading';
 import { useAuth } from '../context/AuthContext';
 import { useNotifications } from '../context/NotificationsContext';
@@ -242,9 +244,19 @@ export function NotificationsPage() {
                 )}
               </button>
             </div>
-            <button type="button" className="btn-secondary" disabled={isDeleting || isLoading || isMarkingAll} onClick={() => void deleteAll()}>{isDeleting ? 'Удаляем…' : 'Удалить все уведомления'}</button><span className="notifications-toolbar__count">
-              {total > 0 ? `${total} всего` : 'Пока пусто'}
-            </span>
+            <div className="notifications-toolbar__actions">
+              <span className="notifications-toolbar__count">
+                {total > 0 ? `${total} всего` : 'Пока пусто'}
+              </span>
+              <IconButton
+                label="Удалить все уведомления"
+                title="Удалить все уведомления"
+                disabled={isDeleting || isLoading || isMarkingAll}
+                onClick={() => void deleteAll()}
+              >
+                <Trash2 size={20} aria-hidden="true" />
+              </IconButton>
+            </div>
           </div>
 
           {error && (

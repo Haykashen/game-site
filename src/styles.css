@@ -465,7 +465,7 @@
             background: var(--brand);
             color: #172013;
             border-radius: 5px;
-            font: 700 .52rem/1 'IBM Plex Mono', monospace;
+            font: 700 .65rem/1 'IBM Plex Mono', monospace;
             letter-spacing: .02em;
             box-shadow: 2px 2px 0 rgba(0,0,0,.2), inset 0 0 0 1px rgba(255,255,255,.14);
         }
@@ -3156,6 +3156,9 @@
             font: 700 .6rem/1 'IBM Plex Mono', monospace;
         }
         .notifications-tab.active .notifications-tab__count { background: rgba(23,32,19,.18); color: #172013; }
+        .notifications-toolbar__actions {
+            display: flex; align-items: center; gap: 1rem; margin-left: auto;
+        }
         .notifications-toolbar__count {
             color: var(--text-muted);
             font: 600 .68rem/1.4 'IBM Plex Mono', monospace;
@@ -4855,3 +4858,5 @@ html:not(.dark) .showcase-feed-page { --feed-card:#fffdf6; --feed-border:#d9d2be
 .showcase-discussion h3 { display:flex; align-items:center; gap:10px; }
 .showcase-discussion__count { display:inline-flex; align-items:center; gap:6px; }
 .showcase-comment-form textarea.form-control { min-height:72px; height:72px; resize:vertical; }
+
+.community-own-action-slot { display:contents; }
