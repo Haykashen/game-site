@@ -2,7 +2,7 @@ import {ratingFrom} from '../lib/rating.js';
 import type {FastifyInstance} from 'fastify';
 import type {Prisma} from '@prisma/client';
 import {shareCopySchema, paginationSchema, paginated, type CopyShareDto} from '@discvault/shared';
-import {badRequest, notFound, unauthorized} from '../errors.js';
+import { notFound, unauthorized} from '../errors.js';
 import {parse} from '../lib/validation.js';
 const include = {_count: {select: {likes: true, comments: true}}, copy: {include: {user: {select: {id: true, displayName: true, ratingSum: true, ratingCount: true}}, edition: {include: {game: {select: {id: true, title: true}}}}}}} satisfies Prisma.CopyShareInclude;
 type Share = Prisma.CopyShareGetPayload<{include: typeof include}>;
@@ -27,7 +27,6 @@ export function registerShowcaseRoutes(app: FastifyInstance) {
     const copy = await app.prisma.copy.findFirst({where: {id: input.copyId, userId: request.user.id}, include: {photos: {orderBy: {sortOrder: 'asc'}}, edition: {include: {region: true}}}});
     if (!copy) throw notFound('Экземпляр не найден в вашей коллекции.');
     const photos = copy.useEditionCover ? copy.edition.coverImages : copy.photos.map(photo => photo.url);
-    if (!photos.length) throw badRequest('Добавьте к экземпляру хотя бы одну фотографию.');
     // Public photos are a snapshot: later private edits must not publish new images silently.
     const data = {topic: input.topic, caption: input.caption, photos: [...photos], condition: copy.condition, completeness: copy.completeness, region: copy.region ?? copy.edition.region.code};
     const share = await app.prisma.copyShare.upsert({where: {copyId: copy.id}, create: {copyId: copy.id, ...data}, update: data, include});

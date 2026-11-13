@@ -88,11 +88,11 @@ export function ShowcasePage() {
         catch (cause) {setError(errorMessage(cause));} finally {setBusy(false);}
       }}><fieldset disabled={busy} className="copy-form__fields showcase-compose-fields"><label className="form-label" htmlFor="share-copy">Экземпляр из моей коллекции</label><select id="share-copy" className="form-control" value={chosen?.id ?? ''} onChange={event => setCopyId(event.target.value)}>{options.map((copy, index) => <option key={copy.id} value={copy.id}>{describe(copy.editionId)} · экземпляр {index + 1}</option>)}</select>
         {chosen && <MarketPhotoGallery photos={chosenPhotos} title={describe(chosen.editionId)} expandable />}
-        {chosen && !chosenPhotos.length && <p role="status" className="panel-hint">У экземпляра нет изображения для публикации. Добавьте фото или включите обложку издания в карточке экземпляра.</p>}
+        {chosen && !chosenPhotos.length && <p role="status" className="panel-hint">Экземпляр будет опубликован без изображения.</p>}
         <label className="form-label" htmlFor="share-topic">Тема</label><textarea id="share-topic" rows={2} className="form-control" maxLength={200} value={topic} onChange={event => setTopic(event.target.value)} placeholder="Коротко о вашей находке…" />
         <label className="form-label" htmlFor="share-caption">Подпись к публикации</label><textarea id="share-caption" rows={4} className="form-control" maxLength={1000} value={caption} onChange={event => setCaption(event.target.value)} placeholder="Расскажите о находке или истории экземпляра…" />
         <p className="panel-hint">Фотографии, состояние, комплектность, регион и подпись будут видны всем. Цена, дата покупки и личные заметки не публикуются. Повторная публикация обновит фото и подпись.</p>
-        {error && <p role="alert" className="market-form__error">{error}</p>}<div className="market-form__actions"><button type="button" className="btn-secondary" onClick={closeCompose}>Отмена</button><button type="submit" className="btn-primary" disabled={!chosenPhotos.length}>{busy ? 'Публикуем…' : 'Опубликовать'}</button></div></fieldset></form>}
+        {error && <p role="alert" className="market-form__error">{error}</p>}<div className="market-form__actions"><button type="button" className="btn-secondary" onClick={closeCompose}>Отмена</button><button type="submit" className="btn-primary" >{busy ? 'Публикуем…' : 'Опубликовать'}</button></div></fieldset></form>}
       {!options.length && <button type="button" className="btn-secondary" onClick={closeCompose}>Закрыть</button>}
     </ModalShell>
     <ModalShell isOpen={opened !== null} onClose={() => {if (!busy) setOpened(null);}} labelledBy="showcase-copy-title">

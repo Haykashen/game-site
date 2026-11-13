@@ -19,7 +19,7 @@ test('publishing and unpublishing enforce ownership; snapshots ignore later priv
     assert.equal((await app.inject({method:'POST',url:'/api/v1/community/showcase',headers:{'x-owner':'yes'},payload:{copyId:'copy'}})).statusCode,404);
     allowed=true;const response=await app.inject({method:'POST',url:'/api/v1/community/showcase',headers:{'x-owner':'yes'},payload:{copyId:'copy',caption:'My find'}});assert.equal(response.statusCode,201,response.body);assert.deepEqual(stored.photos,['https://example.com/first.jpg']);
     copy.photos.push({url:'https://example.com/private.jpg'});assert.equal(stored.photos.length,1);
-    copy.photos=[];assert.equal((await app.inject({method:'POST',url:'/api/v1/community/showcase',headers:{'x-owner':'yes'},payload:{copyId:'copy'}})).statusCode,400);
+    copy.photos=[];assert.equal((await app.inject({method:'POST',url:'/api/v1/community/showcase',headers:{'x-owner':'yes'},payload:{copyId:'copy'}})).statusCode,201);assert.deepEqual(stored.photos,[]);
     copy.useEditionCover=true;
     const withCover=await app.inject({method:'POST',url:'/api/v1/community/showcase',headers:{'x-owner':'yes'},payload:{copyId:'copy'}});
     assert.equal(withCover.statusCode,201,withCover.body);assert.deepEqual(stored.photos,['https://example.com/edition.jpg']);
