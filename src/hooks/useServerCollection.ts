@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { fetchCollectionCatalog, createCopyRequest, deleteEditionRequest, errorMessage, listCopies, mapCopy, setEditionQuantityRequest, updateCopyEditionRequest } from '../api';
 import { fetchCatalog } from '../api/catalog';
 import { useAuth } from '../context/AuthContext';
@@ -40,13 +40,9 @@ export function useGameCollection(): GameCollection {
   const owner = useRef(userId);
   owner.current = userId;
   const isRemote = status === 'api' && Boolean(userId);
-  // Retain an already requested full lookup across route changes for this account.
+  // Cancel the full catalogue load when leaving routes that need it.
   const scope = userId ?? 'guest';
-  const [fullRequest, setFullRequest] = useState({scope, needed: false});
-  const needsFullCatalog = routeNeedsFullCatalog || (fullRequest.scope === scope && fullRequest.needed);
-  useEffect(() => {
-    if (routeNeedsFullCatalog) setFullRequest(previous => previous.scope === scope && previous.needed ? previous : {scope, needed: true});
-  }, [scope, routeNeedsFullCatalog]);
+  const needsFullCatalog = routeNeedsFullCatalog;
   const loadCatalog = useCallback((signal: AbortSignal) => needsFullCatalog ? fetchCatalog(signal) : Promise.resolve(EMPTY_CATALOG), [needsFullCatalog]);
   const fullCatalog = useApiResource('catalog:' + scope, loadCatalog, EMPTY_CATALOG);
   const loadCopies = useCallback(async (signal: AbortSignal) =>

@@ -27,7 +27,7 @@ export function useApiResource<T>(key: string, load: (signal: AbortSignal) => Pr
       }
     } catch (cause) {
       if (currentKey.current === identity && request === sequence.current && !next.signal.aborted) {
-        setState({ key: identity, data: empty, loading: false, error: errorMessage(cause) });
+        setState(previous => ({ key: identity, data: previous.key === identity ? previous.data : empty, loading: false, error: errorMessage(cause) }));
       }
     }
   }, [empty, identity, load, status]);

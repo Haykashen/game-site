@@ -119,6 +119,8 @@ export async function checkApiHealth(signal?: AbortSignal): Promise<boolean> {
 }
 
 export function errorMessage(error: unknown): string {
+  if (error instanceof Error && (error.name === 'TimeoutError' || /signal timed out|operation.*timed out/i.test(error.message))) return 'Сервер не ответил вовремя. Повторите загрузку.';
+  if (error instanceof TypeError && /fetch|network|load failed/i.test(error.message)) return 'Не удалось связаться с сервером. Проверьте соединение и повторите загрузку.';
   if (error instanceof ApiError) return error.message;
   if (error instanceof Error && error.message) return error.message;
   return 'Не удалось выполнить запрос к серверу.';

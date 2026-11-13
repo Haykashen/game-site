@@ -26,9 +26,10 @@ export function registerShowcaseRoutes(app: FastifyInstance) {
     const input = parse(shareCopySchema, request.body);
     const copy = await app.prisma.copy.findFirst({where: {id: input.copyId, userId: request.user.id}, include: {photos: {orderBy: {sortOrder: 'asc'}}, edition: {include: {region: true}}}});
     if (!copy) throw notFound('Экземпляр не найден в вашей коллекции.');
-    if (!copy.photos.length) throw badRequest('Добавьте к экземпляру хотя бы одну фотографию.');
+    const photos = copy.useEditionCover ? copy.edition.coverImages : copy.photos.map(photo => photo.url);
+    if (!photos.length) throw badRequest('Добавьте к экземпляру хотя бы одну фотографию.');
     // Public photos are a snapshot: later private edits must not publish new images silently.
-    const data = {topic: input.topic, caption: input.caption, photos: copy.photos.map(photo => photo.url), condition: copy.condition, completeness: copy.completeness, region: copy.region ?? copy.edition.region.code};
+    const data = {topic: input.topic, caption: input.caption, photos: [...photos], condition: copy.condition, completeness: copy.completeness, region: copy.region ?? copy.edition.region.code};
     const share = await app.prisma.copyShare.upsert({where: {copyId: copy.id}, create: {copyId: copy.id, ...data}, update: data, include});
     return reply.code(201).send(publicCopyShare(share));
   });
