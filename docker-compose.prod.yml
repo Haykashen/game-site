@@ -37,6 +37,7 @@ services:
       DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in .env}
       CORS_ORIGINS: ${CORS_ORIGINS:?Set CORS_ORIGINS in .env}
       COOKIE_SECURE: "true"
+      SITE_URL: ${SITE_URL:-}
       PUBLIC_API_URL: ${PUBLIC_API_URL:?Set PUBLIC_API_URL in .env}
       UPLOAD_DIR: /data/uploads
     volumes:

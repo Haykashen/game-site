@@ -1,3 +1,4 @@
+import { PageMetadata } from './components/PageMetadata';
 import { CollectionAddPage } from './pages/CollectionAddPage';
 import { AchievementsPage } from './pages/AchievementsPage';
 import {ShowcasePage} from './pages/ShowcasePage';
@@ -31,6 +32,7 @@ import { UserProfilePage } from './pages/UserProfilePage';
 export default function App() {
   return (
     <BrowserRouter>
+      <PageMetadata />
       <ThemeProvider>
         <AuthProvider>
           <NotificationsProvider>

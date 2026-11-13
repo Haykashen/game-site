@@ -15,7 +15,7 @@ RUN npm ci
 
 COPY . .
 RUN npm run db:generate
-RUN npm run build:server
+RUN npm run build:all
 
 FROM node:22-bookworm-slim AS runtime
 
@@ -38,6 +38,7 @@ COPY --from=build /app/server/prisma ./server/prisma
 COPY --from=build /app/server/src ./server/src
 COPY --from=build /app/server/dist ./server/dist
 COPY --from=build /app/src/data ./src/data
+COPY --from=build /app/dist ./dist
 
 WORKDIR /app/server
 

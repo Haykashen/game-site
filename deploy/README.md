@@ -294,3 +294,21 @@ docker compose -f docker-compose.prod.yml logs api
   ограничение доступа к SSH и отдельные секреты.
 - Загруженные файлы хранятся на диске VPS. Для нескольких серверов
   используйте S3/MinIO.
+
+## Public page metadata
+
+`SITE_URL=https://your-domain.example` is the single canonical website origin for
+Open Graph, Twitter cards, canonical links and Schema.org JSON-LD. Set it in the
+production `.env`, then recreate the API container. An empty value falls back to
+`PUBLIC_API_URL` for existing installations. Hosting/DNS and `APP_DOMAIN` must still
+point to the new domain; use permanent redirects from the old domain when moving.
+
+Public HTML pages are rendered by the API using the same built frontend HTML.
+Caddy routes page requests to it; API and uploads keep their existing routes.
+The API image now contains the frontend build. Client-side navigation updates the
+same head metadata without reloading the page. Private sections are `noindex`.
+
+Games (`/games?game=...`) use `VideoGame`; showcase posts use `SocialMediaPosting`;
+market entries use `WebPage` with `Product` (and fixed-price sale `Offer` only).
+No purchase prices, private notes, emails, unpublished market entries or removed
+posts are included. Metadata does not guarantee search-engine rich results.

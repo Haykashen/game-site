@@ -9,6 +9,11 @@
 		reverse_proxy api:3001
 	}
 
+	@pages path / /games /games/* /auctions /listings /listings/* /community/* /news /discussions /collection /collection/* /account /settings /notifications /stats /achievements /chats /users/* /admin/*
+	handle @pages {
+		reverse_proxy api:3001
+	}
+
 	handle {
 		root * /srv
 		try_files {path} /index.html

@@ -1,3 +1,4 @@
+import { registerSeoRoutes } from './seo.js';
 import {registerShowcaseReactions} from './collection/showcaseReactions.js';
 import {registerShowcaseRoutes} from './collection/showcase.js';
 import { registerChatRoutes } from './chats/routes.js';
@@ -266,5 +267,6 @@ export async function buildApp() {
   registerReportRoutes(app);
   registerUploadRoutes(app);
 
+  registerSeoRoutes(app);
   return app;
 }

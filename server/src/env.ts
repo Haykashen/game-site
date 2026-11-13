@@ -34,6 +34,7 @@ const envSchema = z.object({
     ),
   COOKIE_SECURE: booleanString,
   SESSION_TTL_DAYS: z.coerce.number().int().min(1).max(365).default(30),
+  SITE_URL: z.preprocess(value => typeof value === 'string' && !value.trim() ? undefined : value, z.string().url().refine(value => /^https?:\/\//.test(value), 'SITE_URL must use http or https').optional()),
   PUBLIC_API_URL: z.string().trim().default('http://localhost:3001'),
   UPLOAD_DIR: z.string().trim().default('./uploads'),
   MAX_UPLOAD_BYTES: z.coerce.number().int().min(1024).default(10 * 1024 * 1024),
@@ -79,6 +80,7 @@ export const env = {
   cookieSecure: data.COOKIE_SECURE || data.NODE_ENV === 'production',
   sessionTtlDays: data.SESSION_TTL_DAYS,
   publicApiUrl,
+  siteUrl: new URL(data.SITE_URL ?? publicApiUrl).origin,
   uploadDir: path.resolve(process.cwd(), data.UPLOAD_DIR),
   maxUploadBytes: data.MAX_UPLOAD_BYTES,
   s3: {
