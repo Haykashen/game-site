@@ -171,6 +171,14 @@ let data=""; process.stdin.on("data", c => data += c); process.stdin.on("end", (
   catch { process.exit(1); }
 });' <"$backup/health.json"
 curl --fail --silent --show-error --max-time 20 "${public_url%/}/" >/dev/null
+curl --fail --silent --show-error --max-time 20 "${public_url%/}/games" >"$backup/seo.html"
+docker exec -i "$next_api" node -e '
+let html=""; process.stdin.on("data", c => html += c); process.stdin.on("end", () => {
+  const valid = html.includes("property=\"og:title\"") && html.includes("property=\"og:image\"") && html.includes("rel=\"canonical\"") && html.includes("application/ld+json");
+  if (!valid) console.error("Public HTML metadata verification failed");
+  process.exit(valid ? 0 : 1);
+});' <"$backup/seo.html"
+echo 'Public HTML contains Open Graph, canonical and Schema.org metadata.'
 printf '%s\n' "$revision" >"$app_dir/.deploy/current-revision.tmp"
 mv "$app_dir/.deploy/current-revision.tmp" "$app_dir/.deploy/current-revision"
 trap - ERR HUP INT TERM
