@@ -4870,3 +4870,8 @@ html:not(.dark) .showcase-feed-page { --feed-card:#fffdf6; --feed-border:#d9d2be
 .game-editions-cell { min-width:180px; }
 .game-editions-cell .form-control { width:100%; }
 .game-editions-cell textarea.form-control { min-height:44px; height:44px; resize:vertical; }
+.copy-link-button { display:inline-flex; align-items:center; justify-content:center; gap:6px; }
+.copy-link-button > svg { flex-shrink:0; }
+.copy-link-button__label { display:grid; }
+.copy-link-button__label > span { grid-area:1 / 1; white-space:nowrap; }
+.copy-link-button__reserve { visibility:hidden; pointer-events:none; }

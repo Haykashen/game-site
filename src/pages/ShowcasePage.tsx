@@ -1,3 +1,4 @@
+import { CopyLinkButton } from '../components/ui/CopyLinkButton';
 import { IconButton } from '../components/ui/IconButton';
 import {ShowcaseReactions} from '../components/community/ShowcaseReactions';
 import {ShowcaseDiscussion} from '../components/community/ShowcaseDiscussion';
@@ -57,7 +58,7 @@ export function ShowcasePage() {
   return <><div className="showcase-feed-page">
     <PageHeading eyebrow="COMMUNITY / COLLECTION SHOWCASE" title="Витрина коллекций" description="Экземпляры с историей: делитесь находками, показывайте редкие издания и знакомьтесь с коллекциями других пользователей."
       />
-    <div className="showcase-create-bar"><span>Поделитесь находкой из вашей коллекции…</span>{user ? <button type="button" className="btn-primary" onClick={() => {setError('');setComposing(true);}}><Plus size={17} aria-hidden="true" />Поделиться экземпляром</button> : <Link className="btn-secondary" to="/account">Войти, чтобы поделиться</Link>}</div>
+    <div className="showcase-create-bar"><span>Поделитесь находкой из вашей коллекции…</span>{user ? <button type="button" className="btn-primary" onClick={() => {setError('');setComposing(true);}}><Plus size={17} aria-hidden="true" />Поделиться</button> : <Link className="btn-secondary" to="/account">Войти, чтобы поделиться</Link>}</div>
     <ApiState loading={feed.isLoading} error={feed.error} onRetry={feed.refresh} />
     {!composing && error && <p className="market-form__error" role="alert">{error}</p>}
     {notice && <p role="status">{notice}</p>}
@@ -75,7 +76,7 @@ export function ShowcasePage() {
       <div className="showcase-post__story"><h2>{share.topic || share.game.title}</h2>{share.caption && <p>{share.caption}</p>}</div>
       <div className="showcase-post__media"><PhotoPreviewGallery photos={share.photos} title={share.game.title} /><div className="card-platforms"><PlatformBadge platform={share.edition.platform} /></div></div>
       <div className="showcase-post__passport"><strong><Gamepad2 size={16} aria-hidden="true" />{share.game.title} · {share.edition.name}</strong><div><span className="edition-chip">{share.region || 'Регион не указан'}</span><span className="edition-chip">{completenessLabel(share.completeness) || 'Комплектность не указана'}</span><span className="edition-chip showcase-post__condition">{formatMarketCondition(share.condition) || 'Состояние не указано'}</span></div></div>
-      <footer className="showcase-post__footer"><ShowcaseReactions post={share} onChange={social => updateSocial(share.id, social)} onComments={() => {setError(''); setOpened(share);}}/><button type="button" className="btn-secondary showcase-post__share" onClick={async () => {try {await navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}#/community/showcase?post=${encodeURIComponent(share.id)}`);setNotice('Ссылка на публикацию скопирована.');}catch{setNotice('Не удалось скопировать ссылку.');}}}><Share2 size={17} aria-hidden="true" />Поделиться</button></footer>
+      <footer className="showcase-post__footer"><ShowcaseReactions post={share} onChange={social => updateSocial(share.id, social)} onComments={() => {setError(''); setOpened(share);}}/><CopyLinkButton className="showcase-post__share" url={`${window.location.origin}/community/showcase?post=${encodeURIComponent(share.id)}`} /></footer>
     </article>)}</section>
     {(page > 1 || feed.data.hasMore) && <div className="showcase-pagination"><button className="btn-secondary" disabled={page <= 1 || feed.isLoading} onClick={() => setPage(value => value - 1)}>Назад</button><span>Страница {page}</span><button className="btn-secondary" disabled={!feed.data.hasMore || feed.isLoading} onClick={() => setPage(value => value + 1)}>Далее</button></div>}
     </div>

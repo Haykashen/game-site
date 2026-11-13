@@ -99,9 +99,11 @@ export function CollectionCopyDetail({copy, group, game: initialGame, edition: i
     const click = (event: MouseEvent) => {
       if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
       const anchor = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('a[href]') : null;
-      const hash = anchor?.getAttribute('href');
-      if (!hash?.startsWith('#/') || anchor?.target === '_blank') return;
-      event.preventDefault(); event.stopPropagation(); requestExit(hash.slice(1));
+      if (!anchor || anchor.target === '_blank' || anchor.hasAttribute('download')) return;
+      const url = new URL(anchor.href, window.location.href);
+      if (url.origin !== window.location.origin || !['http:', 'https:'].includes(url.protocol)) return;
+      if (url.pathname === window.location.pathname && url.search === window.location.search) return;
+      event.preventDefault(); event.stopPropagation(); requestExit(url.pathname + url.search + url.hash);
     };
     window.addEventListener('beforeunload', unload); document.addEventListener('click', click, true);
     return () => {window.removeEventListener('beforeunload', unload); document.removeEventListener('click', click, true);};

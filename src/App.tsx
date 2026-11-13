@@ -3,7 +3,7 @@ import { AchievementsPage } from './pages/AchievementsPage';
 import {ShowcasePage} from './pages/ShowcasePage';
 import { ChatsProvider } from './context/ChatsContext';
 import { ChatsPage } from './pages/ChatsPage';
-import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from './app/AppShell';
 import { AuthProvider } from './context/AuthContext';
 import { CollectionProvider } from './context/CollectionContext';
@@ -30,7 +30,7 @@ import { UserProfilePage } from './pages/UserProfilePage';
 
 export default function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
           <NotificationsProvider>
@@ -81,6 +81,6 @@ export default function App() {
           </NotificationsProvider>
         </AuthProvider>
       </ThemeProvider>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
