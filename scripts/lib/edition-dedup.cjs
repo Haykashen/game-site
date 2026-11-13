@@ -8,7 +8,7 @@ function regionKey(value) {
 }
 function editionKey(edition) {
   return JSON.stringify([edition.gameId,normalize(edition.platform),editionName(edition.name),regionKey(edition.region ?? edition.regionId),
-    unknown(edition.media)]);
+    [...new Set(String(edition.lang??'').split(/[,;]/).map(unknown).filter(Boolean))].sort(),unknown(edition.media)]);
 }
 function expandProducts(document) {
   const result=structuredClone(document);
