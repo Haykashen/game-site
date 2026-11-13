@@ -9,7 +9,7 @@ test('review records the reviewer and requires an actionable rejection reason', 
   const rejected = {statusReference: {code: 'hidden'}};
   assert.throws(() => applyModeration('Game', rejected, {statusReference: {code: 'pending'}}, 'reviewer'));
   const approved: Record<string, unknown> = {statusReference: {code: 'visible'}};
-  applyModeration('Edition', approved, {statusReference: {code: 'draft'}}, 'reviewer');
+  applyModeration('Game', approved, {statusReference: {code: 'draft'}}, 'reviewer');
   assert.equal(approved.moderatorId, 'reviewer');
   assert.ok(approved.moderatedAt instanceof Date);
   const resubmitted: Record<string, unknown> = {statusReference: {code: 'pending'}};
