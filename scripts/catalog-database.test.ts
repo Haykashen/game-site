@@ -25,7 +25,7 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
       id, title: 'PostgreSQL catalogue fixture', publisher: 'Test', year: null,
       genres: {connectOrCreate: {where:{name:'Test'},create:{name:'Test'}}}, description: 'Database-only fixture, never deployed to production.',
       editions: { create: { id: id + '-edition', name: 'Database edition', platform: 'CI Platform',
-         lang: 'CI Language', media: 'Disc', contents: [], coverImages: ['https://showgames.ru/image/cache/catalog/covers/ci-test.jpg'] } },
+         media: 'Disc', contents: [], coverImages: ['https://showgames.ru/image/cache/catalog/covers/ci-test.jpg'] } },
     } });
     const games = await app.inject({ method: 'GET', url: '/api/v1/catalog/games?q=' + encodeURIComponent('PostgreSQL catalogue fixture') });
     assert.equal(games.statusCode, 200);
@@ -114,7 +114,7 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
     assert.equal(runImport().createEditions, 0);
     const editionId=importedId+'-sku',aliasId=importedId+'-variant';
     await app.prisma.edition.create({data:{id:aliasId,gameId:importedId,name:'Standard',platform:'PS5',
-      lang:'русский',media:'Не указан',contents:[],coverImages:['https://c.dns-shop.ru/thumb/st1/fit/500/500/test/back.jpg.webp'],description:'Отличающийся вариант озвучки.'}});
+      media:'Не указан',contents:[],coverImages:['https://c.dns-shop.ru/thumb/st1/fit/500/500/test/back.jpg.webp'],description:'Отличающийся вариант озвучки.'}});
     await app.prisma.user.create({data:{id:ownerId,email:ownerId+'@test.invalid',displayName:'CI owner'}});
     const copy=await app.prisma.copy.create({data:{userId:ownerId,editionId:aliasId,notes:'Keep user notes'}});
     const listing=await app.prisma.marketEntry.create({data:{id:id+'-listing',authorId:ownerId,kind:'listing',listingType:'sale',gameId:importedId,

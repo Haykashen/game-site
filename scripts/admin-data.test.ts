@@ -154,7 +154,7 @@ test('server supplies distinct game and edition UUIDs; Prisma defaults and compo
   const body = {title: 'Game', publisher: 'Test', description: 'Description', genres: []};
   const first = parseCreateData(getTable('Game'), body);
   const second = parseCreateData(getTable('Game'), body);
-  const edition = parseCreateData(getTable('Edition'), {gameId: first.id, name: 'Standard', platform: 'PS5', regionId: otherId, lang: 'Русский', contents: [], coverImages: []});
+  const edition = parseCreateData(getTable('Edition'), {gameId: first.id, name: 'Standard', platform: 'PS5', regionId: otherId, contents: [], coverImages: []});
   const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
   for (const data of [first, second, edition]) assert.match(String(data.id), uuid);
   assert.notEqual(first.id, second.id);

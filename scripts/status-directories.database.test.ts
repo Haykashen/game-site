@@ -32,11 +32,10 @@ test('status references are the only persisted lifecycle source and reject cross
     await assert.rejects(db.marketEntry.update({where:{id},data:{kind:'listing'}}));
     const columns = await db.$queryRaw<{column_name: string}[]>`SELECT column_name FROM information_schema.columns WHERE table_schema = current_schema() AND table_name IN ('games','editions','market_entries','news_posts','discussions','users','deals','reports') AND column_name IN ('status','moderation_status')`;
     assert.deepEqual(columns, []);
-    const editionDraft = await db.status.findFirstOrThrow({where:{entity:'Edition',code:'draft'}});
-    assert.notEqual(editionDraft.id,draft.id);
+    assert.equal(await db.status.count({where:{entity:'Edition'}}),0);
     await assert.rejects(db.status.update({where:{id:draft.id},data:{entity:'Deal'}}));
     await assert.rejects(db.status.update({where:{id:draft.id},data:{code:'another-code'}}));
-    assert.equal(await db.status.count({where:{code:'draft'}}),6);
+    assert.equal(await db.status.count({where:{code:'draft'}}),5);
   } finally {
     await db.marketEntry.deleteMany({where:{id}});
     await db.game.deleteMany({where:{id}});

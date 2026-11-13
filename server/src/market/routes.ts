@@ -44,7 +44,7 @@ async function assertMarketTarget(
   if (editionId) {
     const edition = await app.prisma.edition.findUnique({
       where: { id: editionId },
-      select: { statusReference: { select: { code: true } }, id: true, gameId: true },
+      select: {id: true, gameId: true},
     });
 
     if (!edition || edition.gameId !== gameId) {

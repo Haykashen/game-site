@@ -1,7 +1,7 @@
 import { recordModeration } from './statusDirectories.js';
 import { badRequest } from '../errors.js';
 
-export const MODERATED_MODELS = new Set(['Game', 'Edition', 'MarketEntry', 'Discussion', 'NewsPost']);
+export const MODERATED_MODELS = new Set(['Game', 'MarketEntry', 'Discussion', 'NewsPost']);
 
 /** Review metadata is assigned by the server, never by the editor. */
 export function applyModeration(model: string, data: Record<string, unknown>, old: Record<string, unknown> | null, reviewerId: string) {

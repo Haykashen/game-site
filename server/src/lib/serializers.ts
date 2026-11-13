@@ -99,17 +99,14 @@ export function serializeGame(game: Game & StatusRecord & {series?: {name: strin
   };
 }
 
-export function serializeEdition(edition: Edition & StatusRecord & {region?: {code:string}}): EditionDto {
+export function serializeEdition(edition: Edition & {region?: {code:string}}): EditionDto {
   return {
-    moderationStatus: moderationStatus(edition),
-    moderationNote: edition.moderationNote,
-    statusId: edition.statusId,
     id: edition.id,
     gameId: edition.gameId,
     name: edition.name,
     platform: edition.platform,
     region: edition.region?.code ?? 'EUR',
-    lang: edition.lang,
+
     media: edition.media,
     releaseDate: edition.releaseDate
       ? edition.releaseDate.toISOString().slice(0, 10)

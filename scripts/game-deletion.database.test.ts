@@ -26,9 +26,9 @@ test('game deletion removes its editions and variants atomically, protecting col
     await prisma.region.create({data:{id:regionId,code:id,name:id}});
     const game = await prisma.game.create({data:{id,title:id,publisher:'',description:''}});
     await prisma.game.create({data:{id:otherId,title:otherId,publisher:'',description:''}});
-    const edition = await prisma.edition.create({data:{id:randomUUID(),gameId:id,name:'Standard',platform:'PS5',regionId,lang:'',media:'Disc'}});
-    const variant = await prisma.edition.create({data:{id:randomUUID(),gameId:id,name:'Variant',platform:'PS5',regionId,lang:'',media:'Disc'}});
-    await prisma.edition.create({data:{id:randomUUID(),gameId:otherId,name:'Other',platform:'PS5',regionId,lang:'',media:'Disc'}});
+    const edition = await prisma.edition.create({data:{id:randomUUID(),gameId:id,name:'Standard',platform:'PS5',regionId,media:'Disc'}});
+    const variant = await prisma.edition.create({data:{id:randomUUID(),gameId:id,name:'Variant',platform:'PS5',regionId,media:'Disc'}});
+    await prisma.edition.create({data:{id:randomUUID(),gameId:otherId,name:'Other',platform:'PS5',regionId,media:'Disc'}});
     await prisma.copy.create({data:{userId,editionId:edition.id}});
     const payload = {expectedUpdatedAt:game.updatedAt.toISOString()};
     const preview = await app.inject({method:'GET',url:url+'/dependencies'});

@@ -62,7 +62,6 @@ export function buildMarketWhere(
         { edition: { name: { contains: q, mode: 'insensitive' } } },
         { edition: { platform: { contains: q, mode: 'insensitive' } } },
         { edition: { region: {is:{code:{contains:q,mode:'insensitive'}}} } },
-        { edition: { lang: { contains: q, mode: 'insensitive' } } },
       ],
     });
   }

@@ -41,7 +41,7 @@ export function selectVisibleMarketEntries(
 
     if (query) {
       const editionText = gameEditions
-        .map((item) => `${item.name} ${item.platform} ${item.region} ${item.lang}`)
+        .map((item) => `${item.name} ${item.platform} ${item.region}`)
         .join(' ');
       const haystack = [
         entry.title,
@@ -53,7 +53,6 @@ export function selectVisibleMarketEntries(
         edition?.name,
         edition?.platform,
         edition?.region,
-        edition?.lang,
         game?.title,
         game?.publisher,
         game?.developer,

@@ -22,16 +22,12 @@ export interface Game {
  * physical contents that belong to this particular edition.
  */
 export interface Edition {
-  statusId?: string;
-  moderationStatus?: 'draft' | 'pending' | 'visible' | 'hidden' | 'removed';
-  moderationNote?: string | null;
   id: string;
   gameId: string;
   /** Standard, Launch Edition, Collector's Edition, … */
   name: string;
   platform: string;
   region: string;
-  lang: string;
   media: string;
   /** ISO date (YYYY-MM-DD) or an empty string when the release date is unknown. */
   releaseDate: string;

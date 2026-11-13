@@ -17,7 +17,7 @@ test('personal region, ordered photos and quantity save atomically and remain ow
     await db.user.createMany({data: [owner, other].map(userId => ({id: userId, email: userId+'@test.invalid', displayName: 'Copy editor fixture', passwordHash: 'unused'}))});
     const region = await db.region.upsert({where: {code: 'COPY-EDITOR-TEST'}, update: {}, create: {code: 'COPY-EDITOR-TEST', name: 'Copy editor test region'}});
     await db.game.create({data: {id, title: 'Copy editor fixture', publisher: '', description: ''}});
-    await db.edition.create({data: {id, gameId: id, name: 'Test', platform: 'PS5', regionId: region.id, lang: '', media: 'Disc', contents: [], coverImages: []}});
+    await db.edition.create({data: {id, gameId: id, name: 'Test', platform: 'PS5', regionId: region.id, media: 'Disc', contents: [], coverImages: []}});
     const original = await db.copy.create({data: {userId: owner, editionId: id, photos: {create: [{url: 'https://example.com/first.jpg', sortOrder: 0}, {url: 'https://example.com/second.jpg', sortOrder: 1}]}}});
     const unrelated = await db.copy.create({data: {userId: other, editionId: id}});
     const edit = await app.inject({method: 'PATCH', url: path, payload: {condition: '9', region: 'JPN', notes: 'Updated', purchasePrice: 12345.67, quantity: 3, photos: ['https://example.com/second.jpg', 'https://example.com/first.jpg']}});

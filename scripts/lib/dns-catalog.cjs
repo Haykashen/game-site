@@ -77,7 +77,7 @@ function planCatalog(document, games, editions) {
           const identity=product.catalogueIdentity??product;
           const description = [product.contentType === 'addon' ? 'Дополнение к игре.' : '', product.editionType === 'цифровое издание' ? 'Цифровое издание.' : '', product.ageRating ? `Возрастное ограничение: ${product.ageRating}.` : '', product.voiceLanguages?.length ? `Озвучка: ${product.voiceLanguages.join(', ')}.` : ''].filter(Boolean).join(' ');
           createEditions.push({ id, gameId, name: identity.name === 'стандартное издание' ? 'Standard' : identity.name,
-            platform: platform.name, region: identity.region || 'Не указан', lang: identity.interfaceLanguages?.join(', ') || 'Не указан', media: product.editionType === 'цифровое издание' ? 'Цифровое издание' : 'Не указан',
+            platform: platform.name, region: identity.region || 'Не указан', media: product.editionType === 'цифровое издание' ? 'Цифровое издание' : 'Не указан',
             releaseDate: product.releaseDate ? new Date(product.releaseDate + 'T00:00:00.000Z') : null,
             description, contents: [], coverImages: covers, barcode: '', dnsProductId: isShowgames?'':product.id, dnsProductCode: isShowgames?'':product.code ?? '' });
         }

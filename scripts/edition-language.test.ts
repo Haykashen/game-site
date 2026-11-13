@@ -9,5 +9,5 @@ test('language values have one identity without losing multilingual releases', (
   assert.equal(normalizeEditionLanguage('русский; АНГЛИЙСКИЙ, русский, Не указан'), 'Английский, Русский');
   const base = {gameId: 'game', platform: 'PS5', name: 'Standard', region: 'EUR', media: 'Disc'};
   assert.equal(editionKey({...base, lang: 'Русский, английский, русский'}), editionKey({...base, lang: 'английский; русский'}));
-  assert.notEqual(editionKey({...base, lang: 'Русский'}), editionKey({...base, lang: 'Английский, Русский'}));
+  assert.equal(editionKey({...base, lang: 'Русский'}), editionKey({...base, lang: 'Английский, Русский'}));
 });

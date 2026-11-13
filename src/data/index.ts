@@ -112,7 +112,6 @@ export function getPlatformBadgeStyle(platform: string): PlatformBadgeStyle | un
 }
 
 const platformNames = new Set(PLATFORMS.map((platform) => platform.name));
-const languageNames = new Set(LANGUAGES);
 const regionNames = new Set(REGIONS);
 const editionNames = new Set(EDITIONS);
 
@@ -166,11 +165,7 @@ for (const edition of parsedEditions) {
     );
   }
 
-  if (!languageNames.has(edition.lang)) {
-    throw new Error(
-      `Неизвестный язык «${edition.lang}» у издания «${edition.id}» в src/data/editions.json.`,
-    );
-  }
+
 
   if (!regionNames.has(edition.region)) {
     throw new Error(

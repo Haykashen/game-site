@@ -227,12 +227,6 @@ model GameRating {
 }
 
 model Edition {
-  statusId String @default(dbgenerated()) @map("status_id") @db.Uuid
-  statusReference Status @relation(fields: [statusId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  @@index([statusId])
-  moderationNote String? @map("moderation_note") @db.Text
-  moderatedAt DateTime? @map("moderated_at")
-  moderatorId String? @map("moderator_id") @db.Uuid
   id             String    @id
   gameId         String    @map("game_id")
   name           String
@@ -240,7 +234,6 @@ model Edition {
   platformReference Platform @relation(fields: [platform], references: [code], onDelete: Restrict, onUpdate: Cascade)
   regionId       String @default(dbgenerated("default_region_id()")) @map("region_id") @db.Uuid
   region         Region @relation(fields: [regionId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  lang           String
   media          String
   releaseDate    DateTime? @map("release_date") @db.Date
   description    String    @default("") @db.Text
@@ -259,7 +252,6 @@ model Edition {
   @@index([gameId])
   @@index([platform])
   @@index([regionId])
-  @@index([lang])
   @@map("editions")
 }
 
@@ -672,7 +664,6 @@ model Status {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   gameRecords Game[]
-  editionRecords Edition[]
   marketEntryRecords MarketEntry[]
   newsPostRecords NewsPost[]
   discussionRecords Discussion[]

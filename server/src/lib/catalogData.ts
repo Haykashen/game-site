@@ -22,7 +22,7 @@ export interface SeedEdition {
   name: string;
   platform: string;
   region: string;
-  lang: string;
+
   media: string;
   releaseDate: string;
   description: string;

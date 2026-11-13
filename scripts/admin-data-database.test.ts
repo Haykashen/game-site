@@ -48,7 +48,7 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
     await patch('User', {id: buyerId}, {city: 'Москва', comment: 'Admin note'});
     const regionRecord = await create('Region', {code: 'CI-' + suffix, name: 'CI region ' + suffix, description: 'Fixture'});
     await patch('Region', {id: regionRecord.id}, {description: 'Edited region'});
-    const editionDraft = {name: 'Bundle edition', platform: 'PS5', regionId: regionRecord.id, lang: 'Русский', contents: [], coverImages: []};
+    const editionDraft = {name: 'Bundle edition', platform: 'PS5', regionId: regionRecord.id, contents: [], coverImages: []};
     const bundle = await create('Game', {game: {title: 'Bundle ' + suffix, publisher: 'CI', description: 'Fixture'}, editions: [editionDraft, {...editionDraft, name: 'Second edition'}]});
     const bundleEditions = await prisma.edition.findMany({where: {gameId: bundle.id}});
     assert.equal(bundleEditions.length, 2);
@@ -66,7 +66,7 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
     assert.equal((await prisma.game.findUniqueOrThrow({where: {id: gameId}, include: {series: true}})).series?.name, 'Renamed series ' + suffix);
     const blockedSeries = await app.inject({method: 'DELETE', url: path('GameSeries', {id: seriesRecord.id}), payload: {expectedUpdatedAt: null}});
     assert.notEqual(blockedSeries.statusCode, 204);
-    const editionId = (await create('Edition', {gameId, name: 'Standard', platform: 'PS5', regionId: regionRecord.id, lang: 'Русский', contents: [], coverImages: []})).id;
+    const editionId = (await create('Edition', {gameId, name: 'Standard', platform: 'PS5', regionId: regionRecord.id, contents: [], coverImages: []})).id;
     await create('GameRating', {userId: buyerId, gameId, score: 8}, ['userId', 'gameId']);
     await patch('GameRating', {userId: buyerId, gameId}, {score: 0});
     assert.equal((await prisma.gameRating.findUniqueOrThrow({where: {userId_gameId: {userId: buyerId, gameId}}})).score, 0);

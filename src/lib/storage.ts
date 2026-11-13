@@ -88,10 +88,10 @@ function normalizeEdition(value: unknown): Edition | null {
   const name = readString(value.name);
   const platform = readString(value.platform);
   const region = readString(value.region);
-  const lang = readString(value.lang);
+
   const media = readString(value.media);
 
-  if (!id || !gameId || !name || !platform || !region || !lang || !media) {
+  if (!id || !gameId || !name || !platform || !region || !media) {
     return null;
   }
 
@@ -105,7 +105,6 @@ function normalizeEdition(value: unknown): Edition | null {
     name,
     platform,
     region,
-    lang,
     media,
     releaseDate,
     description: readString(value.description) ?? '',

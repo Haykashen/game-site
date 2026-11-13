@@ -26,7 +26,7 @@ export async function validateRecord(tx: Prisma.TransactionClient, name: string,
     const kind = next.kind;
     const itemType = next.itemType ?? 'game';
     if (next.editionId) {
-      const edition = await tx.edition.findUnique({ include: {statusReference: {select: {code: true}}},where: {id: String(next.editionId)}});
+      const edition = await tx.edition.findUnique({ where: {id: String(next.editionId)}});
       requireRule(edition && edition.gameId === next.gameId, 'Выберите издание указанной игры.');
     }
     requireRule(itemType !== 'game' || (kind === 'listing' && next.listingType === 'purchase') || next.editionId, 'Для игры в продаже, обмене или аукционе обязательно издание.');
@@ -39,7 +39,7 @@ export async function validateRecord(tx: Prisma.TransactionClient, name: string,
       requireRule(!next.startsAt && !next.endsAt && !next.bidStepMinor, 'Даты торгов и шаг ставки доступны только аукционам.');
     }
     if (old) {
-      const deal = await tx.deal.findUnique({ include: {statusReference: {select: {code: true}}},where: {marketEntryId: String(old.id)}});
+      const deal = await tx.deal.findUnique({include:{statusReference:{select:{code:true}}}, where: {marketEntryId: String(old.id)}});
       if (deal && statusCode(deal) !== 'cancelled') {
         requireRule(recordStatus(next) === 'sold' && !changed(old, next, ['authorId', 'gameId', 'editionId', 'kind', 'listingType', 'priceMinor']), 'Лот связан со сделкой: сначала отмените или удалите сделку.');
       }
@@ -48,7 +48,7 @@ export async function validateRecord(tx: Prisma.TransactionClient, name: string,
     } else requireRule(!recordStatus(next) || recordStatus(next) !== 'sold', 'Сначала создайте лот, затем оформите сделку.');
   }
   if (name === 'Copy') {
-    const edition = await tx.edition.findUnique({ include: {statusReference: {select: {code: true}}},where: {id: String(next.editionId)}});
+    const edition = await tx.edition.findUnique({where: {id: String(next.editionId)}});
     requireRule(edition, 'Выберите издание для экземпляра.');
   }
   if (name === 'Bid') {

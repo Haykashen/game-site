@@ -262,7 +262,7 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
               coverImage: true,
               year: true,
               publisher: true,
-              editions: { where: {}, select: { statusReference: { select: { code: true } }, id: true } },
+              editions: { select: {id: true} },
               _count: { select: { subscriptions: true } },
             },
           })

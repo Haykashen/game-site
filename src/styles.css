@@ -4869,3 +4869,4 @@ html:not(.dark) .showcase-feed-page { --feed-card:#fffdf6; --feed-border:#d9d2be
 .game-editions-heading h3 { margin:0; }
 .game-editions-cell { min-width:180px; }
 .game-editions-cell .form-control { width:100%; }
+.game-editions-cell textarea.form-control { min-height:44px; height:44px; resize:vertical; }

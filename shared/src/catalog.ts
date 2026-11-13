@@ -17,15 +17,11 @@ export interface GameDto {
 }
 
 export interface EditionDto {
-  statusId?: string;
-  moderationStatus?: 'draft' | 'pending' | 'visible' | 'hidden' | 'removed';
-  moderationNote?: string | null;
   id: string;
   gameId: string;
   name: string;
   platform: string;
   region: string;
-  lang: string;
   media: string;
   /** Empty string when the release date is unknown. */
   releaseDate: string;
@@ -92,7 +88,6 @@ export const catalogQuerySchema = paginationSchema.extend({
   statusId: z.string().uuid().optional(),
   q: z.string().trim().max(120).optional(),
   platform: optionalFilter,
-  lang: optionalFilter,
   region: optionalFilter,
   edition: optionalFilter,
   year: z.string().trim().max(20).optional(),
@@ -102,7 +97,6 @@ export const editionQuerySchema = paginationSchema.extend({
   gameId: optionalFilter,
   q: z.string().trim().max(120).optional(),
   platform: optionalFilter,
-  lang: optionalFilter,
   region: optionalFilter,
   edition: optionalFilter,
 });

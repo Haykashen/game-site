@@ -1,4 +1,4 @@
-import { normalizeEditionLanguage } from '@discvault/shared';
+
 import { statusWrite } from '../src/lib/statusSource.js';
 import {resolveRegion} from '../src/lib/regions.js';
 import 'dotenv/config';
@@ -81,7 +81,7 @@ async function seedCatalog(): Promise<void> {
       name: edition.name,
       platform: edition.platform,
       regionId: (await resolveRegion(prisma, edition.region)).id,
-      lang: normalizeEditionLanguage(edition.lang),
+
       media: edition.media,
       releaseDate: releaseDate(edition.releaseDate),
       description: edition.description,
@@ -92,7 +92,7 @@ async function seedCatalog(): Promise<void> {
       dnsProductCode: edition.dnsProductCode,
     };
 
-    await prisma.edition.upsert({ include: {statusReference: {select: {code: true}}},
+    await prisma.edition.upsert({
       where: { id: edition.id },
       update: data,
       create: { id: edition.id, ...data },
