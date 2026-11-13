@@ -12,8 +12,16 @@ const prisma = new PrismaClient({datasources: {db: {url: url.toString()}}});
 const tables = ['games','editions','market_entries','news_posts','discussions','users','deals','reports'];
 async function snapshot() {
   const result = [];
-  for (const table of tables) result.push(await prisma.$queryRawUnsafe(
+  for (const table of tables) {
+    // Editions inherit moderation from games; these reviewed columns are removed.
+    // Verify every remaining edition value, not merely the row count.
+    if (table === 'editions') {
+      result.push(await prisma.$queryRawUnsafe(`SELECT count(*)::text AS count, md5(coalesce(string_agg((to_jsonb(e) - ARRAY['status_id','moderation_note','moderated_at','moderator_id','lang'])::text, ',' ORDER BY id), '')) AS fingerprint FROM editions e`));
+      continue;
+    }
+    result.push(await prisma.$queryRawUnsafe(
     'SELECT count(*)::text AS count, md5(coalesce(string_agg(id::text || ' + "':'" + ' || status_id::text, ' + "','" + ' ORDER BY id), ' + "''" + ')) AS fingerprint FROM ' + table));
+  }
   return result;
 }
 try {
@@ -24,7 +32,7 @@ try {
   assert.deepEqual(await snapshot(), before, 'Migration changed records or their status references');
   const legacy = await prisma.$queryRawUnsafe("SELECT column_name FROM information_schema.columns WHERE table_schema = current_schema() AND table_name IN ('games','editions','market_entries','news_posts','discussions','users','deals','reports') AND column_name IN ('status','moderation_status')");
   assert.equal(legacy.length, 0, 'Compatibility status columns remain');
-  console.log('Restored backup migrated successfully; all record/status fingerprints are unchanged.');
+  console.log('Restored backup migrated successfully; all record/status fingerprints are unchanged outside reviewed removed edition fields.');
 } catch {
   console.error('Restored backup migration verification failed. Live schema was not changed.');
   process.exitCode = 1;
