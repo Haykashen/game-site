@@ -80,7 +80,7 @@ test('public catalogue and filter endpoints expose rows created in PostgreSQL, w
     // Several localisations share all previous sort keys. Offset pagination
     // needs a unique tie-breaker to avoid repeating/omitting boundary rows.
     const pageIds=Array.from({length:7},(_,i)=>id+'-page-'+i);
-    await app.prisma.edition.createMany({data:[...pageIds].reverse().map(editionId=>({id:editionId,gameId:id,name:'Pagination fixture',platform:'CI Platform',lang:editionId,media:'Disc',contents:[],coverImages:[]}))});
+    await app.prisma.edition.createMany({data:[...pageIds].reverse().map(editionId=>({id:editionId,gameId:id,name:'Pagination fixture',platform:'CI Platform',media:'Disc',contents:[],coverImages:[]}))});
     const received:string[]=[];
     for(let page=1;page<=4;page++){
       const result=await app.inject({method:'GET',url:`/api/v1/catalog/editions?gameId=${id}&pageSize=2&page=${page}`});
