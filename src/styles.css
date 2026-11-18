@@ -4881,3 +4881,60 @@ html:not(.dark) .showcase-feed-page { --feed-card:#fffdf6; --feed-border:#d9d2be
 .btn-icon--secondary { background:var(--bg-card); }
 .collection-wishlist-heading { margin-top:32px; margin-bottom:16px; }
 .game-cta__btn:disabled { opacity:.4; cursor:not-allowed; transform:none; }
+
+/* Shared showcase trophy reaction, in the feed and publication header. */
+  .showcase-reactions .showcase-trophy.tier-0 {
+    border-color: #2e3330;
+    color: #78807c;
+  }
+
+  /* 1–4 лайка: Uncommon (Зеленый - как на скриншоте) */
+  .showcase-reactions .showcase-trophy.tier-1 {
+    border-color: rgba(163, 230, 53, 0.45);
+    color: #a3e635;
+    background-color: rgba(163, 230, 53, 0.06);
+  }
+
+  /* 5–14 лайков: Rare (Консольный синий / PlayStation) */
+  .showcase-reactions .showcase-trophy.tier-2 {
+    border-color: rgba(56, 189, 248, 0.55);
+    color: #38bdf8;
+    background-color: rgba(56, 189, 248, 0.08);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+  }
+
+  /* 15–29 лайков: Epic (Неоновый фиолетовый) */
+  .showcase-reactions .showcase-trophy.tier-3 {
+    border-color: rgba(192, 132, 252, 0.65);
+    color: #c084fc;
+    background-color: rgba(192, 132, 252, 0.1);
+    box-shadow: 0 0 16px rgba(192, 132, 252, 0.25);
+  }
+
+  /* 30+ лайков: Legendary / Platinum (Золотой с переливом) */
+  .showcase-reactions .showcase-trophy.tier-4 {
+    border-color: #fbbf24;
+    color: #fbbf24;
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.16), rgba(245, 158, 11, 0.05));
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.35);
+    animation: showcaseLegendaryPulse 2.5s infinite alternate;
+  }
+
+  @keyframes showcaseLegendaryPulse {
+    from { box-shadow: 0 0 14px rgba(251, 191, 36, 0.25); }
+    to { box-shadow: 0 0 24px rgba(251, 191, 36, 0.55); }
+  }
+
+
+.showcase-trophy{position:relative;overflow:visible}
+.showcase-trophy-icon{flex-shrink:0;transition:transform .3s ease}
+.showcase-trophy.is-celebrating .showcase-trophy-icon{animation:showcaseTrophyPop .45s cubic-bezier(.175,.885,.32,1.275)}
+.showcase-trophy-particle{position:absolute;left:20px;top:50%;width:5px;height:5px;border-radius:50%;background:currentColor;pointer-events:none;animation:showcaseTrophyFly .6s ease-out forwards}
+@keyframes showcaseTrophyPop{0%,100%{transform:scale(1) rotate(0)}40%{transform:scale(1.45) rotate(-12deg)}70%{transform:scale(.9) rotate(6deg)}}
+@keyframes showcaseTrophyFly{from{transform:translate(0,0) scale(1);opacity:1}to{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}}
+html:not(.dark) .showcase-reactions .showcase-trophy.tier-0{color:#52604f}
+html:not(.dark) .showcase-reactions .showcase-trophy.tier-1{color:#47730b;border-color:#709b35}
+html:not(.dark) .showcase-reactions .showcase-trophy.tier-2{color:#036b99;border-color:#328caf}
+html:not(.dark) .showcase-reactions .showcase-trophy.tier-3{color:#7b33ad;border-color:#9b65bd}
+html:not(.dark) .showcase-reactions .showcase-trophy.tier-4{color:#875500;border-color:#b48417}
+@media(prefers-reduced-motion:reduce){.showcase-trophy,.showcase-trophy-icon,.showcase-trophy-particle{animation:none!important;transition:none!important}.showcase-trophy-particle{display:none}}
