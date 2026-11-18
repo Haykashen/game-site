@@ -53,13 +53,13 @@ export function CollectionCopyDetail({copy, group, game: initialGame, edition: i
   const [, setSearch] = useSearchParams();
   const {updateEdition, addCopy, setEditionQuantity, copies, games, editions, syncError} = useCollection();
   const platformLabel = (value: string) => value.replace(/^ps([1-5])$/i, 'PlayStation $1').replace(/^psp$/i, 'PlayStation Portable').replace(/^ps vita$/i, 'PlayStation Vita');
-  const [platform, setPlatform] = useState(creating ? '' : initialEdition.platform.toLowerCase());
+  const [platform, setPlatform] = useState(initialEdition.platform.toLowerCase());
   const [platformQuery, setPlatformQuery] = useState('');
   const [platformOpen, setPlatformOpen] = useState(false);
   const platformOptions = [...new Set(editions.map(item => item.platform.toLowerCase()))].sort().map(value => ({value,label:platformLabel(value)})).filter(item => item.label.toLowerCase().includes(platformQuery.toLowerCase()));
   const platformGames = games.filter(item => !platform || editions.some(ed => ed.gameId === item.id && ed.platform.toLowerCase() === platform));
-  const [selectedGame, setSelectedGame] = useState(creating ? '' : initialGame.id);
-  const [selectedEdition, setSelectedEdition] = useState(creating ? '' : initialEdition.id);
+  const [selectedGame, setSelectedGame] = useState(initialGame.id);
+  const [selectedEdition, setSelectedEdition] = useState(initialEdition.id);
   const [editionQuery, setEditionQuery] = useState('');
   const [editionOpen, setEditionOpen] = useState(false);
   const game = games.find(item => item.id === selectedGame) ?? initialGame;
@@ -141,10 +141,10 @@ export function CollectionCopyDetail({copy, group, game: initialGame, edition: i
         <CopyPhotoGallery coverPhotos={edition.coverImages} useEditionCover={values.useEditionCover ?? false} onUseEditionCoverChange={next => update('useEditionCover', next)} photos={values.photos} title={game.title} caption={`${edition.name} · ${edition.platform}`} editing={editing} disabled={saving} onBusyChange={setProcessingPhotos} onChange={next => update('photos', next)} />
         <div className="copy-detail__specs">
           <dl className="copy-detail__facts">
+            <div><dt>Статус коллекции</dt><dd>{editing ? <select className="form-control" aria-label="Статус коллекции" disabled={saving} value={values.collectionStatus ?? 'acquired'} onChange={event=>update('collectionStatus',event.target.value as 'acquired'|'wishlist')}><option value="acquired">Приобретено</option><option value="wishlist">Желаемое / в планах</option></select> : wished ? 'Желаемое / в планах' : 'Приобретено'}</dd></div>
             <div><dt>Платформа</dt><dd>{editing ? <Combobox id="copy-platform" value={platformOpen ? platformQuery : platformLabel(platform)} options={platformOptions} selectedValues={[platform]} label="Платформы" placeholder="Найти платформу…" open={platformOpen} onOpen={() => {setPlatformOpen(true);setPlatformQuery('');}} onClose={() => setPlatformOpen(false)} onQueryChange={setPlatformQuery} onSelect={item => {setPlatform(item.value);setSelectedGame('');setSelectedEdition('');setPlatformOpen(false);}} emptyText="Платформы не найдены" /> : platformLabel(edition.platform)}</dd></div>
             <div><dt>Игра</dt><dd>{editing ? <GameCombobox id="copy-game" games={platformGames} value={selectedGame} onChange={id => {setSelectedGame(id);setSelectedEdition('');}} /> : <button type="button" className="market-game-link" onClick={() => requestExit(`/games?game=${encodeURIComponent(game.id)}`)}>{game.title}</button>}</dd></div>
             <div><dt>Издание</dt><dd>{editing ? <Combobox id="copy-edition" value={editionOpen ? editionQuery : selectedEdition ? edition.name+' · '+edition.platform : ''} options={editionOptions} selectedValues={[selectedEdition]} label="Издания" placeholder="Выберите издание игры…" open={editionOpen} onOpen={() => {setEditionOpen(true);setEditionQuery('');}} onClose={() => setEditionOpen(false)} onQueryChange={setEditionQuery} onSelect={item => {setSelectedEdition(item.value);setEditionOpen(false);}} emptyText="Выберите игру или уточните поиск" /> : edition.name}</dd></div>
-            <div><dt>Статус коллекции</dt><dd>{editing ? <select className="form-control" aria-label="Статус коллекции" disabled={saving} value={values.collectionStatus ?? 'acquired'} onChange={event=>update('collectionStatus',event.target.value as 'acquired'|'wishlist')}><option value="acquired">Приобретено</option><option value="wishlist">Желаемое / в планах</option></select> : wished ? 'Желаемое / в планах' : 'Приобретено'}</dd></div>
             <div><dt>Предмет</dt><dd>{editing ? <select className="form-control" aria-label="Предмет"><option value="game">Игра / издание</option></select> : 'Игра / издание'}</dd></div>
 
 

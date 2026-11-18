@@ -26,7 +26,7 @@ interface GameBrowserProps {
 
 /** Paged cards use server summaries; full editions and market are fetched on open. */
 export function GameBrowser({games, gameId, editionId = '', onOpenGame, onCloseGame, emptyText, onEditGame, suspendDrawer = false}: GameBrowserProps) {
-  const {copies, addCopy, setEditionQuantity, removeEdition, isSyncing} = useCollection();
+  const {copies, setEditionQuantity, removeEdition, isSyncing} = useCollection();
   const navigate = useNavigate();
   const [selectedId, setSelectedId] = useState(gameId);
   const [ownedCounts, setOwnedCounts] = useState<Record<string, number>>({});
@@ -99,7 +99,7 @@ export function GameBrowser({games, gameId, editionId = '', onOpenGame, onCloseG
       onClose={onCloseGame} onOpenMarketEntry={openMarketEntry}
       {...(onEditGame ? {onEditGame: () => onEditGame(selectedGame.id)} : {})}
       onOpenDiscussions={(id) => navigate(discussionRoutePath(id))}
-      onAddCopy={addCopy} onSetEditionQuantity={setEditionQuantity} onRemoveEdition={removeEdition}
+      onSetEditionQuantity={setEditionQuantity} onRemoveEdition={removeEdition}
       onPlaceListing={(id) => placeEntry(marketListingPath('sale'), id)}
       onPlaceAuction={(id) => placeEntry('/auctions', id)}
     />}
