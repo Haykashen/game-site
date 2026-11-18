@@ -72,8 +72,8 @@ export function ReferenceCombobox({ value, onChange, inputId, required, referenc
     setOpen(false);
   };
   const isStatus = reference === 'Status' || reference.endsWith('Status');
-  const placeholder = multiple ? 'Найти жанр…' : reference === 'Region' ? 'Найти регион…' : isStatus ? 'Найти статус…' : 'Найти серию…';
-  const label = multiple ? 'Жанры игр' : reference === 'Region' ? 'Регионы' : isStatus ? 'Статусы' : 'Серии игр';
+  const placeholder = multiple ? 'Найти жанр…' : reference === 'Platform' ? 'Найти платформу…' : reference === 'Region' ? 'Найти регион…' : isStatus ? 'Найти статус…' : 'Найти серию…';
+  const label = multiple ? 'Жанры игр' : reference === 'Platform' ? 'Платформы' : reference === 'Region' ? 'Регионы' : isStatus ? 'Статусы' : 'Серии игр';
 
   return <div>
     <Combobox id={inputId} value={text} options={visible} selectedValues={selected}

@@ -4875,3 +4875,7 @@ html:not(.dark) .showcase-feed-page { --feed-card:#fffdf6; --feed-border:#d9d2be
 .copy-link-button__label { display:grid; }
 .copy-link-button__label > span { grid-area:1 / 1; white-space:nowrap; }
 .copy-link-button__reserve { visibility:hidden; pointer-events:none; }
+.admin-table-heading { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:16px; }
+.admin-table-heading h3 { margin:0; }
+.admin-table-heading .admin-users__table-toolbar { margin:0; padding:0; }
+.btn-icon--secondary { background:var(--bg-card); }

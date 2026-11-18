@@ -53,6 +53,16 @@ test('administrator CRUD persists to PostgreSQL for every model and preserves bu
     const bundleEditions = await prisma.edition.findMany({where: {gameId: bundle.id}});
     assert.equal(bundleEditions.length, 2);
     assert.equal(new Set(bundleEditions.map(edition => edition.id)).size, 2);
+    const updateBundle = await app.inject({method:'PATCH',url:path('Game',{id:bundle.id}),payload:{data:{},expectedUpdatedAt:bundle.updatedAt,editions:[
+      {id:bundleEditions[0]!.id,expectedUpdatedAt:bundleEditions[0]!.updatedAt.toISOString(),data:{name:'Updated inline'}},
+      {expectedUpdatedAt:null,data:{name:'Added inline',platform:'PS5',regionId:regionRecord.id,contents:[],coverImages:[]}}
+    ]}});
+    assert.equal(updateBundle.statusCode,200,updateBundle.body);
+    assert.equal(await prisma.edition.count({where:{gameId:bundle.id}}),3);
+    assert.equal((await prisma.edition.findUniqueOrThrow({where:{id:bundleEditions[0]!.id}})).name,'Updated inline');
+    const failedEdit = await app.inject({method:'PATCH',url:path('Game',{id:bundle.id}),payload:{data:{title:'Should roll back'},expectedUpdatedAt:updateBundle.json().record.updatedAt,editions:[{expectedUpdatedAt:null,data:{name:'Invalid',platform:'missing-platform',regionId:regionRecord.id}}]}});
+    assert.equal(failedEdit.statusCode,400,failedEdit.body);
+    assert.equal((await prisma.game.findUniqueOrThrow({where:{id:bundle.id}})).title,bundle.title);
     const failedTitle = 'Failed bundle ' + suffix;
     const failedBundle = await app.inject({method:'POST', url:path('Game'), payload:{game:{title:failedTitle,publisher:'CI',description:'Fixture'},editions:[editionDraft,{...editionDraft,platform:'missing-platform-' + suffix}]}});
     assert.equal(failedBundle.statusCode, 400, failedBundle.body);

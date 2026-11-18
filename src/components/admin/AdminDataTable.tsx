@@ -32,10 +32,12 @@ interface Props<T, K extends string> {
   selectedKey?: string;
   compact?: boolean;
   storageKey?: string;
+  heading?: string;
+  toolbarActions?: ReactNode;
 }
 
 /** The single table renderer for users and every database model. Data loading stays with the page. */
-export function AdminDataTable<T, K extends string = string>({label, columns, rows, rowKey, sortBy, sortDir, onSort, loading, total, page, pageSize, onPage, onReset, hasFilters, actions, onSelect, selectedKey, compact, storageKey}: Props<T, K>) {
+export function AdminDataTable<T, K extends string = string>({label, columns, rows, rowKey, sortBy, sortDir, onSort, loading, total, page, pageSize, onPage, onReset, hasFilters, actions, onSelect, selectedKey, compact, storageKey, heading, toolbarActions}: Props<T, K>) {
   const {user} = useAuth();
   const preferenceKey = 'discvault:table-columns:' + (user?.id ?? 'guest') + ':' + (storageKey ?? label);
   const readHidden = (key: string): string[] => {try {const value: unknown = JSON.parse(localStorage.getItem(key) ?? '[]'); return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];} catch {return [];}};
@@ -47,13 +49,16 @@ export function AdminDataTable<T, K extends string = string>({label, columns, ro
   const displayedColumns = visibleColumns.length ? visibleColumns : columns;
   function saveHidden(next: string[]) {setPreferences({key: preferenceKey, hidden: next}); try {localStorage.setItem(preferenceKey, JSON.stringify(next));} catch {/* Storage may be unavailable; keep the session preference. */}}
   const pages = Math.max(1, Math.ceil(total / pageSize));
-  return <>
-    <div className="panel analytics-table-panel admin-users__panel">
-      <div className="admin-users__table-toolbar" aria-live="polite">
+  const toolbar = (<div className="admin-users__table-toolbar" aria-live="polite">
         <span>{loading ? (rows.length > 0 ? <LoadingState variant="inline" message="Обновляем записи…" /> : 'Записи') : `Всего: ${total.toLocaleString('ru-RU')}`}</span>
         {hasFilters && <button type="button" className="btn-secondary" onClick={onReset}><X size={14} />Сбросить фильтры</button>}
-        <IconButton label="Видимость столбцов" title="Видимость столбцов" aria-expanded={columnsOpen} onClick={() => setColumnsOpen(value => !value)}><Columns3 size={20} /></IconButton>
-      </div>
+        {toolbarActions}
+        <IconButton className="btn-icon--secondary" label="Видимость столбцов" title="Видимость столбцов" aria-expanded={columnsOpen} onClick={() => setColumnsOpen(value => !value)}><Columns3 size={20} /></IconButton>
+      </div>);
+  return <>
+    {heading && <div className="admin-table-heading"><h3>{heading}</h3>{toolbar}</div>}
+    <div className="panel analytics-table-panel admin-users__panel">
+      {!heading && toolbar}
       {columnsOpen && <fieldset className="admin-table-columns"><legend>Видимые столбцы</legend>
         {columns.map(column => <label key={column.key}><input type="checkbox" checked={displayedColumns.some(item => item.key === column.key)} disabled={displayedColumns.length === 1 && displayedColumns[0]?.key === column.key} onChange={event => saveHidden(event.target.checked ? hidden.filter(key => key !== column.key) : [...hidden, column.key])} />{column.label}</label>)}
         <button type="button" className="btn-secondary" onClick={() => saveHidden([])}>Показать все</button>
@@ -66,7 +71,7 @@ export function AdminDataTable<T, K extends string = string>({label, columns, ro
                 {column.label}{sortBy === column.key ? sortDir === 'asc' ? <ArrowUp size={13} /> : <ArrowDown size={13} /> : <ArrowUpDown size={13} />}
               </button>}
             </th>)}{actions && <th scope="col" className="admin-data__actions">Действия</th>}</tr>
-            <tr className="admin-users__column-filters">{columns.map((column) => <th key={column.key}>{column.filter}</th>)}{actions && <th className="admin-data__actions" />}</tr>
+            <tr className="admin-users__column-filters">{displayedColumns.map((column) => <th key={column.key}>{column.filter}</th>)}{actions && <th className="admin-data__actions" />}</tr>
           </thead>
           <tbody>{!rows.length ? <tr><td colSpan={displayedColumns.length + (actions ? 1 : 0)}><div className="admin-users__empty-row">
             {loading ? <LoadingState variant="inline" message="Загружаем записи…" /> : 'По выбранным фильтрам записи не найдены.'}

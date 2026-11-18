@@ -40,7 +40,7 @@ export function userScopeWhere(table: AdminTable, userId: string): Row {
   if (!fields.length) throw badRequest('Эта таблица не ссылается на пользователей.');
   return {OR: fields.map((field) => ({[field.name]: userId}))};
 }
-const updateSchema = z.object({data: z.record(z.unknown()), expectedUpdatedAt: z.string().datetime().nullable()}).strict();
+const updateSchema = z.object({data: z.record(z.unknown()), expectedUpdatedAt: z.string().datetime().nullable(), editions: z.array(z.object({id:z.string().optional(),expectedUpdatedAt:z.string().datetime().nullable(),data:z.record(z.unknown())}).strict()).max(200).optional()}).strict();
 const deleteSchema = z.object({expectedUpdatedAt: z.string().datetime().nullable()}).strict();
 
 export function buildWhere(table: AdminTable, search: string, encodedFilters?: string): Row {
@@ -263,7 +263,8 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
     if (!table.canEdit) throw forbidden('Сессию можно только отозвать.');
     const key = parseKey(table, encodedKey);
     const input = parse(updateSchema, request.body);
-    const data = parseData(table, input.data, false);
+    if (input.editions && (name !== 'Game' || admin.role !== 'admin')) throw forbidden('Издания доступны только администратору в карточке игры.');
+    const data = input.editions?.length && !Object.keys(input.data).length ? {} : parseData(table, input.data, false);
     if (name === 'User' && data.password !== undefined) {
       data.passwordHash = await hashPassword(data.password as string);
       delete data.password;
@@ -283,6 +284,21 @@ export function registerAdminDataRoutes(app: FastifyInstance): void {
       }
       await validateRecord(tx, name, {...old, ...data}, old);
       if (name === 'MarketEntry') data.version = {increment: 1};
+      for (const item of input.editions ?? []) {
+        const editionTable = getTable('Edition');
+        const editionData = item.id ? parseData(editionTable, item.data, false) : parseCreateData(editionTable, {...item.data, gameId: String(old.id)});
+        if (item.id) {
+          const previous = await delegate(tx,'Edition').findFirst({where:{id:item.id,gameId:String(old.id)},select:recordSelect(editionTable)});
+          if (!previous) throw notFound('Издание не найдено у этой игры.');
+          checkVersion(editionTable,previous,item.expectedUpdatedAt);
+          if (editionData.gameId !== undefined && editionData.gameId !== old.id) throw badRequest('Нельзя перенести издание в другую игру.');
+          await validateRecord(tx,'Edition',{...previous,...editionData},previous);
+          await delegate(tx,'Edition').update({where:{id:item.id},data:editionData});
+        } else {
+          await validateRecord(tx,'Edition',editionData,null);
+          await delegate(tx,'Edition').create({data:editionData});
+        }
+      }
       const updated = await db.update({where: uniqueWhere(table, key), data: scalarStatusData(data), select: recordSelect(table)});
       await reconcileRecords(tx, name, old, updated);
       return db.findFirst({where: key, select: recordSelect(table)});

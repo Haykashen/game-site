@@ -7,10 +7,11 @@ import { IconButton } from '../ui/IconButton';
 import { createAdminRecord, fetchAdminRecords, updateAdminRecord } from '../../api/adminData';
 import { errorMessage } from '../../api/client';
 
-export function DraftGameEditions({table, rows, onChange, gameId}: {table: AdminTable; rows: AdminRecord[]; onChange: (rows: AdminRecord[]) => void; gameId?: string}) {
+export function DraftGameEditions({table, rows, onChange, gameId, onBusyChange, disabled = false}: {onBusyChange?: (busy:boolean)=>void; disabled?:boolean;table: AdminTable; rows: AdminRecord[]; onChange: (rows: AdminRecord[]) => void; gameId?: string}) {
   const [page, setPage] = useState(1);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  useEffect(() => {onBusyChange?.(busy);},[busy,onBusyChange]);
   const fields = table.fields.filter(field => !field.readOnly && !field.primary && field.name !== 'gameId');
   useEffect(() => {
     if (!gameId) return;
@@ -42,17 +43,16 @@ export function DraftGameEditions({table, rows, onChange, gameId}: {table: Admin
   }
   const currentPage = Math.min(page,Math.max(1,Math.ceil(rows.length/20)));
   return <>
-    <div className="game-editions-heading"><h3>Издания игры</h3><button type="button" className="btn-secondary" disabled={busy} onClick={()=>{onChange([...rows,{}]);setPage(Math.ceil((rows.length+1)/20));}}><Plus size={16} strokeWidth={2.5}/>Добавить издание</button></div>
     {error && <p role="alert" className="admin-data__error">{error}</p>}
-    <AdminDataTable<AdminRecord> label="Издания игры" storageKey="Edition:game" columns={fields.map(field=>({key:field.name,label:field.label,sortable:false,render:row=>{
+    <AdminDataTable<AdminRecord> heading="Издания игры" toolbarActions={<button type="button" className="btn-secondary" title="Добавить издание" disabled={busy || disabled} onClick={()=>{onChange([...rows,{}]);setPage(Math.ceil((rows.length+1)/20));}}><Plus size={16} strokeWidth={2.5}/>Добавить</button>} label="Издания игры" storageKey="Edition:game" columns={fields.map(field=>({key:field.name,label:field.label,sortable:false,render:row=>{
       const index=Number(row.__draftIndex), id='edition-'+index+'-'+field.name;
       const value=row[field.name];
       const text=Array.isArray(value)?value.join('\n'):String(value??'');
       return <div className="game-editions-cell">{field.reference ? <ReferenceCombobox reference={field.reference} entity="Edition" inputId={id} required={field.required} value={text} onChange={next=>change(index,field.name,next)}/>
-        : field.type==='enum' || field.type==='boolean' ? <select className="form-control" aria-label={field.label} disabled={busy} value={text} onChange={event=>change(index,field.name,field.type==='boolean'?event.target.value==='true':event.target.value)}><option value="">По умолчанию</option>{(field.type==='boolean'?['true','false']:field.options).map(option=><option key={option} value={option}>{adminOptionLabel(option)}</option>)}</select>
-        : field.multiline || field.type==='list' ? <textarea className="form-control" aria-label={field.label} rows={1} disabled={busy} value={text} onChange={event=>change(index,field.name,field.type==='list'?event.target.value.split('\n').filter(Boolean):event.target.value)}/>
-        : <input className="form-control" aria-label={field.label} disabled={busy} value={text} type={field.type==='number'?'number':'text'} onChange={event=>change(index,field.name,field.type==='number' && event.target.value!==''?Number(event.target.value):event.target.value)}/>}</div>;
+        : field.type==='enum' || field.type==='boolean' ? <select className="form-control" aria-label={field.label} disabled={busy || disabled} value={text} onChange={event=>change(index,field.name,field.type==='boolean'?event.target.value==='true':event.target.value)}><option value="">По умолчанию</option>{(field.type==='boolean'?['true','false']:field.options).map(option=><option key={option} value={option}>{adminOptionLabel(option)}</option>)}</select>
+        : field.multiline || field.type==='list' ? <textarea className="form-control" aria-label={field.label} rows={1} disabled={busy || disabled} value={text} onChange={event=>change(index,field.name,field.type==='list'?event.target.value.split('\n').filter(Boolean):event.target.value)}/>
+        : <input className="form-control" aria-label={field.label} disabled={busy || disabled} value={text} type={field.type==='number'?'number':'text'} onChange={event=>change(index,field.name,field.type==='number' && event.target.value!==''?Number(event.target.value):event.target.value)}/>}</div>;
     }}))} rows={rows.map((row,index)=>({...Object.fromEntries(Object.entries(row).filter(([key])=>!key.startsWith('__reference_'))),__draftIndex:index})).slice((currentPage-1)*20,currentPage*20)} rowKey={row=>String(row.__draftIndex)} sortBy="" sortDir="asc" onSort={()=>{}} loading={busy} total={rows.length} page={currentPage} pageSize={20} onPage={setPage} onReset={()=>{}} hasFilters={false}
-      actions={row=><>{gameId && <IconButton label="Сохранить издание" title="Сохранить издание" disabled={busy} onClick={()=>void save(Number(row.__draftIndex))}><Save size={20}/></IconButton>}{!row.id && <IconButton label="Удалить строку" title="Удалить строку" disabled={busy} onClick={()=>onChange(rows.filter((_,index)=>index!==Number(row.__draftIndex)))}><Trash2 size={20}/></IconButton>}</>} />
+      actions={row=><>{gameId && <IconButton label="Сохранить издание" title="Сохранить издание" disabled={busy || disabled} onClick={()=>void save(Number(row.__draftIndex))}><Save size={20}/></IconButton>}{!row.id && <IconButton label="Удалить строку" title="Удалить строку" disabled={busy || disabled} onClick={()=>onChange(rows.filter((_,index)=>index!==Number(row.__draftIndex)))}><Trash2 size={20}/></IconButton>}</>} />
   </>;
 }

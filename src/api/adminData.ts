@@ -36,3 +36,7 @@ export function fetchAdminDependencies(table: string, key: string, signal: Abort
 export function createGameWithEditions(game: AdminRecord, editions: AdminRecord[]) {
   return apiRequest<{record: AdminRecord}>(tablePath('Game') + '/records', {method: 'POST', body: {game, editions}});
 }
+
+export function updateGameWithEditions(key:string, data:AdminRecord, expectedUpdatedAt:string|null, editions: {id?:string;expectedUpdatedAt:string|null;data:AdminRecord}[]) {
+ return apiRequest<{record:AdminRecord}>(recordPath('Game',key),{method:'PATCH',body:{data,expectedUpdatedAt,editions}});
+}
