@@ -4879,3 +4879,5 @@ html:not(.dark) .showcase-feed-page { --feed-card:#fffdf6; --feed-border:#d9d2be
 .admin-table-heading h3 { margin:0; }
 .admin-table-heading .admin-users__table-toolbar { margin:0; padding:0; }
 .btn-icon--secondary { background:var(--bg-card); }
+.collection-wishlist-heading { margin-top:32px; margin-bottom:16px; }
+.game-cta__btn:disabled { opacity:.4; cursor:not-allowed; transform:none; }

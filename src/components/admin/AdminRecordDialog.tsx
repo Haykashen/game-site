@@ -1,3 +1,4 @@
+import { editionWriteData } from '../../lib/editionEditor';
 import { LoadingState } from '../LoadingState';
 import { ReferenceCombobox } from './ReferenceCombobox';
 import { useEffect, useId, useState } from 'react';
@@ -146,11 +147,11 @@ export function AdminRecordDialog({table, editor, onClose, onSaved, title, onDel
         }
         if (!Object.keys(data).length && !(table.name === 'Game' && draftEditions.length)) {onClose(); return;}
         if (onSubmitRecord) {onSubmitRecord(data); onClose(); return;}
-        if (creating) savedRecord = (await (table.name === 'Game' ? createGameWithEditions(data, draftEditions) : createAdminRecord(table.name, data))).record;
+        const editionChanges = table.name === 'Game' && editionTable ? draftEditions.flatMap((row,index) => {const data=editionWriteData(row,editionTable.fields,index+1);return data ? [{...(typeof row.id === 'string' ? {id:row.id} : {}),expectedUpdatedAt:typeof row.updatedAt === 'string'?row.updatedAt:null,data}] : [];}) : [];
+        if (!Object.keys(data).length && !editionChanges.length) {onClose();return;}
+        if (creating) savedRecord = (await (table.name === 'Game' ? createGameWithEditions(data, editionChanges.map(item=>item.data)) : createAdminRecord(table.name, data))).record;
         else if (table.name === 'Game' && editionTable && draftEditions.length) {
-          const editions = draftEditions.map(row => ({...(typeof row.id === 'string' ? {id: row.id} : {}), expectedUpdatedAt: typeof row.updatedAt === 'string' ? row.updatedAt : null,
-            data: Object.fromEntries(editionTable.fields.filter(field => !field.readOnly && !field.primary && field.name !== 'gameId' && row[field.name] !== undefined && !(field.generated && row[field.name] === '')).map(field => [field.name,row[field.name]!]))}));
-          savedRecord = (await updateGameWithEditions(editor.key!,data,version,editions)).record;
+          savedRecord = (await updateGameWithEditions(editor.key!,data,version,editionChanges)).record;
         } else savedRecord = (await updateAdminRecord(table.name, editor.key!, data, version)).record;
       }
       await onSaved(savedRecord);

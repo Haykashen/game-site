@@ -20,7 +20,7 @@ export const TABLE_LABELS: Record<string, string> = {
   Discussion: 'Обсуждения', DiscussionComment: 'Комментарии', NewsPost: 'Новости',
 };
 const FIELD_LABELS: Record<string, string> = {
-  group: 'Семейство', color: 'Цвет фона', textColor: 'Цвет текста', localizationId: 'Локализация', code: 'Код', id: 'ID', email: 'Почта', displayName: 'Имя', password: 'Пароль', phone: 'Телефон',
+  group: 'Семейство', color: 'Цвет фона', textColor: 'Цвет текста', collectionStatus: 'Статус коллекции', localizationId: 'Локализация', code: 'Код', id: 'ID', email: 'Почта', displayName: 'Имя', password: 'Пароль', phone: 'Телефон',
   city: 'Город', avatarUrl: 'Аватар', isDemo: 'Демо-аккаунт', role: 'Роль', status: 'Статус',
   suspendedAt: 'Дата блокировки', comment: 'Комментарий', ratingSum: 'Сумма оценок',
   ratingCount: 'Количество отзывов', createdAt: 'Создано', updatedAt: 'Обновлено', lastSeenAt: 'Последнее посещение',

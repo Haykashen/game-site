@@ -256,6 +256,8 @@ model Edition {
 }
 
 model Copy {
+  collectionStatus CollectionStatus @default(acquired) @map("collection_status")
+  @@index([userId, collectionStatus])
   useEditionCover Boolean @default(false) @map("use_edition_cover")
   id                 String    @id @default(uuid()) @db.Uuid
   userId             String    @map("user_id") @db.Uuid
@@ -726,4 +728,9 @@ model Platform {
   updatedAt DateTime @updatedAt @map("updated_at")
   editions Edition[]
   @@map("platforms")
+}
+
+enum CollectionStatus {
+  acquired
+  wishlist
 }

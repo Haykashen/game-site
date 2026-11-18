@@ -112,12 +112,12 @@ export function CollectionPage() {
         title="Моя коллекция"
         description={
           items.length > 0
-            ? `${copiesOnShelf(copies.length)}. Одна карточка — одно издание; количество экземпляров можно менять.`
+            ? `${copiesOnShelf(copies.filter(copy=>copy.collectionStatus!=='wishlist').length)}. Одна карточка — одно издание; количество экземпляров можно менять.`
             : 'Здесь появятся конкретные издания, которые вы добавите из каталога.'
         }
       />
 
-      <SearchToolbar idPrefix="collection" ariaLabel="Поиск и фильтры коллекции" searchPlaceholder="Найти игру в коллекции" query={query} fields={fields} filterValues={filterValues} onQueryChange={value => setFilter('q',value)} onFilterChange={setFilter} onReset={resetFilters} resultCountLabel={`${visibleItems.length} изданий · ${visibleItems.reduce((sum,item)=>sum+item.quantity,0)} экземпляров`}
+      <SearchToolbar idPrefix="collection" ariaLabel="Поиск и фильтры коллекции" searchPlaceholder="Найти игру в коллекции" query={query} fields={fields} filterValues={filterValues} onQueryChange={value => setFilter('q',value)} onFilterChange={setFilter} onReset={resetFilters} resultCountLabel={`${visibleItems.filter(item=>item.copy.collectionStatus!=='wishlist').length} изданий · ${visibleItems.filter(item=>item.copy.collectionStatus!=='wishlist').reduce((sum,item)=>sum+item.quantity,0)} экземпляров · ${visibleItems.filter(item=>item.copy.collectionStatus==='wishlist').length} в планах`}
         actions={user ? <button type="button" className="btn-primary" onClick={() => navigate('/collection/new')}><Plus size={16} aria-hidden="true" />Пополнить коллекцию</button> : undefined} />
       <ApiState loading={isSyncing || isCatalogLoading} error={syncError ?? catalogError} onRetry={refresh} />
       {status === 'api' && !user && <div className="panel account-notice"><p>Войдите, чтобы увидеть свою коллекцию.</p><Link to="/account" className="btn-secondary">Войти</Link></div>}
@@ -142,9 +142,10 @@ export function CollectionPage() {
           </Link>
         </div>
       ) : (
-        <section className="collection-copy-grid" aria-label="Издания в коллекции">
+        <> <h2>Приобретено</h2><section className="collection-copy-grid" aria-label="Издания в коллекции">
+          {visibleItems.length > 0 && !visibleItems.some(item => item.copy.collectionStatus !== 'wishlist') && <p>Приобретённых экземпляров пока нет.</p>}
           {!visibleItems.length && <div className="panel"><p>По выбранным условиям ничего не найдено.</p><button type="button" className="btn-secondary" onClick={resetFilters}>Сбросить поиск и фильтры</button></div>}
-          {visibleItems.map(({ copy, photos, edition, game, quantity }) => (
+          {visibleItems.filter(item=>item.copy.collectionStatus!=='wishlist').map(({ copy, photos, edition, game, quantity }) => (
             <CopyCard
               key={edition.id}
               copy={copy}
@@ -158,6 +159,22 @@ export function CollectionPage() {
             />
           ))}
         </section>
+        {visibleItems.some(item=>item.copy.collectionStatus==='wishlist') && <><h2 className="collection-wishlist-heading">Желаемое / в планах</h2><section className="collection-copy-grid" aria-label="Желаемые издания">
+          {visibleItems.filter(item=>item.copy.collectionStatus==='wishlist').map(({ copy, photos, edition, game, quantity }) => (
+            <CopyCard
+              key={edition.id}
+              copy={copy}
+              photos={photos}
+              edition={edition}
+              game={game}
+              quantity={quantity}
+              onOpen={() => navigate(`/collection/${encodeURIComponent(edition.id)}`)}
+              onEdit={() => navigate(`/collection/${encodeURIComponent(edition.id)}?edit=1`)}
+              onRemove={() => removeEdition(edition.id)}
+            />
+          ))}
+        </section></>}
+        </>
       )}
 
     </>

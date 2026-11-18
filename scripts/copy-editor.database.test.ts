@@ -19,6 +19,7 @@ test('personal region, ordered photos and quantity save atomically and remain ow
     await db.game.create({data: {id, title: 'Copy editor fixture', publisher: '', description: ''}});
     await db.edition.create({data: {id, gameId: id, name: 'Test', platform: 'PS5', regionId: region.id, media: 'Disc', contents: [], coverImages: []}});
     const original = await db.copy.create({data: {userId: owner, editionId: id, photos: {create: [{url: 'https://example.com/first.jpg', sortOrder: 0}, {url: 'https://example.com/second.jpg', sortOrder: 1}]}}});
+    assert.equal(original.collectionStatus, 'acquired');
     const unrelated = await db.copy.create({data: {userId: other, editionId: id}});
     const edit = await app.inject({method: 'PATCH', url: path, payload: {condition: '9', region: 'JPN', notes: 'Updated', purchasePrice: 12345.67, quantity: 3, photos: ['https://example.com/second.jpg', 'https://example.com/first.jpg']}});
     assert.equal(edit.statusCode, 200, edit.body);
@@ -33,6 +34,15 @@ test('personal region, ordered photos and quantity save atomically and remain ow
     const clear = await app.inject({method: 'PATCH', url: path, payload: {region: '', photos: [], quantity: 1}});
     assert.equal(clear.statusCode, 200, clear.body); assert.equal(clear.json().length, 1); assert.equal(clear.json()[0].region, ''); assert.deepEqual(clear.json()[0].photos, []);
     const inherited = await app.inject({method: 'PATCH', url: path, payload: {region: null}}); assert.equal(inherited.json()[0].region, null);
+    const wished = await app.inject({method: 'PATCH', url: path, payload: {collectionStatus: 'wishlist', quantity: 2}});
+    assert.equal(wished.statusCode, 200, wished.body);
+    assert.ok(wished.json().every((copy: any) => copy.collectionStatus === 'wishlist'));
+    const stats = await app.inject({method: 'GET', url: '/api/v1/collection/stats'});
+    assert.equal(stats.statusCode, 200, stats.body);
+    assert.equal(stats.json().copiesCount, 0);
+    const acquired = await app.inject({method: 'PATCH', url: path, payload: {collectionStatus: 'acquired'}});
+    assert.equal(acquired.statusCode, 200, acquired.body);
+    assert.ok(acquired.json().every((copy: any) => copy.collectionStatus === 'acquired'));
     const added = await app.inject({method: 'POST', url: '/api/v1/collection/copies', payload: {editionId: id, region: 'EUR'}}); assert.equal(added.statusCode, 201, added.body); assert.equal(added.json().region, 'EUR');
   } finally {
     await app.close(); await db.copy.deleteMany({where: {editionId: id}}); await db.edition.deleteMany({where: {id}}); await db.game.deleteMany({where: {id}}); await db.user.deleteMany({where: {id: {in: [owner, other]}}}); await db.region.deleteMany({where: {code: 'COPY-EDITOR-TEST'}}); await db.$disconnect();

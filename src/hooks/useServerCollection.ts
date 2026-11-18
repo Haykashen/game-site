@@ -68,7 +68,7 @@ export function useGameCollection(): GameCollection {
     for (const edition of editions) map.set(edition.gameId, [...(map.get(edition.gameId) ?? []), edition]);
     return map;
   }, [editions]);
-  const ownedIds = useMemo(() => [...new Set(copies.flatMap((copy) => {
+  const ownedIds = useMemo(() => [...new Set(copies.filter(copy=>copy.collectionStatus!=='wishlist').flatMap((copy) => {
     const edition = editionById.get(copy.editionId);
     return edition ? [edition.gameId] : [];
   }))], [copies, editionById]);
@@ -94,7 +94,7 @@ export function useGameCollection(): GameCollection {
 
   const refresh = useCallback(async () => { await Promise.all([catalog.refresh(), shelf.refresh()]); }, [catalog.refresh, shelf.refresh]);
   return {
-    games, editions, copies, editionById, editionsByGame, ownedIds, ownedCount: copies.length,
+    games, editions, copies, editionById, editionsByGame, ownedIds, ownedCount: copies.filter(copy=>copy.collectionStatus!=='wishlist').length,
     isOwned: (id) => ownedIds.includes(id),
     getEdition: (id) => editionById.get(id),
     getGameEditions: (id) => editionsByGame.get(id) ?? EMPTY_EDITIONS,

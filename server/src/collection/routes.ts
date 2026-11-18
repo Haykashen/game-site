@@ -10,7 +10,7 @@ import {
   type CopyDetailsInput,
   type CopyDto,
 } from '@discvault/shared';
-import { conflict, notFound, unauthorized } from '../errors.js';
+import { badRequest, conflict, notFound, unauthorized } from '../errors.js';
 import { serializeGame, serializeEdition, serializeCopy } from '../lib/serializers.js';
 import { storePhotoReferences } from '../lib/storage.js';
 import { parse } from '../lib/validation.js';
@@ -31,6 +31,7 @@ function dateFromInput(value: string | undefined): Date | null | undefined {
 
 function sharedDetailsData(details: CopyDetailsInput): Prisma.CopyUpdateManyMutationInput {
   const data: Prisma.CopyUpdateManyMutationInput = {};
+  if (details.collectionStatus !== undefined) data.collectionStatus = details.collectionStatus;
   if (details.useEditionCover !== undefined) data.useEditionCover = details.useEditionCover;
 
   if (details.region !== undefined) data.region = details.region;
@@ -125,6 +126,7 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
       }
 
       const representative = existing[0];
+      if (representative && input.collectionStatus && representative.collectionStatus !== input.collectionStatus) throw badRequest('Это издание уже есть в коллекции. Измените его статус в карточке экземпляра.');
       const photos =
         input.photos !== undefined
           ? await storePhotoReferences(input.photos, 'collection')
@@ -134,6 +136,7 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
         data: {
           userId: user.id,
           editionId: input.editionId,
+          collectionStatus: input.collectionStatus ?? representative?.collectionStatus ?? 'acquired',
           useEditionCover: input.useEditionCover ?? representative?.useEditionCover ?? false,
           region: input.region !== undefined ? input.region : representative?.region ?? null,
           condition: input.condition ?? representative?.condition ?? DEFAULT_CONDITION,
@@ -263,6 +266,7 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
                 userId: user.id,
                 editionId,
                 region: representative?.region ?? null,
+                collectionStatus: representative?.collectionStatus ?? 'acquired',
                 useEditionCover: representative?.useEditionCover ?? false,
                 condition: representative?.condition ?? DEFAULT_CONDITION,
                 completeness: representative?.completeness ?? DEFAULT_COMPLETENESS,
@@ -330,9 +334,9 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
           } else {
             const base = await tx.copy.findUniqueOrThrow({where: {id: representative.id}});
             await tx.copy.createMany({data: Array.from({length: input.quantity - current.length}, () => ({
-              userId: user.id, editionId,
+              userId: user.id, editionId: targetEditionId,
               condition: base.condition, completeness: base.completeness,
-              useEditionCover: base.useEditionCover, region: base.region, purchasePriceMinor: base.purchasePriceMinor,
+              collectionStatus: base.collectionStatus, useEditionCover: base.useEditionCover, region: base.region, purchasePriceMinor: base.purchasePriceMinor,
               purchaseDate: base.purchaseDate, notes: base.notes,
             }))});
           }
@@ -370,7 +374,7 @@ export function registerCollectionRoutes(app: FastifyInstance): void {
       if (!user) throw unauthorized();
 
       const copies = await app.prisma.copy.findMany({
-        where: { userId: user.id },
+        where: { userId: user.id, collectionStatus: 'acquired' },
         select: { editionId: true, purchasePriceMinor: true },
       });
 

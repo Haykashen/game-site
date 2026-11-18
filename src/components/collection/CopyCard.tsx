@@ -38,6 +38,7 @@ export function CopyCard({
   onRemove,
 }: CopyCardProps) {
   const navigate = useNavigate();
+  const wished=copy.collectionStatus==='wishlist';
   const images = [...new Set((copy.useEditionCover ? edition.coverImages : photos).filter(Boolean))];
   const displayEdition = {...edition, region: copy.region ?? edition.region};
   const purchase = formatPurchaseDetails(copy.purchasePrice, copy.purchaseDate);
@@ -63,7 +64,7 @@ export function CopyCard({
           </div>
         )}
         <div className="card-platforms"><PlatformBadge platform={edition.platform} /></div>
-        <CollectionCountBadge count={quantity} />
+        {!wished && <CollectionCountBadge count={quantity} />}
       </div>
 
       <div className="copy-card__body">
@@ -72,7 +73,7 @@ export function CopyCard({
           <p className="copy-card__edition">{editionLabel(displayEdition)}</p>
         </div>
 
-        <div className="copy-card__chips">
+        {!wished && <div className="copy-card__chips">
           {chips.map((chip) => (
             <span className="edition-chip" key={chip}>
               {chip}
@@ -81,14 +82,14 @@ export function CopyCard({
           {edition.releaseDate && (
             <span className="edition-chip">{formatEditionDate(edition.releaseDate)}</span>
           )}
-        </div>
+        </div>}
 
-        <p className="copy-card__contents">
+        {!wished && <p className="copy-card__contents">
           <Package size={13} aria-hidden="true" />
           <span>{editionContentsLabel(edition, 3)}</span>
-        </p>
+        </p>}
 
-        {purchase && (
+        {!wished && purchase && (
           <p className="copy-card__purchase">
             <Wallet size={13} aria-hidden="true" />
             <span>{purchase}</span>

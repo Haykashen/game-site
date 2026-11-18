@@ -54,3 +54,11 @@ test('edition cover is used only when the owner enables it', () => {
   const restored = render({...copy, useEditionCover: false, photos: ['https://example.com/personal.jpg']});
   assert.ok(restored.includes('src="https://example.com/personal.jpg"'));
 });
+
+ test('wishlist cards omit physical ownership and purchase details', () => {
+  const html = render({...copy, collectionStatus: 'wishlist', purchasePrice: 500, purchaseDate: '2026-11-01'});
+  assert.ok(html.includes('Test game'));
+  assert.ok(!html.includes('copy-card__purchase'));
+  assert.ok(!html.includes('copy-card__contents'));
+  assert.ok(!html.includes('collection-count-badge'));
+ });

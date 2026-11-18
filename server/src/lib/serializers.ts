@@ -124,6 +124,7 @@ type CopyWithPhotos = Copy & { photos: CopyPhoto[] };
 
 export function serializeCopy(copy: CopyWithPhotos): CopyDto {
   return {
+    collectionStatus: copy.collectionStatus,
     id: copy.id,
     editionId: copy.editionId,
     region: copy.region ?? null,

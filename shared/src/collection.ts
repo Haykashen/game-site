@@ -8,6 +8,7 @@ import {
 } from './common.js';
 
 export const copyDetailsSchema = z.object({
+  collectionStatus: z.enum(['acquired','wishlist']).optional(),
   useEditionCover: z.boolean().optional(),
   region: z.string().trim().max(40).nullable().optional(),
   condition: z.string().trim().min(1).max(60).optional(),
@@ -30,6 +31,7 @@ export const editionQuantitySchema = z.object({
 });
 
 export interface CopyDto {
+  collectionStatus?: 'acquired' | 'wishlist';
   useEditionCover?: boolean;
   id: string;
   editionId: string;

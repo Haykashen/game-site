@@ -137,6 +137,7 @@ export function registerCatalogRoutes(app: FastifyInstance): void {
             by: ['editionId'],
             where: {
               userId: request.user.id,
+              collectionStatus: 'acquired',
               editionId: { in: editionIds },
             },
             _count: { _all: true },

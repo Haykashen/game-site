@@ -1,3 +1,4 @@
+import { editionWriteData } from '../../lib/editionEditor';
 import { useEffect, useState } from 'react';
 import { Plus, Save, Trash2 } from 'lucide-react';
 import { adminOptionLabel, type AdminRecord, type AdminTable, type AdminValue } from '@discvault/shared';
@@ -33,10 +34,11 @@ export function DraftGameEditions({table, rows, onChange, gameId, onBusyChange, 
   function change(index: number, field: string, value: AdminValue) {onChange(rows.map((row,i)=>i===index?{...row,[field]:value}:row));}
   async function save(index: number) {
     const row = rows[index]!;
-    const data: AdminRecord = {gameId: gameId!};
-    for (const field of fields) if (row[field.name] !== undefined && !(field.generated && row[field.name] === '')) data[field.name] = row[field.name]!;
     setBusy(true);setError('');
     try {
+      const values=editionWriteData(row,table.fields,index+1);
+      if(!values)throw new Error('Заполните название и выберите платформу издания.');
+      const data:AdminRecord={...values,gameId:gameId!};
       const saved = row.id ? await updateAdminRecord('Edition',JSON.stringify({id:row.id}),data,String(row.updatedAt)) : await createAdminRecord('Edition',data);
       onChange(rows.map((item,i)=>i===index?saved.record:item));
     } catch(cause) {setError(errorMessage(cause));} finally {setBusy(false);}

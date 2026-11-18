@@ -58,6 +58,7 @@ export function mapMarketEntry(dto: MarketEntryDto): MarketEntry {
 
 export function mapCopy(dto: CopyDto): Copy {
   return {
+    collectionStatus: dto.collectionStatus ?? 'acquired',
     id: dto.id,
     editionId: dto.editionId,
     region: dto.region ?? null,

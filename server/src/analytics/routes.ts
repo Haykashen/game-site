@@ -183,12 +183,12 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
         prisma.game.count(),
         prisma.game.count({ where: { createdAt: { gte: start } } }),
         prisma.edition.count(),
-        prisma.copy.count(),
+        prisma.copy.count({where:{collectionStatus:'acquired'}}),
         prisma.user.count(),
         prisma.user.count({ where: { ...statusWhere('active') } }),
         prisma.user.count({ where: { ...statusWhere('suspended') } }),
         prisma.user.count({ where: { createdAt: { gte: start } } }),
-        prisma.copy.groupBy({ by: ['userId'] }),
+        prisma.copy.groupBy({ by: ['userId'], where:{collectionStatus:'acquired'} }),
         prisma.marketEntry.groupBy({
           by: ['authorId'],
           where: { deletedAt: null },
@@ -279,7 +279,7 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
       const copyGroups = editionIds.length
         ? await prisma.copy.groupBy({
             by: ['editionId'],
-            where: { editionId: { in: editionIds } },
+            where: { collectionStatus:'acquired', editionId: { in: editionIds } },
             _count: { _all: true },
           })
         : [];
@@ -431,6 +431,7 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
         }),
         prisma.copy.groupBy({
           by: ['userId'],
+          where:{collectionStatus:'acquired'},
           _count: { _all: true },
         }),
       ]);
@@ -464,7 +465,7 @@ export function registerAnalyticsRoutes(app: FastifyInstance): void {
             }),
             prisma.copy.groupBy({
               by: ['userId'],
-              where: { userId: { in: userIds } },
+              where: { collectionStatus:'acquired', userId: { in: userIds } },
               _count: { _all: true },
             }),
           ])

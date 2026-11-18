@@ -49,3 +49,14 @@ test('copy mapping preserves personal and explicitly unspecified regions', () =>
   assert.equal(mapCopy({...copy, region: 'JPN', updatedAt: ''}).region, 'JPN');
   assert.equal(mapCopy({...copy, region: '', updatedAt: ''}).region, '');
 });
+
+ test('wishlist status survives editing and switching to acquired', () => {
+  const before = initial();
+  assert.equal(before.collectionStatus, 'acquired');
+  const wished = {...before, collectionStatus: 'wishlist' as const};
+  assert.equal(copyEditorDirty(before, wished), true);
+  assert.equal(copyEditorDetails(before, wished).collectionStatus, 'wishlist');
+  assert.equal(copyEditorDetails(wished, before).collectionStatus, 'acquired');
+  assert.equal(mapCopy({...copy, updatedAt: ''}).collectionStatus, 'acquired');
+  assert.equal(mapCopy({...copy, collectionStatus: 'wishlist', updatedAt: ''}).collectionStatus, 'wishlist');
+ });
