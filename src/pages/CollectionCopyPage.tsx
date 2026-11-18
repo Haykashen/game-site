@@ -46,12 +46,14 @@ export function CollectionCopyPage() {
   </>;
 }
 
-interface DetailProps {copy: Copy; group: Copy[]; edition: Edition; game: Game; initiallyEditing: boolean; creating?: boolean}
+interface DetailProps {copy: Copy; group: Copy[]; edition: Edition; game: Game; initiallyEditing: boolean; creating?: boolean; seedEditions?: readonly Edition[]}
 /** Data comes exclusively from the signed-in owner's collection, never the public catalog. */
-export function CollectionCopyDetail({copy, group, game: initialGame, edition: initialEdition, initiallyEditing, creating = false}: DetailProps) {
+export function CollectionCopyDetail({copy, group, game: initialGame, edition: initialEdition, initiallyEditing, creating = false, seedEditions = []}: DetailProps) {
   const navigate = useNavigate();
   const [, setSearch] = useSearchParams();
-  const {updateEdition, addCopy, setEditionQuantity, copies, games, editions, syncError} = useCollection();
+  const {updateEdition, addCopy, setEditionQuantity, copies, games: catalogGames, editions: catalogEditions, syncError} = useCollection();
+  const games = useMemo(() => [...new Map([initialGame, ...catalogGames].filter(item => item.id).map(item => [item.id, item])).values()], [initialGame, catalogGames]);
+  const editions = useMemo(() => [...new Map([initialEdition, ...seedEditions, ...catalogEditions].filter(item => item.id).map(item => [item.id, item])).values()], [initialEdition, seedEditions, catalogEditions]);
   const platformLabel = (value: string) => value.replace(/^ps([1-5])$/i, 'PlayStation $1').replace(/^psp$/i, 'PlayStation Portable').replace(/^ps vita$/i, 'PlayStation Vita');
   const [platform, setPlatform] = useState(initialEdition.platform.toLowerCase());
   const [platformQuery, setPlatformQuery] = useState('');

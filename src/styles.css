@@ -4632,7 +4632,7 @@ html:not(.dark) .market-shipping__icon { color:var(--brand-ink); }
 .photo-strip .market-photo-tile>.photo-strip__select.is-sortable{cursor:grab;touch-action:none}
 .photo-strip .market-photo-tile>.photo-strip__remove{z-index:2;right:3px;top:3px;width:23px;height:23px}
 .photo-strip .market-photo-picker__hint{font-size:10px;line-height:1.6;margin-top:10px}
-.unsaved-dialog{max-width:min(540px,calc(100vw - 32px));padding:26px;border:1px solid var(--border-color);border-radius:14px;background:var(--bg-card);color:var(--text-main);box-shadow:0 20px 100px #0008}
+.unsaved-dialog{position:fixed;inset:0;margin:auto;max-width:min(540px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:26px;border:1px solid var(--border-color);border-radius:14px;background:var(--bg-card);color:var(--text-main);box-shadow:0 20px 100px #0008}
 .unsaved-dialog::backdrop{background:#030805b8;backdrop-filter:blur(4px)}
 .unsaved-dialog h2{font-size:21px;font-weight:700;line-height:1.3}
 .unsaved-dialog p{color:var(--text-muted);font-size:14px;line-height:1.7;margin:14px 0 24px}

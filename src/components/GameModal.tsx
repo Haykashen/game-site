@@ -48,7 +48,9 @@ export function GameModal({ marketLoading, marketError, onRetryMarket, onEditGam
   const selectedEdition = editions.find(edition => edition.id === selectedEditionId) ?? editions[0];
   const selectedEditionCopies = selectedEdition ? copies.filter(copy => copy.editionId === selectedEdition.id) : [];
   const openCopyEditor = () => {
-    if (selectedEdition) navigate('/collection/new?editionId=' + encodeURIComponent(selectedEdition.id));
+    if (selectedEdition) navigate('/collection/new?editionId=' + encodeURIComponent(selectedEdition.id), {
+      state: {copyEditorSeed: {game, edition: selectedEdition, editions: [...editions]}},
+    });
   };
 
   return <ModalShell isOpen={isOpen} onClose={onClose} labelledBy="modal-title">
